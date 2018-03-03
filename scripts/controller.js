@@ -1,9 +1,33 @@
+// This variable saves the currently selected language
+var language;
+/**
+ * This function initializes the page when its loaded
+ */
+function loadPage() {
+    // Use the language that was selected before
+    language = localStorage.getItem( "language" );
+    // If no language was selected before, we set it to default (english)
+    if ( language === null ) {
+        setLangToEnglish();
+    }
+    else if ( language === "en" ) {
+        setLangToEnglish();
+    }
+    else if ( language === "de" ) {
+        setLangToGerman();
+    }
+
+    test();
+}
+
 /**
  * This function hides all elements with lang=en attribute
  */
 function setLangToGerman() {
     $("[lang=en]").hide();
     $("[lang=de]").show();
+    language = "de";
+    localStorage.setItem( "language", language );
 }
 
 /**
@@ -12,6 +36,8 @@ function setLangToGerman() {
 function setLangToEnglish() {
     $("[lang=de]").hide();
     $("[lang=en]").show();
+    language = "en";
+    localStorage.setItem( "language", language);
 }
 
 

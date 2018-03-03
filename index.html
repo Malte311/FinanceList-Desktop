@@ -10,7 +10,6 @@
         <script language="javascript" src="scripts/controller.js"></script>
         <script language="javascript" src="scripts/spendingchart.js"></script>
 
-        <link rel="stylesheet" href="style/select.css">
         <link rel="stylesheet" href="style/w3.css">
         <link rel="stylesheet" type="text/css" href="style/fontawesome/css/fontawesome-all.css">
     </head>
@@ -33,14 +32,14 @@
             </div>
             <hr>
             <div class="w3-bar-block">
-                <a href="#" class="w3-bar-item w3-button w3-padding w3-blue" lang="en"><i class="fa fa-home"></i> Overview </a>
-                <a href="#" class="w3-bar-item w3-button w3-padding w3-blue" lang="de"><i class="fa fa-home"></i> Überblick </a>
-                <a href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="fas fa-euro-sign"></i> Balances </a>
-                <a href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="fas fa-euro-sign"></i> Bilanzen </a>
-                <a href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="fas fa-cog"></i> Settings </a>
-                <a href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="fas fa-cog"></i> Einstellungen </a>
-                <a href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="far fa-question-circle"></i> Help </a>
-                <a href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="far fa-question-circle"></i> Hilfe </a>
+                <a onclick="window.location.href='sites/overview.html';" href="#" class="w3-bar-item w3-button w3-padding w3-blue" lang="en"><i class="fa fa-home"></i> Overview </a>
+                <a onclick="window.location.href='sites/overview.html';" href="#" class="w3-bar-item w3-button w3-padding w3-blue" lang="de"><i class="fa fa-home"></i> Überblick </a>
+                <a onclick="window.location.href='sites/balances.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="fas fa-euro-sign"></i> Balances </a>
+                <a onclick="window.location.href='sites/balances.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="fas fa-euro-sign"></i> Bilanzen </a>
+                <a onclick="window.location.href='sites/settings.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="fas fa-cog"></i> Settings </a>
+                <a onclick="window.location.href='sites/settings.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="fas fa-cog"></i> Einstellungen </a>
+                <a onclick="window.location.href='sites/help.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="far fa-question-circle"></i> Help </a>
+                <a onclick="window.location.href='sites/help.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="far fa-question-circle"></i> Hilfe </a>
             </div>
         </nav>
         <!-- main content -->
@@ -104,8 +103,7 @@
             <hr>
         </div>
         <script>
-            setLangToEnglish();
-            test();
+            loadPage();
         </script>
     </body>
 </html>
