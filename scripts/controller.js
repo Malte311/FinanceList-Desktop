@@ -1,22 +1,17 @@
 /**
- * This function determines which language is selected and then executes the
- * correct styling.
+ * This function hides all elements with lang=en attribute
  */
-function setLanguage() {
-    var sel = document.getElementById( "language" );
-    // Determine which language is selected
-    if ( sel.options[sel.selectedIndex].text === "Deutsch" ) {
+function setLangToGerman() {
+    $("[lang=en]").hide();
+    $("[lang=de]").show();
+}
 
-        $("[lang=en]").hide();
-
-        console.log("DE");
-    }
-    else if ( sel.options[sel.selectedIndex].text === "English" ) {
-
-        $("[lang=en]").show();
-
-        console.log("EN");
-    }
+/**
+ * This function hides all elements with lang=de attribute
+ */
+function setLangToEnglish() {
+    $("[lang=de]").hide();
+    $("[lang=en]").show();
 }
 
 

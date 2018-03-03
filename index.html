@@ -1,7 +1,7 @@
 <html>
     <!-- head -->
     <head>
-        <title> FinanceList - Finance Management made easy </title>
+        <title> FinanceList - Overview </title>
         <link rel="shortcut icon" href="img/tab.ico">
         <meta charset="UTF-8">
 
@@ -10,7 +10,7 @@
         <script language="javascript" src="scripts/controller.js"></script>
         <script language="javascript" src="scripts/spendingchart.js"></script>
 
-        <link rel="stylesheet" href="style/lang.css">
+        <link rel="stylesheet" href="style/select.css">
         <link rel="stylesheet" href="style/w3.css">
         <link rel="stylesheet" type="text/css" href="style/fontawesome/css/fontawesome-all.css">
     </head>
@@ -19,28 +19,28 @@
     <body class="w3-light-grey">
         <!-- header -->
         <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
-            <span class="w3-bar-item w3-center" lang="en"> FinanceList </span>
+            <span class="w3-bar-item w3-center"> FinanceList </span>
             <span class="w3-bar-item w3-right">
-                <form class="dropdown">
-                    <select id="language" onchange="setLanguage()">
-                        <option><img src="/img/us.ico" alt="EN"> English </option>
-                        <option value="Deutsch"><img src="/img/de.ico" alt="DE"> Deutsch </option>
-                    </select>
-                </form>
+                <a onclick="setLangToEnglish()" href="#"><img border="0" alt="EN" src="img/us.ico" width=20px height=20px></a>
+                <a onclick="setLangToGerman()" href="#"><img border="0" alt="DE" src="img/de.ico" width=20px height=20px></a>
             </span>
         </div>
         <!-- sidebar -->
         <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:250px;" id="mySidebar"><br>
             <div class="w3-container w3-row">
-                <h2 align="center">Overview</h2>
+                <h2 align="center" lang="en"> Overview </h2>
+                <h2 align="center" lang="de"> Überblick </h2>
             </div>
             <hr>
             <div class="w3-bar-block">
-                <a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-home"></i> Overview </a>
-                <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-exchange-alt"></i> Transactions </a>
-                <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-euro-sign"></i> Budgets </a>
-                <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-cog"></i> Settings </a>
-                <a href="#" class="w3-bar-item w3-button w3-padding"><i class="far fa-question-circle"></i> Help </a>
+                <a href="#" class="w3-bar-item w3-button w3-padding w3-blue" lang="en"><i class="fa fa-home"></i> Overview </a>
+                <a href="#" class="w3-bar-item w3-button w3-padding w3-blue" lang="de"><i class="fa fa-home"></i> Überblick </a>
+                <a href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="fas fa-euro-sign"></i> Balances </a>
+                <a href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="fas fa-euro-sign"></i> Bilanzen </a>
+                <a href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="fas fa-cog"></i> Settings </a>
+                <a href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="fas fa-cog"></i> Einstellungen </a>
+                <a href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="far fa-question-circle"></i> Help </a>
+                <a href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="far fa-question-circle"></i> Hilfe </a>
             </div>
         </nav>
         <!-- main content -->
@@ -104,7 +104,7 @@
             <hr>
         </div>
         <script>
-            setLanguage();
+            setLangToEnglish();
             test();
         </script>
     </body>
