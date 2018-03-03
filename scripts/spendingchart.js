@@ -7,7 +7,7 @@
  * @param bdcolors Bordercolors in the diagram
  */
 function createChart( canvas, categories, dataset, bgcolors, bdcolors ) {
-     spendingChart = new Chart(ctx, {
+     spendingChart = new Chart(canvas, {
         type: 'pie',
         data: {
             labels: categories,
