@@ -18,6 +18,8 @@ function loadPage() {
     }
 
     test();
+    loadSettings();
+    setOverview();
 }
 
 /**
@@ -38,6 +40,22 @@ function setLangToEnglish() {
     $("[lang=en]").show();
     language = "en";
     localStorage.setItem( "language", language);
+}
+
+/**
+ * This function sets the style for the overview. This means that some elements
+ * will be hidden in case there are missing data.
+ */
+function setOverview() {
+    // If there are no recent spendings, the "Recent spendings" div should be hidden
+    if ( false ) {
+        $("#recentHr").hide();
+        $("#recentAll").hide();
+    }
+    // If there are less than five recent spendings, we hide all the rest
+    else if ( true ) {
+        $("#recentFive").hide();
+    }
 }
 
 
