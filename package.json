@@ -1,0 +1,26 @@
+{
+  "name": "FinanceList-Desktop",
+  "version": "1.0.0",
+  "description": "A finance managing tool",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/Malte311/FinanceList-Desktop",
+  "keywords": [
+    "Electron",
+    "finance-management",
+    "finance",
+    "finances",
+    "money-manager",
+    "moneytracker",
+    "money-spending"
+  ],
+  "author": "Malte311",
+  "license": "MIT",
+  "devDependencies": {
+    "chart.js": "^2.7.2",
+    "electron": "~1.8.2",
+    "jquery": "^3.3.1"
+  }
+}
