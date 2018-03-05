@@ -1,18 +1,20 @@
 <html>
     <!-- head -->
     <head>
+        <!-- general settings -->
         <title> FinanceList - Overview </title>
         <link rel="shortcut icon" href="img/tab.ico">
         <meta charset="UTF-8">
 
-        <script language="javascript" src="../scripts/Chart.js"></script>
-        <script language="javascript" src="../scripts/jquery-3.3.1.js"></script>
+        <!-- scripts -->
+        <script language="javascript" src="../scripts/Chart.min.js"></script>
+        <script language="javascript" src="../scripts/jquery-3.3.1.min.js"></script>
         <script language="javascript" src="../scripts/controller.js"></script>
         <script language="javascript" src="../scripts/spendingchart.js"></script>
-        <script language="javascript" src="../scripts/jsonhandler.js"></script>
 
+        <!-- stylsheets -->
         <link rel="stylesheet" href="../style/w3.css">
-        <link rel="stylesheet" type="text/css" href="../style/fontawesome/css/fontawesome-all.css">
+        <link rel="stylesheet" type="text/css" href="../style/fontawesome/css/fontawesome-all.min.css">
     </head>
 
     <!-- body -->
@@ -47,9 +49,12 @@
         <div class="w3-main" style="margin-left:300px;margin-top:65px;">
             <div class="w3-panel">
                 <div class="w3-row-padding" style="margin:0 -16px">
-
+                    <!-- this canvas contains the pie chart -->
                     <canvas id="myChart" width="400" height="400"></canvas>
+
                     <hr id="recentHr">
+
+                    <!-- recent spendings -->
                     <div class="w3-twothird" id="recentAll">
                         <h3 lang="en"><i class="fa fa-arrow-right"></i> Recent spendings </h3>
                         <h3 lang="de"><i class="fa fa-arrow-right"></i> Letzte Ausgaben </h3>
@@ -82,7 +87,10 @@
                         </div>
                     </div>
                 </div>
+
                 <hr>
+
+                <!-- budget overview --> 
                 <div class="w3-container">
                     <h3><i class="fa fa-arrow-right"></i> Budgets </h3>
                     <p>New Visitors</p>

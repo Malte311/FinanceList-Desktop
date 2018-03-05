@@ -18,7 +18,6 @@ function loadPage() {
     }
 
     test();
-    loadSettings();
     setOverview();
 }
 
@@ -63,8 +62,6 @@ function test() {
     var ctx = document.getElementById("myChart");
     ctx.width="6000";
     ctx.height="2000";
-
-    var spendingChart;
 
     createChart( ctx, ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"], [12, 19, 3, 5, 2, 3], [
         'rgba(255,99,132,1)',
