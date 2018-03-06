@@ -8,7 +8,7 @@
   },
   "repository": "https://github.com/Malte311/FinanceList-Desktop",
   "keywords": [
-    "Electron",
+    "electron",
     "finance-management",
     "finance",
     "finances",
@@ -21,6 +21,7 @@
   "devDependencies": {
     "chart.js": "^2.7.2",
     "electron": "~1.8.2",
+    "electron-json-storage": "^4.0.2",
     "jquery": "^3.3.1"
   }
 }

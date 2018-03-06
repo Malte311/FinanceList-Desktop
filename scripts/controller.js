@@ -1,4 +1,6 @@
-// This variable saves the currently selected language
+/**
+ * This variable holds the currently selected language.
+ */
 var language;
 /**
  * This function initializes the page when its loaded
@@ -22,7 +24,7 @@ function loadPage() {
 }
 
 /**
- * This function hides all elements with lang=en attribute
+ * This function shows only elements with lang=de attribute
  */
 function setLangToGerman() {
     $("[lang=en]").hide();
@@ -32,7 +34,7 @@ function setLangToGerman() {
 }
 
 /**
- * This function hides all elements with lang=de attribute
+ * This function shows only elements with lang=en attribute
  */
 function setLangToEnglish() {
     $("[lang=de]").hide();
