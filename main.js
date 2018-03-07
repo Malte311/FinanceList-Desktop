@@ -20,6 +20,10 @@ function createWindow () {
         width: 1200,
         height: 900,
         icon: path.join( __dirname, 'img/tab.ico' ),
+        movable: true,
+        center: true,
+        fullscreen: false,
+        frame: true,
         show: false
     })
 

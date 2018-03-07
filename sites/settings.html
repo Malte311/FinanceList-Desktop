@@ -1,19 +1,20 @@
+<!DOCTYPE html>
 <html>
     <!-- head -->
     <head>
-        <title> FinanceList - Settings </title>
+        <!-- general settings -->
+        <title> FinanceList - A finance managing tool </title>
         <link rel="shortcut icon" href="img/tab.ico">
         <meta charset="UTF-8">
-
+        <!-- scripts -->
         <script language="javascript" src="../scripts/controller.js"></script>
         <script language="javascript" src="../scripts/spendingchart.js"></script>
-
-        <link rel="stylesheet" href="../style/w3.css">
+        <!-- stylesheets -->
+        <link rel="stylesheet" type="text/css" href="../style/w3.css">
         <link rel="stylesheet" type="text/css" href="../style/fontawesome/css/fontawesome-all.min.css">
     </head>
-
     <!-- body -->
-    <body>
+    <body class="w3-light-grey">
         <!-- header -->
         <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
             <span class="w3-bar-item w3-center"> FinanceList </span>
@@ -23,27 +24,53 @@
             </span>
         </div>
         <!-- sidebar -->
-        <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:250px;" id="mySidebar"><br>
-            <div class="w3-container w3-row">
-                <h2 align="center" lang="en"> Settings </h2>
-                <h2 align="center" lang="de"> Einstellungen </h2>
+        <nav class="w3-sidebar w3-collapse w3-card w3-white w3-animate-left" style="z-index:3;width:200px;margin-top:0px;">
+            <br>
+            <div align="center" class="w3-container w3-row">
+                <span class="w3-xlarge" lang="en"> Settings </span>
+                <span class="w3-xlarge" lang="de"> Einstellungen </span>
             </div>
             <hr>
             <div class="w3-bar-block">
-                <a onclick="window.location.href='overview.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="fa fa-home"></i> Overview </a>
-                <a onclick="window.location.href='overview.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="fa fa-home"></i> Überblick </a>
+                <a onclick="window.location.href='../index.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="fa fa-home"></i> Overview </a>
+                <a onclick="window.location.href='../index.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="fa fa-home"></i> Überblick </a>
                 <a onclick="window.location.href='balances.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="fas fa-euro-sign"></i> Balances </a>
                 <a onclick="window.location.href='balances.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="fas fa-euro-sign"></i> Bilanzen </a>
-                <a onclick="window.location.href='settings.html';" href="#" class="w3-bar-item w3-button w3-padding w3-blue" lang="en"><i class="fas fa-cog"></i> Settings </a>
-                <a onclick="window.location.href='settings.html';" href="#" class="w3-bar-item w3-button w3-padding w3-blue" lang="de"><i class="fas fa-cog"></i> Einstellungen </a>
+                <a href="#" class="w3-bar-item w3-button w3-padding w3-blue" lang="en"><i class="fas fa-cog"></i> Settings </a>
+                <a href="#" class="w3-bar-item w3-button w3-padding w3-blue" lang="de"><i class="fas fa-cog"></i> Einstellungen </a>
                 <a onclick="window.location.href='help.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="far fa-question-circle"></i> Help </a>
                 <a onclick="window.location.href='help.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="far fa-question-circle"></i> Hilfe </a>
             </div>
         </nav>
+        <!-- main content -->
+        <div class="w3-main" style="margin-left:250px;margin-top:45px;">
+            <div class="w3-row-padding" style="margin:0 -16px">
+                <!-- window size settings -->
+                <h5 lang="en"><i class="fas fa-desktop"></i> Window size </h5>
+                <h5 lang="de"><i class="fas fa-desktop"></i> Fenstergr&ouml;&szlig;e </h5>
+                <div class="w3-dropdown-hover">
+                    <button class="w3-button w3-black"></button>
+                    <div class="w3-dropdown-content w3-bar-block w3-border">
+                        <a href="#" class="w3-bar-item w3-button">800x600</a>
+                        <a href="#" class="w3-bar-item w3-button">1024x768</a>
+                        <a href="#" class="w3-bar-item w3-button">1280x1024</a>
+                        <a href="#" class="w3-bar-item w3-button">1366x768</a>
+                        <a href="#" class="w3-bar-item w3-button">1440x900</a>
+                        <a href="#" class="w3-bar-item w3-button">1920x1080</a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <!-- path settings -->
+            <div class="w3-row-padding" style="margin:0 -16px">
+
+            </div>
+        </div>
     </body>
+    <!-- JavaScript initialization -->
     <script>
-        var $ = require("jquery");
-        var Chart = require("chart.js");
+        const $ = require( 'jquery' );
+        const Chart = require( 'chart.js' );
         loadPage();
     </script>
 </html>

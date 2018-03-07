@@ -61,7 +61,7 @@ function setOverview() {
 
 
 function test() {
-    var ctx = document.getElementById("myChart");
+    var ctx = document.getElementById("pieChart");
     ctx.width="6000";
     ctx.height="2000";
 

@@ -1,17 +1,18 @@
+<!DOCTYPE html>
 <html>
     <!-- head -->
     <head>
-        <title> FinanceList - Overview </title>
+        <!-- general settings -->
+        <title> FinanceList - A finance managing tool </title>
         <link rel="shortcut icon" href="img/tab.ico">
         <meta charset="UTF-8">
-
+        <!-- scripts -->
         <script language="javascript" src="scripts/controller.js"></script>
         <script language="javascript" src="scripts/spendingchart.js"></script>
-
-        <link rel="stylesheet" href="style/w3.css">
+        <!-- stylesheets -->
+        <link rel="stylesheet" type="text/css" href="style/w3.css">
         <link rel="stylesheet" type="text/css" href="style/fontawesome/css/fontawesome-all.min.css">
     </head>
-
     <!-- body -->
     <body class="w3-light-grey">
         <!-- header -->
@@ -23,15 +24,16 @@
             </span>
         </div>
         <!-- sidebar -->
-        <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:250px;" id="mySidebar"><br>
-            <div class="w3-container w3-row">
-                <h2 align="center" lang="en"> Overview </h2>
-                <h2 align="center" lang="de"> Überblick </h2>
+        <nav class="w3-sidebar w3-collapse w3-white w3-card w3-animate-left" style="z-index:3;width:200px;margin-top:0px;">
+            <br>
+            <div align="center" class="w3-container w3-row">
+                <span class="w3-xlarge" lang="en"> Overview </span>
+                <span class="w3-xlarge" lang="de"> Überblick </span>
             </div>
             <hr>
             <div class="w3-bar-block">
-                <a onclick="window.location.href='sites/overview.html';" href="#" class="w3-bar-item w3-button w3-padding w3-blue" lang="en"><i class="fa fa-home"></i> Overview </a>
-                <a onclick="window.location.href='sites/overview.html';" href="#" class="w3-bar-item w3-button w3-padding w3-blue" lang="de"><i class="fa fa-home"></i> Überblick </a>
+                <a href="#" class="w3-bar-item w3-button w3-padding w3-blue" lang="en"><i class="fa fa-home"></i> Overview </a>
+                <a href="#" class="w3-bar-item w3-button w3-padding w3-blue" lang="de"><i class="fa fa-home"></i> Überblick </a>
                 <a onclick="window.location.href='sites/balances.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="fas fa-euro-sign"></i> Balances </a>
                 <a onclick="window.location.href='sites/balances.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="fas fa-euro-sign"></i> Bilanzen </a>
                 <a onclick="window.location.href='sites/settings.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="fas fa-cog"></i> Settings </a>
@@ -41,15 +43,18 @@
             </div>
         </nav>
         <!-- main content -->
-        <div class="w3-main" style="margin-left:300px;margin-top:65px;">
+        <div class="w3-main" style="margin-left:250px;margin-top:45px;">
             <div class="w3-panel">
                 <div class="w3-row-padding" style="margin:0 -16px">
-
-                    <canvas id="myChart" width="400" height="400"></canvas>
+                    <h3 lang="en"><i class="fa fa-arrow-right"></i> Last months spendings </h3>
+                    <h3 lang="de"><i class="fa fa-arrow-right"></i> Ausgaben im letzten Monat </h3>
+                    <!-- canvas for the pie chart -->
+                    <canvas id="pieChart" width="400" height="400"></canvas>
                     <hr>
+                    <!-- recent spendings overview -->
                     <div class="w3-twothird">
                         <h3 lang="en"><i class="fa fa-arrow-right"></i> Recent spendings </h3>
-                        <h3 lang="de"><i class="fa fa-arrow-right"></i> Letzte Ausgaben </h3>
+                        <h3 lang="de"><i class="fa fa-arrow-right"></i> Kürzliche Ausgaben </h3>
                         <table class="w3-table w3-striped w3-white">
                             <tr>
                                 <td><i class="fa fa-share-alt w3-text-green w3-large"></i></td>
@@ -80,19 +85,21 @@
                     </div>
                 </div>
                 <hr>
+                <!-- budget overview -->
                 <div class="w3-container">
-                    <h3><i class="fa fa-arrow-right"></i> Budgets </h3>
-                    <p>New Visitors</p>
+                    <h3 lang="en"><i class="fa fa-arrow-right"></i> Budgets </h3>
+                    <h3 lang="de"><i class="fa fa-arrow-right"></i> Konten </h3>
+                    <p></p>
                     <div class="w3-grey">
                         <div class="w3-container w3-center w3-padding w3-green" style="width:25%">+25%</div>
                     </div>
 
-                    <p>New Users</p>
+                    <p></p>
                     <div class="w3-grey">
                         <div class="w3-container w3-center w3-padding w3-orange" style="width:50%">50%</div>
                     </div>
 
-                    <p>Bounce Rate</p>
+                    <p></p>
                     <div class="w3-grey">
                         <div class="w3-container w3-center w3-padding w3-red" style="width:75%">75%</div>
                     </div>
@@ -100,9 +107,10 @@
             </div>
             <hr>
         </div>
+        <!-- JavaScript initialization -->
         <script>
-            var $ = require("jquery");
-            var Chart = require("chart.js");
+            const $ = require( 'jquery' );
+            const Chart = require( 'chart.js' );
             loadPage();
         </script>
     </body>
