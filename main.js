@@ -17,7 +17,7 @@ const devMode = true;
 let mainWindow
 
 function createWindow () {
-    // Create the browser window.
+    // Create the browser window (with default values)
     mainWindow = new BrowserWindow({
         width: 1920,
         height: 1080,
@@ -25,7 +25,6 @@ function createWindow () {
         movable: true,
         center: true,
         fullscreen: false,
-        frame: true,
         show: false
     });
 
@@ -35,6 +34,16 @@ function createWindow () {
         protocol: 'file:',
         slashes: true
     }));
+
+    // Read the configuration file, to get the preferences.
+    storage.get( "settings", function( error, data ) {
+        if ( error ) throw error;
+        // Apply the changes to the default values.
+        mainWindow.setSize( parseInt( data.windowSize.split( "x" )[0] ),
+                            parseInt( data.windowSize.split( "x" )[1] ));
+        mainWindow.setFullScreen( data.fullscreen );
+        mainWindow.center();
+    });
 
     // Don't show the window before content finished loading
     mainWindow.once( 'page-title-updated', function() {
@@ -108,7 +117,7 @@ function createWindow () {
                 { role: 'toggledevtools' }
             ]
         });
-        // open console automatically
+        // open console automatically when in devmode
         mainWindow.webContents.openDevTools();
     }
 
