@@ -1,6 +1,8 @@
 // These are neccessary to set the window size.
 const { remote } = require( 'electron' );
 const win = remote.getCurrentWindow();
+// Module for setting the path.
+const { dialog } = require( 'electron' ).remote;
 
 /**
  * This function initializes the page when its loaded. This means it sets the
@@ -27,6 +29,14 @@ function loadPage() {
         if ( data.fullscreen === true ) {
             document.getElementById( "fullscreen" ).checked = true;
         }
+        // Before displaying the currently selected path, we check if it is defined.
+        // If not, we set a default value.
+        if ( data.path === undefined || data.path === null ) {
+            // TODO
+            //data.path = storage.getDefaultDataPath() + "/data";
+        }
+        // Display currently selected path.
+        $( "#currentPath" ).text( data.path );
     });
 }
 
@@ -42,7 +52,7 @@ function setWindowSize( size ) {
         if ( error ) throw error;
         // Only change the size if a different value than the current one is selected.
         if ( data.windowSize !== size ) {
-            // Since the format of size is "widthxheight", this works.
+            // Since the format of size is always "widthxheight", this works.
             var newWidth = parseInt( size.split( "x" )[0] );
             var newHeight = parseInt( size.split( "x" )[1] );
             // Set the new size.
@@ -87,5 +97,30 @@ function setWindowMode( mode ) {
         storage.set( "settings", settingsObj, function( error ) {
             if ( error ) throw error;
         });
+    });
+}
+
+/**
+ * This function sets the path to the directory which should contain the user data.
+ * The path will be saved in the configuration file to remember it.
+ */
+function setPath() {
+    // Get the new path from user input.
+    var path = dialog.showOpenDialog({
+        properties: ['openDirectory']
+    });
+    // As always, we get existing data, to be able to append new data.
+    storage.get( "settings", function( error, data ) {
+        if ( error ) throw error;
+        // Make sure that the user did not cancel the selection.
+        if ( path !== null && path !== undefined ) {
+            // Save the new path in the configuration file.
+            var settingsObj = data;
+            // Path is an one element array, so we take only the content.
+            settingsObj.path = path[0];
+            storage.set( "settings", settingsObj, function( error ) {
+                if ( error ) throw error;
+            });
+        }
     });
 }

@@ -12,6 +12,7 @@
         <!-- stylesheets -->
         <link rel="stylesheet" type="text/css" href="../style/w3.min.css">
         <link rel="stylesheet" type="text/css" href="../style/fontawesome/css/fontawesome-all.min.css">
+        <link rel="stylesheet" type="text/css" href="../style/settings.css">
     </head>
     <!-- body -->
     <body class="w3-light-grey">
@@ -30,7 +31,7 @@
                 <span class="w3-xlarge" lang="en"> Settings </span>
                 <span class="w3-xlarge" lang="de"> Einstellungen </span>
             </div>
-            <hr>
+            <hr style="border-color:black;">
             <div class="w3-bar-block">
                 <a onclick="window.location.href='../index.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="fa fa-home"></i> Overview </a>
                 <a onclick="window.location.href='../index.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="fa fa-home"></i> Überblick </a>
@@ -50,12 +51,12 @@
                 <h5 lang="de"><i class="fas fa-desktop"></i> Fenstergr&ouml;&szlig;e </h5>
                 <!-- dropdown menu to select the window size -->
                 <div class="w3-dropdown-hover">
-                    <button class="w3-button w3-white" id="currentSize"></button>
+                    <button class="w3-button w3-white w3-round-xlarge" id="currentSize"></button>
                     <div class="w3-dropdown-content w3-bar-block w3-border">
-                        <a href="#" onclick="setWindowSize('1024x768');" class="w3-bar-item w3-button">1024x768</a>
-                        <a href="#" onclick="setWindowSize('1366x768');" class="w3-bar-item w3-button">1366x768</a>
-                        <a href="#" onclick="setWindowSize('1440x900');" class="w3-bar-item w3-button">1440x900</a>
-                        <a href="#" onclick="setWindowSize('1920x1080');" class="w3-bar-item w3-button">1920x1080</a>
+                        <a href="#" onclick="setWindowSize('1024x768');" class="w3-bar-item w3-button w3-bar-block w3-border">1024x768</a>
+                        <a href="#" onclick="setWindowSize('1366x768');" class="w3-bar-item w3-button w3-bar-block w3-border">1366x768</a>
+                        <a href="#" onclick="setWindowSize('1440x900');" class="w3-bar-item w3-button w3-bar-block w3-border">1440x900</a>
+                        <a href="#" onclick="setWindowSize('1920x1080');" class="w3-bar-item w3-button w3-bar-block w3-border">1920x1080</a>
                     </div>
                 </div>
                 <!-- checkbox to switch between fullscreen and window mode -->
@@ -63,8 +64,22 @@
                 <span lang="en">Fullscreen</span>
                 <span lang="de">Vollbildmodus</span>
             </div>
-            <hr>
+            <br>
+            <hr style="border-color:black;">
             <!-- path settings -->
+            <div class="w3-row-padding" style="margin:0 -16px">
+                <h5 lang="en"><i class="fas fa-folder"></i> File path </h5>
+                <h5 lang="de"><i class="fas fa-folder"></i> Dateipfad </h5>
+                <button class="w3-button w3-white w3-round-xlarge" onclick="setPath();" id="currentPath"></button>
+                <div class="tooltip">
+                    <i class="fas fa-info-circle"></i>
+                    <span class="tooltiptext" lang="de">Der Pfad, unter dem die Einnahmen und Ausgaben gespeichert werden.</span>
+                    <span class="tooltiptext" lang="en">The file path where your data is saved.</span>
+                </div>
+            </div>
+            <br>
+            <hr style="border-color:black;">
+            <!-- budget settings -->
             <div class="w3-row-padding" style="margin:0 -16px">
 
             </div>

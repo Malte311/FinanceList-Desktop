@@ -38,9 +38,27 @@ function createWindow () {
     // Read the configuration file, to get the preferences.
     storage.get( "settings", function( error, data ) {
         if ( error ) throw error;
-        // Apply the changes to the default values.
-        mainWindow.setSize( parseInt( data.windowSize.split( "x" )[0] ),
-                            parseInt( data.windowSize.split( "x" )[1] ));
+        // try-catch to ensure that the input is O.K.
+        try {
+            mainWindow.setSize( parseInt( data.windowSize.split( "x" )[0] ),
+                                parseInt( data.windowSize.split( "x" )[1] ));
+        }
+        // Set default value since the input was not O.K.
+        catch ( err ) {
+            var settingsObj = data;
+            settingsObj.windowSize = "1920x1080";
+            storage.set( "settings", settingsObj, function( error ) {
+                if ( error ) throw error;
+            });
+        }
+        // Set default value in case no correct value exists.
+        if ( data.fullscreen !== true && data.fullscreen !== false ) {
+            var settingsObj = data;
+            settingsObj.fullscreen = false;
+            storage.set( "settings", settingsObj, function( error ) {
+                if ( error ) throw error;
+            });
+        }
         mainWindow.setFullScreen( data.fullscreen );
         mainWindow.center();
     });
