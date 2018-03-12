@@ -1,7 +1,19 @@
 const $ = require( 'jquery' );
 const Chart = require( 'chart.js' );
-// This is for writing in the settings.json file.
-const storage = require( 'electron-json-storage' );
+
+/**
+ * This function sets the language.
+ */
+function setLanguage() {
+    // Use the language that was selected before.
+    var language = readPreference( "language" );
+    if ( language === "en" ) {
+        setLangToEnglish();
+    }
+    else if ( language === "de" ) {
+        setLangToGerman();
+    }
+}
 
 /**
  * This function shows only elements with lang=de attribute and hides all elements
@@ -12,15 +24,7 @@ function setLangToGerman() {
     $( "[lang=en]" ).hide();
     $( "[lang=de]" ).show();
     // Save the new language.
-    storage.get( "settings", function( error, data ) {
-        if ( error ) throw error;
-        // We get the existing data and add a value for the language.
-        var settingsObj = data;
-        settingsObj.language = "de";
-        storage.set( "settings", settingsObj, function( error ) {
-            if ( error ) throw error;
-        });
-    });
+    storePreference( "language", "de" );
 }
 
 /**
@@ -32,15 +36,7 @@ function setLangToEnglish() {
     $( "[lang=de]" ).hide();
     $( "[lang=en]" ).show();
     // Save the new language.
-    storage.get( "settings", function( error, data ) {
-        if ( error ) throw error;
-        // We get the existing data and add a value for the language.
-        var settingsObj = data;
-        settingsObj.language = "en";
-        storage.set( "settings", settingsObj, function( error ) {
-            if ( error ) throw error;
-        });
-    });
+    storePreference( "language", "en" );
 }
 
 /**

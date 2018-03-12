@@ -3,22 +3,7 @@
  * language and some of the content.
  */
 function loadPage() {
-    // Use the language that was selected before.
-    storage.get( "settings", function( error, data ) {
-        if ( error ) throw error;
-        var language = data.language;
-        // If no language was selected before, we set it to default (english).
-        if ( language === null || language === undefined ) {
-            setLangToEnglish();
-        }
-        else if ( language === "en" ) {
-            setLangToEnglish();
-        }
-        else if ( language === "de" ) {
-            setLangToGerman();
-        }
-    });
-
+    setLanguage();
     test();
     setOverview();
 }
