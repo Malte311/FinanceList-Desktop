@@ -28,13 +28,14 @@ function addSpending( spending, sum, budget ) {
  * This function displays all currently available budgets.
  */
 function displayBudgets() {
+
+    // TODO: This function should read the corresponding file to get the standardBudget name.
+
     // First, display the standard budget which can never be deleted.
     var currentLanguage = readPreference( "language" );
     var standardBudget = "<li class=\"w3-hover-light-blue w3-display-container\" lang=\"en\">Checking account</li><li class=\"w3-hover-light-blue w3-display-container\" lang=\"de\">Girokonto</li>";
     $( "#currentBudgets" ).append( standardBudget );
-
-    //<li class="w3-hover-light-blue w3-display-container">b<span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-right">&times;</span></li>
-    //<li class="w3-hover-light-blue w3-display-container">c<span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-right">&times;</span></li>
+    setLanguage();
 }
 
 /**
@@ -42,7 +43,22 @@ function displayBudgets() {
  * @param {String} name THe name of the budget we want to create.
  */
 function addBudget( name ) {
+    // Make sure the input field is not empty.
+    if ( name !== "" ) {
+        // Close the dialog.
+        $( '#addDialog' ).hide();
+        // Save the new budget if it does not already exist.
 
+        // TODO!
+
+        // Display it in the list of available budgets.
+        var newBudget = "<li class=\"w3-hover-light-blue w3-display-container\">" +
+                        "<span onclick=\"$('#renameDialog').show();\" class=\"w3-button w3-hover-light-blue\"><i class=\"fas fa-edit\"></i></span>" + name +
+                        "<span onclick=\"$('#deleteDialog').show();\" class=\"w3-button w3-hover-light-blue w3-display-right\">&times;</span></li>";
+        // TODO: Some sort of displayBudgets(); instead of the following
+        $( "#currentBudgets" ).append( newBudget );
+        setLanguage();
+    }
 }
 
 /**
@@ -51,5 +67,14 @@ function addBudget( name ) {
  * @param {String} name The name of the budget we want to delete.
  */
 function deleteBudget( name ) {
-    console.log(name);
+    this.parentElement.style.display='none';
+    console.log("delete " + name);
+}
+
+/**
+ * This function renames a budget.
+ * @param {String} name The name of the budget we want to change.
+ */
+function renameBudget( name ) {
+    console.log("rename " + name);
 }

@@ -3,6 +3,7 @@ const fs = require( 'fs' );
 const storage = require( 'electron-json-storage' );
 const path = storage.getDefaultDataPath() + "/settings.json";
 const defaultObj = {"windowSize":"1920x1080","fullscreen":false,"language":"en","path": __dirname + "/data","currency":"Euro","chartType":"pie"};
+const defaultStorageObj = {"budgets":["checking account"]};
 
 /**
  * This function reads a field in the settings.json file.
@@ -66,5 +67,32 @@ function storeData( file, data ) {
     else {
         // The content is an array containing JSON objects.
         fs.appendFileSync( dataPath, "[" + JSON.stringify( data ) + "]" );
+    }
+}
+
+// TODO: Improve this function ************************************************
+
+/**
+ * This function reads a field in the mainStorage.json file.
+ * @param {String} name The name of the field we want to access.
+ * @return {Object} The corresponding value of the field.
+ */
+function readData( name ) {
+    var dataPath = readPreference( "path" ) + "/mainStorage.json";
+    // Check if the file exists. If not, create it.
+    if ( fs.existsSync( dataPath ) ) {
+        var mainStorageObj = JSON.parse( fs.readFileSync( dataPath ) );
+        // File exists but the value is undefined:
+        if ( mainStorageObj[name] === undefined ) {
+            storePreference( name, defaultStorageObj[name] );
+            return defaultStorageObj[name];
+        }
+        // File exists and value is not undefined:
+        return mainStorageObj[name];
+    }
+    // File does not exist: Create it and write default values in it.
+    else {
+        fs.appendFileSync( dataPath, JSON.stringify( defaultStorageObj ) );
+        return defaultStorageObj[name];
     }
 }

@@ -35,14 +35,14 @@
             </div>
             <hr style="border-color:black;">
             <div class="w3-bar-block">
-                <a onclick="window.location.href='../index.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="fa fa-home"></i> Overview </a>
-                <a onclick="window.location.href='../index.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="fa fa-home"></i> Überblick </a>
-                <a onclick="window.location.href='balances.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="fas fa-euro-sign"></i> Balances </a>
-                <a onclick="window.location.href='balances.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="fas fa-euro-sign"></i> Bilanzen </a>
-                <a href="#" class="w3-bar-item w3-button w3-padding w3-blue" lang="en"><i class="fas fa-cog"></i> Settings </a>
-                <a href="#" class="w3-bar-item w3-button w3-padding w3-blue" lang="de"><i class="fas fa-cog"></i> Einstellungen </a>
-                <a onclick="window.location.href='help.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="far fa-question-circle"></i> Help </a>
-                <a onclick="window.location.href='help.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="far fa-question-circle"></i> Hilfe </a>
+                <span lang="en"><a onclick="window.location.href='../index.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-home"></i> Overview </a></span>
+                <span lang="de"><a onclick="window.location.href='../index.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-home"></i> Überblick </a></span>
+                <span lang="en"><a onclick="window.location.href='balances.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-euro-sign"></i> Balances </a></span>
+                <span lang="de"><a onclick="window.location.href='balances.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-euro-sign"></i> Bilanzen </a></span>
+                <span lang="en"><a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fas fa-cog"></i> Settings </a></span>
+                <span lang="de"><a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fas fa-cog"></i> Einstellungen </a></span>
+                <span lang="en"><a onclick="window.location.href='help.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="far fa-question-circle"></i> Help </a></span>
+                <span lang="de"><a onclick="window.location.href='help.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="far fa-question-circle"></i> Hilfe </a></span>
             </div>
         </nav>
         <!-- main content -->
@@ -55,16 +55,16 @@
                 <div class="w3-dropdown-hover">
                     <button class="w3-button w3-white w3-round-xlarge" id="currentSize"></button>
                     <div class="w3-dropdown-content w3-bar-block w3-border">
-                        <a href="#" onclick="setWindowSize('1024x768');" class="w3-bar-item w3-button w3-bar-block w3-border">1024x768</a>
-                        <a href="#" onclick="setWindowSize('1366x768');" class="w3-bar-item w3-button w3-bar-block w3-border">1366x768</a>
-                        <a href="#" onclick="setWindowSize('1440x900');" class="w3-bar-item w3-button w3-bar-block w3-border">1440x900</a>
-                        <a href="#" onclick="setWindowSize('1920x1080');" class="w3-bar-item w3-button w3-bar-block w3-border">1920x1080</a>
+                        <a href="#" onclick="setWindowSize('1024x768');" class="w3-bar-item w3-button w3-bar-block w3-border"> 1024x768 </a>
+                        <a href="#" onclick="setWindowSize('1366x768');" class="w3-bar-item w3-button w3-bar-block w3-border"> 1366x768 </a>
+                        <a href="#" onclick="setWindowSize('1440x900');" class="w3-bar-item w3-button w3-bar-block w3-border"> 1440x900 </a>
+                        <a href="#" onclick="setWindowSize('1920x1080');" class="w3-bar-item w3-button w3-bar-block w3-border"> 1920x1080 </a>
                     </div>
                 </div>
                 <!-- checkbox to switch between fullscreen and window mode -->
                 <input type="checkbox" onclick="setWindowMode('fullscreen');" id="fullscreen">
-                <span lang="en">Fullscreen</span>
-                <span lang="de">Vollbildmodus</span>
+                <span lang="en"> Fullscreen </span>
+                <span lang="de"> Vollbildmodus </span>
             </div>
             <br>
             <hr style="border-color:black;">
@@ -75,8 +75,8 @@
                 <button class="w3-button w3-white w3-round-xlarge" onclick="setPath();" id="currentPath"></button>
                 <div class="tooltip">
                     <i class="fas fa-info-circle"></i>
-                    <span class="tooltiptext" lang="de">Der Pfad, unter dem die Einnahmen und Ausgaben gespeichert werden.</span>
-                    <span class="tooltiptext" lang="en">The file path where your data is saved.</span>
+                    <span class="tooltiptext" lang="de"> Der Pfad, unter dem die Einnahmen und Ausgaben gespeichert werden. </span>
+                    <span class="tooltiptext" lang="en"> The file path where your data is saved. </span>
                 </div>
             </div>
             <br>
