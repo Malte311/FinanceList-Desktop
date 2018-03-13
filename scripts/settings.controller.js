@@ -18,6 +18,10 @@ function loadPage() {
     }
     // Display currently selected path.
     $( "#currentPath" ).text( readPreference( "path" ) );
+    // Display currenctly selected currency.
+    $( "#currentCurrency" ).text( readPreference( "currency" ) );
+    // Display currenctly selected chart type.
+    displayChartType();
 }
 
 /**
@@ -73,5 +77,58 @@ function setPath() {
     if ( path !== null && path !== undefined ) {
         // Save the new path in the configuration file.
         storePreference( "path", newPath );
+        // Show the path as currently selected.
+        $( "#currentPath" ).text( newPath );
+    }
+}
+
+/**
+ * This function sets the currency.
+ * @param {String} value The name of the currency.
+ */
+function setCurrency( value ) {
+    // Save the value in settings.json.
+    storePreference( "currency", value );
+    // Show the currently selected currency.
+    $( "#currentCurrency" ).text( value );
+}
+
+/**
+ * This function sets the chart type.
+ * @param {String} name The name of the chart type.
+ */
+function setChartType( name ) {
+    // Save the value in settings.json.
+    storePreference( "chartType", name );
+    displayChartType();
+}
+
+/**
+ * This function displays the correct chart type. We need to switch case here, since
+ * the names are different in various languages.
+ */
+function displayChartType() {
+    var currentChartType = readPreference( "chartType" );
+    var currentLanguage = readPreference( "language" );
+    // Switch case in case some more languages are added later on.
+    switch ( currentLanguage ) {
+        case "en":
+            // Capitalize the chart type and display it.
+            $( "#currentChartType" ).text( readPreference( "chartType" ).replace( /\b\w/g, l => l.toUpperCase() ) + " chart" );
+            break;
+        case "de":
+            if ( currentChartType === "pie" ) {
+                $( "#currentChartType" ).text( "Kreisdiagramm" );
+            }
+            else if ( currentChartType === "line" ) {
+                $( "#currentChartType" ).text( "Liniendiagramm" );
+            }
+            else if ( currentChartType === "bar" ) {
+                $( "#currentChartType" ).text( "Balkendiagramm" );
+            }
+            else if ( currentChartType === "doughnut" ) {
+                $( "#currentChartType" ).text( "Ringdiagramm" );
+            }
+            break;
     }
 }

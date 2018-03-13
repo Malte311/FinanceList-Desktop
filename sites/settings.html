@@ -14,6 +14,7 @@
         <link rel="stylesheet" type="text/css" href="../style/w3.min.css">
         <link rel="stylesheet" type="text/css" href="../style/fontawesome/css/fontawesome-all.min.css">
         <link rel="stylesheet" type="text/css" href="../style/settings.css">
+        <link rel="stylesheet" type="text/css" href="../style/style.css">
     </head>
     <!-- body -->
     <body class="w3-light-grey">
@@ -21,8 +22,8 @@
         <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
             <span class="w3-bar-item w3-center"> FinanceList </span>
             <span class="w3-bar-item w3-right">
-                <a onclick="setLangToEnglish()" href="#"><img border="0" alt="EN" src="../img/us.ico" width=20px height=20px></a>
-                <a onclick="setLangToGerman()" href="#"><img border="0" alt="DE" src="../img/de.ico" width=20px height=20px></a>
+                <a onclick="setLangToEnglish();displayChartType();" href="#"><img border="0" alt="EN" src="../img/us.ico" width=20px height=20px></a>
+                <a onclick="setLangToGerman();displayChartType();" href="#"><img border="0" alt="DE" src="../img/de.ico" width=20px height=20px></a>
             </span>
         </div>
         <!-- sidebar -->
@@ -80,14 +81,45 @@
             </div>
             <br>
             <hr style="border-color:black;">
-            <!-- budget settings -->
+            <!-- currency settings -->
             <div class="w3-row-padding" style="margin:0 -16px">
-
+                <h5 lang="en"><i class="far fa-money-bill-alt"></i> Currency </h5>
+                <h5 lang="de"><i class="far fa-money-bill-alt"></i> Währung </h5>
+                <!-- dropdown menu to select the currency -->
+                <div class="w3-dropdown-hover">
+                    <button class="w3-button w3-white w3-round-xlarge" id="currentCurrency"></button>
+                    <div class="w3-dropdown-content w3-bar-block w3-border">
+                        <a href="#" onclick="setCurrency('Euro');" class="w3-bar-item w3-button w3-bar-block w3-border"><i class="fas fa-euro-sign"></i> Euro </a>
+                        <a href="#" onclick="setCurrency('Dollar');" class="w3-bar-item w3-button w3-bar-block w3-border"><i class="fas fa-dollar-sign"></i> Dollar </a>
+                        <a href="#" onclick="setCurrency('Pound');" class="w3-bar-item w3-button w3-bar-block w3-border"><i class="fas fa-pound-sign"></i> Pound </a>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <hr style="border-color:black;">
+            <!-- charttype settings -->
+            <div class="w3-row-padding" style="margin:0 -16px">
+                <h5 lang="en"><i class="fas fa-chart-pie"></i> Chart type </h5>
+                <h5 lang="de"><i class="fas fa-chart-pie"></i> Diagrammart </h5>
+                <!-- dropdown menu to select the chart type -->
+                <div class="w3-dropdown-hover">
+                    <button class="w3-button w3-white w3-round-xlarge" id="currentChartType"></button>
+                    <div class="w3-dropdown-content w3-bar-block w3-border">
+                        <a href="#" onclick="setChartType('pie');" class="w3-bar-item w3-button w3-bar-block w3-border" lang="en"> Pie chart </a>
+                        <a href="#" onclick="setChartType('pie');" class="w3-bar-item w3-button w3-bar-block w3-border" lang="de"> Kreisdiagramm </a>
+                        <a href="#" onclick="setChartType('line');" class="w3-bar-item w3-button w3-bar-block w3-border" lang="en"> Line chart </a>
+                        <a href="#" onclick="setChartType('line');" class="w3-bar-item w3-button w3-bar-block w3-border" lang="de"> Liniendiagramm </a>
+                        <a href="#" onclick="setChartType('bar');" class="w3-bar-item w3-button w3-bar-block w3-border" lang="en"> Bar chart </a>
+                        <a href="#" onclick="setChartType('bar');" class="w3-bar-item w3-button w3-bar-block w3-border" lang="de"> Balkendiagramm </a>
+                        <a href="#" onclick="setChartType('doughnut');" class="w3-bar-item w3-button w3-bar-block w3-border" lang="en"> Doughnut chart </a>
+                        <a href="#" onclick="setChartType('doughnut');" class="w3-bar-item w3-button w3-bar-block w3-border" lang="de"> Ringdiagramm </a>
+                    </div>
+                </div>
             </div>
         </div>
+        <!-- JavaScript initialization -->
+        <script>
+            loadPage();
+        </script>
     </body>
-    <!-- JavaScript initialization -->
-    <script>
-        loadPage();
-    </script>
 </html>

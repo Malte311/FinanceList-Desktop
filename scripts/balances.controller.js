@@ -4,39 +4,52 @@
  */
 function loadPage() {
     setLanguage();
-
-    addSpending( "auto", "porsche" );
+    displayBudgets();
 }
 
 /**
  * This function saves new spending entries in json files.
  * @param {String} spending The name of the spending.
- * @param {String} category The name of the category of the spending. It is
- * possible to select more than one category (seperated by commas).
+ * @param {double} sum The cost of the aquired thing.
+ * @param {String} budget The budget from which the sum should be subtracted.
  */
-function addSpending( spending, category ) {
+function addSpending( spending, sum, budget ) {
     // First, we get the current time to add this data to the entry.
     var currentTime = new Date();
     var day = currentTime.getDate() < 10 ? "0" + currentTime.getDate().toString() : currentTime.getDate().toString();
     var month = (currentTime.getMonth() + 1) < 10 ? "0" + (currentTime.getMonth() + 1).toString() : (currentTime.getMonth() + 1).toString();
-    var fileName = month + "." + currentTime.getFullYear().toString();
-    var timestamp = day + "." + fileName;
-    // Before we store the data, we get the path to the file in which we want to store it.
-    storage.get( "settings", function( error, data ) {
-        if ( error ) throw error;
-        // If no path exists, we set a default path.
-        if ( data.path === undefined || data.path === null ) {
-            // Save existing data and add a value for "path".
-            var settingsObj = data;
-            settingsObj.path = __dirname + "/data";
-            storage.set( "settings", settingsObj, function( error ) {
-                if ( error ) throw error;
-            });
-        }
+    // Create a JSON object containing the data.
+    var spendingObj = {"date": day + "." + month + "." + currentTime.getFullYear().toString(), "name": spending, "amount": sum, "budget": budget};
+    // Now store the data in the corresponding json file.
+    storeData( month + "." + currentTime.getFullYear().toString(), spendingObj );
+}
 
+/**
+ * This function displays all currently available budgets.
+ */
+function displayBudgets() {
+    // First, display the standard budget which can never be deleted.
+    var currentLanguage = readPreference( "language" );
+    var standardBudget = "<li class=\"w3-hover-light-blue w3-display-container\" lang=\"en\">Checking account</li><li class=\"w3-hover-light-blue w3-display-container\" lang=\"de\">Girokonto</li>";
+    $( "#currentBudgets" ).append( standardBudget );
 
+    //<li class="w3-hover-light-blue w3-display-container">b<span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-right">&times;</span></li>
+    //<li class="w3-hover-light-blue w3-display-container">c<span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-right">&times;</span></li>
+}
 
-    });
+/**
+ * This function creates a new budget.
+ * @param {String} name THe name of the budget we want to create.
+ */
+function addBudget( name ) {
 
+}
 
+/**
+ * This function deletes a budget. Before deleting it, we will show a dialog to
+ * ask if deleting the budget is really wanted.
+ * @param {String} name The name of the budget we want to delete.
+ */
+function deleteBudget( name ) {
+    console.log(name);
 }

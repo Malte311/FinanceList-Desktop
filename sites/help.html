@@ -2,19 +2,21 @@
 <html>
     <!-- head -->
     <head>
+        <!-- general settings -->
         <title> FinanceList - A finance managing tool </title>
         <link rel="shortcut icon" href="img/tab.ico">
         <meta charset="UTF-8">
-
+        <!-- scripts -->
+        <script language="javascript" src="../scripts/JSONhandler.js"></script>
         <script language="javascript" src="../scripts/controller.js"></script>
-        <script language="javascript" src="../scripts/spendingchart.js"></script>
-
-        <link rel="stylesheet" href="../style/w3.min.css">
+        <script language="javascript" src="../scripts/help.controller.js"></script>
+        <!-- stylesheets -->
+        <link rel="stylesheet" type="text/css" href="../style/w3.min.css">
         <link rel="stylesheet" type="text/css" href="../style/fontawesome/css/fontawesome-all.min.css">
+        <link rel="stylesheet" type="text/css" href="../style/style.css">
     </head>
-
     <!-- body -->
-    <body>
+    <body class="w3-light-grey">
         <!-- header -->
         <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
             <span class="w3-bar-item w3-center"> FinanceList </span>
@@ -24,12 +26,13 @@
             </span>
         </div>
         <!-- sidebar -->
-        <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:250px;" id="mySidebar"><br>
-            <div class="w3-container w3-row">
-                <h2 align="center" lang="en"> Help </h2>
-                <h2 align="center" lang="de"> Hilfe </h2>
+        <nav class="w3-sidebar w3-collapse w3-card w3-white w3-animate-left" style="z-index:3;width:200px;margin-top:0px;">
+            <br>
+            <div align="center" class="w3-container w3-row">
+                <span class="w3-xlarge" lang="en"> Help </span>
+                <span class="w3-xlarge" lang="de"> Hilfe </span>
             </div>
-            <hr>
+            <hr style="border-color:black;">
             <div class="w3-bar-block">
                 <a onclick="window.location.href='../index.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="en"><i class="fa fa-home"></i> Overview </a>
                 <a onclick="window.location.href='../index.html';" href="#" class="w3-bar-item w3-button w3-padding" lang="de"><i class="fa fa-home"></i> Überblick </a>
@@ -41,10 +44,15 @@
                 <a href="#" class="w3-bar-item w3-button w3-padding w3-blue" lang="de"><i class="far fa-question-circle"></i> Hilfe </a>
             </div>
         </nav>
+        <!-- main content -->
+        <div class="w3-main" style="margin-left:250px;margin-top:45px;">
+            <div class="w3-container">
+
+            </div>
+        </div>
     </body>
+    <!-- JavaScript initialization -->
     <script>
-        var $ = require("jquery");
-        var Chart = require("chart.js");
         loadPage();
     </script>
 </html>
