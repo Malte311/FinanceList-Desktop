@@ -74,7 +74,7 @@ function setPath() {
     var newPath = dialog.showOpenDialog({
         properties: ['openDirectory']
     });
-    if ( path !== null && path !== undefined ) {
+    if ( newPath !== null && newPath !== undefined ) {
         // Save the new path in the configuration file.
         // (Since newPath is a one element array containing the path, we just take
         // the path instead of the whole array.)

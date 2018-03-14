@@ -101,7 +101,12 @@ function getCurrentDate() {
  * file if it is missing and we update it. This file keeps track of all the data.
  */
 function initMainStorage() {
-    var dataPath = readPreference( "path" ) + "/mainStorage.json";
+    var dataPath = readPreference( "path" );
+    // Create directory, if it doesn't exist yet.
+    if ( !fs.existsSync( dataPath ) ) {
+        fs.mkdirSync( dataPath );
+    }
+    dataPath = readPreference( "path" ) + "/mainStorage.json";
     // Check if the file exists. If not, create it.
     if ( fs.existsSync( dataPath ) ) {
         // File exists, so we check if it needs to get updated.
