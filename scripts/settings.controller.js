@@ -76,7 +76,9 @@ function setPath() {
     });
     if ( path !== null && path !== undefined ) {
         // Save the new path in the configuration file.
-        storePreference( "path", newPath );
+        // (Since newPath is a one element array containing the path, we just take
+        // the path instead of the whole array.)
+        storePreference( "path", newPath[0] );
         // Show the path as currently selected.
         $( "#currentPath" ).text( newPath );
     }

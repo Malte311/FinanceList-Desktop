@@ -4,6 +4,8 @@
  */
 function loadPage() {
     setLanguage();
+    // Initialize the json-storage. 
+    initMainStorage();
     test();
     setOverview();
 }

@@ -14,14 +14,23 @@ function loadPage() {
  * @param {String} budget The budget from which the sum should be subtracted.
  */
 function addSpending( spending, sum, budget ) {
-    // First, we get the current time to add this data to the entry.
-    var currentTime = new Date();
-    var day = currentTime.getDate() < 10 ? "0" + currentTime.getDate().toString() : currentTime.getDate().toString();
-    var month = (currentTime.getMonth() + 1) < 10 ? "0" + (currentTime.getMonth() + 1).toString() : (currentTime.getMonth() + 1).toString();
     // Create a JSON object containing the data.
-    var spendingObj = {"date": day + "." + month + "." + currentTime.getFullYear().toString(), "name": spending, "amount": sum, "budget": budget};
+    var spendingObj = {"date": getCurrentDate(), "name": spending, "amount": sum, "budget": budget, "type": "spending"};
     // Now store the data in the corresponding json file.
-    storeData( month + "." + currentTime.getFullYear().toString(), spendingObj );
+    storeData( spendingObj );
+}
+
+/**
+ * This function saves new earnings entries in json files.
+ * @param {String} earning The name of the earning.
+ * @param {double} sum The amount of the earning.
+ * @param {String} budget The budget to which the sum should be added.
+ */
+function addEarning( earning, sum, budget ) {
+    // Create a JSON object containing the data.
+    var spendingObj = {"date": getCurrentDate(), "name": earning, "amount": sum, "budget": budget, "type": "earning"};
+    // Now store the data in the corresponding json file.
+    storeData( spendingObj );
 }
 
 /**
