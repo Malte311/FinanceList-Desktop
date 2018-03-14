@@ -14,6 +14,7 @@
         <link rel="stylesheet" type="text/css" href="../style/w3.min.css">
         <link rel="stylesheet" type="text/css" href="../style/fontawesome/css/fontawesome-all.min.css">
         <link rel="stylesheet" type="text/css" href="../style/style.css">
+        <link rel="stylesheet" type="text/css" href="../style/jquery-ui.min.css">
     </head>
     <!-- body -->
     <body class="w3-light-grey">
@@ -53,48 +54,11 @@
                     <li lang="en"><h6> Current budgets </h6></li>
                     <li lang="de"><h6> Aktuelle Konten </h6></li>
                 </ul>
+                <!-- div for dialogs -->
+                <div id="dialogDiv"></div>
                 <br>
-                <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="$('#addDialog').show();"> Add budget </button>
-                <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="$('#addDialog').show();"> Konto hinzufügen </button>
-                <!-- dialog to type in the name of a new budget when adding a new budget -->
-                <dialog open id="addDialog">
-                    <h3 lang="en"> Create a new budget </h3>
-                    <h3 lang="de"> Neues Konto anlegen </h3>
-                    <form method="post">
-                        <span lang="en"><label> Please enter a name for the new budget. </label><input id="budgetName" type="text"/></span>
-                        <span lang="de"><label> Bitte geben Sie einen Namen f&uuml;r das neue Konto ein. </label><input id="budgetName" type="text"/></span>
-                    </form>
-                    <button lang="en" onclick="addBudget(document.getElementById('budgetName').value.trim());"> Confirm </button>
-                    <button lang="de" onclick="addBudget(document.getElementById('budgetName').value.trim());"> Best&auml;tigen </button>
-                    <button lang="en" onclick="$('#addDialog').hide();"> Cancel </button>
-                    <button lang="de" onclick="$('#addDialog').hide();"> Abbrechen </button>
-                </dialog>
-                <!-- dialog to type in the name when renaming a budget -->
-                <dialog open id="renameDialog">
-                    <h3 lang="en"> Rename this budget </h3>
-                    <h3 lang="de"> Konto umbenennen </h3>
-                    <form method="post">
-                        <span lang="en"><label> Please enter a new name for this budget. </label><input id="budgetRename" type="text"/></span>
-                        <span lang="de"><label> Bitte geben Sie einen neuen Namen f&uuml;r dieses Konto ein. </label><input id="budgetRename" type="text"/></span>
-                    </form>
-                    <button lang="en" onclick="renameBudget(document.getElementById('budgetRename').value.trim());"> Confirm </button>
-                    <button lang="de" onclick="renameBudget(document.getElementById('budgetRename').value.trim());"> Best&auml;tigen </button>
-                    <button lang="en" onclick="$('#renameDialog').hide();"> Cancel </button>
-                    <button lang="de" onclick="$('#renameDialog').hide();"> Abbrechen </button>
-                </dialog>
-                <!-- dialog to confirm the deletion of a budget -->
-                <dialog open id="deleteDialog">
-                    <h3 lang="en"> Delete this budget </h3>
-                    <h3 lang="de"> Konto löschen </h3>
-                    <form method="post">
-                        <span lang="en"><label> Type in the name of the budget you want to delete. </label><input id="budgetDelete" type="text"/></span>
-                        <span lang="de"><label> Geben Sie den Namen des Kontos ein, dass gel&ouml;scht werden soll. </label><input id="budgetDelete" type="text"/></span>
-                    </form>
-                    <button lang="en" onclick="deleteBudget(document.getElementById('budgetDelete').value.trim());"> Delete </button>
-                    <button lang="de" onclick="deleteBudget(document.getElementById('budgetDelete').value.trim());"> L&ouml;schen </button>
-                    <button lang="en" onclick="$('#renameDialog').hide();"> Cancel </button>
-                    <button lang="de" onclick="$('#renameDialog').hide();"> Abbrechen </button>
-                </dialog>
+                <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="addBudget();"> Add budget </button>
+                <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="addBudget();"> Konto hinzufügen </button>
             </div>
             <br>
             <hr style="border-color:black;">
@@ -118,6 +82,10 @@
             </div>
         </div>
         <!-- JavaScript initialization -->
+        <script>
+            window.$ = window.jQuery = require( 'jquery' );
+        </script>
+        <script language="javascript" src="../scripts/jquery-ui.min.js"></script>
         <script>
             loadPage();
         </script>

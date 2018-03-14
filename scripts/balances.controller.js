@@ -48,26 +48,47 @@ function displayBudgets() {
 }
 
 /**
- * This function creates a new budget.
- * @param {String} name THe name of the budget we want to create.
+ * This function creates a dialog.
  */
-function addBudget( name ) {
-    // Make sure the input field is not empty.
-    if ( name !== "" ) {
-        // Close the dialog.
-        $( '#addDialog' ).hide();
+function createDialog() {
+
+}
+
+/**
+ * This function creates a new budget. It opens a dialog in which the user types
+ * in a name for the new budget.
+ */
+function addBudget() {
         // Save the new budget if it does not already exist.
 
-        // TODO!
+    $("#dialogDiv").dialog({
+    	resizable: false,
+    	height: "auto",
+    	width: "auto",
+    	minWidth: 200,
+    	minHeight: 150,
+    	modal: true,
+    	title: "Test",
+    	close: function () {
+    		$("#dialogDiv").html("");
+    		$("#dialogDiv").addClass("disable");
+    	},
+    	
+    	buttons : {
+			"OK" : function (){},
+			"Abbrechen" : function (){}
+		}
+    });
 
-        // Display it in the list of available budgets.
-        var newBudget = "<li class=\"w3-hover-light-blue w3-display-container\">" +
-                        "<span onclick=\"$('#renameDialog').show();\" class=\"w3-button w3-hover-light-blue\"><i class=\"fas fa-edit\"></i></span>" + name +
-                        "<span onclick=\"$('#deleteDialog').show();\" class=\"w3-button w3-hover-light-blue w3-display-right\">&times;</span></li>";
-        // TODO: Some sort of displayBudgets(); instead of the following
-        $( "#currentBudgets" ).append( newBudget );
-        setLanguage();
-    }
+    // TODO!
+
+    // Display it in the list of available budgets.
+    var newBudget = "<li class=\"w3-hover-light-blue w3-display-container\">" +
+                    "<span onclick=\"$('#renameDialog').show();\" class=\"w3-button w3-hover-light-blue\"><i class=\"fas fa-edit\"></i></span>" + name +
+                    "<span onclick=\"$('#deleteDialog').show();\" class=\"w3-button w3-hover-light-blue w3-display-right\">&times;</span></li>";
+    // TODO: Some sort of displayBudgets(); instead of the following
+    $( "#currentBudgets" ).append( newBudget );
+    setLanguage();
 }
 
 /**
