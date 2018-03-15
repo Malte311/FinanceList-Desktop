@@ -14,7 +14,7 @@
         <link rel="stylesheet" type="text/css" href="../style/w3.min.css">
         <link rel="stylesheet" type="text/css" href="../style/fontawesome/css/fontawesome-all.min.css">
         <link rel="stylesheet" type="text/css" href="../style/style.css">
-        <link rel="stylesheet" type="text/css" href="../style/jquery-ui.min.css">
+        <link rel="stylesheet" type="text/css" href="../style/jquery-ui/jquery-ui.min.css">
     </head>
     <!-- body -->
     <body class="w3-light-grey">
@@ -51,10 +51,9 @@
                 <h5 lang="en"><i class="fas fa-credit-card"></i> Budget overview </h5>
                 <h5 lang="de"><i class="fas fa-credit-card"></i> Konten&uuml;bersicht </h5>
                 <ul class="w3-ul w3-white w3-border w3-round" id="currentBudgets">
-                    <li lang="en"><h6> Current budgets </h6></li>
-                    <li lang="de"><h6> Aktuelle Konten </h6></li>
+                    
                 </ul>
-                <!-- div for dialogs -->
+                <!-- div for dialogues -->
                 <div id="dialogDiv"></div>
                 <br>
                 <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="addBudget();"> Add budget </button>
@@ -64,7 +63,7 @@
             <hr style="border-color:black;">
             <div class="w3-container">
                 <button lang="en" onclick="addSpending( 'auto', 10, 'checking account' );"> Add expenditure to this budget </button>
-                <button lang="de" onclick="addSpending( 'auto', 10, 'checking account' );"> Ausgabe zu diesem Konto hinzuf&uuml;gen </button>
+                <button lang="de" onclick="addEarning( 'lottery', 10, 'checking account' );"> Ausgabe zu diesem Konto hinzuf&uuml;gen </button>
                 <p></p>
                 <div class="w3-grey">
                     <div class="w3-container w3-center w3-padding w3-green" style="width:25%">+25%</div>

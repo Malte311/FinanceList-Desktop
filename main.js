@@ -126,7 +126,7 @@ function createWindow () {
             // Quit for Mac users (CMD+Q).
             {
                 label: 'Quit',
-				role: 'quit'
+                role: 'quit'
             }
         ]
     });

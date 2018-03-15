@@ -1,9 +1,3 @@
-// These are neccessary to set the window size.
-const { remote } = require( 'electron' );
-const win = remote.getCurrentWindow();
-// Module for setting the path.
-const { dialog } = require( 'electron' ).remote;
-
 /**
  * This function initializes the page when its loaded. This means it sets the
  * language and some of the content.
@@ -74,11 +68,16 @@ function setPath() {
     var newPath = dialog.showOpenDialog({
         properties: ['openDirectory']
     });
-    if ( newPath !== null && newPath !== undefined ) {
+    // Make sure that a new path was selected and that the new path is a different one than the old one.
+    if ( newPath !== null && newPath !== undefined && newPath[0] !== readPreference( "path" ) ) {
+        // Move all files to the new location
+        moveFiles( readPreference( "path" ), newPath[0] );
         // Save the new path in the configuration file.
         // (Since newPath is a one element array containing the path, we just take
         // the path instead of the whole array.)
         storePreference( "path", newPath[0] );
+        // Update paths references in JSONhandler.js
+        updatePaths();
         // Show the path as currently selected.
         $( "#currentPath" ).text( newPath );
     }

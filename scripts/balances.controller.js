@@ -37,21 +37,21 @@ function addEarning( earning, sum, budget ) {
  * This function displays all currently available budgets.
  */
 function displayBudgets() {
-
-    // TODO: This function should read the corresponding file to get the standardBudget name.
-
-    // First, display the standard budget which can never be deleted.
+    // Reset previous content.
     var currentLanguage = readPreference( "language" );
-    var standardBudget = "<li class=\"w3-hover-light-blue w3-display-container\" lang=\"en\">Checking account</li><li class=\"w3-hover-light-blue w3-display-container\" lang=\"de\">Girokonto</li>";
-    $( "#currentBudgets" ).append( standardBudget );
-    setLanguage();
-}
+    if ( currentLanguage === "en" ) $( "#currentBudgets" ).html( "<li><h6> Current budgets </h6></li>" );
+    else if ( currentLanguage === "de" ) $( "#currentBudgets" ).html( "<li><h6> Aktuelle Konten </h6></li>" );
+    // Get the mainStorage.json object.
+    var mainStorageObj = JSON.parse( fs.readFileSync( readPreference( "path" ) + "/mainStorage.json" ) );
+    // Iterate over all budgets to display them.
+    for ( var i = 0; i < mainStorageObj["budgets"].length; i++ ) {
+        // Display all budgets. The first one is a standard budget and can therefore not be deleted.
+        if ( i == 0 ) $( "#currentBudgets" ).append( "<li class=\"w3-hover-light-blue w3-display-container\">" + mainStorageObj["budgets"][i][0] + "</li>" );
 
-/**
- * This function creates a dialog.
- */
-function createDialog() {
 
+        // TODO: else condition is not correct
+        else $( "#currentBudgets" ).append( "<li class=\"w3-hover-light-blue w3-display-container\">" + mainStorageObj["budgets"][i][0] + "</li>" );
+    }
 }
 
 /**
@@ -59,36 +59,81 @@ function createDialog() {
  * in a name for the new budget.
  */
 function addBudget() {
-        // Save the new budget if it does not already exist.
-
-    $("#dialogDiv").dialog({
+    // Find out which language is selected to set the text of the dialog.
+    var currentLanguage = readPreference( "language" );
+    var okButtonText;
+    var cancelButtonText;
+    var title;
+    // Set the text elements in the dialog.
+    if ( currentLanguage === "en" ) {
+        $( "#dialogDiv" ).html( "Type in the name of the new budget." + "<br><input type=\"text\" id=\"dialogInput\">" );
+        okButtonText = "Ok";
+        cancelButtonText = "Cancel";
+        title = "Adding a budget";
+    }
+    else if ( currentLanguage === "de" ) {
+        // >>Not sure how to handle umlauts here<<
+        $( "#dialogDiv" ).html( "Geben Sie einen Namen f&uuml;r das neue Konto ein." + "<br><input type=\"text\" id=\"dialogInput\">" );
+        okButtonText = "Bestätigen";
+        cancelButtonText = "Abbrechen";
+        title = "Konto hinzufügen";
+    }
+    // Create a new dialog.
+    $( "#dialogDiv" ).dialog({
     	resizable: false,
     	height: "auto",
     	width: "auto",
     	minWidth: 200,
     	minHeight: 150,
     	modal: true,
-    	title: "Test",
+    	title: title,
     	close: function () {
-    		$("#dialogDiv").html("");
-    		$("#dialogDiv").addClass("disable");
+    		$( "#dialogDiv" ).html( "" );
     	},
-    	
-    	buttons : {
-			"OK" : function (){},
-			"Abbrechen" : function (){}
-		}
+    	buttons : [
+            {
+                text: okButtonText,
+                click: function() {
+                    // Save the new budget and display it.
+                    var dataPath = readPreference( "path" ) + "/mainStorage.json";
+                    var mainStorageObj = JSON.parse( fs.readFileSync( dataPath ) );
+                    var currentBudgets = [];
+                    var newBudget = document.getElementById( "dialogInput" ).value.trim();
+                    var alreadyExists = false;
+                    for ( var i = 0; i < mainStorageObj.budgets.length; i++ ) {
+                        currentBudgets.push( mainStorageObj.budgets[i] );
+                        if ( mainStorageObj.budgets[i][0] === newBudget ) {
+                            alreadyExists = true;
+                            break;
+                        }
+                    }
+                    // Only add a new budget if it does not already exist.
+                    if ( !alreadyExists ) {
+                        currentBudgets.push( [newBudget, 0.0] );
+                        mainStorageObj.budgets = currentBudgets;
+                        fs.writeFileSync( dataPath, JSON.stringify( mainStorageObj ) );
+                        displayBudgets();
+                    }
+                    $( this ).dialog( "close" );
+                }
+		    },
+            {
+                text: cancelButtonText,
+                click: function() {
+                    $( this ).dialog( "close" );
+                }
+		    }
+        ]
     });
 
-    // TODO!
+
+
+    // TODO: Give this stuff a better structure.
 
     // Display it in the list of available budgets.
-    var newBudget = "<li class=\"w3-hover-light-blue w3-display-container\">" +
-                    "<span onclick=\"$('#renameDialog').show();\" class=\"w3-button w3-hover-light-blue\"><i class=\"fas fa-edit\"></i></span>" + name +
-                    "<span onclick=\"$('#deleteDialog').show();\" class=\"w3-button w3-hover-light-blue w3-display-right\">&times;</span></li>";
-    // TODO: Some sort of displayBudgets(); instead of the following
-    $( "#currentBudgets" ).append( newBudget );
-    setLanguage();
+    var newBudget = "<li class=\"w3-hover-light-blue w3-display-container\">" + name +
+                    "<span onclick=\"console.log('edit')\" class=\"w3-button w3-display-right\"><i style=\"padding-right:50px\" class=\"fas fa-edit\"></i></span>" +
+                    "<span onclick=\"console.log('delete')\" class=\"w3-button w3-display-right\"><i style=\"width=25px; height=25px\" class=\"fas fa-times\"></i></span></li>"
 }
 
 /**
@@ -97,7 +142,7 @@ function addBudget() {
  * @param {String} name The name of the budget we want to delete.
  */
 function deleteBudget( name ) {
-    this.parentElement.style.display='none';
+
     console.log("delete " + name);
 }
 

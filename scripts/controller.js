@@ -1,4 +1,10 @@
 const Chart = require( 'chart.js' );
+// Electron is needed for further modules.
+const { remote } = require( 'electron' );
+// Module for dialogues (needed when setting the path or to display error messages).
+const { dialog } = require( 'electron' ).remote;
+// Neccessary to set the window size.
+const win = remote.getCurrentWindow();
 
 /**
  * This function sets the language.
