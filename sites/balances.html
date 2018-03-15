@@ -22,8 +22,8 @@
         <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
             <span class="w3-bar-item w3-center"> FinanceList </span>
             <span class="w3-bar-item w3-right">
-                <a onclick="setLangToEnglish()" href="#"><img border="0" alt="EN" src="../img/us.ico" width=20px height=20px></a>
-                <a onclick="setLangToGerman()" href="#"><img border="0" alt="DE" src="../img/de.ico" width=20px height=20px></a>
+                <a onclick="setLangToEnglish();updateView();" href="#"><img border="0" alt="EN" src="../img/us.ico" width=20px height=20px></a>
+                <a onclick="setLangToGerman();updateView();" href="#"><img border="0" alt="DE" src="../img/de.ico" width=20px height=20px></a>
             </span>
         </div>
         <!-- sidebar -->
@@ -36,7 +36,7 @@
             <hr style="border-color:black;">
             <div class="w3-bar-block">
                 <span lang="en"><a onclick="window.location.href='../index.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-home"></i> Overview </a></span>
-                <span lang="de"><a onclick="window.location.href='../index.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-home"></i> Überblick </a></span>
+                <span lang="de"><a onclick="window.location.href='../index.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-home"></i> &Uuml;berblick </a></span>
                 <span lang="en"><a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fas fa-euro-sign"></i> Balances </a></span>
                 <span lang="de"><a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fas fa-euro-sign"></i> Bilanzen </a></span>
                 <span lang="en"><a onclick="window.location.href='settings.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-cog"></i> Settings </a></span>
@@ -51,19 +51,19 @@
                 <h5 lang="en"><i class="fas fa-credit-card"></i> Budget overview </h5>
                 <h5 lang="de"><i class="fas fa-credit-card"></i> Konten&uuml;bersicht </h5>
                 <ul class="w3-ul w3-white w3-border w3-round" id="currentBudgets">
-                    
+                    <!-- This list is getting added via JavaScript (because we read the storage to get all the items) -->
                 </ul>
                 <!-- div for dialogues -->
                 <div id="dialogDiv"></div>
                 <br>
                 <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="addBudget();"> Add budget </button>
-                <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="addBudget();"> Konto hinzufügen </button>
+                <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="addBudget();"> Konto hinzuf&uuml;gen </button>
             </div>
             <br>
             <hr style="border-color:black;">
+            <h5 lang="en"><i class="fas fa-desktop"></i></h5>
+            <h5 lang="de"><i class="fas fa-desktop"></i></h5>
             <div class="w3-container">
-                <button lang="en" onclick="addSpending( 'auto', 10, 'checking account' );"> Add expenditure to this budget </button>
-                <button lang="de" onclick="addEarning( 'lottery', 10, 'checking account' );"> Ausgabe zu diesem Konto hinzuf&uuml;gen </button>
                 <p></p>
                 <div class="w3-grey">
                     <div class="w3-container w3-center w3-padding w3-green" style="width:25%">+25%</div>
@@ -78,7 +78,10 @@
                 <div class="w3-grey">
                     <div class="w3-container w3-center w3-padding w3-red" style="width:75%">75%</div>
                 </div>
+                <button lang="en" onclick="addSpending( 'auto', 10, 'checking account' );"> Add expenditure to this budget </button>
+                <button lang="de" onclick="addEarning( 'lottery', 10, 'checking account' );"> Ausgabe zu diesem Konto hinzuf&uuml;gen </button>
             </div>
+            <hr style="border-color:black;">
         </div>
         <!-- JavaScript initialization -->
         <script>

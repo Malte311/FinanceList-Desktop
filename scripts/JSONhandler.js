@@ -60,6 +60,54 @@ function storePreference( name, value ) {
 }
 
 /**
+ * This function reads a specified field in the mainStorage.json file.
+ * @param {String} field The field we want to read.
+ * @return {Object} The corresponding value for the field.
+ */
+function readMainStorage( field ) {
+    // Check if the file exists. If not, create it.
+    if ( fs.existsSync( mainStoragePath ) ) {
+        var mainStorageObj = JSON.parse( fs.readFileSync( mainStoragePath ) );
+        // File exists but the value is undefined: Set a default value and return it.
+        if ( mainStorageObj[field] === undefined ) {
+            writeMainStorage( field, defaultStorageObj[field] );
+            return defaultStorageObj[field];
+        }
+        // File exists and value is not undefined: Return the corresponding value.
+        return mainStorageObj[field];
+    }
+    // File does not exist: Create it, write default values and return a default value.
+    else {
+        fs.appendFileSync( mainStoragePath, JSON.stringify( defaultStorageObj ) );
+        return defaultStorageObj[field];
+    }
+}
+
+/**
+ * This function writes in the mainStorage.json. It sets a new value for the specified field.
+ * @param {String} field The field which value we want to set.
+ * @param {Object} value The new value for the specified field.
+ */
+function writeMainStorage( field, value ) {
+    // Check if the file exists. If not, create it.
+    if ( fs.existsSync( mainStoragePath ) ) {
+        var mainStorageObj = JSON.parse( fs.readFileSync( mainStoragePath ) );
+        mainStorageObj[field] = value;
+        fs.writeFileSync( mainStoragePath, JSON.stringify( mainStorageObj ) );
+    }
+    // File does not exist: Create it and write default values in it.
+    // When done, we can set the value.
+    else {
+        // Create default file.
+        fs.appendFileSync( mainStoragePath, JSON.stringify( defaultStorageObj ) );
+        // Change the value of the specified field.
+        var mainStorageObj = JSON.parse( fs.readFileSync( mainStoragePath ) );
+        mainStorageObj[field] = value;
+        fs.writeFileSync( mainStoragePath, JSON.stringify( mainStorageObj ) );
+    }
+}
+
+/**
  * This function is for writing user data in .json files (user data means
  * either spendings or earnings; the files are named by date).
  * @param {JSON} data The data we want to write in form of a JSON object.
@@ -105,6 +153,40 @@ function getCurrentDate() {
     return (currentTime.getDate() < 10 ? "0" + currentTime.getDate().toString() : currentTime.getDate().toString()) + "." +
            ((currentTime.getMonth() + 1) < 10 ? "0" + (currentTime.getMonth() + 1).toString() : (currentTime.getMonth() + 1).toString()) + "." +
            currentTime.getFullYear().toString();
+}
+
+/**
+ * This function moves all files when the path is changed.
+ * @param {String} from The path from which all files should be moved.
+ * @param {String} to The path to all the files should be moved.
+ */
+function moveFiles( from, to ) {
+    // Get a list of all files.
+    var allFiles = fs.readdirSync( from );
+    // Now iterate over all the files and move all the .json files.
+    for ( var i = 0; i < allFiles.length; i++ ) {
+        // We are only interested in .json files.
+        if ( allFiles[i].endsWith( ".json" ) ) {
+            // Try to move the files (cross disk will cause an error)
+            try {
+                fs.renameSync( from + "/" + allFiles[i], to + "/" + allFiles[i] );
+            }
+            // Display the error and stop trying to move files (since the destination
+            // will be the same and therefore every file would produce an error).
+            catch ( err ) {
+                dialog.showErrorBox( "Error", "Cross-device link not permitted." );
+                break;
+            }
+        }
+    }
+}
+
+/**
+ * This function is called when the path is changed. It updates all path references.
+ * (Well, "all" path references means the path to the mainStorage.json file at the moment)
+ */
+function updatePaths() {
+    mainStoragePath = readPreference( "path" ) + "/mainStorage.json";
 }
 
 /**
@@ -178,58 +260,4 @@ function updateMainStorage( data ) {
     else {
         fs.appendFileSync( path, "[" + JSON.stringify( data ) + "]" );
     }
-}
-
-/**
- * This function reads a specified field in the mainStorage.json file.
- * @param {String} field The field we want to read.
- * @return {Object} The corresponding value for the field.
- */
-function readMainStorage( field ) {
-    return JSON.parse( fs.readFileSync( mainStoragePath ) )[field];
-}
-
-/**
- * This function writes in the mainStorage.json. It sets a new value for the specified field.
- * @param {String} field The field which value we want to set.
- * @param {Object} value The new value for the specified field.
- */
-function writeMainStorage( field, value ) {
-    var mainStorageObj = JSON.parse( fs.readFileSync( mainStoragePath ) );
-    mainStorageObj[field] = value;
-    fs.writeFileSync( mainStoragePath, JSON.stringify( mainStorageObj ) );
-}
-
-/**
- * This function moves all files when the path is changed.
- * @param {String} from The path from which all files should be moved.
- * @param {String} to The path to all the files should be moved.
- */
-function moveFiles( from, to ) {
-    // Get a list of all files.
-    var allFiles = fs.readdirSync( from );
-    // Now iterate over all the files and move all the .json files.
-    for ( var i = 0; i < allFiles.length; i++ ) {
-        // We are only interested in .json files.
-        if ( allFiles[i].endsWith( ".json" ) ) {
-            // Try to move the files (cross disk will cause an error)
-            try {
-                fs.renameSync( from + "/" + allFiles[i], to + "/" + allFiles[i] );
-            }
-            // Display the error and stop trying to move files (since the destination
-            // will be the same and therefore every file would produce an error).
-            catch ( err ) {
-                dialog.showErrorBox( "Error", "Cross-device link not permitted." );
-                break;
-            }
-        }
-    }
-}
-
-/**
- * This function is called when the path is changed. It updates all path references.
- * (Well, "all" path references means the path to the mainStorage.json file at the moment)
- */
-function updatePaths() {
-    mainStoragePath = readPreference( "path" ) + "/mainStorage.json";
 }
