@@ -5,8 +5,8 @@
 function loadPage() {
     // We will always set the language first.
     setLanguage();
-    // Display a list of currently available budgets.
-    displayBudgets();
+    // Display a list of currently available budgets and display every budget in detail.
+    updateView();
 }
 
 /**
@@ -58,7 +58,7 @@ function createDialog( title, text, withInput, okFunction ) {
             break;
     }
     // Set the text message of the dialog.
-    $( "#dialogDiv" ).html( text + withInput ? "<br><input type=\"text\" id=\"dialogInput\">" : "" );
+    $( "#dialogDiv" ).html( text + (withInput ? "<br><input type=\"text\" id=\"dialogInput\">" : "")  );
     // Create a new dialog.
     $( "#dialogDiv" ).dialog({
     	resizable: false,
@@ -139,8 +139,38 @@ function addBudget() {
  * @param {String} name The name of the budget we want to delete.
  */
 function deleteBudget( name ) {
-
-    console.log("delete " + name);
+    // Find out which language is selected to set the correct text.
+    var currentLanguage = readPreference( "language" );
+    var title, text;
+    switch ( currentLanguage ) {
+        case "en":
+            title = "Delete budget";
+            text = "Are you sure you want to delete " + name + "?";
+            break;
+        case "de":
+            title = "Konto löschen";
+            text = "Wollen Sie " + name + " wirklich l&ouml;schen?";
+            break;
+    }
+    createDialog( title, text, false, function() {
+        // Get all currently available budgets.
+        var currentBudgets = readMainStorage( "budgets" );
+        // We add all budgets except the one we want to delete.
+        var updatedBudgets = [];
+        // Search for the correct budget to delete it.
+        for ( var i = 0; i < currentBudgets.length; i++ ) {
+            // Add all budgets except the one we want to delete.
+            if ( currentBudgets[i][0] !== name ) {
+                updatedBudgets.push( currentBudgets[i] );
+            }
+        }
+        // Save the updated budgets in the mainStorage.json file.
+        writeMainStorage( "budgets", updatedBudgets );
+        // Update the view: Don't display the deleted budget anymore.
+        updateView();
+        // Close the dialog (since this function is only executed when the OK button is pressed)
+        $( this ).dialog( "close" );
+    });
 }
 
 /**
@@ -148,7 +178,42 @@ function deleteBudget( name ) {
  * @param {String} name The name of the budget we want to change.
  */
 function renameBudget( name ) {
-    console.log("rename " + name);
+    // Find out which language is selected to set the correct text.
+    var currentLanguage = readPreference( "language" );
+    var title, text;
+    switch ( currentLanguage ) {
+        case "en":
+            title = "Rename budget";
+            text = "Type in a new name for " + name + ".";
+            break;
+        case "de":
+            title = "Konto umbenennen";
+            text = "Geben Sie einen neuen Namen f&uuml;r " + name + " ein.";
+            break;
+    }
+    createDialog( title, text, true, function() {
+        // Get all currently available budgets.
+        var currentBudgets = readMainStorage( "budgets" );
+        // We add all budgets to this (and the renamed one with its new name)
+        var updatedBudgets = [];
+        // Iterate over them to find the one we want to rename.
+        for ( var i = 0; i < currentBudgets.length; i++ ) {
+            // Found it? Rename it.
+            if ( currentBudgets[i][0] === name ) {
+                updatedBudgets.push( [$( "#dialogInput" ).val().trim(), currentBudgets[i][1]] );
+            }
+            // Not the budget we are looking for? Push the budget unmodified.
+            else {
+                updatedBudgets.push( currentBudgets[i] );
+            }
+        }
+        // Save the updated budgets in the mainStorage.json file.
+        writeMainStorage( "budgets", updatedBudgets );
+        // Update the view: Display the new name.
+        updateView();
+        // Close the dialog (since this function is only executed when the OK button is pressed)
+        $( this ).dialog( "close" );
+    });
 }
 
 /**
@@ -157,13 +222,15 @@ function renameBudget( name ) {
 function displayBudgets() {
     // Reset previous content.
     var currentLanguage = readPreference( "language" );
-    if ( currentLanguage === "en" ) {
-        $( "#currentBudgets" ).html( "<li><h6> Current budgets </h6></li>" );
+    switch ( currentLanguage ) {
+        case "en":
+            $( "#currentBudgets" ).html( "<li><h6> Current budgets </h6></li>" );
+            break;
+        case "de":
+            $( "#currentBudgets" ).html( "<li><h6> Aktuelle Konten </h6></li>" );
+            break;
     }
-    else if ( currentLanguage === "de" ) {
-        $( "#currentBudgets" ).html( "<li><h6> Aktuelle Konten </h6></li>" );
-    }
-    // Save all budgets to iterate over them.
+    // Get all budgets to iterate over them.
     var currentBudgets = readMainStorage( "budgets" );
     // Iterate over all budgets to display them.
     for ( var i = 0; i < currentBudgets.length; i++ ) {
@@ -186,10 +253,40 @@ function displayBudgets() {
 }
 
 /**
- * This function
+ * This function displays every available budget in detail.
  */
 function displayContent() {
+    // Reset previous content.
+    $( "#mainContent" ).html( "" );
+    // Find out which button text should be displayed.
+    var addSpendingButtonText;
+    var currentLanguage = readPreference( "language" );
+    switch ( currentLanguage ) {
+        case "en":
+            addSpendingButtonText = "Add expenditure to this budget";
+            break;
+        case "de":
+            addSpendingButtonText = "Ausgabe zu diesem Konto hinzuf&uuml;gen";
+            break;
+    }
+    // Get all budgets to iterate over them.
+    var currentBudgets = readMainStorage( "budgets" );
+    // Display a detailed overview for every budget.
+    for ( var i = 0; i < currentBudgets.length; i++ ) {
+        // Create a new div and a seperation line.
+        $( "#mainContent" ).append( "<br><hr style=\"border-color:black;\"><div class=\"w3-container\">" );
+        // Display the name of the budget.
+        $( "#mainContent" ).append( "<h5><i class=\"fa fa-arrow-right\"></i> " + currentBudgets[i][0] + " </h5>" );
+        // Find out the sum of earnings in this month, so we can get an overview how much money is left.
+        for ( var j = 0; j < 1; j++ ) {
 
+        }
+        // Display the current balance.
+        $( "#mainContent" ).append( "<p></p><div class=\"w3-grey\">" +
+                                    "<div class=\"w3-container w3-center w3-padding w3-green\" style=\"width:5.2%\">" + currentBudgets[i][1] + "&euro;</div></div>" );
+        // Display button to add new spendings.
+        $( "#mainContent" ).append( "<br><button class=\"w3-button w3-white w3-round-xlarge\" onclick=\"addSpending( 'auto', 10, 'checking account' );\">" + addSpendingButtonText + "</button></div><br>" );
+    }
 }
 
 /**

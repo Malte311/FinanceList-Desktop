@@ -108,6 +108,36 @@ function writeMainStorage( field, value ) {
 }
 
 /**
+ * This function reads user data (earnings/spendings) in a specified file.
+ * @param {String} file The file we want to access.
+ * @param {String} data The data field which we want to read.
+ * @return {double} The sum of all the specified data (e.g. if data is "spending",
+ * this will be the sum of all spendings in this file)
+ */
+function readData( file, data ) {
+    // Note that the parameter needs to end with .json!
+    var dataPath = readPreference( "path" ) + "/" + file;
+    // File exists: Read it.
+    if ( fs.existsSync( dataPath ) ) {
+        // Get the data and check if the specified field is defined.
+        var userDataObj = JSON.parse( fs.readFileSync( dataPath ) );
+        // Data not defined? Return zero.
+        if ( userDataObj[data] === undefined ) {
+            return 0;
+        }
+        // Data is defined? Return it.
+        else {
+            return userDataObj[data];
+        }
+    }
+    // File does not exist: Return zero (since the return value may be added or
+    // subtracted in some cases)
+    else {
+        return 0;
+    }
+}
+
+/**
  * This function is for writing user data in .json files (user data means
  * either spendings or earnings; the files are named by date).
  * @param {JSON} data The data we want to write in form of a JSON object.

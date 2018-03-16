@@ -56,32 +56,12 @@
                 <!-- div for dialogues -->
                 <div id="dialogDiv"></div>
                 <br>
+                <!-- button to add new budgets -->
                 <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="addBudget();"> Add budget </button>
                 <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="addBudget();"> Konto hinzuf&uuml;gen </button>
             </div>
-            <br>
-            <hr style="border-color:black;">
-            <h5 lang="en"><i class="fas fa-desktop"></i></h5>
-            <h5 lang="de"><i class="fas fa-desktop"></i></h5>
-            <div class="w3-container">
-                <p></p>
-                <div class="w3-grey">
-                    <div class="w3-container w3-center w3-padding w3-green" style="width:25%">+25%</div>
-                </div>
-
-                <p></p>
-                <div class="w3-grey">
-                    <div class="w3-container w3-center w3-padding w3-orange" style="width:50%">50%</div>
-                </div>
-
-                <p></p>
-                <div class="w3-grey">
-                    <div class="w3-container w3-center w3-padding w3-red" style="width:75%">75%</div>
-                </div>
-                <button lang="en" onclick="addSpending( 'auto', 10, 'checking account' );"> Add expenditure to this budget </button>
-                <button lang="de" onclick="addEarning( 'lottery', 10, 'checking account' );"> Ausgabe zu diesem Konto hinzuf&uuml;gen </button>
-            </div>
-            <hr style="border-color:black;">
+            <!-- in this div there will be added an overview for each budget in detail via JavaScript -->
+            <div id="mainContent" style="margin-right=50px;"></div>
         </div>
         <!-- JavaScript initialization -->
         <script>
