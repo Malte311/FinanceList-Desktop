@@ -109,33 +109,42 @@ function writeMainStorage( field, value ) {
 
 /**
  * This function reads user data (earnings/spendings) in a specified file.
- * @param {String} file The file we want to access.
- * @param {String} data The data field which we want to read.
- * @return {double} The sum of all the specified data (e.g. if data is "spending",
- * this will be the sum of all spendings in this file)
+ * @param {String} file The file we want to access (with .json ending!).
+ * @param {JSON} quest Contains a connector (or/and) and an array of parameter to
+ * filter objects. Example: quest = { connector : "or",
+ *                                    params : [ ["day", "12.8.2018"],
+ *	                                             ["konto", "test1"]
+ *                                             ]
+ *                                  }
+ * @return {JSON array} All the data which matches the quest.
  */
-function readData( file, data ) {
-    // Note that the parameter needs to end with .json!
+function getData( file, quest ) {
+    // Get the data object we want to access.
     var dataPath = readPreference( "path" ) + "/" + file;
-    // File exists: Read it.
-    if ( fs.existsSync( dataPath ) ) {
-        // Get the data and check if the specified field is defined.
-        var userDataObj = JSON.parse( fs.readFileSync( dataPath ) );
-        // Data not defined? Return zero.
-        if ( userDataObj[data] === undefined ) {
-            return 0;
-        }
-        // Data is defined? Return it.
-        else {
-            return userDataObj[data];
-        }
-    }
-    // File does not exist: Return zero (since the return value may be added or
-    // subtracted in some cases)
-    else {
-        return 0;
-    }
+    var dataStorageObj = JSON.parse( fs.readFileSync( dataPath ) );
+    // Filter the data and return an array with appropriate data.
+    var ret = null;
+    return dataStorageObj.filter( (dat) => {
+        quest.params.some( (qu) => {
+            if ( quest.connector === "or" ) {
+                if ( dat[qu[0]] === qu[1] ) {
+                    ret = true;
+                    return true;
+                }
+            }
+            else {
+                if ( dat[qu[0]] !== qu[1] ) {
+                    ret = false;
+                    return true;
+                }
+            }
+        });
+        if ( ret !== null ) return ret;
+        return (quest.connector === "or") ? false : true;
+    });
 }
+
+
 
 /**
  * This function is for writing user data in .json files (user data means

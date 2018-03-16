@@ -259,14 +259,30 @@ function displayContent() {
     // Reset previous content.
     $( "#mainContent" ).html( "" );
     // Find out which button text should be displayed.
-    var addSpendingButtonText;
+    var addSpendingButtonText, addEarningButtonText;
     var currentLanguage = readPreference( "language" );
     switch ( currentLanguage ) {
         case "en":
             addSpendingButtonText = "Add expenditure to this budget";
+            addEarningButtonText = "Add earning to this budget";
             break;
         case "de":
             addSpendingButtonText = "Ausgabe zu diesem Konto hinzuf&uuml;gen";
+            addEarningButtonText = "Einnahme zu diesem Konto hinzuf&uuml;gen";
+            break;
+    }
+    // Get the currently selected currency to display it later on.
+    var currentCurrency = readPreference( "currency" );
+    var currencySign;
+    switch ( currentCurrency ) {
+        case "Euro":
+            currencySign = "&euro;";
+            break;
+        case "Dollar":
+            currencySign = "&dollar;";
+            break;
+        case "Pound":
+            currencySign = "&pound;";
             break;
     }
     // Get all budgets to iterate over them.
@@ -278,14 +294,35 @@ function displayContent() {
         // Display the name of the budget.
         $( "#mainContent" ).append( "<h5><i class=\"fa fa-arrow-right\"></i> " + currentBudgets[i][0] + " </h5>" );
         // Find out the sum of earnings in this month, so we can get an overview how much money is left.
-        for ( var j = 0; j < 1; j++ ) {
-
+        var quest = {connector:'or',params:[['budget',currentBudgets[i][0]]]};
+        var dataObj = getData( getCurrentFileName(), quest );
+        var totalEarnings = 0;
+        for ( var j = 0; j < dataObj.length; j++ ) {
+            if ( dataObj[j].type === "earning" ) {
+                totalEarnings += dataObj[j].amount;
+            }
         }
+        var percentage = 100;
+        if ( totalEarnings > 0 ) percentage = (currentBudgets[i][1] / totalEarnings) * 100;
+        console.log(percentage);
+
+        //TODO: empty json file leads to error
+
+        //TODO: Container 0% wrong display, maybe add some margins left and right
+
+        //TODO: When clicking on one of the buttons, open a dialog to type in a name and an amount for the spending/earning,
+        // maybe a checkbox to decide if the transaction should be automated ervery month, select a day for each month in a dropdown menu,
+        // display currently recurring transaction in a table like the budget overview table
+
+        //TODO: First clean up "JSONhandler.js", then clean up this file and "balances.html". After this is done, continue with settings.
+
         // Display the current balance.
         $( "#mainContent" ).append( "<p></p><div class=\"w3-grey\">" +
-                                    "<div class=\"w3-container w3-center w3-padding w3-green\" style=\"width:5.2%\">" + currentBudgets[i][1] + "&euro;</div></div>" );
+                                    "<div class=\"w3-container w3-center w3-padding w3-green\" style=\"width:" + percentage + "%\">" + currentBudgets[i][1] + currencySign + "</div></div>" );
         // Display button to add new spendings.
-        $( "#mainContent" ).append( "<br><button class=\"w3-button w3-white w3-round-xlarge\" onclick=\"addSpending( 'auto', 10, 'checking account' );\">" + addSpendingButtonText + "</button></div><br>" );
+        $( "#mainContent" ).append( "<br><button class=\"w3-button w3-white w3-round-xlarge\" onclick=\"addSpending( 'auto', 10, '" + currentBudgets[i][0] + "' );\">" + addSpendingButtonText + "</button>" );
+        // Display button to add new earnings
+        $( "#mainContent" ).append( "<button class=\"w3-button w3-white w3-round-xlarge\" onclick=\"addEarning( 'auto', 10, '" + currentBudgets[i][0] + "' );\">" + addEarningButtonText + "</button></div><br>" );
     }
 }
 
