@@ -10,6 +10,8 @@ const defaultStorageObj = {"budgets":[["checking account", 0.0]],"currentDate":g
 const settingsPath = storage.getDefaultDataPath() + "/settings.json";
 // The path to the mainStorage.json file (no constant since the path can be changed at runtime).
 var mainStoragePath = readPreference( "path" ) + "/mainStorage.json";
+// This is for reading the settings.json file in the main process.
+module.exports.getPreference = ( name ) => readPreference( name );
 
 /**
  * This function reads a field in the settings.json file.
@@ -111,11 +113,7 @@ function writeMainStorage( field, value ) {
  * This function reads user data (earnings/spendings) in a specified file.
  * @param {String} file The file we want to access (with .json ending!).
  * @param {JSON} quest Contains a connector (or/and) and an array of parameter to
- * filter objects. Example: quest = { connector : "or",
- *                                    params : [ ["day", "12.8.2018"],
- *	                                             ["konto", "test1"]
- *                                             ]
- *                                  }
+ * filter objects. Example: quest = { connector : "or", params : [["day", "12.8.2018"],["konto", "test1"]] }
  * @return {JSON array} All the data which matches the quest.
  */
 function getData( file, quest ) {
@@ -143,8 +141,6 @@ function getData( file, quest ) {
         return (quest.connector === "or") ? false : true;
     });
 }
-
-
 
 /**
  * This function is for writing user data in .json files (user data means

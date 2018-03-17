@@ -318,7 +318,7 @@ function displayContent() {
 
         // Display the current balance.
         $( "#mainContent" ).append( "<p></p><div class=\"w3-grey\">" +
-                                    "<div class=\"w3-container w3-center w3-padding w3-green\" style=\"width:" + percentage + "%\">" + currentBudgets[i][1] + currencySign + "</div></div>" );
+                                    "<div class=\"w3-container w3-center w3-padding w3-green\" style=\"margin-right=25px;width:" + percentage + "%;\">" + currentBudgets[i][1] + currencySign + "</div></div>" );
         // Display button to add new spendings.
         $( "#mainContent" ).append( "<br><button class=\"w3-button w3-white w3-round-xlarge\" onclick=\"addSpending( 'auto', 10, '" + currentBudgets[i][0] + "' );\">" + addSpendingButtonText + "</button>" );
         // Display button to add new earnings
