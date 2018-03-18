@@ -113,7 +113,7 @@ function writeMainStorage( field, value ) {
  * This function reads user data (earnings/spendings) in a specified file.
  * @param {String} file The file we want to access (with .json ending!).
  * @param {JSON} quest Contains a connector (or/and) and an array of parameter to
- * filter objects. Example: quest = { connector : "or", params : [["day", "12.8.2018"],["konto", "test1"]] }
+ * filter objects. Example: quest = { connector : "or", params : [["date", "12.8.2018"],["budget", "checking account"]] }
  * @return {JSON array} All the data which matches the quest.
  */
 function getData( file, quest ) {
@@ -121,15 +121,17 @@ function getData( file, quest ) {
     var dataPath = readPreference( "path" ) + "/" + file;
     var dataStorageObj = JSON.parse( fs.readFileSync( dataPath ) );
     // Filter the data and return an array with appropriate data.
-    var ret = null;
     return dataStorageObj.filter( (dat) => {
+        var ret = null;
         quest.params.some( (qu) => {
+            // At least one param matched? Return true (ret=true) because connector is "or".
             if ( quest.connector === "or" ) {
                 if ( dat[qu[0]] === qu[1] ) {
                     ret = true;
                     return true;
                 }
             }
+            // One param does not match => "and" connector can not be satisfied (ret=false).
             else {
                 if ( dat[qu[0]] !== qu[1] ) {
                     ret = false;
@@ -137,8 +139,11 @@ function getData( file, quest ) {
                 }
             }
         });
+        // Return the value of ret as explained above.
         if ( ret !== null ) return ret;
-        return (quest.connector === "or") ? false : true;
+        // We only get to this point when (1) connector = "or" and no match was found,
+        // (2) connector = "and" and no mismatch was found.
+        return ( quest.connector === "or" ) ? false : true;
     });
 }
 
@@ -163,8 +168,6 @@ function storeData( data ) {
         // The content is an array containing JSON objects.
         fs.appendFileSync( dataPath, "[" + JSON.stringify( data ) + "]" );
     }
-    // Now we update the reference in our mainStorage.json file.
-    updateMainStorage( data );
 }
 
 /**
@@ -258,41 +261,41 @@ function initMainStorage() {
  * It gets only called by storeData(), which is defined above.
  * @param {JSON} data The new data we want to process.
  */
-function updateMainStorage( data ) {
-    // No file for the current month? Create one.
-    var path = readPreference( "path" ) + "/" + getCurrentFileName();
-    // File exists (which should always be the case, see below).
-    if ( fs.existsSync( path ) ) {
-        var mainStorageObj = JSON.parse( fs.readFileSync( mainStoragePath ) );
-        // Determine if a spending or an earning was added.
-        var index;
-        if ( data.type === "spending" ) {
-            index = "allTimeSpendings";
-        }
-        // Earning was added.
-        else if ( data.type === "earning" ) {
-            index = "allTimeEarnings";
-        }
-        // Iterate over all budgets to find the correct one. Then add the cost of
-        // the newly aquired item or the sum of the earning.
-        for ( var i = 0; i < mainStorageObj[index].length; i++ ) {
-            // Found the correct budget?
-            if ( mainStorageObj[index][i][0] === data.budget ) {
-                // Add the amount to the all time earnings.
-                mainStorageObj[index][i][1] += data.amount;
-                // Earning? Then add the sum to the budget.
-                if ( data.type === "earning" ) {
-                    mainStorageObj["budgets"][i][1] += data.amount;
-                }
-                // Save it and stop looping.
-                fs.writeFileSync( mainStoragePath, JSON.stringify( mainStorageObj ) );
-                break;
-            }
-        }
-    }
-    // This case should never happen since this function gets called from storeData().
-    // In storeData(), we already make sure that the file exists (since we write in it).
-    else {
-        fs.appendFileSync( path, "[" + JSON.stringify( data ) + "]" );
-    }
-}
+// function updateMainStorage( data ) {
+//     // No file for the current month? Create one.
+//     var path = readPreference( "path" ) + "/" + getCurrentFileName();
+//     // File exists (which should always be the case, see below).
+//     if ( fs.existsSync( path ) ) {
+//         var mainStorageObj = JSON.parse( fs.readFileSync( mainStoragePath ) );
+//         // Determine if a spending or an earning was added.
+//         var index;
+//         if ( data.type === "spending" ) {
+//             index = "allTimeSpendings";
+//         }
+//         // Earning was added.
+//         else if ( data.type === "earning" ) {
+//             index = "allTimeEarnings";
+//         }
+//         // Iterate over all budgets to find the correct one. Then add the cost of
+//         // the newly aquired item or the sum of the earning.
+//         for ( var i = 0; i < mainStorageObj[index].length; i++ ) {
+//             // Found the correct budget?
+//             if ( mainStorageObj[index][i][0] === data.budget ) {
+//                 // Add the amount to the all time earnings.
+//                 mainStorageObj[index][i][1] += data.amount;
+//                 // Earning? Then add the sum to the budget.
+//                 if ( data.type === "earning" ) {
+//                     mainStorageObj["budgets"][i][1] += data.amount;
+//                 }
+//                 // Save it and stop looping.
+//                 fs.writeFileSync( mainStoragePath, JSON.stringify( mainStorageObj ) );
+//                 break;
+//             }
+//         }
+//     }
+//     // This case should never happen since this function gets called from storeData().
+//     // In storeData(), we already make sure that the file exists (since we write in it).
+//     else {
+//         fs.appendFileSync( path, "[" + JSON.stringify( data ) + "]" );
+//     }
+// }

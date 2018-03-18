@@ -35,6 +35,36 @@ function addEarning( earning, sum, budget ) {
     storeData( spendingObj );
 }
 
+
+function updateMainStorage( type ) {
+    var mainStorageObj = JSON.parse( fs.readFileSync( mainStoragePath ) );
+    // Determine if a spending or an earning was added.
+    var index;
+    if ( type === "spending" ) {
+        index = "allTimeSpendings";
+    }
+    // Earning was added.
+    else if ( type === "earning" ) {
+        index = "allTimeEarnings";
+    }
+    // Iterate over all budgets to find the correct one. Then add the cost of
+    // the newly aquired item or the sum of the earning.
+    for ( var i = 0; i < mainStorageObj[index].length; i++ ) {
+        // Found the correct budget?
+        if ( mainStorageObj[index][i][0] === data.budget ) {
+            // Add the amount to the all time earnings.
+            mainStorageObj[index][i][1] += data.amount;
+            // Earning? Then add the sum to the budget.
+            if ( data.type === "earning" ) {
+                mainStorageObj["budgets"][i][1] += data.amount;
+            }
+            // Save it and stop looping.
+            fs.writeFileSync( mainStoragePath, JSON.stringify( mainStorageObj ) );
+            break;
+        }
+    }
+}
+
 /**
  * This function creates dialogues for adding, renaming and deleting budgets.
  * @param {String} title The title of the dialog.
@@ -296,14 +326,14 @@ function displayContent() {
         // Find out the sum of earnings in this month, so we can get an overview how much money is left.
         var quest = {connector:'or',params:[['budget',currentBudgets[i][0]]]};
         var dataObj = getData( getCurrentFileName(), quest );
-        var totalEarnings = 0;
+        var totalEarningsThisMonth = 0;
         for ( var j = 0; j < dataObj.length; j++ ) {
             if ( dataObj[j].type === "earning" ) {
-                totalEarnings += dataObj[j].amount;
+                totalEarningsThisMonth += dataObj[j].amount;
             }
         }
         var percentage = 100;
-        if ( totalEarnings > 0 ) percentage = (currentBudgets[i][1] / totalEarnings) * 100;
+        if ( totalEarningsThisMonth > 0 ) percentage = (currentBudgets[i][1] / totalEarningsThisMonth) * 100;
         console.log(percentage);
 
         //TODO: empty json file leads to error
@@ -317,8 +347,8 @@ function displayContent() {
         //TODO: First clean up "JSONhandler.js", then clean up this file and "balances.html". After this is done, continue with settings.
 
         // Display the current balance.
-        $( "#mainContent" ).append( "<p></p><div class=\"w3-grey\">" +
-                                    "<div class=\"w3-container w3-center w3-padding w3-green\" style=\"margin-right=25px;width:" + percentage + "%;\">" + currentBudgets[i][1] + currencySign + "</div></div>" );
+        $( "#mainContent" ).append( "<div class=\"w3-grey\">" +
+                                    "<div class=\"w3-center w3-green\" style=\"width:" + percentage + "%;\">" + currentBudgets[i][1] + currencySign + "</div></div>" );
         // Display button to add new spendings.
         $( "#mainContent" ).append( "<br><button class=\"w3-button w3-white w3-round-xlarge\" onclick=\"addSpending( 'auto', 10, '" + currentBudgets[i][0] + "' );\">" + addSpendingButtonText + "</button>" );
         // Display button to add new earnings

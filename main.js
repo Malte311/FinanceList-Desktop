@@ -9,12 +9,23 @@ const JSONhandler = require( './scripts/JSONhandler.js' );
 let mainWindow
 
 function createWindow () {
-    var windowSize = JSONhandler.getPreference( "windowSize" );
+    // Read the stored data to select the window size and window mode.
+    var screenWidth, screenHeight;
+    try {
+        screenWidth = parseInt( JSONhandler.getPreference( "windowSize" ).split( "x" )[0] );
+        screenHeight = parseInt( JSONhandler.getPreference( "windowSize" ).split( "x" )[1] );
+    }
+    // In case the file is corrupted, we set some default values.
+    catch ( err ) {
+        screenWidth = 1920;
+        screenHeight = 1080;
+    }
     var fullscreen = JSONhandler.getPreference( "fullscreen" );
+    if ( fullscreen !== true && fullscreen !== false ) fullscreen = false;
     // Create the browser window
     mainWindow = new electron.BrowserWindow({
-        width: parseInt( windowSize.split( "x" )[0] ),
-        height: parseInt( windowSize.split( "x" )[1] ),
+        width: screenWidth,
+        height: screenHeight,
         icon: __dirname + '/img/tab.ico',
         movable: true,
         center: true,
