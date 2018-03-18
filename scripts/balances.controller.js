@@ -20,6 +20,24 @@ function addSpending( spending, sum, budget ) {
     var spendingObj = {"date": getCurrentDate(), "name": spending, "amount": sum, "budget": budget, "type": "spending"};
     // Now store the data in the corresponding .json file.
     storeData( spendingObj );
+    // Update the reference in the mainStorage.
+    var budgets = readMainStorage( "budgets" );
+    var allTimeSpendings = readMainStorage( "allTimeSpendings" );
+    // Search for the correct budget.
+    for ( var i = 0; i < allTimeSpendings.length; i++ ) {
+        // Found it? Then update the value.
+        if ( allTimeSpendings[i][0] === budget ) {
+            allTimeSpendings[i][1] += sum;
+        }
+        if ( budgets[i][0] === budget ) {
+            budgets[i][1] -= sum;
+        }
+    }
+    // Write back to storage.
+    writeMainStorage( "budgets", budgets );
+    writeMainStorage( "allTimeSpendings", allTimeSpendings );
+    // Update the view: Display the new balance.
+    updateView();
 }
 
 /**
@@ -33,36 +51,24 @@ function addEarning( earning, sum, budget ) {
     var spendingObj = {"date": getCurrentDate(), "name": earning, "amount": sum, "budget": budget, "type": "earning"};
     // Now store the data in the corresponding .json file.
     storeData( spendingObj );
-}
-
-
-function updateMainStorage( type ) {
-    var mainStorageObj = JSON.parse( fs.readFileSync( mainStoragePath ) );
-    // Determine if a spending or an earning was added.
-    var index;
-    if ( type === "spending" ) {
-        index = "allTimeSpendings";
-    }
-    // Earning was added.
-    else if ( type === "earning" ) {
-        index = "allTimeEarnings";
-    }
-    // Iterate over all budgets to find the correct one. Then add the cost of
-    // the newly aquired item or the sum of the earning.
-    for ( var i = 0; i < mainStorageObj[index].length; i++ ) {
-        // Found the correct budget?
-        if ( mainStorageObj[index][i][0] === data.budget ) {
-            // Add the amount to the all time earnings.
-            mainStorageObj[index][i][1] += data.amount;
-            // Earning? Then add the sum to the budget.
-            if ( data.type === "earning" ) {
-                mainStorageObj["budgets"][i][1] += data.amount;
-            }
-            // Save it and stop looping.
-            fs.writeFileSync( mainStoragePath, JSON.stringify( mainStorageObj ) );
-            break;
+    // Update the reference in the mainStorage.
+    var budgets = readMainStorage( "budgets" );
+    var allTimeEarnings = readMainStorage( "allTimeEarnings" );
+    // Search for the correct budget.
+    for ( var i = 0; i < allTimeEarnings.length; i++ ) {
+        // Found it? Then update the value.
+        if ( allTimeEarnings[i][0] === budget ) {
+            allTimeEarnings[i][1] += sum;
+        }
+        if ( budgets[i][0] === budget ) {
+            budgets[i][1] += sum;
         }
     }
+    // Write back to storage.
+    writeMainStorage( "budgets", budgets );
+    writeMainStorage( "allTimeEarnings", allTimeEarnings );
+    // Update the view: Display the new balance.
+    updateView();
 }
 
 /**
@@ -130,6 +136,7 @@ function addBudget() {
             text = "Type in the name of the new budget.";
             break;
         case "de":
+            // This is no HTML, how to handle umlauts???
             title = "Konto hinzufügen";
             text = "Geben Sie einen Namen f&uuml;r das neue Konto ein.";
             break;
@@ -155,6 +162,13 @@ function addBudget() {
             currentBudgets.push( [newBudget, 0.0] );
             // Save a reference to the new budget in the mainStorage.json file.
             writeMainStorage( "budgets", currentBudgets );
+            // Update all time earnings and spendings for the new budget (set it to zero).
+            var allTimeEarnings = readMainStorage( "allTimeEarnings" );
+            allTimeEarnings.push( [newBudget, 0] );
+            writeMainStorage( "allTimeEarnings", allTimeEarnings );
+            var allTimeSpendings = readMainStorage( "allTimeSpendings" );
+            allTimeSpendings.push( [newBudget, 0] );
+            writeMainStorage( "allTimeSpendings", allTimeSpendings );
             // Update the view: List the new budget.
             updateView();
         }
@@ -178,6 +192,7 @@ function deleteBudget( name ) {
             text = "Are you sure you want to delete " + name + "?";
             break;
         case "de":
+            // This is no HTML, how to handle umlauts???
             title = "Konto löschen";
             text = "Wollen Sie " + name + " wirklich l&ouml;schen?";
             break;
@@ -185,17 +200,31 @@ function deleteBudget( name ) {
     createDialog( title, text, false, function() {
         // Get all currently available budgets.
         var currentBudgets = readMainStorage( "budgets" );
+        // Delete the budget in all time earnings/spendings as well.
+        var allTimeEarnings = readMainStorage( "allTimeEarnings" );
+        var allTimeSpendings = readMainStorage( "allTimeSpendings" );
         // We add all budgets except the one we want to delete.
-        var updatedBudgets = [];
+        var updatedBudgets = [], updatedAllTimeEarnings = [], updatedAllTimeSpendings = [];
         // Search for the correct budget to delete it.
+        // (Note that all arrays have the same length)
         for ( var i = 0; i < currentBudgets.length; i++ ) {
             // Add all budgets except the one we want to delete.
             if ( currentBudgets[i][0] !== name ) {
                 updatedBudgets.push( currentBudgets[i] );
             }
+            // Do the same for allTimeEarnings and allTimeSpendings.
+            if ( allTimeEarnings[i][0] !== name ) {
+                updatedAllTimeEarnings.push( allTimeEarnings[i] );
+            }
+            if ( allTimeSpendings[i][0] !== name ) {
+                updatedAllTimeSpendings.push( allTimeSpendings[i] );
+            }
         }
         // Save the updated budgets in the mainStorage.json file.
         writeMainStorage( "budgets", updatedBudgets );
+        // Again, we do this as well for allTimeEarnings and allTimeSpendings.
+        writeMainStorage( "allTimeEarnings", updatedAllTimeEarnings );
+        writeMainStorage( "allTimeSpendings", updatedAllTimeSpendings );
         // Update the view: Don't display the deleted budget anymore.
         updateView();
         // Close the dialog (since this function is only executed when the OK button is pressed)
@@ -224,21 +253,33 @@ function renameBudget( name ) {
     createDialog( title, text, true, function() {
         // Get all currently available budgets.
         var currentBudgets = readMainStorage( "budgets" );
+        // Rename the budget in all time earnings/spendings as well.
+        var allTimeEarnings = readMainStorage( "allTimeEarnings" );
+        var allTimeSpendings = readMainStorage( "allTimeSpendings" );
         // We add all budgets to this (and the renamed one with its new name)
-        var updatedBudgets = [];
+        var updatedBudgets = [], updatedAllTimeEarnings = [], updatedAllTimeSpendings = [];
+        var newName = $( "#dialogInput" ).val().trim();
         // Iterate over them to find the one we want to rename.
         for ( var i = 0; i < currentBudgets.length; i++ ) {
             // Found it? Rename it.
             if ( currentBudgets[i][0] === name ) {
-                updatedBudgets.push( [$( "#dialogInput" ).val().trim(), currentBudgets[i][1]] );
+                updatedBudgets.push( [newName, currentBudgets[i][1]] );
             }
             // Not the budget we are looking for? Push the budget unmodified.
             else {
                 updatedBudgets.push( currentBudgets[i] );
             }
+            // Do the same for allTimeEarnings and allTimeSpendings.
+            if ( allTimeEarnings[i][0] === name ) updatedAllTimeEarnings.push( [newName, allTimeEarnings[i][1]] );
+            else updatedAllTimeEarnings.push( allTimeEarnings[i] );
+            if ( allTimeSpendings[i][0] === name ) updatedAllTimeSpendings.push( [newName, allTimeSpendings[i][1]] );
+            else updatedAllTimeSpendings.push( allTimeSpendings[i] );
         }
         // Save the updated budgets in the mainStorage.json file.
         writeMainStorage( "budgets", updatedBudgets );
+        // Again, we do this as well for allTimeEarnings and allTimeSpendings.
+        writeMainStorage( "allTimeEarnings", updatedAllTimeEarnings );
+        writeMainStorage( "allTimeSpendings", updatedAllTimeSpendings );
         // Update the view: Display the new name.
         updateView();
         // Close the dialog (since this function is only executed when the OK button is pressed)
@@ -324,7 +365,7 @@ function displayContent() {
         // Display the name of the budget.
         $( "#mainContent" ).append( "<h5><i class=\"fa fa-arrow-right\"></i> " + currentBudgets[i][0] + " </h5>" );
         // Find out the sum of earnings in this month, so we can get an overview how much money is left.
-        var quest = {connector:'or',params:[['budget',currentBudgets[i][0]]]};
+        var quest = { connector:'or', params:[['budget', currentBudgets[i][0]]] };
         var dataObj = getData( getCurrentFileName(), quest );
         var totalEarningsThisMonth = 0;
         for ( var j = 0; j < dataObj.length; j++ ) {
@@ -332,23 +373,22 @@ function displayContent() {
                 totalEarningsThisMonth += dataObj[j].amount;
             }
         }
+        // Calculate the percentage of how much money is left to adjust the progress bar.
         var percentage = 100;
         if ( totalEarningsThisMonth > 0 ) percentage = (currentBudgets[i][1] / totalEarningsThisMonth) * 100;
-        console.log(percentage);
-
-        //TODO: empty json file leads to error
-
-        //TODO: Container 0% wrong display, maybe add some margins left and right
+        // Select the color of the progress bar in dependency of the percentage value.
+        var color;
+        if ( percentage > 66 ) color = "green";
+        else if ( percentage > 33 ) color = "orange";
+        else color = "red";
 
         //TODO: When clicking on one of the buttons, open a dialog to type in a name and an amount for the spending/earning,
         // maybe a checkbox to decide if the transaction should be automated ervery month, select a day for each month in a dropdown menu,
         // display currently recurring transaction in a table like the budget overview table
 
-        //TODO: First clean up "JSONhandler.js", then clean up this file and "balances.html". After this is done, continue with settings.
-
         // Display the current balance.
         $( "#mainContent" ).append( "<div class=\"w3-grey\">" +
-                                    "<div class=\"w3-center w3-green\" style=\"width:" + percentage + "%;\">" + currentBudgets[i][1] + currencySign + "</div></div>" );
+                                    "<div class=\"w3-center w3-" + color + "\" style=\"width:" + percentage + "%;\">" + currentBudgets[i][1] + currencySign + "</div></div>" );
         // Display button to add new spendings.
         $( "#mainContent" ).append( "<br><button class=\"w3-button w3-white w3-round-xlarge\" onclick=\"addSpending( 'auto', 10, '" + currentBudgets[i][0] + "' );\">" + addSpendingButtonText + "</button>" );
         // Display button to add new earnings

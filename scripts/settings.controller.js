@@ -76,7 +76,7 @@ function setPath() {
         // (Since newPath is a one element array containing the path, we just take
         // the path instead of the whole array.)
         storePreference( "path", newPath[0] );
-        // Update paths references in JSONhandler.js
+        // Update paths references in JSONhandler.js (has to be called after storing it)
         updatePaths();
         // Show the path as currently selected.
         $( "#currentPath" ).text( newPath );

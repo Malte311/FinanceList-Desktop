@@ -12,6 +12,7 @@ const settingsPath = storage.getDefaultDataPath() + "/settings.json";
 var mainStoragePath = readPreference( "path" ) + "/mainStorage.json";
 // This is for reading the settings.json file in the main process.
 module.exports.getPreference = ( name ) => readPreference( name );
+module.exports.initStorage = () => initMainStorage();
 
 /**
  * This function reads a field in the settings.json file.
@@ -58,6 +59,34 @@ function storePreference( name, value ) {
         var settingsObj = JSON.parse( fs.readFileSync( settingsPath ) );
         settingsObj[name] = value;
         fs.writeFileSync( settingsPath, JSON.stringify( settingsObj ) );
+    }
+}
+
+/**
+ * This function initializes the storage. This means, we create a mainStorage.json
+ * file if it is missing or we update it if it exists. This file keeps track of all the data.
+ * The initMainStorage() function is called when the application is started.
+ */
+function initMainStorage() {
+    // Create directory, if it doesn't exist yet.
+    var path = readPreference( "path" );
+    if ( !fs.existsSync( path ) ) {
+        fs.mkdirSync( path );
+    }
+    // Check if the file exists. If not, create it.
+    if ( fs.existsSync( mainStoragePath ) ) {
+        // File exists, so we check if it needs to get updated.
+        var mainStorageObj = JSON.parse( fs.readFileSync( mainStoragePath ) );
+        // Missing default budget? Create it.
+        if ( mainStorageObj.budgets === undefined || mainStorageObj.budgets.length < 1 || mainStorageObj.budgets.length === undefined ) {
+            writeMainStorage( "budgets", defaultStorageObj.budgets );
+        }
+        // Set the current date to today.
+        writeMainStorage( "currentDate", getCurrentDate() );
+    }
+    // File does not exist: Create it and write default values in it.
+    else {
+        fs.appendFileSync( mainStoragePath, JSON.stringify( defaultStorageObj ) );
     }
 }
 
@@ -226,76 +255,3 @@ function moveFiles( from, to ) {
 function updatePaths() {
     mainStoragePath = readPreference( "path" ) + "/mainStorage.json";
 }
-
-/**
- * This function initializes the storage. This means, we create a mainStorage.json
- * file if it is missing or we update it if it exists. This file keeps track of all the data.
- */
-function initMainStorage() {
-    // Create directory, if it doesn't exist yet.
-    var path = readPreference( "path" );
-    if ( !fs.existsSync( path ) ) {
-        fs.mkdirSync( path );
-    }
-    // Check if the file exists. If not, create it.
-    if ( fs.existsSync( mainStoragePath ) ) {
-        // File exists, so we check if it needs to get updated.
-        var mainStorageObj = JSON.parse( fs.readFileSync( mainStoragePath ) );
-        // Missing default budget? Create it.
-        if ( mainStorageObj.budgets === undefined ) {
-            mainStorageObj.budgets = defaultStorageObj.budgets;
-            fs.writeFileSync( mainStoragePath, JSON.stringify( mainStorageObj ) );
-        }
-        // Set the current date to today.
-        mainStorageObj.currentDate = getCurrentDate();
-        fs.writeFileSync( mainStoragePath, JSON.stringify( mainStorageObj ) );
-    }
-    // File does not exist: Create it and write default values in it.
-    else {
-        fs.appendFileSync( mainStoragePath, JSON.stringify( defaultStorageObj ) );
-    }
-}
-
-/**
- * This function updates the storage references and some global data.
- * It gets only called by storeData(), which is defined above.
- * @param {JSON} data The new data we want to process.
- */
-// function updateMainStorage( data ) {
-//     // No file for the current month? Create one.
-//     var path = readPreference( "path" ) + "/" + getCurrentFileName();
-//     // File exists (which should always be the case, see below).
-//     if ( fs.existsSync( path ) ) {
-//         var mainStorageObj = JSON.parse( fs.readFileSync( mainStoragePath ) );
-//         // Determine if a spending or an earning was added.
-//         var index;
-//         if ( data.type === "spending" ) {
-//             index = "allTimeSpendings";
-//         }
-//         // Earning was added.
-//         else if ( data.type === "earning" ) {
-//             index = "allTimeEarnings";
-//         }
-//         // Iterate over all budgets to find the correct one. Then add the cost of
-//         // the newly aquired item or the sum of the earning.
-//         for ( var i = 0; i < mainStorageObj[index].length; i++ ) {
-//             // Found the correct budget?
-//             if ( mainStorageObj[index][i][0] === data.budget ) {
-//                 // Add the amount to the all time earnings.
-//                 mainStorageObj[index][i][1] += data.amount;
-//                 // Earning? Then add the sum to the budget.
-//                 if ( data.type === "earning" ) {
-//                     mainStorageObj["budgets"][i][1] += data.amount;
-//                 }
-//                 // Save it and stop looping.
-//                 fs.writeFileSync( mainStoragePath, JSON.stringify( mainStorageObj ) );
-//                 break;
-//             }
-//         }
-//     }
-//     // This case should never happen since this function gets called from storeData().
-//     // In storeData(), we already make sure that the file exists (since we write in it).
-//     else {
-//         fs.appendFileSync( path, "[" + JSON.stringify( data ) + "]" );
-//     }
-// }
