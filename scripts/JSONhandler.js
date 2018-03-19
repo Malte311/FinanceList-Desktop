@@ -5,7 +5,7 @@ const storage = require( 'electron-json-storage' );
 // A default settings.json object.
 const defaultObj = {"windowSize":"1920x1080","fullscreen":false,"language":"en","path": __dirname + "/data","currency":"Euro","chartType":"pie"};
 // A default mainStorage.json object.
-const defaultStorageObj = {"budgets":[["checking account", 0.0]],"currentDate":getCurrentDate(),"allTimeEarnings":[["checking account", 0.0]],"allTimeSpendings":[["checking account", 0.0]]};
+const defaultStorageObj = {"budgets":[["checking account", 0.0]],"currentDate":getCurrentDate(),"allTimeEarnings":[["checking account", 0.0]],"allTimeSpendings":[["checking account", 0.0]],"allocation":[["checking account", 100]]};
 // The path to the settings.json file.
 const settingsPath = storage.getDefaultDataPath() + "/settings.json";
 // The path to the mainStorage.json file (no constant since the path can be changed at runtime).

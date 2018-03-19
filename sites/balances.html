@@ -9,6 +9,7 @@
         <!-- scripts -->
         <script language="javascript" src="../scripts/JSONhandler.js"></script>
         <script language="javascript" src="../scripts/controller.js"></script>
+        <script language="javascript" src="../scripts/balances.view.js"></script>
         <script language="javascript" src="../scripts/balances.controller.js"></script>
         <!-- stylesheets -->
         <link rel="stylesheet" type="text/css" href="../style/w3.min.css">
@@ -59,6 +60,12 @@
                 <!-- button to add new budgets -->
                 <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="addBudget();"> Add budget </button>
                 <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="addBudget();"> Konto hinzuf&uuml;gen </button>
+                <!-- button to add new earnings or spendings -->
+                <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="addTransaction();"> Add transaction </button>
+                <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="addTransaction();"> Eintrag hinzuf&uuml;gen </button>
+                <!-- button for setting allocations -->
+                <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="createBudgetSettingsDialog();"> Allocation settings </button>
+                <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="createBudgetSettingsDialog();"> Budgetverwaltung </button>
             </div>
             <!-- in this div there will be added an overview for each budget in detail via JavaScript -->
             <div id="mainContent" style="margin-right:50px;"></div>

@@ -1,12 +1,35 @@
 /**
  * This function initializes the page when its loaded. This means it sets the
- * language and some of the content.
+ * language and the content.
  */
 function loadPage() {
     // We will always set the language first.
     setLanguage();
     // Display a list of currently available budgets and display every budget in detail.
     updateView();
+}
+
+/**
+ * This function adds a new transaction, either unique or recurring.
+ */
+function addTransaction() {
+    // Find out which language is selected to set the correct text.
+    var currentLanguage = readPreference( "language" );
+    var title, text;
+    switch ( currentLanguage ) {
+        case "en":
+            title = "Add transaction";
+            text = "";
+            break;
+        case "de":
+            title = "Eintrag hinzufügen";
+            text = "";
+            break;
+    }
+    // We want to display a dialog in which the user types in the name of the transaction,
+    // selects the type (earning/spending), the amount and selects if the transaction is
+    // either unique or recurring.
+    createTransactionDialog();
 }
 
 /**
@@ -72,57 +95,6 @@ function addEarning( earning, sum, budget ) {
 }
 
 /**
- * This function creates dialogues for adding, renaming and deleting budgets.
- * @param {String} title The title of the dialog.
- * @param {String} text The text message of the dialog.
- * @param {bool} withInput This indicates if the dialog has an input field or not.
- * @param {function} okFunction A function to be executed when the OK button was pressed.
- */
-function createDialog( title, text, withInput, okFunction ) {
-    // Find out which language is selected to set the text elements of the dialog.
-    var currentLanguage = readPreference( "language" );
-    var okButtonText, cancelButtonText;
-    switch ( currentLanguage ) {
-        case "en":
-            okButtonText = "Ok";
-            cancelButtonText = "Cancel";
-            break;
-        case "de":
-            // >>Not sure how to handle umlauts here, since it is not HTML<<
-            okButtonText = "Bestätigen";
-            cancelButtonText = "Abbrechen";
-            break;
-    }
-    // Set the text message of the dialog.
-    $( "#dialogDiv" ).html( text + (withInput ? "<br><input type=\"text\" id=\"dialogInput\">" : "")  );
-    // Create a new dialog.
-    $( "#dialogDiv" ).dialog({
-    	resizable: false,
-    	height: "auto",
-    	width: "auto",
-    	minWidth: 200,
-    	minHeight: 150,
-    	modal: true,
-    	title: title,
-    	close: function () {
-    		$( "#dialogDiv" ).html( "" );
-    	},
-    	buttons : [
-            {
-                text: okButtonText,
-                click: okFunction
-		    },
-            {
-                text: cancelButtonText,
-                click: function() {
-                    $( this ).dialog( "close" );
-                }
-		    }
-        ]
-    });
-}
-
-/**
  * This function creates a new budget. It opens a dialog in which the user types
  * in a name for the new budget.
  */
@@ -136,12 +108,11 @@ function addBudget() {
             text = "Type in the name of the new budget.";
             break;
         case "de":
-            // This is no HTML, how to handle umlauts???
             title = "Konto hinzufügen";
             text = "Geben Sie einen Namen f&uuml;r das neue Konto ein.";
             break;
     }
-    createDialog( title, text, true, function() {
+    createBudgetDialog( title, text, true, function() {
         // Get all currently available budgets.
         var currentBudgets = readMainStorage( "budgets" );
         // Save the new budget (the input from the user).
@@ -192,12 +163,11 @@ function deleteBudget( name ) {
             text = "Are you sure you want to delete " + name + "?";
             break;
         case "de":
-            // This is no HTML, how to handle umlauts???
             title = "Konto löschen";
             text = "Wollen Sie " + name + " wirklich l&ouml;schen?";
             break;
     }
-    createDialog( title, text, false, function() {
+    createBudgetDialog( title, text, false, function() {
         // Get all currently available budgets.
         var currentBudgets = readMainStorage( "budgets" );
         // Delete the budget in all time earnings/spendings as well.
@@ -250,7 +220,7 @@ function renameBudget( name ) {
             text = "Geben Sie einen neuen Namen f&uuml;r " + name + " ein.";
             break;
     }
-    createDialog( title, text, true, function() {
+    createBudgetDialog( title, text, true, function() {
         // Get all currently available budgets.
         var currentBudgets = readMainStorage( "budgets" );
         // Rename the budget in all time earnings/spendings as well.
@@ -285,123 +255,4 @@ function renameBudget( name ) {
         // Close the dialog (since this function is only executed when the OK button is pressed)
         $( this ).dialog( "close" );
     });
-}
-
-/**
- * This function displays all currently available budgets.
- */
-function displayBudgets() {
-    // Reset previous content.
-    var currentLanguage = readPreference( "language" );
-    switch ( currentLanguage ) {
-        case "en":
-            $( "#currentBudgets" ).html( "<li><h6> Current budgets </h6></li>" );
-            break;
-        case "de":
-            $( "#currentBudgets" ).html( "<li><h6> Aktuelle Konten </h6></li>" );
-            break;
-    }
-    // Get all budgets to iterate over them.
-    var currentBudgets = readMainStorage( "budgets" );
-    // Iterate over all budgets to display them.
-    for ( var i = 0; i < currentBudgets.length; i++ ) {
-        // Display all budgets. The first one is a standard budget and can therefore not be deleted.
-        // Note that currentBudgets is an array of arrays (name of the budget and its current balance).
-        if ( i == 0 ) {
-            $( "#currentBudgets" ).append( "<li class=\"w3-hover-light-blue w3-display-container\">" + currentBudgets[i][0] +
-            "<span onclick=\"renameBudget('" + currentBudgets[i][0] + "');\" class=\"w3-button w3-display-right\">" +
-            "<i style=\"padding-right:40px;\" class=\"fas fa-edit\"></i></span></li>" );
-        }
-        // Every other budget (not default) can be deleted.
-        else {
-            $( "#currentBudgets" ).append( "<li class=\"w3-hover-light-blue w3-display-container\">" + currentBudgets[i][0] +
-                            "<span onclick=\"renameBudget('" + currentBudgets[i][0] + "');\" class=\"w3-button w3-display-right\">" +
-                            "<i style=\"padding-right:40px\" class=\"fas fa-edit\"></i></span>" +
-                            "<span onclick=\"deleteBudget('" + currentBudgets[i][0] + "');\" class=\"w3-button w3-display-right\">" +
-                            "<i class=\"fas fa-times\"></i></span></li>" );
-        }
-    }
-}
-
-/**
- * This function displays every available budget in detail.
- */
-function displayContent() {
-    // Reset previous content.
-    $( "#mainContent" ).html( "" );
-    // Find out which button text should be displayed.
-    var addSpendingButtonText, addEarningButtonText;
-    var currentLanguage = readPreference( "language" );
-    switch ( currentLanguage ) {
-        case "en":
-            addSpendingButtonText = "Add expenditure to this budget";
-            addEarningButtonText = "Add earning to this budget";
-            break;
-        case "de":
-            addSpendingButtonText = "Ausgabe zu diesem Konto hinzuf&uuml;gen";
-            addEarningButtonText = "Einnahme zu diesem Konto hinzuf&uuml;gen";
-            break;
-    }
-    // Get the currently selected currency to display it later on.
-    var currentCurrency = readPreference( "currency" );
-    var currencySign;
-    switch ( currentCurrency ) {
-        case "Euro":
-            currencySign = "&euro;";
-            break;
-        case "Dollar":
-            currencySign = "&dollar;";
-            break;
-        case "Pound":
-            currencySign = "&pound;";
-            break;
-    }
-    // Get all budgets to iterate over them.
-    var currentBudgets = readMainStorage( "budgets" );
-    // Display a detailed overview for every budget.
-    for ( var i = 0; i < currentBudgets.length; i++ ) {
-        // Create a new div and a seperation line.
-        $( "#mainContent" ).append( "<br><hr style=\"border-color:black;\"><div class=\"w3-container\">" );
-        // Display the name of the budget.
-        $( "#mainContent" ).append( "<h5><i class=\"fa fa-arrow-right\"></i> " + currentBudgets[i][0] + " </h5>" );
-        // Find out the sum of earnings in this month, so we can get an overview how much money is left.
-        var quest = { connector:'or', params:[['budget', currentBudgets[i][0]]] };
-        var dataObj = getData( getCurrentFileName(), quest );
-        var totalEarningsThisMonth = 0;
-        for ( var j = 0; j < dataObj.length; j++ ) {
-            if ( dataObj[j].type === "earning" ) {
-                totalEarningsThisMonth += dataObj[j].amount;
-            }
-        }
-        // Calculate the percentage of how much money is left to adjust the progress bar.
-        var percentage = 100;
-        if ( totalEarningsThisMonth > 0 ) percentage = (currentBudgets[i][1] / totalEarningsThisMonth) * 100;
-        // Select the color of the progress bar in dependency of the percentage value.
-        var color;
-        if ( percentage > 66 ) color = "green";
-        else if ( percentage > 33 ) color = "orange";
-        else color = "red";
-
-        //TODO: When clicking on one of the buttons, open a dialog to type in a name and an amount for the spending/earning,
-        // maybe a checkbox to decide if the transaction should be automated ervery month, select a day for each month in a dropdown menu,
-        // display currently recurring transaction in a table like the budget overview table
-
-        // Display the current balance.
-        $( "#mainContent" ).append( "<div class=\"w3-grey\">" +
-                                    "<div class=\"w3-center w3-" + color + "\" style=\"width:" + percentage + "%;\">" + currentBudgets[i][1] + currencySign + "</div></div>" );
-        // Display button to add new spendings.
-        $( "#mainContent" ).append( "<br><button class=\"w3-button w3-white w3-round-xlarge\" onclick=\"addSpending( 'auto', 10, '" + currentBudgets[i][0] + "' );\">" + addSpendingButtonText + "</button>" );
-        // Display button to add new earnings
-        $( "#mainContent" ).append( "<button class=\"w3-button w3-white w3-round-xlarge\" onclick=\"addEarning( 'auto', 10, '" + currentBudgets[i][0] + "' );\">" + addEarningButtonText + "</button></div><br>" );
-    }
-}
-
-/**
- * This function updates the view when changes are made.
- */
-function updateView() {
-    // Display a list of currently available budgets.
-    displayBudgets();
-    // Display the budgets in detail.
-    displayContent();
 }
