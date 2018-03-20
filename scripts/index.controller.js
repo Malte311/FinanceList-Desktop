@@ -3,7 +3,7 @@
  * language and some of the content.
  */
 function loadPage() {
-
+    // We will always set the language first.
     setLanguage();
 
     test();

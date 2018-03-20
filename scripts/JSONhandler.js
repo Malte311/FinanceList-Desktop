@@ -2,14 +2,16 @@
 const fs = require( 'fs' );
 // This is only used to get the DefaultDataPath (some sort of Temp directory).
 const storage = require( 'electron-json-storage' );
+// We use this module to get the correct path seperator (only needed to display it correctly).
+const path = require( 'path' );
 // A default settings.json object.
-const defaultObj = {"windowSize":"1920x1080","fullscreen":false,"language":"en","path": __dirname + "/data","currency":"Euro","chartType":"pie"};
+const defaultObj = {"windowSize":"1920x1080","fullscreen":false,"language":"en","path": __dirname + path.sep + "data","currency":"Euro","chartType":"pie"};
 // A default mainStorage.json object.
 const defaultStorageObj = {"budgets":[["checking account", 0.0]],"currentDate":getCurrentDate(),"allTimeEarnings":[["checking account", 0.0]],"allTimeSpendings":[["checking account", 0.0]],"allocation":[["checking account", 100]]};
 // The path to the settings.json file.
-const settingsPath = storage.getDefaultDataPath() + "/settings.json";
+const settingsPath = storage.getDefaultDataPath() + path.sep + "settings.json";
 // The path to the mainStorage.json file (no constant since the path can be changed at runtime).
-var mainStoragePath = readPreference( "path" ) + "/mainStorage.json";
+var mainStoragePath = readPreference( "path" ) + path.sep + "mainStorage.json";
 // This is for reading the settings.json file in the main process.
 module.exports.getPreference = ( name ) => readPreference( name );
 module.exports.initStorage = () => initMainStorage();
@@ -147,7 +149,7 @@ function writeMainStorage( field, value ) {
  */
 function getData( file, quest ) {
     // Get the data object we want to access.
-    var dataPath = readPreference( "path" ) + "/" + file;
+    var dataPath = readPreference( "path" ) + path.sep + file;
     var dataStorageObj = JSON.parse( fs.readFileSync( dataPath ) );
     // Filter the data and return an array with appropriate data.
     return dataStorageObj.filter( (dat) => {
@@ -182,7 +184,7 @@ function getData( file, quest ) {
  * @param {JSON} data The data we want to write in form of a JSON object.
  */
 function storeData( data ) {
-    var dataPath = readPreference( "path" ) + "/" + getCurrentFileName();
+    var dataPath = readPreference( "path" ) + path.sep + getCurrentFileName();
     // File exists: Write the data in it.
     if ( fs.existsSync( dataPath ) ) {
         // Get existing data, add the new data and then write it.
@@ -236,7 +238,7 @@ function moveFiles( from, to ) {
         if ( allFiles[i].endsWith( ".json" ) ) {
             // Try to move the files (cross disk will cause an error)
             try {
-                fs.renameSync( from + "/" + allFiles[i], to + "/" + allFiles[i] );
+                fs.renameSync( from + path.sep + allFiles[i], to + path.sep + allFiles[i] );
             }
             // Display the error and stop trying to move files (since the destination
             // will be the same and therefore every file would produce an error).
@@ -253,5 +255,5 @@ function moveFiles( from, to ) {
  * (Well, "all" path references means the path to the mainStorage.json file at the moment)
  */
 function updatePaths() {
-    mainStoragePath = readPreference( "path" ) + "/mainStorage.json";
+    mainStoragePath = readPreference( "path" ) + path.sep + "mainStorage.json";
 }
