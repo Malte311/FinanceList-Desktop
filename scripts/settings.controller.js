@@ -3,24 +3,15 @@
  * language and some of the content.
  */
 function loadPage() {
+    // Select the correct language.
     setLanguage( readPreference( "language" ) );
-    // This sets the currently selected window size as a text in the dropdown menu.
-    $( "#currentSize" ).text( readPreference( "windowSize" ) );
-    // Maybe we need to display checkboxes as checked, if they were previously selected.
-    if ( readPreference( "fullscreen" ) === true ) {
-        document.getElementById( "fullscreen" ).checked = true;
-    }
-    // Display currently selected path.
-    $( "#currentPath" ).text( readPreference( "path" ) );
-    // Display currenctly selected currency.
-    $( "#currentCurrency" ).text( readPreference( "currency" ) );
-    // Display currenctly selected chart type.
-    displayChartType();
+    // Display everything else.
+    updateView();
 }
 
 /**
  * This function sets the size of the application window and stores the currently
- * selected window size in a configutation file.
+ * selected window size in a configuration file.
  * @param {String} size The new window size (format has to be like this: "widthxheight").
  */
 function setWindowSize( size ) {
@@ -35,28 +26,28 @@ function setWindowSize( size ) {
         win.center();
         // Save the new size. We get the existing data and add a value for the language.
         storePreference( "windowSize", newWidth + "x" + newHeight );
-        // Display the new size as currently selected.
-        $( "#currentSize" ).text( size );
+        // Update the view to display the newly selected size.
+        updateView();
     }
 }
 
 /**
  * This function sets the window mode. Available is fullscreen/no fullscreen.
- * @param {String} mode The window mode.
  */
-function setWindowMode( mode ) {
-    // Find out, if the checkbox was previously checked or unchecked.
-    if ( document.getElementById( "fullscreen" ).checked ) {
-        // If the checkbox is checked now, it was previously unchecked. This means
-        // we will switch to fullscreen.
+function setWindowMode() {
+    // If the checkbox is checked now, it was previously unchecked. This means
+    // we will switch to fullscreen.
+    if ( $( "#fullscreen" ).is( ":checked" ) ) {
         win.setFullScreen( true );
         storePreference( "fullscreen", true );
     }
+    // Otherwise we switch back to window mode.
     else {
         win.setFullScreen( false );
         win.center();
         storePreference( "fullscreen", false );
     }
+    // No updateView() required here, since the checkbox change its state automatically.
 }
 
 /**
@@ -78,8 +69,8 @@ function setPath() {
         storePreference( "path", newPath[0] );
         // Update paths references in JSONhandler.js (has to be called after storing it)
         updatePaths();
-        // Show the path as currently selected.
-        $( "#currentPath" ).text( newPath );
+        // Update the view to display the newly selected path.
+        updateView();
     }
 }
 
@@ -90,8 +81,8 @@ function setPath() {
 function setCurrency( value ) {
     // Save the value in settings.json.
     storePreference( "currency", value );
-    // Show the currently selected currency.
-    $( "#currentCurrency" ).text( value );
+    // Update the view to display the newly selected currency.
+    updateView();
 }
 
 /**
@@ -101,35 +92,6 @@ function setCurrency( value ) {
 function setChartType( name ) {
     // Save the value in settings.json.
     storePreference( "chartType", name );
-    displayChartType();
-}
-
-/**
- * This function displays the correct chart type. We need to switch case here, since
- * the names are different in various languages.
- */
-function displayChartType() {
-    var currentChartType = readPreference( "chartType" );
-    var currentLanguage = readPreference( "language" );
-    // Switch case in case some more languages are added later on.
-    switch ( currentLanguage ) {
-        case "en":
-            // Capitalize the chart type and display it.
-            $( "#currentChartType" ).text( readPreference( "chartType" ).replace( /\b\w/g, l => l.toUpperCase() ) + " chart" );
-            break;
-        case "de":
-            if ( currentChartType === "pie" ) {
-                $( "#currentChartType" ).text( "Kreisdiagramm" );
-            }
-            else if ( currentChartType === "line" ) {
-                $( "#currentChartType" ).text( "Liniendiagramm" );
-            }
-            else if ( currentChartType === "bar" ) {
-                $( "#currentChartType" ).text( "Balkendiagramm" );
-            }
-            else if ( currentChartType === "doughnut" ) {
-                $( "#currentChartType" ).text( "Ringdiagramm" );
-            }
-            break;
-    }
+    // Update the view to display the new chart type.
+    updateView();
 }

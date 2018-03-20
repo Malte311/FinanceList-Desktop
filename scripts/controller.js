@@ -27,34 +27,6 @@ function setLanguage( language ) {
 }
 
 /**
- * Creates a pie chart to visualize the input data.
- * @param {Object} canvas The canvas which contains the diagram.
- * @param {String[]} categories The labels for the data.
- * @param {number[]} dataset The data that will be visualized.
- * @param {Object[]} bgcolors Backgroundcolors in the diagram.
- * @param {Object[]} bdcolors Bordercolors in the diagram.
- * @param {String} charttype The type of the chart.
- */
-function createChart( canvas, categories, dataset, bgcolors, bdcolors, charttype ) {
-     spendingChart = new Chart( canvas, {
-        type: charttype,
-        data: {
-            labels: categories,
-            datasets: [{
-                data: dataset,
-                backgroundColor: bgcolors,
-                borderColor: bdcolors,
-                borderWidth: 0
-            }]
-        },
-        // Don't show axes.
-        options: {
-            display: false
-        }
-    });
-}
-
-/**
  * This function returns the currently selected language.
  * @return {String} The currently selected language.
  */
@@ -88,4 +60,32 @@ function getCurrencySign() {
         default:
             return "&euro;";
     }
+}
+
+/**
+ * Creates a pie chart to visualize the input data.
+ * @param {Object} canvas The canvas which contains the diagram.
+ * @param {String[]} categories The labels for the data.
+ * @param {number[]} dataset The data that will be visualized.
+ * @param {Object[]} bgcolors Backgroundcolors in the diagram.
+ * @param {Object[]} bdcolors Bordercolors in the diagram.
+ * @param {String} charttype The type of the chart.
+ */
+function createChart( canvas, categories, dataset, bgcolors, bdcolors, charttype ) {
+     spendingChart = new Chart( canvas, {
+        type: charttype,
+        data: {
+            labels: categories,
+            datasets: [{
+                data: dataset,
+                backgroundColor: bgcolors,
+                borderColor: bdcolors,
+                borderWidth: 0
+            }]
+        },
+        // Don't show axes.
+        options: {
+            display: false
+        }
+    });
 }

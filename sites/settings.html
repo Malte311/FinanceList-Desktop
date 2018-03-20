@@ -9,6 +9,7 @@
         <!-- scripts -->
         <script language="javascript" src="../scripts/JSONhandler.js"></script>
         <script language="javascript" src="../scripts/controller.js"></script>
+        <script language="javascript" src="../scripts/settings.view.js"></script>
         <script language="javascript" src="../scripts/settings.controller.js"></script>
         <!-- stylesheets -->
         <link rel="stylesheet" type="text/css" href="../style/w3.min.css">
@@ -22,8 +23,8 @@
         <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
             <span class="w3-bar-item w3-center"> FinanceList </span>
             <span class="w3-bar-item w3-right">
-                <a onclick="setLanguage('en');displayChartType();" href="#"><img border="0" alt="EN" src="../img/us.ico" width=20px height=20px></a>
-                <a onclick="setLanguage('de');displayChartType();" href="#"><img border="0" alt="DE" src="../img/de.ico" width=20px height=20px></a>
+                <a onclick="setLanguage('en');updateView();" href="#"><img border="0" alt="EN" src="../img/us.ico" width=20px height=20px></a>
+                <a onclick="setLanguage('de');updateView();" href="#"><img border="0" alt="DE" src="../img/de.ico" width=20px height=20px></a>
             </span>
         </div>
         <!-- sidebar -->
@@ -62,7 +63,7 @@
                     </div>
                 </div>
                 <!-- checkbox to switch between fullscreen and window mode -->
-                <input type="checkbox" onclick="setWindowMode('fullscreen');" id="fullscreen">
+                <input type="checkbox" onclick="setWindowMode();" id="fullscreen">
                 <span lang="en"> Fullscreen </span>
                 <span lang="de"> Vollbildmodus </span>
             </div>
