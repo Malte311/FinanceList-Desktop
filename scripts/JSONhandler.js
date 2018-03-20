@@ -225,6 +225,26 @@ function getCurrentDate() {
 }
 
 /**
+ * This function returns all JSON files in the current data directory.
+ * @return {String array} An array containing the names of all .json files.
+ */
+function getJSONFiles() {
+    // First, get all files. Then exclude every file which is not a .json file.
+    var allFiles = fs.readdirSync( readPreference( "path" ) );
+    // Only add .json files to this empty array.
+    var JSONFiles = [];
+    // Search for files which are not .json format.
+    for ( var i = 0; i < allFiles.length; i++ ) {
+        // .json file found? Add it (if it is not the mainStorage file), otherwise continue without adding.
+        // (Note: We only add the filename, not the extension.)
+        if ( allFiles[i].endsWith( ".json" ) && allFiles[i].indexOf( "mainStorage" ) === -1 ) {
+            JSONFiles.push( allFiles[i].substring( 0, allFiles[i].lastIndexOf( "." ) ) );
+        }
+    }
+    return JSONFiles;
+}
+
+/**
  * This function moves all files when the path is changed.
  * @param {String} from The path from which all files should be moved.
  * @param {String} to The path to all the files should be moved.

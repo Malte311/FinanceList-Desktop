@@ -4,7 +4,7 @@
  */
 function loadPage() {
     // We will always set the language first.
-    setLanguage();
+    setLanguage( readPreference( "language" ) );
     // Display a list of currently available budgets and display every budget in detail.
     updateView();
 }

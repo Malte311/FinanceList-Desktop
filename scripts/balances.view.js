@@ -316,7 +316,7 @@ function displayContent() {
         // Create a new div and a seperation line.
         $( "#mainContent" ).append( "<br><hr style=\"border-color:black;\"><div class=\"w3-container\">" );
         // Display the name of the budget.
-        $( "#mainContent" ).append( "<h5><i class=\"fa fa-arrow-right\"></i> " + currentBudgets[i][0] + " </h5>" );
+        $( "#mainContent" ).append( "<h5><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + currentBudgets[i][0] + " </h5>" );
         // Find out the sum of earnings in this month, so we can get an overview how much money is left.
         var quest = { connector:'or', params:[['budget', currentBudgets[i][0]]] };
         var dataObj = getData( getCurrentFileName(), quest );

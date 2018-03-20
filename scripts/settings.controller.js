@@ -3,7 +3,7 @@
  * language and some of the content.
  */
 function loadPage() {
-    setLanguage();
+    setLanguage( readPreference( "language" ) );
     // This sets the currently selected window size as a text in the dropdown menu.
     $( "#currentSize" ).text( readPreference( "windowSize" ) );
     // Maybe we need to display checkboxes as checked, if they were previously selected.

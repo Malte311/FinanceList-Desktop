@@ -4,26 +4,10 @@
  */
 function loadPage() {
     // We will always set the language first.
-    setLanguage();
-
+    setLanguage( readPreference( "language" ) );
+    // Display recent spendings, if they exist.
+    displayRecentSpendings();
     test();
-    setOverview();
-}
-
-/**
- * This function sets the style for the overview. This means that some elements
- * will be hidden in case there are missing data.
- */
-function setOverview() {
-    // If there are no recent spendings, the "Recent spendings" div should be hidden
-    if ( false ) {
-        $("#recentHr").hide();
-        $("#recentAll").hide();
-    }
-    // If there are less than five recent spendings, we hide all the rest
-    else if ( true ) {
-        $("#recentFive").hide();
-    }
 }
 
 function test() {
@@ -45,5 +29,5 @@ function test() {
         'rgba(75, 192, 192, 1)',
         'rgba(153, 102, 255, 1)',
         'rgba(255, 159, 64, 1)'
-    ], 'pie' );
+    ], readPreference( "chartType" ) );
 }

@@ -8,40 +8,22 @@ const win = remote.getCurrentWindow();
 
 /**
  * This function sets the language.
+ * @param {String} language The new language.
  */
-function setLanguage() {
-    // Use the language that was selected before.
-    var language = readPreference( "language" );
-    if ( language === "en" ) {
-        setLangToEnglish();
+function setLanguage( language ) {
+    // Display the new language.
+    switch ( language ) {
+        case "en":
+            $( "[lang=de]" ).hide();
+            $( "[lang=en]" ).show();
+            break;
+        case "de":
+            $( "[lang=en]" ).hide();
+            $( "[lang=de]" ).show();
+            break;
     }
-    else if ( language === "de" ) {
-        setLangToGerman();
-    }
-}
-
-/**
- * This function shows only elements with lang=de attribute and hides all elements
- * with a different language attribute.
- */
-function setLangToGerman() {
-    // Set the new language.
-    $( "[lang=en]" ).hide();
-    $( "[lang=de]" ).show();
     // Save the new language.
-    storePreference( "language", "de" );
-}
-
-/**
- * This function shows only elements with lang=en attribute and hides all elements
- * with a different language attribute.
- */
-function setLangToEnglish() {
-    // Set the new language.
-    $( "[lang=de]" ).hide();
-    $( "[lang=en]" ).show();
-    // Save the new language.
-    storePreference( "language", "en" );
+    storePreference( "language", language );
 }
 
 /**
@@ -62,7 +44,7 @@ function createChart( canvas, categories, dataset, bgcolors, bdcolors, charttype
                 data: dataset,
                 backgroundColor: bgcolors,
                 borderColor: bdcolors,
-                borderWidth: 1
+                borderWidth: 0
             }]
         },
         // Don't show axes.
@@ -70,4 +52,40 @@ function createChart( canvas, categories, dataset, bgcolors, bdcolors, charttype
             display: false
         }
     });
+}
+
+/**
+ * This function returns the currently selected language.
+ * @return {String} The currently selected language.
+ */
+function getLanguage() {
+    // Find out, which language is selected and return it.
+    var currentLanguage = readPreference( "language" );
+    switch ( currentLanguage ) {
+        case "en":
+            return "en";
+        case "de":
+            return "de";
+        default:
+            return "en";
+    }
+}
+
+/**
+ * This function return the currency sign.
+ * @return {String} An HTML representation of the currency sign.
+ */
+function getCurrencySign() {
+    // Find out, which currency is selected and choose the appropriate sign.
+    var currentCurrency = readPreference( "currency" );
+    switch ( currentCurrency ) {
+        case "Euro":
+            return "&euro;";
+        case "Dollar":
+            return "&dollar;";
+        case "Pound":
+            return "&pound;";
+        default:
+            return "&euro;";
+    }
 }

@@ -3,5 +3,5 @@
  * language and some of the content.
  */
 function loadPage() {
-    setLanguage();
+    setLanguage( readPreference( "language" ) );
 }

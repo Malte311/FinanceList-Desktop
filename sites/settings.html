@@ -22,8 +22,8 @@
         <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
             <span class="w3-bar-item w3-center"> FinanceList </span>
             <span class="w3-bar-item w3-right">
-                <a onclick="setLangToEnglish();displayChartType();" href="#"><img border="0" alt="EN" src="../img/us.ico" width=20px height=20px></a>
-                <a onclick="setLangToGerman();displayChartType();" href="#"><img border="0" alt="DE" src="../img/de.ico" width=20px height=20px></a>
+                <a onclick="setLanguage('en');displayChartType();" href="#"><img border="0" alt="EN" src="../img/us.ico" width=20px height=20px></a>
+                <a onclick="setLanguage('de');displayChartType();" href="#"><img border="0" alt="DE" src="../img/de.ico" width=20px height=20px></a>
             </span>
         </div>
         <!-- sidebar -->
@@ -35,14 +35,14 @@
             </div>
             <hr style="border-color:black;">
             <div class="w3-bar-block">
-                <span lang="en"><a onclick="window.location.href='../index.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-home"></i> Overview </a></span>
-                <span lang="de"><a onclick="window.location.href='../index.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-home"></i> &Uuml;berblick </a></span>
-                <span lang="en"><a onclick="window.location.href='balances.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-euro-sign"></i> Balances </a></span>
-                <span lang="de"><a onclick="window.location.href='balances.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-euro-sign"></i> Bilanzen </a></span>
-                <span lang="en"><a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fas fa-cog"></i> Settings </a></span>
-                <span lang="de"><a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fas fa-cog"></i> Einstellungen </a></span>
-                <span lang="en"><a onclick="window.location.href='help.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="far fa-question-circle"></i> Help </a></span>
-                <span lang="de"><a onclick="window.location.href='help.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="far fa-question-circle"></i> Hilfe </a></span>
+                <span lang="en"><a onclick="window.location.href='../index.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-home w3-text-blue w3-large icon"></i> Overview </a></span>
+                <span lang="de"><a onclick="window.location.href='../index.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-home w3-text-blue w3-large icon"></i> &Uuml;berblick </a></span>
+                <span lang="en"><a onclick="window.location.href='balances.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-euro-sign w3-text-green w3-large icon"></i> Balances </a></span>
+                <span lang="de"><a onclick="window.location.href='balances.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-euro-sign w3-text-green w3-large icon"></i> Bilanzen </a></span>
+                <span lang="en"><a href="#" class="w3-bar-item w3-button w3-padding w3-light-blue"><i class="fas fa-cog w3-large icon"></i> Settings </a></span>
+                <span lang="de"><a href="#" class="w3-bar-item w3-button w3-padding w3-light-blue"><i class="fas fa-cog w3-large icon"></i> Einstellungen </a></span>
+                <span lang="en"><a onclick="window.location.href='help.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="far fa-question-circle w3-text-yellow w3-large icon"></i> Help </a></span>
+                <span lang="de"><a onclick="window.location.href='help.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="far fa-question-circle w3-text-yellow w3-large icon"></i> Hilfe </a></span>
             </div>
         </nav>
         <!-- main content -->
@@ -70,8 +70,8 @@
             <hr style="border-color:black;">
             <!-- path settings -->
             <div class="w3-row-padding" style="margin:0 -16px">
-                <h5 lang="en"><i class="fas fa-folder"></i> File path </h5>
-                <h5 lang="de"><i class="fas fa-folder"></i> Dateipfad </h5>
+                <h5 lang="en"><i class="fas fa-folder w3-text-yellow w3-large"></i> File path </h5>
+                <h5 lang="de"><i class="fas fa-folder w3-text-yellow w3-large"></i> Dateipfad </h5>
                 <button class="w3-button w3-white w3-round-xlarge" onclick="setPath();" id="currentPath"></button>
                 <div class="tooltip">
                     <i class="fas fa-info-circle"></i>
@@ -83,8 +83,8 @@
             <hr style="border-color:black;">
             <!-- currency settings -->
             <div class="w3-row-padding" style="margin:0 -16px">
-                <h5 lang="en"><i class="far fa-money-bill-alt"></i> Currency </h5>
-                <h5 lang="de"><i class="far fa-money-bill-alt"></i> Währung </h5>
+                <h5 lang="en"><i class="far fa-money-bill-alt w3-text-green w3-large"></i> Currency </h5>
+                <h5 lang="de"><i class="far fa-money-bill-alt w3-text-green w3-large"></i> Währung </h5>
                 <!-- dropdown menu to select the currency -->
                 <div class="w3-dropdown-hover">
                     <button class="w3-button w3-white w3-round-xlarge" id="currentCurrency"></button>
@@ -99,8 +99,8 @@
             <hr style="border-color:black;">
             <!-- charttype settings -->
             <div class="w3-row-padding" style="margin:0 -16px">
-                <h5 lang="en"><i class="fas fa-chart-pie"></i> Chart type </h5>
-                <h5 lang="de"><i class="fas fa-chart-pie"></i> Diagrammart </h5>
+                <h5 lang="en"><i class="fas fa-chart-pie w3-text-red w3-large"></i> Chart type </h5>
+                <h5 lang="de"><i class="fas fa-chart-pie w3-text-red w3-large"></i> Diagrammart </h5>
                 <!-- dropdown menu to select the chart type -->
                 <div class="w3-dropdown-hover">
                     <button class="w3-button w3-white w3-round-xlarge" id="currentChartType"></button>
