@@ -5,10 +5,11 @@
 }
 
 .tooltip .tooltiptext {
-    top: -5px;
-    left: 105%;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
     visibility: hidden;
-    width: 320px;
+    width: 250px;
     background-color: black;
     color: #fff;
     text-align: center;
@@ -20,4 +21,9 @@
 
 .tooltip:hover .tooltiptext {
     visibility: visible;
+}
+
+.disabledDiv {
+    pointer-events: none;
+    opacity: 0.4;
 }

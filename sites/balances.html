@@ -11,10 +11,12 @@
         <script language="javascript" src="../scripts/controller.js"></script>
         <script language="javascript" src="../scripts/balances.view.js"></script>
         <script language="javascript" src="../scripts/balances.controller.js"></script>
+        <script language="javascript" src="../scripts/text.js"></script>
         <!-- stylesheets -->
         <link rel="stylesheet" type="text/css" href="../style/w3.min.css">
         <link rel="stylesheet" type="text/css" href="../style/fontawesome/css/fontawesome-all.min.css">
         <link rel="stylesheet" type="text/css" href="../style/style.css">
+        <link rel="stylesheet" type="text/css" href="../style/balances.css">
         <link rel="stylesheet" type="text/css" href="../style/jquery-ui/jquery-ui.min.css">
     </head>
     <!-- body -->
@@ -50,25 +52,27 @@
         <div class="w3-main" style="margin-left:250px;margin-top:45px;">
             <!-- div for dialogues -->
             <div id="dialogDiv"></div>
-            <div class="w3-container">
+            <div class="w3-container" style="margin-right:50px;">
                 <h5 lang="en"><i class="fas fa-credit-card w3-text-blue w3-large"></i> Budget overview </h5>
                 <h5 lang="de"><i class="fas fa-credit-card w3-text-blue w3-large"></i> Konten&uuml;bersicht </h5>
-                <ul class="w3-ul w3-white w3-border w3-round" id="currentBudgets">
-                    <!-- This list is getting added via JavaScript (because we read the storage to get all the items) -->
-                </ul>
+                <!-- This content is getting added via JavaScript -->
+                <div id="currentBudgets" class="w3-container" style="margin-right:50px;"></div>
                 <br>
-                <!-- button to add new budgets -->
-                <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="addBudget();"> Add budget </button>
-                <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="addBudget();"> Konto hinzuf&uuml;gen </button>
-                <!-- button to add new earnings or spendings -->
-                <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="addTransaction();"> Add transaction </button>
-                <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="addTransaction();"> Eintrag hinzuf&uuml;gen </button>
-                <!-- button for setting allocations -->
-                <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="createBudgetSettingsDialog();"> Automated allocation </button>
-                <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="createBudgetSettingsDialog();"> Automatische Aufteilung </button>
+                <!-- buttons -->
+                <div class="w3-container" style="margin-right:50px;">
+                    <!-- button to add new budgets -->
+                    <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="addBudget();"> Add budget </button>
+                    <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="addBudget();"> Konto hinzuf&uuml;gen </button>
+                    <!-- button to add new earnings or spendings -->
+                    <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="addTransaction();"> Add transaction </button>
+                    <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="addTransaction();"> Eintrag hinzuf&uuml;gen </button>
+                    <!-- button for setting allocations -->
+                    <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="setAllocation();"> Automated allocation </button>
+                    <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="setAllocation();"> Automatische Aufteilung </button>
+                </div>
             </div>
             <!-- in this div there will be added an overview for each budget in detail via JavaScript -->
-            <div id="mainContent" style="margin-right:50px;"></div>
+            <div id="mainContent" class="w3-container" style="margin-right:50px;"></div>
         </div>
         <!-- JavaScript initialization -->
         <script>

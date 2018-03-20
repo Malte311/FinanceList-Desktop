@@ -13,23 +13,75 @@ function loadPage() {
  * This function adds a new transaction, either unique or recurring.
  */
 function addTransaction() {
-    // Find out which language is selected to set the correct text.
-    var currentLanguage = readPreference( "language" );
-    var title, text;
-    switch ( currentLanguage ) {
-        case "en":
-            title = "Add transaction";
-            text = "";
-            break;
-        case "de":
-            title = "Eintrag hinzufügen";
-            text = "";
-            break;
+    // Find out which language is selected to set the text elements of the dialog.
+    var textElements = getTransactionDialogTextElements();
+    // Set the content of the dialog. First, get all budgets to offer a selection between them.
+    var currentBudgets = readMainStorage( "budgets" );
+    // We will add all the content to this and then display it in the dialog.
+    var options = "";
+    // Display an option for every available budget, so the user can select any budget.
+    for ( var i = 0; i < currentBudgets.length; i++ ) {
+        options += "<option value=\"" + currentBudgets[i][0] + "\">" + currentBudgets[i][0] + "</option>";
     }
-    // We want to display a dialog in which the user types in the name of the transaction,
-    // selects the type (earning/spending), the amount and selects if the transaction is
-    // either unique or recurring.
-    createTransactionDialog();
+    // Set the complete content for the dialog.
+    var text = "<form class=\"w3-center\"><input id=\"earning\" type=\"radio\" name=\"type\">" + textElements[0] +
+                            "<input id=\"spending\" style=\"margin-left:15px;\" type=\"radio\" name=\"type\" checked>" + textElements[1] + "</form><hr>" +
+                            "<b>Name</b><br><input type=\"text\" id=\"nameInput\"><br><hr>" +
+                            "<b>" + textElements[2] + "</b><br><input style=\"width=50px;\" type=\"text\" id=\"sumInput\"><br><hr>" +
+                            "<b>" + textElements[3] + "</b><br>" +
+                            "<select id=\"selectInput\">" + options + "</select><hr><input type=\"checkbox\" id=\"checkboxInput\">" + textElements[4];
+    // Now we are able to actually create a dialog.
+    createDialog( getTransactionDialogTitle(), text, function() {
+        // Save the inputs and then execute the right function to add a new entry.
+        var name = $( "#nameInput" ).val().trim();
+        var sum = $( "#sumInput" ).val().trim();
+        // Replace all commas with dots to make sure that parseFloat() works as intended.
+        sum.replace( ",", "." );
+        // Make sure that the input is ok.
+        var inputOk = true;
+        // Make sure that the name is not empty and that it contains only alphanumeric characters.
+        if ( name.length < 1 || !/^[a-z0-9]+$/i.test( name ) ) inputOk = false;
+        // Make sure that the sum contains no letters and that it contains at least one number.
+        if ( /[a-z]/i.test( sum ) || !/\d/.test( sum ) ) inputOk = false;
+        // Some character is not a digit? Make sure that this is only a single dot.
+        // Also, make sure that there are not more than two decimal places.
+        if ( /\D/.test ( sum ) ) {
+            // No dot or more than one dot found?
+            // (Remember that we already found at least one non digit character, so there has to be a dot)
+            if ( sum.indexOf( "." ) === -1 || sum.replace( ".", "" ).length + 1 < sum.length ) inputOk = false;
+            // Any other non digit characters found?
+            if ( /\D/.test( sum.replace( ".", "" ) ) ) inputOk = false;
+            // More than two decimal digits in the sum? Truncate them.
+            if ( inputOk ) {
+                // Remember that the input was already checked, so there is exactly one dot.
+                if ( sum.split( "." )[1].length > 2 ) {
+                    inputOk = false;
+                }
+            }
+            // Note: Inputs like .5 are okay since parseFloat( ".5" ) = 0.5
+        }
+        // Input ok? Then continue.
+        if ( inputOk ) {
+            // Get the selected budget.
+            var budgetSelect = document.getElementById( "selectInput" );
+            var budget = budgetSelect.options[budgetSelect.selectedIndex].text;
+            // Find out which type (earning/spending) was selected and
+            // execute the correct function.
+            if ( document.getElementById( "earning" ).checked ) {
+                addEarning( name, parseFloat( sum ), budget );
+            }
+            else if ( document.getElementById( "spending" ).checked ) {
+                addSpending( name, parseFloat( sum ), budget );
+            }
+        }
+        // Wrong input: Show error message.
+        else {
+            dialog.showErrorBox( "Error", "Invalid input." );
+        }
+        // Close the dialog and update the view.
+        $( this ).dialog( "close" );
+        updateView();
+    });
 }
 
 /**
@@ -99,20 +151,8 @@ function addEarning( earning, sum, budget ) {
  * in a name for the new budget.
  */
 function addBudget() {
-    // Find out which language is selected to set the correct text.
-    var currentLanguage = readPreference( "language" );
-    var title, text;
-    switch ( currentLanguage ) {
-        case "en":
-            title = "Add budget";
-            text = "Type in the name of the new budget.";
-            break;
-        case "de":
-            title = "Konto hinzufügen";
-            text = "Geben Sie einen Namen f&uuml;r das neue Konto ein.";
-            break;
-    }
-    createBudgetDialog( title, text, true, function() {
+    // Add an input field to the dialog
+    createDialog( getAddBudgetDialogTitle(), getAddBudgetDialogText() + "<br><input type=\"text\" id=\"dialogInput\">", function() {
         // Get all currently available budgets.
         var currentBudgets = readMainStorage( "budgets" );
         // Save the new budget (the input from the user).
@@ -154,20 +194,7 @@ function addBudget() {
  * @param {String} name The name of the budget we want to delete.
  */
 function deleteBudget( name ) {
-    // Find out which language is selected to set the correct text.
-    var currentLanguage = readPreference( "language" );
-    var title, text;
-    switch ( currentLanguage ) {
-        case "en":
-            title = "Delete budget";
-            text = "Are you sure you want to delete " + name + "?";
-            break;
-        case "de":
-            title = "Konto löschen";
-            text = "Wollen Sie " + name + " wirklich l&ouml;schen?";
-            break;
-    }
-    createBudgetDialog( title, text, false, function() {
+    createDialog( getDeleteBudgetDialogTitle(), getDeleteBudgetDialogText(), function() {
         // Get all currently available budgets.
         var currentBudgets = readMainStorage( "budgets" );
         // Delete the budget in all time earnings/spendings as well.
@@ -207,20 +234,8 @@ function deleteBudget( name ) {
  * @param {String} name The name of the budget we want to change.
  */
 function renameBudget( name ) {
-    // Find out which language is selected to set the correct text.
-    var currentLanguage = readPreference( "language" );
-    var title, text;
-    switch ( currentLanguage ) {
-        case "en":
-            title = "Rename budget";
-            text = "Type in a new name for " + name + ".";
-            break;
-        case "de":
-            title = "Konto umbenennen";
-            text = "Geben Sie einen neuen Namen f&uuml;r " + name + " ein.";
-            break;
-    }
-    createBudgetDialog( title, text, true, function() {
+    // Add an input field.
+    createDialog( getRenameBudgetDialogTitle(), getRenameBudgetDialogText() + "<br><input type=\"text\" id=\"dialogInput\">", function() {
         // Get all currently available budgets.
         var currentBudgets = readMainStorage( "budgets" );
         // Rename the budget in all time earnings/spendings as well.
@@ -254,5 +269,46 @@ function renameBudget( name ) {
         updateView();
         // Close the dialog (since this function is only executed when the OK button is pressed)
         $( this ).dialog( "close" );
+    });
+}
+
+function setAllocation() {
+    // Find out which language is selected to set the text elements of the dialog.
+    var textElements = getSetAllocationDialogTextElements();
+    // We want to display all budgets and their allocations.
+    var currentAllocation = readMainStorage( "allocation" );
+    var currentBudgets = readMainStorage( "budgets" );
+    var currentBudgetsHTML = "";
+    for ( var i = 0; i < currentBudgets.length; i++ ) {
+        // Display currently selected value as selected.
+        // Note: The allocation array has same length as the budgets array.
+        // Additionally, the indizes are corresponding, so we don't need further checking.
+        // (Obviously, this is only true if nobody manipulated the .json file)
+        var currentAllocationHTML = "";
+        for ( var j = 1; j <= 10; j++ ) {
+            if ( j * 10 === currentAllocation[i][1] ) {
+                currentAllocationHTML += "<option value=\"" + currentAllocation[i][1] + "\" selected=\"selected\">" + currentAllocation[i][1] + "</option>";
+            }
+            else {
+                currentAllocationHTML += "<option value=\"" + (j * 10).toString() + "\">" + (j * 10).toString() + "</option>";
+            }
+        }
+        currentBudgetsHTML += "<tr class=\"w3-hover-light-blue\"><td>" + currentBudgets[i][0] + "</td><td><select class=\"w3-select\" id=\"percentageSelect" + currentBudgets[i][0] + "\">" + currentAllocationHTML + "</select></td></tr>";
+    }
+
+    var activate = "<br><br>" + "<input type=\"checkbox\" onclick=\"console.log('test');\" id=\"autoAllocation\"> " + textElements[1] +
+                   " <div class=\"tooltip\"><i class=\"fas fa-info-circle\"></i><span class=\"tooltiptext\">"+textElements[2]+"</span></div>";
+    var text = textElements[0] + activate + "<br><hr><table class=\"w3-table-all\"><tr><th>" + textElements[3] + "</th><th>" + textElements[4] + "</th>" + currentBudgetsHTML + "</tr>" + "</table>";
+
+    //TODO: Don't display the select option if the checkbox is not checked.
+
+    // Create a new dialog.
+    createDialog( getSetAllocationDialogTitle(), text, function() {
+        var test = document.getElementById( "percentageSelectchecking account" );
+        console.log( test.options[test.selectedIndex].text );
+        console.log( $("#percentageSelectchecking account").val() );
+        // Close the dialog and update the view.
+        $( this ).dialog( "close" );
+        updateView();
     });
 }

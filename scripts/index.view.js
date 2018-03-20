@@ -54,8 +54,7 @@ function displayRecentSpendings() {
             // Display only numberOfRecentSpendings many items.
             if ( spendingData.length - numberOfRecentSpendings === i ) break;
         }
-        // Set the HTML content and display it.
-        $( "#recentSpendings" ).append( recentSpendingsTable + "</table>" );
+        $( "#recentSpendings" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentSpendingsHeading() + " </h3>" + recentSpendingsTable + "</table>" );
     }
 }
 
