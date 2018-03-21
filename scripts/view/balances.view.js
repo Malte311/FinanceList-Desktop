@@ -43,7 +43,10 @@ function displayBudgets() {
     var content = "<table class=\"w3-table-all w3-round w3-twothird\">" +
                   "<tr><td>" + getCurrentBudgetsHeadings()[0] + "</td>" +
                   "<td>" + getCurrentBudgetsHeadings()[1] + "</td>" +
-                  "<td>" + getCurrentBudgetsHeadings()[2] + "</td></tr>";
+                  "<td>" + getCurrentBudgetsHeadings()[2] + "</td>" +
+                  (readMainStorage( "allocationOn" ) ?
+                  "<td>" + getCurrentBudgetsHeadings()[3] + "</td></tr>" :
+                  "</tr>");
     // Get all budgets to iterate over them.
     var currentBudgets = readMainStorage( "budgets" );
     // Iterate over all budgets to display them.
@@ -58,7 +61,13 @@ function displayBudgets() {
         if ( i !== 0 ) {
             content += "<span onclick=\"deleteBudget('" + currentBudgets[i][0] + "');\" class=\"w3-button\"><i class=\"fas fa-times\"></i></span></li>";
         }
-        content += "</td></tr>";
+        content += "</td>";
+        // Allocation enabled? Display the ratios.
+        // Note: Allocation has the same order as budgets, so we can use the same index.
+        if ( readMainStorage( "allocationOn" ) ) {
+            content += "<td>" + readMainStorage( "allocation" )[i][1] + "&percnt;</td>";
+        }
+        content += "</tr>";
     }
     content += "</table><br>";
     // Display the content.

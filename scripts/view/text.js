@@ -45,9 +45,9 @@ function getRecentSpendingsHeading() {
 function getCurrentBudgetsHeadings() {
     switch ( getLanguage() ) {
         case "en":
-            return ["Budget", "Balance", "Rename/Delete"];
+            return ["Budget", "Balance", "Rename/Delete", "Allocation ratio"];
         case "de":
-            return ["Konto", "Kontostand", "Umbenennen/L&ouml;schen"];
+            return ["Konto", "Kontostand", "Umbenennen/L&ouml;schen", "Anteil bei Verteilung"];
     }
 }
 

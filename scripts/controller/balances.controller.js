@@ -51,7 +51,7 @@ function addTransaction() {
             if ( sum.indexOf( "." ) === -1 || sum.replace( ".", "" ).length + 1 < sum.length ) inputOk = false;
             // Any other non digit characters found?
             if ( /\D/.test( sum.replace( ".", "" ) ) ) inputOk = false;
-            // More than two decimal digits in the sum? Truncate them.
+            // More than two decimal digits in the sum?
             if ( inputOk ) {
                 // Remember that the input was already checked, so there is exactly one dot.
                 if ( sum.split( "." )[1].length > 2 ) {
