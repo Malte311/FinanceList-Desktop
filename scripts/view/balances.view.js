@@ -135,6 +135,13 @@ function displayContent() {
 }
 
 /**
+ * This function changes the content of the transaction dialog dynamically.
+ */
+function changeTransactionDialog() {
+    $( "#dialogDiv" ).html( "!" );
+}
+
+/**
  * This function updates the view when changes are made.
  */
 function updateView() {

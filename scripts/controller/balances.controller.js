@@ -24,12 +24,12 @@ function addTransaction() {
         options += "<option value=\"" + currentBudgets[i][0] + "\">" + currentBudgets[i][0] + "</option>";
     }
     // Set the complete content for the dialog.
-    var text = "<form class=\"w3-center\"><input id=\"earning\" type=\"radio\" name=\"type\">" + textElements[0] +
-                            "<input id=\"spending\" style=\"margin-left:15px;\" type=\"radio\" name=\"type\" checked>" + textElements[1] + "</form><hr>" +
-                            "<b>Name</b><br><input type=\"text\" id=\"nameInput\"><br><hr>" +
-                            "<b>" + textElements[2] + "</b><br><input style=\"width=50px;\" type=\"text\" id=\"sumInput\"><br><hr>" +
-                            "<b>" + textElements[3] + "</b><br>" +
-                            "<select id=\"selectInput\">" + options + "</select><hr><input type=\"checkbox\" id=\"checkboxInput\">" + textElements[4];
+    var text = textElements[0] + "<form class=\"w3-center\"><input id=\"earning\" onclick=\"changeTransactionDialog();\" type=\"radio\" name=\"type\">" + textElements[1] +
+               "<input id=\"spending\" style=\"margin-left:15px;\" type=\"radio\" name=\"type\" checked>" + textElements[2] + "</form><hr>" +
+               "<b>Name</b><br><input type=\"text\" id=\"nameInput\"><br><hr>" +
+               "<b>" + textElements[3] + "</b><br><input style=\"width=50px;\" type=\"text\" id=\"sumInput\"><br><hr>" +
+               "<b>" + textElements[4] + "</b><br>" +
+               "<select id=\"selectInput\">" + options + "</select><hr><input type=\"checkbox\" id=\"checkboxInput\">" + textElements[5];
     // Now we are able to actually create a dialog.
     createDialog( getTransactionDialogTitle(), text, function() {
         // Save the inputs and then execute the right function to add a new entry.
@@ -273,42 +273,89 @@ function renameBudget( name ) {
 }
 
 function setAllocation() {
-    // Find out which language is selected to set the text elements of the dialog.
+    // Get all the text elements of the dialog.
     var textElements = getSetAllocationDialogTextElements();
     // We want to display all budgets and their allocations.
-    var currentAllocation = readMainStorage( "allocation" );
     var currentBudgets = readMainStorage( "budgets" );
+    var currentAllocation = readMainStorage( "allocation" );
     var currentBudgetsHTML = "";
+    // Display currently selected value as selected.
+    // Note: The allocation array has the same length as the budgets array.
+    // Additionally, the indizes are corresponding, so we don't need further checking.
+    // (Obviously, this is only true if nobody manipulated the .json file)
     for ( var i = 0; i < currentBudgets.length; i++ ) {
-        // Display currently selected value as selected.
-        // Note: The allocation array has same length as the budgets array.
-        // Additionally, the indizes are corresponding, so we don't need further checking.
-        // (Obviously, this is only true if nobody manipulated the .json file)
+        // We need a precise id of every selection (every budget has its own selection with 10 options in it).
         var currentAllocationHTML = "";
+        // We want to loop from 1 to 10, because the options should range from 10 to 100 percent, with an increase of 10 per step.
         for ( var j = 1; j <= 10; j++ ) {
+            // We display the previously selected value as selected.
             if ( j * 10 === currentAllocation[i][1] ) {
-                currentAllocationHTML += "<option value=\"" + currentAllocation[i][1] + "\" selected=\"selected\">" + currentAllocation[i][1] + "</option>";
+                // Note that we have 10 options for every budget.
+                currentAllocationHTML += "<option selected=\"selected\">" + currentAllocation[i][1] + "</option>";
             }
+            // This is for every other value (not previously selected).
             else {
-                currentAllocationHTML += "<option value=\"" + (j * 10).toString() + "\">" + (j * 10).toString() + "</option>";
+                currentAllocationHTML += "<option>" + (j * 10).toString() + "</option>";
             }
         }
-        currentBudgetsHTML += "<tr class=\"w3-hover-light-blue\"><td>" + currentBudgets[i][0] + "</td><td><select class=\"w3-select\" id=\"percentageSelect" + currentBudgets[i][0] + "\">" + currentAllocationHTML + "</select></td></tr>";
+        // This holds the lines of the table.
+        currentBudgetsHTML += "<tr class=\"w3-hover-light-blue\">" +
+                              "<td>" + currentBudgets[i][0] + "</td>" +
+                              "<td><select class=\"w3-select\" id=\"percentageSelect" + i.toString() + "\">" + currentAllocationHTML + "</select></td></tr>";
     }
-
-    var activate = "<br><br>" + "<input type=\"checkbox\" onclick=\"console.log('test');\" id=\"autoAllocation\"> " + textElements[1] +
-                   " <div class=\"tooltip\"><i class=\"fas fa-info-circle\"></i><span class=\"tooltiptext\">"+textElements[2]+"</span></div>";
-    var text = textElements[0] + activate + "<br><hr><table class=\"w3-table-all\"><tr><th>" + textElements[3] + "</th><th>" + textElements[4] + "</th>" + currentBudgetsHTML + "</tr>" + "</table>";
-
-    //TODO: Don't display the select option if the checkbox is not checked.
-
+    // This holds the checkbox to activate/deactivate the allocation (and a tooltip).
+    var activateCheckBox = "<br><br>" + "<input type=\"checkbox\" id=\"autoAllocation\"> " + textElements[1] + " " +
+                           "<div class=\"tooltip\"><i class=\"fas fa-info-circle\"></i><span class=\"tooltiptext\">" + textElements[2] + "</span></div>";
+    // Now combine the elements to set the complete content of the dialog.
+    var text = textElements[0] + activateCheckBox +
+               "<br><hr>" +
+               "<table class=\"w3-table-all\">" +
+               "<tr><th>" + textElements[3] + "</th>" +
+               "<th>" + textElements[4] + "</th>" +
+               currentBudgetsHTML + "</tr></table>";
     // Create a new dialog.
     createDialog( getSetAllocationDialogTitle(), text, function() {
-        var test = document.getElementById( "percentageSelectchecking account" );
-        console.log( test.options[test.selectedIndex].text );
-        console.log( $("#percentageSelectchecking account").val() );
-        // Close the dialog and update the view.
-        $( this ).dialog( "close" );
-        updateView();
+        // Get the allocation array and iterate over it.
+        var allocation = readMainStorage( "allocation" );
+        // Since we want to write, we need a new object to which we push the new data.
+        var newAllocation = [];
+        // Set the selected value for every budget. In addition to that, we will calculate
+        // the sum, to check if it is exactly 100%.
+        var checkSum = 0;
+        for ( var i = 0; i < allocation.length; i++ ) {
+            var value = $( "#percentageSelect" + i + " " + "option:selected" ).text();
+            newAllocation.push( [allocation[i][0], parseInt( value )] );
+            checkSum += parseInt( value );
+        }
+        // Check, if input is O.K.
+        if ( checkSum === 100 ) {
+            // Now write the updated values in the storage.
+            writeMainStorage( "allocation", newAllocation );
+            // Get the value of the checkbox and save it in the main storage.
+            setAllocationOn();
+            // Close the dialog and update the view.
+            $( this ).dialog( "close" );
+            updateView();
+        }
+        // Input now O.K.? Show error message.
+        else {
+            dialog.showErrorBox( "Error", "The sum of the parts has to be 100%!" );
+        }
     });
+    // Display checkbox as selected if it was selected previously.
+    if ( readMainStorage( "allocationOn" ) ) $( "#autoAllocation" )[0].checked = true;
+}
+
+/**
+ * This function sets the value of "allocationOn".
+ */
+function setAllocationOn() {
+    // Checkbox activated?
+    if ( $( "#autoAllocation" )[0].checked ) {
+        writeMainStorage( "allocationOn", true );
+    }
+    // Checkbox not activated?
+    else {
+        writeMainStorage( "allocationOn", false );
+    }
 }
