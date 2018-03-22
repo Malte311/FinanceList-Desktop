@@ -180,7 +180,7 @@ function addBudget() {
             var allTimeSpendings = readMainStorage( "allTimeSpendings" );
             allTimeSpendings.push( [newBudget, 0] );
             writeMainStorage( "allTimeSpendings", allTimeSpendings );
-            // Do the same for the alloction (set the allocation of the new budget to zero).
+            // Do the same for the allocation (set the allocation of the new budget to zero).
             var allocation = readMainStorage( "allocation" );
             allocation.push( [newBudget, 0] );
             writeMainStorage( "allocation", allocation );
@@ -204,10 +204,12 @@ function deleteBudget( name ) {
         // Delete the budget in all time earnings/spendings as well.
         var allTimeEarnings = readMainStorage( "allTimeEarnings" );
         var allTimeSpendings = readMainStorage( "allTimeSpendings" );
+        // Also delete it in allocation.
+        var allocation = readMainStorage( "allocation" );
         // We add all budgets except the one we want to delete.
-        var updatedBudgets = [], updatedAllTimeEarnings = [], updatedAllTimeSpendings = [];
+        var updatedBudgets = [], updatedAllTimeEarnings = [], updatedAllTimeSpendings = [], newAllocation = [];
         // Search for the correct budget to delete it.
-        // (Note that all arrays have the same length)
+        // (Note that all arrays have the same length and the same order, so we can use the same index)
         for ( var i = 0; i < currentBudgets.length; i++ ) {
             // Add all budgets except the one we want to delete.
             if ( currentBudgets[i][0] !== name ) {
@@ -220,16 +222,48 @@ function deleteBudget( name ) {
             if ( allTimeSpendings[i][0] !== name ) {
                 updatedAllTimeSpendings.push( allTimeSpendings[i] );
             }
+            // And for allocation as well.
+            if ( allocation[i][0] !== name ) {
+                newAllocation.push( allocation[i] );
+            }
+            // Remember that the sum of allocation amounts could be changed now. Make sure it will be 100 percent again.
+            else {
+                // More than 0 percent allocation ratio?
+                if ( allocation[i][1] > 0 ) {
+                    // Add the amount to the standard budget (the standard budget is at index 0).
+                    newAllocation[0][1] += allocation[i][1];
+                }
+            }
         }
         // Save the updated budgets in the mainStorage.json file.
         writeMainStorage( "budgets", updatedBudgets );
         // Again, we do this as well for allTimeEarnings and allTimeSpendings.
         writeMainStorage( "allTimeEarnings", updatedAllTimeEarnings );
         writeMainStorage( "allTimeSpendings", updatedAllTimeSpendings );
+        // And for allocation as well.
+        writeMainStorage( "allocation", newAllocation );
         // Update the view: Don't display the deleted budget anymore.
         updateView();
         // Close the dialog (since this function is only executed when the OK button is pressed)
         $( this ).dialog( "close" );
+        // Now we can delete all data for this budget (in the background).
+        var allFiles = getJSONFiles();
+        for ( var i = 0; i < allFiles.length; i++ ) {
+            // Filter the data. We will add all budgets, except the deleted one to the quest.
+            var budgets = readMainStorage( "budgets" );
+            // We start of with an empty param list and then add every param to add.
+            var paramList = [];
+            // Add a param for each budget (except for the deleted one).
+            // We already updated the mainStorage, so the deleted budget is already gone.
+            for ( var j = 0; j < budgets.length; j++ ) {
+                paramList.push( ["budget", budgets[j][0]] );
+            }
+            var quest = { connector : "or", params : paramList };
+            // Now, get the complete data.
+            var data = getData( allFiles[i] + ".json", quest );
+            // Now replace the data with the new data.
+            replaceData( allFiles[i] + ".json", data );
+        }
     });
 }
 
@@ -245,10 +279,13 @@ function renameBudget( name ) {
         // Rename the budget in all time earnings/spendings as well.
         var allTimeEarnings = readMainStorage( "allTimeEarnings" );
         var allTimeSpendings = readMainStorage( "allTimeSpendings" );
+        // For allocation as well.
+        var allocation = readMainStorage( "allocation" );
         // We add all budgets to this (and the renamed one with its new name)
-        var updatedBudgets = [], updatedAllTimeEarnings = [], updatedAllTimeSpendings = [];
+        var updatedBudgets = [], updatedAllTimeEarnings = [], updatedAllTimeSpendings = [], newAllocation = [];
         var newName = $( "#dialogInput" ).val().trim();
         // Iterate over them to find the one we want to rename.
+        // Remember that all the fields are all in the same order, so we can use the same index.
         for ( var i = 0; i < currentBudgets.length; i++ ) {
             // Found it? Rename it.
             if ( currentBudgets[i][0] === name ) {
@@ -263,16 +300,38 @@ function renameBudget( name ) {
             else updatedAllTimeEarnings.push( allTimeEarnings[i] );
             if ( allTimeSpendings[i][0] === name ) updatedAllTimeSpendings.push( [newName, allTimeSpendings[i][1]] );
             else updatedAllTimeSpendings.push( allTimeSpendings[i] );
+            // And for allocation as well.
+            if ( allocation[i][0] === name ) newAllocation.push( [newName, allocation[i][1]] );
+            else newAllocation.push( allocation[i] );
         }
         // Save the updated budgets in the mainStorage.json file.
         writeMainStorage( "budgets", updatedBudgets );
         // Again, we do this as well for allTimeEarnings and allTimeSpendings.
         writeMainStorage( "allTimeEarnings", updatedAllTimeEarnings );
         writeMainStorage( "allTimeSpendings", updatedAllTimeSpendings );
+        // Same for allocation.
+        writeMainStorage( "allocation", newAllocation );
         // Update the view: Display the new name.
         updateView();
         // Close the dialog (since this function is only executed when the OK button is pressed)
         $( this ).dialog( "close" );
+        // Now we can rename all data for this budget (in the background).
+        var allFiles = getJSONFiles();
+        for ( var i = 0; i < allFiles.length; i++ ) {
+            // Filter the data. First, we get ALL data (earning OR spending will deliver everything).
+            var quest = { connector : "or", params : [["type", "earning"],["type", "spending"]] };
+            // Now, get the data.
+            var data = getData( allFiles[i] + ".json", quest );
+            // Iterate over all the data and find the data which has to be renamed.
+            for ( var j = 0; j < data.length; j++ ) {
+                // Found the correct budget? Rename it.
+                if ( data[j].budget === name ) {
+                    data[j].budget = newName;
+                }
+            }
+            // Now replace the old data with the new data.
+            replaceData( allFiles[i] + ".json", data );
+        }
     });
 }
 

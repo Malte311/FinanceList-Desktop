@@ -202,6 +202,23 @@ function storeData( data ) {
 }
 
 /**
+ * This function is for overwriting data in a specified file.
+ * @param {String} file The file we want to override.
+ * @param {JSON} data The data we want to write in form of a JSON object.
+ */
+function replaceData( file, data ) {
+    var dataPath = readPreference( "path" ) + path.sep + file;
+    // File exists: Overwrite the data in it.
+    if ( fs.existsSync( dataPath ) ) {
+        fs.writeFileSync( dataPath, JSON.stringify( data ) );
+    }
+    // File does not exist: Create it and write the data in it.
+    else {
+        fs.appendFileSync( dataPath, JSON.stringify( data ) );
+    }
+}
+
+/**
  * This function returns the name of the current file. The current file is the file
  * with the name of the current month. (We will use a new file for each month)
  * @return {String} The name of the current file.
