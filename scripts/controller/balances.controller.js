@@ -180,6 +180,10 @@ function addBudget() {
             var allTimeSpendings = readMainStorage( "allTimeSpendings" );
             allTimeSpendings.push( [newBudget, 0] );
             writeMainStorage( "allTimeSpendings", allTimeSpendings );
+            // Do the same for the alloction (set the allocation of the new budget to zero).
+            var allocation = readMainStorage( "allocation" );
+            allocation.push( [newBudget, 0] );
+            writeMainStorage( "allocation", allocation );
             // Update the view: List the new budget.
             updateView();
         }
@@ -272,6 +276,9 @@ function renameBudget( name ) {
     });
 }
 
+/**
+ * This function opens the automated allocation dialog.
+ */
 function setAllocation() {
     // Get all the text elements of the dialog.
     var textElements = getSetAllocationDialogTextElements();
@@ -286,8 +293,8 @@ function setAllocation() {
     for ( var i = 0; i < currentBudgets.length; i++ ) {
         // We need a precise id of every selection (every budget has its own selection with 10 options in it).
         var currentAllocationHTML = "";
-        // We want to loop from 1 to 10, because the options should range from 10 to 100 percent, with an increase of 10 per step.
-        for ( var j = 1; j <= 10; j++ ) {
+        // We want to loop from 0 to 10, because the options should range from 0 to 100 percent, with an increase of 10 per step.
+        for ( var j = 0; j <= 10; j++ ) {
             // We display the previously selected value as selected.
             if ( j * 10 === currentAllocation[i][1] ) {
                 // Note that we have 10 options for every budget.
@@ -337,7 +344,7 @@ function setAllocation() {
             $( this ).dialog( "close" );
             updateView();
         }
-        // Input now O.K.? Show error message.
+        // Input not O.K.? Show error message.
         else {
             dialog.showErrorBox( "Error", "The sum of the parts has to be 100%!" );
         }
