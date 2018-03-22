@@ -137,8 +137,14 @@ function displayContent() {
 /**
  * This function changes the content of the transaction dialog dynamically.
  */
-function changeTransactionDialog() {
-    $( "#dialogDiv" ).html( "!" );
+function updateTransactionDialog() {
+    //$( "#dialogDiv" ).html( "!" );
+    if ( $( "#earning" )[0].checked ) {
+
+    }
+    else if ( $( "#spending" )[0].checked ) {
+        
+    }
 }
 
 /**

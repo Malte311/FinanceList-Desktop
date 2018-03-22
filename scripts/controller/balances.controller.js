@@ -24,10 +24,10 @@ function addTransaction() {
         options += "<option value=\"" + currentBudgets[i][0] + "\">" + currentBudgets[i][0] + "</option>";
     }
     // Set the complete content for the dialog.
-    var text = textElements[0] + "<form class=\"w3-center\"><input id=\"earning\" onclick=\"changeTransactionDialog();\" type=\"radio\" name=\"type\">" + textElements[1] +
-               "<input id=\"spending\" style=\"margin-left:15px;\" type=\"radio\" name=\"type\" checked>" + textElements[2] + "</form><hr>" +
-               "<b>Name</b><br><input type=\"text\" id=\"nameInput\"><br><hr>" +
-               "<b>" + textElements[3] + "</b><br><input style=\"width=50px;\" type=\"text\" id=\"sumInput\"><br><hr>" +
+    var text = textElements[0] + "<form class=\"w3-center\"><input id=\"earning\" onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"type\">" + textElements[1] +
+               "<input id=\"spending\" onclick=\"updateTransactionDialog();\" style=\"margin-left:15px;\" type=\"radio\" name=\"type\" checked>" + textElements[2] + "</form><hr>" +
+               "<div><div><b>" + textElements[6] + "</b><br><input type=\"text\" id=\"nameInput\"></div>" +
+               "<div><b>" + textElements[3] + "</b><br><input style=\"width=50px;\" type=\"text\" id=\"sumInput\"></div></div><br><hr>" +
                "<b>" + textElements[4] + "</b><br>" +
                "<select id=\"selectInput\">" + options + "</select><hr><input type=\"checkbox\" id=\"checkboxInput\">" + textElements[5];
     // Now we are able to actually create a dialog.
@@ -63,14 +63,13 @@ function addTransaction() {
         // Input ok? Then continue.
         if ( inputOk ) {
             // Get the selected budget.
-            var budgetSelect = document.getElementById( "selectInput" );
-            var budget = budgetSelect.options[budgetSelect.selectedIndex].text;
+            var budget = $( "#selectInput option:selected" ).text();
             // Find out which type (earning/spending) was selected and
             // execute the correct function.
-            if ( document.getElementById( "earning" ).checked ) {
+            if ( $( "#earning" )[0].checked ) {
                 addEarning( name, parseFloat( sum ), budget );
             }
-            else if ( document.getElementById( "spending" ).checked ) {
+            else if ( $( "#spending" )[0].checked ) {
                 addSpending( name, parseFloat( sum ), budget );
             }
         }
