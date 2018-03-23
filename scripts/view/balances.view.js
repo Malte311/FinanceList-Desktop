@@ -138,12 +138,33 @@ function displayContent() {
  * This function changes the content of the transaction dialog dynamically.
  */
 function updateTransactionDialog() {
-    //$( "#dialogDiv" ).html( "!" );
+    // Earning selected?
     if ( $( "#earning" )[0].checked ) {
-
+        // Allocation on?
+        if ( readMainStorage( "allocationOn" ) ) {
+            // Show the allocation option.
+            $( "#dynamicDiv1" ).show();
+            // If allocation is selected, don't show budget select.
+            if ( $( "#autoAllocation" )[0].checked ) {
+                $( "#dynamicDiv2" ).hide();
+            }
+            // Otherwise (manual budget select) show budget select.
+            else if ( $( "#manual" )[0].checked ) {
+                $( "#dynamicDiv2" ).show();
+            }
+        }
+        // Allocation is not activated.
+        else {
+            // Hide automatic allocation and show budget select.
+            $( "#dynamicDiv1" ).hide();
+            $( "#dynamicDiv2" ).show();
+        }
     }
+    // Spending selected?
     else if ( $( "#spending" )[0].checked ) {
-        
+        // Hide automatic allocation and show budget select.
+        $( "#dynamicDiv1" ).hide();
+        $( "#dynamicDiv2" ).show();
     }
 }
 

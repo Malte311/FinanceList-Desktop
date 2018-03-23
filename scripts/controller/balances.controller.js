@@ -13,9 +13,7 @@ function loadPage() {
  * This function adds a new transaction, either unique or recurring.
  */
 function addTransaction() {
-    // Find out which language is selected to set the text elements of the dialog.
-    var textElements = getTransactionDialogTextElements();
-    // Set the content of the dialog. First, get all budgets to offer a selection between them.
+    // First, get all budgets to offer a selection between them.
     var currentBudgets = readMainStorage( "budgets" );
     // We will add all the content to this and then display it in the dialog.
     var options = "";
@@ -23,24 +21,35 @@ function addTransaction() {
     for ( var i = 0; i < currentBudgets.length; i++ ) {
         options += "<option value=\"" + currentBudgets[i][0] + "\">" + currentBudgets[i][0] + "</option>";
     }
+    // Find out which language is selected to set the text elements of the dialog.
+    var textElements = getTransactionDialogTextElements();
     // Set the complete content for the dialog.
+    // First two lines are radio buttons to select between earning and spending.
     var text = textElements[0] + "<form class=\"w3-center\"><input id=\"earning\" onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"type\">" + textElements[1] +
                "<input id=\"spending\" onclick=\"updateTransactionDialog();\" style=\"margin-left:15px;\" type=\"radio\" name=\"type\" checked>" + textElements[2] + "</form><hr>" +
+               // Input for name and amount.
                "<div><div><b>" + textElements[6] + "</b><br><input type=\"text\" id=\"nameInput\"></div>" +
-               "<div><b>" + textElements[3] + "</b><br><input style=\"width=50px;\" type=\"text\" id=\"sumInput\"></div></div><br><hr>" +
-               "<b>" + textElements[4] + "</b><br>" +
-               "<select id=\"selectInput\">" + options + "</select><hr><input type=\"checkbox\" id=\"checkboxInput\">" + textElements[5];
+               "<div><b>" + textElements[3] + "</b><br><input style=\"width=50px;\" type=\"text\" id=\"sumInput\"></div></div><br>" +
+               // Choose between manual and automated allocation. Hidden until "earning" is selected.
+               "<div id=\"dynamicDiv1\" style=\"display:none;\"><hr>" +
+               "<form class=\"w3-center\"><input id=\"manual\" onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"allocation\">" + textElements[7] +
+               "<input id=\"autoAllocation\" onclick=\"updateTransactionDialog();\" style=\"margin-left:15px;\" type=\"radio\" name=\"allocation\" checked>" + textElements[8] +
+               // Budget select will be displayed at the beginning (because spending is selected as a default).
+               "</form></div><div id=\"dynamicDiv2\"><hr><b>" + textElements[4] + "</b><br>" + "<select id=\"selectInput\">" + options + "</select></div><hr>" +
+               // Option to automate this transaction.
+               "<div id=\"budgetSelect\"></div>" +
+               "<input type=\"checkbox\" id=\"checkboxInput\">" + textElements[5];
     // Now we are able to actually create a dialog.
     createDialog( getTransactionDialogTitle(), text, function() {
         // Save the inputs and then execute the right function to add a new entry.
         var name = $( "#nameInput" ).val().trim();
         var sum = $( "#sumInput" ).val().trim();
         // Replace all commas with dots to make sure that parseFloat() works as intended.
-        sum.replace( ",", "." );
+        sum = sum.replace( ",", "." );
         // Make sure that the input is ok.
         var inputOk = true;
-        // Make sure that the name is not empty and that it contains only alphanumeric characters.
-        if ( name.length < 1 || !/^[a-z0-9]+$/i.test( name ) ) inputOk = false;
+        // Make sure that the name is not empty and that it contains only alphanumeric characters (and space,_,- are allowed as well).
+        if ( name.length < 1 || !/^[a-z\d\-_\s]+$/i.test( name ) ) inputOk = false;
         // Make sure that the sum contains no letters and that it contains at least one number.
         if ( /[a-z]/i.test( sum ) || !/\d/.test( sum ) ) inputOk = false;
         // Some character is not a digit? Make sure that this is only a single dot.
@@ -121,26 +130,67 @@ function addSpending( spending, sum, budget ) {
  * @param {String} budget The budget to which the sum should be added.
  */
 function addEarning( earning, sum, budget ) {
-    // Create a JSON object containing the data.
-    var spendingObj = {"date": getCurrentDate(), "name": earning, "amount": sum, "budget": budget, "type": "earning"};
-    // Now store the data in the corresponding .json file.
-    storeData( spendingObj );
-    // Update the reference in the mainStorage.
-    var budgets = readMainStorage( "budgets" );
-    var allTimeEarnings = readMainStorage( "allTimeEarnings" );
-    // Search for the correct budget.
-    for ( var i = 0; i < allTimeEarnings.length; i++ ) {
-        // Found it? Then update the value.
-        if ( allTimeEarnings[i][0] === budget ) {
-            allTimeEarnings[i][1] += sum;
-        }
-        if ( budgets[i][0] === budget ) {
-            budgets[i][1] += sum;
+    // Split the sum?
+    if ( $( "#autoAllocation" )[0].checked && readMainStorage( "allocationOn" ) ) {
+        // Get budgets, allocation and allTimeEarnings, because we have to update them all.
+        var budgets = readMainStorage( "budgets" );
+        var allocation = readMainStorage( "allocation" );
+        var allTimeEarnings = readMainStorage( "allTimeEarnings" );
+        // We want to keep track of a rest, because not every sum can be split perfectly.
+        var rest = sum;
+        for ( var i = 0; i < budgets.length; i++ ) {
+            // No need to calculate anything in case allocation is zero percent.
+            if ( allocation[i][1] > 0 ) {
+                // Split the sum: allocation[i][1]/100 is the percentage value, the other stuff is for rounding.
+                var newSum = Math.round( (sum*allocation[i][1]/100) * 1e2) / 1e2;
+                rest = Math.round( (rest - newSum) * 1e2 ) / 1e2;
+                // Added too much?
+                if ( rest < 0 ) {
+                    // Subtract the overflow from the newSum (we add rest because rest is negative).
+                    newSum = Math.round( (newSum + rest) * 1e2 ) / 1e2;
+                }
+                // We did not add too much, but we want to make sure, that we don't add too less.
+                else {
+                    // To ensure this, we will add the rest in the last iteration.
+                    // This will always happen to the last budget, but the above case (rest is negative) will do, too.
+                    // So hopefully, this will balance out in the long term.
+                    if ( i === budgets.length - 1 ) newSum = Math.round( (newSum + rest) * 1e2 ) / 1e2;
+                }
+                // Save the earning data.
+                var earningObj = {"date": getCurrentDate(), "name": earning, "amount": newSum, "budget": budgets[i][0], "type": "earning"};
+                storeData( earningObj );
+                // Now, update allTimeEarnings and the current balance.
+                allTimeEarnings[i][1] = Math.round( (allTimeEarnings[i][1] + newSum) * 1e2 ) / 1e2;
+                budgets[i][1] = Math.round( (budgets[i][1] + newSum) * 1e2 ) / 1e2;
+                // Write back to storage.
+                writeMainStorage( "budgets", budgets );
+                writeMainStorage( "allTimeEarnings", allTimeEarnings );
+            }
         }
     }
-    // Write back to storage.
-    writeMainStorage( "budgets", budgets );
-    writeMainStorage( "allTimeEarnings", allTimeEarnings );
+    // Don't split the sum
+    else {
+        // Create a JSON object containing the data.
+        var earningObj = {"date": getCurrentDate(), "name": earning, "amount": sum, "budget": budget, "type": "earning"};
+        // Now store the data in the corresponding .json file.
+        storeData( earningObj );
+        // Update the reference in the mainStorage.
+        var budgets = readMainStorage( "budgets" );
+        var allTimeEarnings = readMainStorage( "allTimeEarnings" );
+        // Search for the correct budget.
+        for ( var i = 0; i < allTimeEarnings.length; i++ ) {
+            // Found it? Then update the value.
+            if ( allTimeEarnings[i][0] === budget ) {
+                allTimeEarnings[i][1] += sum;
+            }
+            if ( budgets[i][0] === budget ) {
+                budgets[i][1] += sum;
+            }
+        }
+        // Write back to storage.
+        writeMainStorage( "budgets", budgets );
+        writeMainStorage( "allTimeEarnings", allTimeEarnings );
+    }
     // Update the view: Display the new balance.
     updateView();
 }

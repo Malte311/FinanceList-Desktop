@@ -56,6 +56,10 @@ function displayRecentSpendings() {
         }
         $( "#recentSpendings" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentSpendingsHeading() + " </h3>" + recentSpendingsTable + "</table>" );
     }
+    // Display a message that no data exists yet.
+    else {
+        $( "#recentSpendings" ).html( "<i>" + getRecentSpendingsMissingDataMessage() + "</i>" );
+    }
 }
 
 /**

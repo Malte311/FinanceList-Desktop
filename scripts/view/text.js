@@ -26,6 +26,19 @@ function getCancelButtonText() {
 }
 
 /**
+ * This function returns text for the recent spendings section in case there are no recent spendings.
+ * @return {String} The text for the recent spendings section in case there are no recent spendings.
+ */
+function getRecentSpendingsMissingDataMessage() {
+    switch ( getLanguage() ) {
+        case "en":
+            return "There are no recent spendings yet!";
+        case "de":
+            return "Es gibt bisher keine Ausgaben!";
+    }
+}
+
+/**
  * This function returns text for recent spendings heading in the correct language.
  * @return {String} The heading for the recent spendings section.
  */
@@ -72,9 +85,9 @@ function getTransactionDialogTitle() {
 function getTransactionDialogTextElements() {
     switch ( getLanguage() ) {
         case "en":
-            return ["Here you can add new earnings or new spendings.", "Earning", "Spending", "Amount", "Budget", "Automate", "Name"];
+            return ["Here you can add new earnings or new spendings.", "Earning", "Spending", "Amount", "Budget", "Automate", "Name", "Choose budget", "Allocate automatically"];
         case "de":
-            return ["Hier k&ouml;nnen Sie neue Einnahmen oder Ausgaben hinzuf&uuml;gen.", "Einnahme", "Ausgabe", "Betrag", "Konto", "Automatisieren", "Name"];
+            return ["Hier k&ouml;nnen Sie neue Einnahmen oder Ausgaben hinzuf&uuml;gen.", "Einnahme", "Ausgabe", "Betrag", "Konto", "Automatisieren", "Name", "Konto w&auml;hlen", "Automatisch verteilen"];
     }
 }
 
