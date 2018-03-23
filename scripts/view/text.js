@@ -39,6 +39,32 @@ function getRecentSpendingsMissingDataMessage() {
 }
 
 /**
+ * This function returns text for the all time spendings section in case there are no spendings.
+ * @return {String} The text for all time spendings section in case there are no spendings.
+ */
+function getAllTimeSpendingsMissingDataMessage() {
+    switch ( getLanguage() ) {
+        case "en":
+            return "There are no spendings yet!";
+        case "de":
+            return "Es gibt bisher keine Ausgaben!";
+    }
+}
+
+/**
+ * This function returns text for the all time earnings section in case there are no earnings.
+ * @return {String} The text for all time earnings section in case there are no earnings.
+ */
+function getAllTimeEarningsMissingDataMessage() {
+    switch ( getLanguage() ) {
+        case "en":
+            return "There are no earnings yet!";
+        case "de":
+            return "Es gibt bisher keine Einnahmen!";
+    }
+}
+
+/**
  * This function returns text for recent spendings heading in the correct language.
  * @return {String} The heading for the recent spendings section.
  */

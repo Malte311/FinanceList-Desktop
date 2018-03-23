@@ -2,6 +2,26 @@
 const numberOfRecentSpendings = 5;
 
 /**
+ * This function displays the current balance for each budget.
+ */
+function displayBalances() {
+    // <p></p>
+    // <div class="w3-grey">
+    //     <div class="w3-container w3-center w3-padding w3-green" style="width:25%">+25%</div>
+    // </div>
+    //
+    // <p></p>
+    // <div class="w3-grey">
+    //     <div class="w3-container w3-center w3-padding w3-orange" style="width:50%">50%</div>
+    // </div>
+    //
+    // <p></p>
+    // <div class="w3-grey">
+    //     <div class="w3-container w3-center w3-padding w3-red" style="width:75%">75%</div>
+    // </div>
+}
+
+/**
  * This function displays five of the recent spendings, if they exist.
  */
 function displayRecentSpendings() {
@@ -58,37 +78,88 @@ function displayRecentSpendings() {
     }
     // Display a message that no data exists yet.
     else {
-        $( "#recentSpendings" ).html( "<i>" + getRecentSpendingsMissingDataMessage() + "</i>" );
+        $( "#recentSpendings" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentSpendingsHeading() + " </h3><i>" + getRecentSpendingsMissingDataMessage() + "</i>" );
     }
 }
 
 /**
- * This function displays the current balance for each budget.
+ * This function displays a chart which visualizes all time spendings.
  */
-function displayBudgetOverview() {
+function displaySpendingChart() {
+    // Reset the canvas in case no data existed before (then the HTML content was overwritten).
+    $( "#spendingChartDiv" ).html( "<canvas id=\"Spendings\" width=\"8000\" height=\"2500\"></canvas>" );
+    // Get a reference to the canvas in which the chart should be.
+    var spendingChart = $( "#Spendings" )[0];
+    // Get all budgets.
+    var allTimeSpendings = readMainStorage( "allTimeSpendings" );
+    // Declare some variables to store the values in them.
+    var labels = [], dataset = [];
+    // We will declare a checksum, to make sure there is at least one earning.
+    var checksum = 0;
+    // Iterate over them to get the all time spendings.
+    for ( var i = 0; i < allTimeSpendings.length; i++ ) {
+        // Get the name of every budget.
+        labels.push( allTimeSpendings[i][0] );
+        // Get the balance of
+        dataset.push( allTimeSpendings[i][1] );
+        // Update the checksum
+        checksum += allTimeSpendings[i][1];
+    }
+    // Now use the checksum to check if there exists at least one earning.
+    if ( checksum > 0 ) {
+        // Create the chart. The colors are declared as a constant in controller.js.
+        createChart( spendingChart, labels, dataset, colors, colors, readPreference( "chartType" ) );
+    }
+    // Otherwise display a message that there is no data yet.
+    else {
+        $( "#spendingChartDiv" ).html( "<i>" + getAllTimeSpendingsMissingDataMessage() + "</i>" );
+    }
+}
 
-    // <p></p>
-    // <div class="w3-grey">
-    //     <div class="w3-container w3-center w3-padding w3-green" style="width:25%">+25%</div>
-    // </div>
-    //
-    // <p></p>
-    // <div class="w3-grey">
-    //     <div class="w3-container w3-center w3-padding w3-orange" style="width:50%">50%</div>
-    // </div>
-    //
-    // <p></p>
-    // <div class="w3-grey">
-    //     <div class="w3-container w3-center w3-padding w3-red" style="width:75%">75%</div>
-    // </div>
+/**
+ * This function displays a chart which visualizes all time earnings.
+ */
+function displayEarningChart() {
+    // Reset the canvas in case no data existed before (then the HTML content was overwritten).
+    $( "#earningChartDiv" ).html( "<canvas id=\"Earnings\" width=\"8000\" height=\"2500\"></canvas>" );
+    // Get a reference to the canvas in which the chart should be.
+    var earningChart = $( "#Earnings" )[0];
+    // Get all budgets.
+    var allTimeEarnings = readMainStorage( "allTimeEarnings" );
+    // Declare some variables to store the values in them.
+    var labels = [], dataset = [];
+    // We will declare a checksum, to make sure there is at least one earning.
+    var checksum = 0;
+    // Iterate over them to get the all time spendings.
+    for ( var i = 0; i < allTimeEarnings.length; i++ ) {
+        // Get the name of every budget.
+        labels.push( allTimeEarnings[i][0] );
+        // Get the balance of
+        dataset.push( allTimeEarnings[i][1] );
+        // Update the checksum
+        checksum += allTimeEarnings[i][1];
+    }
+    // Now use the checksum to check if there exists at least one earning.
+    if ( checksum > 0 ) {
+        // Create the chart. The colors are declared as a constant in controller.js.
+        createChart( earningChart, labels, dataset, colors, colors, readPreference( "chartType" ) );
+    }
+    // Otherwise display a message that there is no data yet.
+    else {
+        $( "#earningChartDiv" ).html( "<i>" + getAllTimeEarningsMissingDataMessage() + "</i>" );
+    }
 }
 
 /**
  * This function updates the view when changes are made.
  */
 function updateView() {
+    // Display current balances.
+    displayBalances();
     // Display a table of recent spendings.
     displayRecentSpendings();
-    // Display current balances.
-    displayBudgetOverview();
+    // Display all time spendings.
+    displaySpendingChart();
+    // Display all time earnings.
+    displayEarningChart();
 }

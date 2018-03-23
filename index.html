@@ -49,22 +49,33 @@
         <!-- main content -->
         <div class="w3-main" style="margin-left:250px;margin-top:45px;">
             <div class="w3-panel">
-                <!-- canvas for the pie chart -->
-                <div class="w3-row-padding" style="margin:0 -16px">
-                    <h3 lang="en"><i class="fa fa-arrow-right w3-text-green w3-large"></i> Last months spendings </h3>
-                    <h3 lang="de"><i class="fa fa-arrow-right w3-text-green w3-large"></i> Ausgaben im letzten Monat </h3>
-                    <canvas id="pieChart" width="400" height="400"></canvas>
+                <!-- budget overview, added via JavaScript -->
+                <div class="w3-row-padding w3-twothird" style="margin:0 -16px">
+                    <h3 lang="en"><i class="fa fa-arrow-right w3-text-green w3-large"></i> Current balances </h3>
+                    <h3 lang="de"><i class="fa fa-arrow-right w3-text-green w3-large"></i> Aktuelle Bilanzen </h3>
                 </div>
-                <!-- recent spendings overview, added via JavaScript -->
-                <hr style="border-color:black;">
+            </div>
+            <!-- recent spendings overview, added via JavaScript -->
+            <hr style="border-color:black;">
+            <div class="w3-panel">
                 <div class="w3-row-padding w3-twothird" style="margin:0 -16px" id="recentSpendings"></div>
             </div>
+            <hr style="border-color:black;">
+            <!-- canvas for the spendings chart -->
             <div class="w3-panel">
-                <!-- budget overview, added via JavaScript -->
-                <hr style="border-color:black;">
-                <div class="w3-row-padding w3-twothird" style="margin:0 -16px">
-                    <h3 lang="en"><i class="fa fa-arrow-right w3-text-green w3-large"></i> Budgets </h3>
-                    <h3 lang="de"><i class="fa fa-arrow-right w3-text-green w3-large"></i> Konten </h3>
+                <div class="w3-row-padding" style="margin:0 -16px">
+                    <h3 lang="en"><i class="fa fa-arrow-right w3-text-green w3-large"></i> All time spendings </h3>
+                    <h3 lang="de"><i class="fa fa-arrow-right w3-text-green w3-large"></i> Gesamtausgaben </h3>
+                    <div id="spendingChartDiv"><canvas id="Spendings" width="8000" height="2500"></canvas></div>
+                </div>
+            </div>
+            <hr style="border-color:black;">
+            <!-- canvas for the earnings chart -->
+            <div class="w3-panel">
+                <div class="w3-row-padding" style="margin:0 -16px">
+                    <h3 lang="en"><i class="fa fa-arrow-right w3-text-green w3-large"></i> All time earnings </h3>
+                    <h3 lang="de"><i class="fa fa-arrow-right w3-text-green w3-large"></i> Gesamteinnahmen </h3>
+                    <div id="earningChartDiv"><canvas id="Earnings" width="8000" height="2500"></canvas></div>
                 </div>
             </div>
             <hr>
