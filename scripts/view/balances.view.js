@@ -51,10 +51,12 @@ function displayBudgets() {
     var currentBudgets = readMainStorage( "budgets" );
     // Iterate over all budgets to display them.
     for ( var i = 0; i < currentBudgets.length; i++ ) {
+        // Sometimes we want to add a single zero (2.5 => 2.50).
+        var balance = (currentBudgets[i][1].toString().length < 5 ? currentBudgets[i][1] + "0" : currentBudgets[i][1]);
         // Display all budgets. The first one is a standard budget and can therefore not be deleted.
         // Note that currentBudgets is an array of arrays (name of the budget and its current balance).
         content += "<tr><td>" + currentBudgets[i][0] + "</td>" +
-                   "<td>" + currentBudgets[i][1] + getCurrencySign() + "</td>" +
+                   "<td>" + balance + getCurrencySign() + "</td>" +
                    "<td>" + "<span onclick=\"renameBudget('" + currentBudgets[i][0] + "');\" class=\"w3-button\">" +
                    "<i class=\"fas fa-edit\"></i></span>";
         // Every other budget (not default) can be deleted.
@@ -129,8 +131,9 @@ function displayContent() {
         //TODO: select a day for each month in a dropdown menu, display currently recurring transaction in a table like the budget overview table
 
         // Display the current balance.
+        var balance = (currentBudgets[i][1].toString().length < 5 ? currentBudgets[i][1] + "0" : currentBudgets[i][1]);
         $( "#mainContent" ).append( "<div class=\"w3-grey\">" +
-                                    "<div class=\"w3-center w3-" + color + "\" style=\"width:" + percentage + "%;\">" + currentBudgets[i][1] + getCurrencySign() + "</div></div>" );
+                                    "<div class=\"w3-center w3-" + color + "\" style=\"width:" + percentage + "%;\">" + balance + getCurrencySign() + "</div></div>" );
     }
 }
 

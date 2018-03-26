@@ -87,7 +87,7 @@ function createChart( canvas, categories, dataset, bgcolors, bdcolors, charttype
         },
         // Don't show axes.
         options: {
-            display: false,
+            display: false
         }
     });
 }
