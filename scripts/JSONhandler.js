@@ -150,32 +150,39 @@ function writeMainStorage( field, value ) {
 function getData( file, quest ) {
     // Get the data object we want to access.
     var dataPath = readPreference( "path" ) + path.sep + file;
-    var dataStorageObj = JSON.parse( fs.readFileSync( dataPath ) );
-    // Filter the data and return an array with appropriate data.
-    return dataStorageObj.filter( (dat) => {
-        var ret = null;
-        quest.params.some( (qu) => {
-            // At least one param matched? Return true (ret=true) because connector is "or".
-            if ( quest.connector === "or" ) {
-                if ( dat[qu[0]] === qu[1] ) {
-                    ret = true;
-                    return true;
+    // Before we continue, we make sure that the file exists.
+    if ( fs.existsSync( dataPath ) ) {
+        var dataStorageObj = JSON.parse( fs.readFileSync( dataPath ) );
+        // Filter the data and return an array with appropriate data.
+        return dataStorageObj.filter( (dat) => {
+            var ret = null;
+            quest.params.some( (qu) => {
+                // At least one param matched? Return true (ret=true) because connector is "or".
+                if ( quest.connector === "or" ) {
+                    if ( dat[qu[0]] === qu[1] ) {
+                        ret = true;
+                        return true;
+                    }
                 }
-            }
-            // One param does not match => "and" connector can not be satisfied (ret=false).
-            else {
-                if ( dat[qu[0]] !== qu[1] ) {
-                    ret = false;
-                    return true;
+                // One param does not match => "and" connector can not be satisfied (ret=false).
+                else {
+                    if ( dat[qu[0]] !== qu[1] ) {
+                        ret = false;
+                        return true;
+                    }
                 }
-            }
+            });
+            // Return the value of ret as explained above.
+            if ( ret !== null ) return ret;
+            // We only get to this point when (1) connector = "or" and no match was found,
+            // (2) connector = "and" and no mismatch was found.
+            return ( quest.connector === "or" ) ? false : true;
         });
-        // Return the value of ret as explained above.
-        if ( ret !== null ) return ret;
-        // We only get to this point when (1) connector = "or" and no match was found,
-        // (2) connector = "and" and no mismatch was found.
-        return ( quest.connector === "or" ) ? false : true;
-    });
+    }
+    // File does not exist: Return undefined.
+    else {
+        return undefined;
+    }
 }
 
 /**

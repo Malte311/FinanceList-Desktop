@@ -30,6 +30,8 @@ function addTransaction() {
                // Input for name and amount.
                "<div><div><b>" + textElements[6] + "</b><br><input type=\"text\" id=\"nameInput\"></div>" +
                "<div><b>" + textElements[3] + "</b><br><input style=\"width=50px;\" type=\"text\" id=\"sumInput\"></div></div><br>" +
+               // Input for category.
+               "<div><b>" + textElements[9] + "</b><br><input type=\"text\" id=\"categoryInput\"></div><br>" +
                // Choose between manual and automated allocation. Hidden until "earning" is selected.
                "<div id=\"dynamicDiv1\" style=\"display:none;\"><hr>" +
                "<form class=\"w3-center\"><input id=\"manual\" onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"allocation\">" + textElements[7] +
@@ -44,12 +46,13 @@ function addTransaction() {
         // Save the inputs and then execute the right function to add a new entry.
         var name = $( "#nameInput" ).val().trim();
         var sum = $( "#sumInput" ).val().trim();
+        var category = $( "#categoryInput" ).val().trim();
         // Replace all commas with dots to make sure that parseFloat() works as intended.
         sum = sum.replace( ",", "." );
         // Make sure that the input is ok.
         var inputOk = true;
-        // Make sure that the name is not empty and that it contains only alphanumeric characters (and space,_,- are allowed as well).
-        if ( name.length < 1 || !/^[a-z\d\-_\s]+$/i.test( name ) ) inputOk = false;
+        // Make sure that the name and the category are not empty.
+        if ( name.length < 1 || category.length < 1 ) inputOk = false;
         // Make sure that the sum contains no letters and that it contains at least one number.
         if ( /[a-z]/i.test( sum ) || !/\d/.test( sum ) ) inputOk = false;
         // Some character is not a digit? Make sure that this is only a single dot.
@@ -76,10 +79,10 @@ function addTransaction() {
             // Find out which type (earning/spending) was selected and
             // execute the correct function.
             if ( $( "#earning" )[0].checked ) {
-                addEarning( name, parseFloat( sum ), budget );
+                addEarning( name, parseFloat( sum ), budget, category );
             }
             else if ( $( "#spending" )[0].checked ) {
-                addSpending( name, parseFloat( sum ), budget );
+                addSpending( name, parseFloat( sum ), budget, category );
             }
         }
         // Wrong input: Show error message.
@@ -97,10 +100,11 @@ function addTransaction() {
  * @param {String} spending The name of the spending.
  * @param {double} sum The cost of the aquired thing.
  * @param {String} budget The budget from which the sum should be subtracted.
+ * @param {String} category The category of the spending.
  */
-function addSpending( spending, sum, budget ) {
+function addSpending( spending, sum, budget, category ) {
     // Create a JSON object containing the data.
-    var spendingObj = {"date": getCurrentDate(), "name": spending, "amount": sum, "budget": budget, "type": "spending"};
+    var spendingObj = {"date": getCurrentDate(), "name": spending, "amount": sum, "budget": budget, "type": "spending", "category": category};
     // Now store the data in the corresponding .json file.
     storeData( spendingObj );
     // Update the reference in the mainStorage.
@@ -128,8 +132,9 @@ function addSpending( spending, sum, budget ) {
  * @param {String} earning The name of the earning.
  * @param {double} sum The amount of the earning.
  * @param {String} budget The budget to which the sum should be added.
+ * @param {String} category The category of the earning.
  */
-function addEarning( earning, sum, budget ) {
+function addEarning( earning, sum, budget, category ) {
     // Split the sum?
     if ( $( "#autoAllocation" )[0].checked && readMainStorage( "allocationOn" ) ) {
         // Get budgets, allocation and allTimeEarnings, because we have to update them all.
@@ -157,7 +162,7 @@ function addEarning( earning, sum, budget ) {
                     if ( i === budgets.length - 1 ) newSum = Math.round( (newSum + rest) * 1e2 ) / 1e2;
                 }
                 // Save the earning data.
-                var earningObj = {"date": getCurrentDate(), "name": earning, "amount": newSum, "budget": budgets[i][0], "type": "earning"};
+                var earningObj = {"date": getCurrentDate(), "name": earning, "amount": newSum, "budget": budgets[i][0], "type": "earning", "category": category};
                 storeData( earningObj );
                 // Now, update allTimeEarnings and the current balance.
                 allTimeEarnings[i][1] = Math.round( (allTimeEarnings[i][1] + newSum) * 1e2 ) / 1e2;
@@ -171,7 +176,7 @@ function addEarning( earning, sum, budget ) {
     // Don't split the sum
     else {
         // Create a JSON object containing the data.
-        var earningObj = {"date": getCurrentDate(), "name": earning, "amount": sum, "budget": budget, "type": "earning"};
+        var earningObj = {"date": getCurrentDate(), "name": earning, "amount": sum, "budget": budget, "type": "earning", "category": category};
         // Now store the data in the corresponding .json file.
         storeData( earningObj );
         // Update the reference in the mainStorage.
