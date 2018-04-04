@@ -91,6 +91,32 @@ function getCurrentBudgetsHeadings() {
 }
 
 /**
+ * This function returns text for recurring transactions headings in the correct language.
+ * @return {String[]} The headings for the recurring transactions section.
+ */
+function getRecurringTransactionsHeadings() {
+    switch ( getLanguage() ) {
+        case "en":
+            return ["Name", "Amount", "Type", "Budget", "Category", "Interval"];
+        case "de":
+            return ["Name", "Summe", "Art", "Konto", "Kategorie", "Intervall"];
+    }
+}
+
+/**
+ * This function returns text for recurring transactions content in the correct language.
+ * @return {String[]} The content for the recurring transactions section.
+ */
+function getRecurringTransactionsContent() {
+    switch ( getLanguage() ) {
+        case "en":
+            return ["earning", "spending", "days", "No recurring transactions available."];
+        case "de":
+            return ["Einnahme", "Ausgabe", "Tage", "Es sind keine wiederkehrenden Transaktionen vorhanden."];
+    }
+}
+
+/**
  * This function returns the title of the transaction dialog in the correct language.
  * @return {String} The title of the transaction dialog.
  */

@@ -43,7 +43,10 @@ function displayBalances() {
             color = "gray";
         }
         // We want to display every balance with two decimal places (if there is a comma). Example: Display $2.50 instead of $2.5
-        var balance = ((currentBudgets[i][1].toString().length < 5 && currentBudgets[i][1].toString().indexOf( "." ) !== -1 ) ? currentBudgets[i][1] + "0" : currentBudgets[i][1]);
+        var balance = currentBudgets[i][1];
+        if ( currentBudgets[i][1].toString().indexOf( "." ) !== -1 ) {
+            if ( currentBudgets[i][1].toString().split( "." )[1].length < 2 ) balance += "0";
+        }
         $( "#currentBalances" ).append( "<p></p><div class=\"w3-grey\"><div class=\"w3-container w3-center w3-padding w3-" + color + "\" style=\"width:" + percentage + "%;\">" + balance + getCurrencySign() + "</div></div>" );
     }
 }
@@ -95,8 +98,13 @@ function displayRecentSpendings() {
         // Now, we just need to display the data. Remember that new data is at the end, so
         // we need to loop backwards.
         for ( var i = spendingData.length - 1; i >= 0; i-- ) {
+            // Sometimes we want to add a single zero (2.5 => 2.50) for a more beautiful display style.
+            var amount = spendingData[i].amount;
+            if ( spendingData[i].amount.toString().indexOf( "." ) !== -1 ) {
+                if ( spendingData[i].amount.toString().split( "." )[1].length < 2 ) amount += "0";
+            }
             recentSpendingsTable += "<tr><td><i class=\"far fa-money-bill-alt w3-text-green w3-large\"></i> " + spendingData[i].name + " </td>" +
-                                    "<td><i>" + spendingData[i].amount + getCurrencySign() + "</i></td>" +
+                                    "<td><i>" + amount + getCurrencySign() + "</i></td>" +
                                     "<td><i>" + spendingData[i].date + "</i></td></tr>";
             // Display only numberOfRecentSpendings many items.
             if ( spendingData.length - numberOfRecentSpendings === i ) break;

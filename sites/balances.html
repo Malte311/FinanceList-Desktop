@@ -71,8 +71,18 @@
                     <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="setAllocation();"> Automatische Aufteilung </button>
                 </div>
             </div>
-            <!-- in this div there will be added an overview for each budget in detail via JavaScript -->
-            <div id="mainContent" class="w3-container" style="margin-right:50px;"></div>
+            <hr style="border-color:black;">
+            <div class="w3-container" style="margin-right:50px;">
+                <!-- in this div there will be added an overview for each budget in detail via JavaScript -->
+                <div id="mainContent" class="w3-container" style="margin-right:50px;"></div>
+            </div>
+            <hr style="border-color:black;">
+            <div class="w3-container" style="margin-right:50px;">
+                <h5 lang="en"><i class="fas fa-redo w3-text-orange w3-large"></i> Recurring transactions </h5>
+                <h5 lang="de"><i class="fas fa-redo w3-text-orange w3-large"></i> Wiederkehrende Transaktionen </h5>
+                <!-- in this div there will be added an overview of recurring transactions via JavaScript -->
+                <div id="recurringTransactions" class="w3-container" style="margin-right:50px;"></div>
+            </div>
         </div>
         <!-- JavaScript initialization -->
         <script>

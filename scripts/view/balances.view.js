@@ -52,7 +52,10 @@ function displayBudgets() {
     // Iterate over all budgets to display them.
     for ( var i = 0; i < currentBudgets.length; i++ ) {
         // Sometimes we want to add a single zero (2.5 => 2.50).
-        var balance = ((currentBudgets[i][1].toString().length < 5 && currentBudgets[i][1].toString().indexOf( "." ) !== -1 ) ? currentBudgets[i][1] + "0" : currentBudgets[i][1]);
+        var balance = currentBudgets[i][1];
+        if ( currentBudgets[i][1].toString().indexOf( "." ) !== -1 ) {
+            if ( currentBudgets[i][1].toString().split( "." )[1].length < 2 ) balance += "0";
+        }
         // Display all budgets. The first one is a standard budget and can therefore not be deleted.
         // Note that currentBudgets is an array of arrays (name of the budget and its current balance).
         content += "<tr><td>" + currentBudgets[i][0] + "</td>" +
@@ -61,7 +64,7 @@ function displayBudgets() {
                    "<i class=\"fas fa-edit\"></i></span>";
         // Every other budget (not default) can be deleted.
         if ( i !== 0 ) {
-            content += "<span onclick=\"deleteBudget('" + currentBudgets[i][0] + "');\" class=\"w3-button\"><i class=\"fas fa-times\"></i></span></li>";
+            content += "<span onclick=\"deleteBudget('" + currentBudgets[i][0] + "');\" class=\"w3-button\"><i class=\"fas fa-times w3-text-red\"></i></span></li>";
         }
         content += "</td>";
         // Allocation enabled? Display the ratios.
@@ -77,9 +80,57 @@ function displayBudgets() {
 }
 
 /**
+ * This function displays all currently recurring transactions.
+ */
+function displayRecurringTransactions() {
+    // Get all recurring transactions.
+    var recurringTransactions = readMainStorage( "recurring" );
+    // Recurring transactions existing?
+    if ( recurringTransactions.length > 0 ) {
+        // Reset previous content.
+        var content = "<table class=\"w3-table-all w3-round w3-twothird\"><tr>" +
+                      "<td>" + getRecurringTransactionsHeadings()[0] + "</td>" +
+                      "<td>" + getRecurringTransactionsHeadings()[1] + "</td>" +
+                      "<td>" + getRecurringTransactionsHeadings()[2] + "</td>" +
+                      "<td>" + getRecurringTransactionsHeadings()[3] + "</td>" +
+                      "<td>" + getRecurringTransactionsHeadings()[4] + "</td>" +
+                      "<td>" + getRecurringTransactionsHeadings()[5] + "</td>" +
+                      "</tr>";
+        // Iterate over all recurring transactions to display them.
+        for ( var i = 0; i < recurringTransactions.length; i++ ) {
+            // Sometimes we want to add a single zero (2.5 => 2.50) for a more beautiful display style.
+            var amount = recurringTransactions[i].amount;
+            if ( recurringTransactions[i].amount.toString().indexOf( "." ) !== -1 ) {
+                if ( recurringTransactions[i].amount.toString().split( "." )[1].length < 2 ) amount += "0";
+            }
+            // Set the type in dependecy of the current language.
+            var type = ( recurringTransactions[i].type === "earning" ? getRecurringTransactionsContent()[0] : getRecurringTransactionsContent()[1] );
+            // Add all the data to our content.
+            content += "<tr><td>" + recurringTransactions[i].name + "</td>" +
+                       "<td>" + amount + getCurrencySign() + "</td>" +
+                       "<td>" + type + "</td>" +
+                       "<td>" + recurringTransactions[i].budget + "</td>" +
+                       "<td>" + recurringTransactions[i].category + "</td>" +
+                       "<td>" + recurringTransactions[i].interval + " " + getRecurringTransactionsContent()[2] + "</td>" +
+                       "</tr>";
+        }
+        content += "</table><br>";
+        // Set the new content.
+        $( "#recurringTransactions" ).html( content );
+    }
+    // No recurring transactions:
+    else {
+        $( "#recurringTransactions" ).html( "<i>" + getRecurringTransactionsContent()[3] + "</i>" );
+    }
+}
+
+/**
  * This function displays every available budget in detail.
  */
 function displayContent() {
+    // Reset previous content.
+    $( "#mainContent" ).html( "" );
+
     //TODO: select a day for each month in a dropdown menu, display currently recurring transaction in a table like the budget overview table
 }
 
@@ -125,4 +176,6 @@ function updateView() {
     displayBudgets();
     // Display the budgets in detail.
     displayContent();
+    // Display a list of currently recurring transactions.
+    displayRecurringTransactions();
 }

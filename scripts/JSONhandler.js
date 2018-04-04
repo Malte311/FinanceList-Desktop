@@ -7,7 +7,7 @@ const path = require( 'path' );
 // A default settings.json object.
 const defaultObj = {"windowSize":"1920x1080","fullscreen":false,"language":"en","path": __dirname + path.sep + "data","currency":"Euro","chartType":"pie"};
 // A default mainStorage.json object.
-const defaultStorageObj = {"budgets":[["checking account", 0.0]],"currentDate":getCurrentDate(),"allTimeEarnings":[["checking account", 0.0]],"allTimeSpendings":[["checking account", 0.0]],"allocationOn":false,"allocation":[["checking account", 100]]};
+const defaultStorageObj = {"budgets":[["checking account", 0.0]],"currentDate":getCurrentDate(),"allTimeEarnings":[["checking account", 0.0]],"allTimeSpendings":[["checking account", 0.0]],"allocationOn":false,"allocation":[["checking account", 100]],"recurring":[]};
 // The path to the settings.json file.
 const settingsPath = storage.getDefaultDataPath() + path.sep + "settings.json";
 // The path to the mainStorage.json file (no constant since the path can be changed at runtime).
