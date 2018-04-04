@@ -52,7 +52,7 @@ function displayBudgets() {
     // Iterate over all budgets to display them.
     for ( var i = 0; i < currentBudgets.length; i++ ) {
         // Sometimes we want to add a single zero (2.5 => 2.50).
-        var balance = (currentBudgets[i][1].toString().length < 5 ? currentBudgets[i][1] + "0" : currentBudgets[i][1]);
+        var balance = ((currentBudgets[i][1].toString().length < 5 && currentBudgets[i][1].toString().indexOf( "." ) !== -1 ) ? currentBudgets[i][1] + "0" : currentBudgets[i][1]);
         // Display all budgets. The first one is a standard budget and can therefore not be deleted.
         // Note that currentBudgets is an array of arrays (name of the budget and its current balance).
         content += "<tr><td>" + currentBudgets[i][0] + "</td>" +
@@ -80,61 +80,7 @@ function displayBudgets() {
  * This function displays every available budget in detail.
  */
 function displayContent() {
-    // Reset previous content.
-    $( "#mainContent" ).html( "" );
-    // Find out which button text should be displayed.
-    var addSpendingButtonText, addEarningButtonText;
-    var currentLanguage = readPreference( "language" );
-    switch ( currentLanguage ) {
-        case "en":
-            addSpendingButtonText = "Add expenditure to this budget";
-            addEarningButtonText = "Add earning to this budget";
-            break;
-        case "de":
-            addSpendingButtonText = "Ausgabe zu diesem Konto hinzuf&uuml;gen";
-            addEarningButtonText = "Einnahme zu diesem Konto hinzuf&uuml;gen";
-            break;
-    }
-    // Get all budgets to iterate over them.
-    var currentBudgets = readMainStorage( "budgets" );
-    // Display a detailed overview for every budget.
-    for ( var i = 0; i < currentBudgets.length; i++ ) {
-        // Create a new div and a seperation line.
-        $( "#mainContent" ).append( "<hr style=\"border-color:black;\"><div class=\"w3-container\">" );
-        // Display the name of the budget.
-        $( "#mainContent" ).append( "<h5><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + currentBudgets[i][0] + " </h5>" );
-        // Find out the sum of earnings in this month, so we can get an overview how much money is left.
-        var quest = { connector:'or', params:[['budget', currentBudgets[i][0]]] };
-        var dataObj = getData( getCurrentFileName(), quest );
-        var totalEarningsThisMonth = 0;
-        for ( var j = 0; j < dataObj.length; j++ ) {
-            if ( dataObj[j].type === "earning" ) {
-                totalEarningsThisMonth += dataObj[j].amount;
-            }
-        }
-        // Calculate the percentage of how much money is left to adjust the progress bar.
-        var percentage = 100;
-        var color;
-        // Check if balance is negative.
-        if ( currentBudgets[i][1] >= 0 ) {
-            if ( totalEarningsThisMonth > 0 ) percentage = (currentBudgets[i][1] / totalEarningsThisMonth) * 100;
-            // Select the color of the progress bar in dependency of the percentage value.
-            if ( percentage > 66 ) color = "green";
-            else if ( percentage > 33 ) color = "orange";
-            else color = "red";
-        }
-        // Balance negative: Red color, percentage still at 100 (so the complete bar is red).
-        else {
-            color = "red";
-        }
-
-        //TODO: select a day for each month in a dropdown menu, display currently recurring transaction in a table like the budget overview table
-
-        // Display the current balance.
-        var balance = (currentBudgets[i][1].toString().length < 5 ? currentBudgets[i][1] + "0" : currentBudgets[i][1]);
-        $( "#mainContent" ).append( "<div class=\"w3-grey\">" +
-                                    "<div class=\"w3-center w3-" + color + "\" style=\"width:" + percentage + "%;\">" + balance + getCurrencySign() + "</div></div>" );
-    }
+    //TODO: select a day for each month in a dropdown menu, display currently recurring transaction in a table like the budget overview table
 }
 
 /**

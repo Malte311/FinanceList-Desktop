@@ -5,20 +5,47 @@ const numberOfRecentSpendings = 5;
  * This function displays the current balance for each budget.
  */
 function displayBalances() {
-    // <p></p>
-    // <div class="w3-grey">
-    //     <div class="w3-container w3-center w3-padding w3-green" style="width:25%">+25%</div>
-    // </div>
-    //
-    // <p></p>
-    // <div class="w3-grey">
-    //     <div class="w3-container w3-center w3-padding w3-orange" style="width:50%">50%</div>
-    // </div>
-    //
-    // <p></p>
-    // <div class="w3-grey">
-    //     <div class="w3-container w3-center w3-padding w3-red" style="width:75%">75%</div>
-    // </div>
+    // Reset previous content.
+    $( "#currentBalances" ).html( "" );
+    // Get all budgets to iterate over them.
+    var currentBudgets = readMainStorage( "budgets" );
+    // Display the monthly surplus for every budget.
+    for ( var i = 0; i < currentBudgets.length; i++ ) {
+        // Set the name of the budget.
+        $( "#currentBalances" ).append( "<h5><i class=\"fas fa-angle-double-right w3-text-deep-purple\"></i> " + currentBudgets[i][0] + " </h5>" );
+        // Find out the sum of earnings in this month, so we can calculate the surplus.
+        var quest = { connector:'or', params:[['budget', currentBudgets[i][0]]] };
+        var dataObj = getData( getCurrentFileName(), quest );
+        // Add all earnings and spendings from this month.
+        var totalEarningsThisMonth = 0, totalSpendingsThisMonth = 0;
+        for ( var j = 0; j < dataObj.length; j++ ) {
+            if ( dataObj[j].type === "earning" ) {
+                totalEarningsThisMonth += dataObj[j].amount;
+            }
+            else if ( dataObj[j].type === "spending" ) {
+                totalSpendingsThisMonth += dataObj[j].amount;
+            }
+        }
+        // Calculate the ratio of how much money is left from this months earnings.
+        var percentage = 100
+        var color;
+        // Positive balance for this month:
+        if ( totalEarningsThisMonth - totalSpendingsThisMonth > 0 ) {
+            if ( totalEarningsThisMonth > 0 && totalSpendingsThisMonth !== 0 ) percentage = (totalSpendingsThisMonth / totalEarningsThisMonth) * 100;
+            color = "green";
+        }
+        // Balance negative: Red color, percentage still at 100 (so the complete bar is red).
+        else if ( totalEarningsThisMonth - totalSpendingsThisMonth < 0 ) {
+            color = "red";
+        }
+        // Balance is exactly zero for this month (percentage still at 100):
+        else {
+            color = "gray";
+        }
+        // We want to display every balance with two decimal places (if there is a comma). Example: Display $2.50 instead of $2.5
+        var balance = ((currentBudgets[i][1].toString().length < 5 && currentBudgets[i][1].toString().indexOf( "." ) !== -1 ) ? currentBudgets[i][1] + "0" : currentBudgets[i][1]);
+        $( "#currentBalances" ).append( "<p></p><div class=\"w3-grey\"><div class=\"w3-container w3-center w3-padding w3-" + color + "\" style=\"width:" + percentage + "%;\">" + balance + getCurrencySign() + "</div></div>" );
+    }
 }
 
 /**
