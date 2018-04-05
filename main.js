@@ -3,6 +3,8 @@ const electron = require( 'electron' );
 const config = require( './scripts/config.js' );
 // Module to read the settings.json file.
 const JSONhandler = require( './scripts/JSONhandler.js' );
+// Module to execute recurring transactions.
+const updates = require( './scripts/controller/updates.js' );
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -59,6 +61,8 @@ function createWindow () {
     if ( config.devMode ) mainWindow.webContents.openDevTools();
     // Init the JSON storage.
     JSONhandler.initStorage();
+    // Execute recurring transactions.
+    updates.updateTransactions();
 }
 
 // This method will be called when Electron has finished

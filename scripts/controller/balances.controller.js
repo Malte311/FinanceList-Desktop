@@ -23,6 +23,18 @@ function addTransaction() {
     }
     // Find out which language is selected to set the text elements of the dialog.
     var textElements = getTransactionDialogTextElements();
+    // Set options for selecting an interval (when automation is avtivated).
+    var intervalOptions = "", intervalOptionsTextElements = getIntervalOptionsTextElements();
+    for ( var i = 0; i < intervalOptionsTextElements.length; i++ ) {
+        // Monthly? Set as default (keep in mind that "monthly" has to be index 0 all the time).
+        if ( i === 0 ) {
+            intervalOptions += "<option selected=\"selected\">" + intervalOptionsTextElements[i] + "</option>";
+        }
+        // Not monthly? Not selected.
+        else {
+            intervalOptions += "<option>" + intervalOptionsTextElements[i] + "</option>";
+        }
+    }
     // Set the complete content for the dialog.
     // First two lines are radio buttons to select between earning and spending.
     var text = textElements[0] + "<form class=\"w3-center\"><input id=\"earning\" onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"type\">" + textElements[1] +
@@ -40,7 +52,9 @@ function addTransaction() {
                "</form></div><div id=\"dynamicDiv2\"><hr><b>" + textElements[4] + "</b><br>" + "<select id=\"selectInput\">" + options + "</select></div><hr>" +
                // Option to automate this transaction.
                "<div id=\"budgetSelect\"></div>" +
-               "<input type=\"checkbox\" id=\"checkboxInput\">" + textElements[5];
+               "<input type=\"checkbox\" id=\"checkboxInput\" onclick=\"updateTransactionDialog();\">" + textElements[5] +
+               // Another dynamic div, which changes when the checkbox is activated/deactivated.
+               "<br><div id=\"dynamicDiv3\" style=\"display:none;\"><select id=\"intervalSelect\">" + intervalOptions + "</select></div>";
     // Now we are able to actually create a dialog.
     createDialog( getTransactionDialogTitle(), text, function() {
         // Save the inputs and then execute the right function to add a new entry.
@@ -51,8 +65,8 @@ function addTransaction() {
         sum = sum.replace( ",", "." );
         // Make sure that the input is ok.
         var inputOk = true;
-        // Make sure that the name and the category are not empty.
-        if ( name.length < 1 || category.length < 1 ) inputOk = false;
+        // Make sure that the name is not empty. Category can be empty.
+        if ( name.length < 1 ) inputOk = false;
         // Make sure that the sum contains no letters and that it contains at least one number.
         if ( /[a-z]/i.test( sum ) || !/\d/.test( sum ) ) inputOk = false;
         // Some character is not a digit? Make sure that this is only a single dot.
@@ -83,6 +97,37 @@ function addTransaction() {
             }
             else if ( $( "#spending" )[0].checked ) {
                 addSpending( name, parseFloat( sum ), budget, category );
+            }
+
+            // Automation activated?
+            if ( $( "#checkboxInput" )[0].checked ) {
+                // Add a new recurring transaction.
+                // Select the correct interval.
+                var interval = 1;
+                switch ( $("#intervalSelect")[0].selectedIndex ) {
+                    // Index 0: monthly
+                    case 0:
+                        interval = 1;
+                        break;
+                    // Index 1: bimonthly
+                    case 1:
+                        interval = 2;
+                        break;
+                    // Index 2: quarterly
+                    case 2:
+                        interval = 3;
+                        break;
+                    // Index 3: biannual
+                    case 3:
+                        interval = 6;
+                        break;
+                    // Index 4: annual
+                    case 4:
+                        interval = 12;
+                        break;
+                }
+                var type = $( "#earning" )[0].checked ? "earning" : "spending";
+                addRecurringTransaction( name, parseFloat( sum ), budget, category, type, interval );
             }
         }
         // Wrong input: Show error message.
@@ -197,6 +242,59 @@ function addEarning( earning, sum, budget, category ) {
         writeMainStorage( "allTimeEarnings", allTimeEarnings );
     }
     // Update the view: Display the new balance.
+    updateView();
+}
+
+/**
+ * This function creates a recurring transaction.
+ * @param {String} name The name of the transaction.
+ * @param {double} amount The amount of the transaction.
+ * @param {String} budget The budget for the transaction.
+ * @param {String} category The category of the transaction.
+ * @param {String} type The type of the transaction.
+ * @param {String} interval The interval of the transaction.
+ */
+function addRecurringTransaction( name, amount, budget, category, type, interval ) {
+    // Determine, if this transaction involves the automatic allocation.
+    var allocationOn = $( "#earning" )[0].checked && $( "#autoAllocation" )[0].checked && readMainStorage( "allocationOn" );
+    // Determine the correct date.
+    var newMonth = parseInt( getCurrentDate().split( "." )[1] ) + interval;
+    var newYear = parseInt( getCurrentDate().split( "." )[2] );
+    // Check if there was an overflow and handle it. (we use while instead of if in case the overflow is over more than one year)
+    while ( newMonth > 12 ) {
+        // Subtract the number of months and update the year.
+        newMonth = newMonth - 12;
+        newYear++;
+    }
+    var date = getCurrentDate().split( "." )[0] + "." + (newMonth < 10 ? "0" + newMonth.toString() : newMonth.toString()) + "." + newYear.toString();
+    // Create a new object and store it (in the mainStorage.json file).
+    var dataObj = {"date": date, "name": name, "amount": amount, "budget": budget, "type": type, "category": category, "interval": interval, "allocationOn": allocationOn};
+    // Now, get the existing data and add this data to it.
+    var currentRecurringTransactions = readMainStorage( "recurring" );
+    currentRecurringTransactions.push( dataObj );
+    writeMainStorage( "recurring", currentRecurringTransactions );
+    // This function is called in addTransaction, so no need to update the view here,
+    // since it is already done.
+}
+
+/**
+ * This function deletes a recurring transaction.
+ * @param {String} name The name of the transaction we want to delete.
+ */
+function deleteRecurringTransaction( name ) {
+    // Get current transactions.
+    var currentRecurringTransactions = readMainStorage( "recurring" );
+    // Search the transaction we want to delete.
+    for ( var i = 0; i < currentRecurringTransactions.length; i++ ) {
+        // Found it? Delete it and stop.
+        if ( currentRecurringTransactions[i].name === name ) {
+            currentRecurringTransactions.splice( i, 1 );
+            break;
+        }
+    }
+    // Write back to mainStorage.json.
+    writeMainStorage( "recurring", currentRecurringTransactions );
+    // Update the view: Don't display the transaction anymore.
     updateView();
 }
 
@@ -411,11 +509,11 @@ function setAllocation() {
             // We display the previously selected value as selected.
             if ( j * 10 === currentAllocation[i][1] ) {
                 // Note that we have 10 options for every budget.
-                currentAllocationHTML += "<option selected=\"selected\">" + currentAllocation[i][1] + "</option>";
+                currentAllocationHTML += "<option selected=\"selected\">" + currentAllocation[i][1] + "&percnt;</option>";
             }
             // This is for every other value (not previously selected).
             else {
-                currentAllocationHTML += "<option>" + (j * 10).toString() + "</option>";
+                currentAllocationHTML += "<option>" + (j * 10).toString() + "&percnt;</option>";
             }
         }
         // This holds the lines of the table.

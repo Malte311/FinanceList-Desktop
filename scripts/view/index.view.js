@@ -43,9 +43,9 @@ function displayBalances() {
             color = "gray";
         }
         // We want to display every balance with two decimal places (if there is a comma). Example: Display $2.50 instead of $2.5
-        var balance = currentBudgets[i][1];
-        if ( currentBudgets[i][1].toString().indexOf( "." ) !== -1 ) {
-            if ( currentBudgets[i][1].toString().split( "." )[1].length < 2 ) balance += "0";
+        var balance = totalEarningsThisMonth - totalSpendingsThisMonth;
+        if ( (totalEarningsThisMonth - totalSpendingsThisMonth).toString().indexOf( "." ) !== -1 ) {
+            if ( (totalEarningsThisMonth - totalSpendingsThisMonth).toString().split( "." )[1].length < 2 ) balance += "0";
         }
         $( "#currentBalances" ).append( "<p></p><div class=\"w3-grey\"><div class=\"w3-container w3-center w3-padding w3-" + color + "\" style=\"width:" + percentage + "%;\">" + balance + getCurrencySign() + "</div></div>" );
     }
@@ -81,7 +81,8 @@ function displayRecentSpendings() {
     var spendingData = [];
     // Search for the recent spendings (they may be in older files, thats why we iterate).
     // Remember that we need to reverse the names again (undo the reverse).
-    for ( var i = 0; i < JSONFiles.length; i++ ) {
+    // Also, we loop backwards, because we want to begin with the newest file.
+    for ( var i = JSONFiles.length - 1; i >= 0; i-- ) {
         // Reverse again to undo the reverse.
         var tmp = JSONFiles[i].split( "." );
         JSONFiles[i] = tmp[1] + "." + tmp[0] + ".json";

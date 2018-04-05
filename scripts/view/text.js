@@ -97,9 +97,9 @@ function getCurrentBudgetsHeadings() {
 function getRecurringTransactionsHeadings() {
     switch ( getLanguage() ) {
         case "en":
-            return ["Name", "Amount", "Type", "Budget", "Category", "Interval"];
+            return ["Name", "Amount", "Type", "Budget", "Category", "Next execution", "Delete"];
         case "de":
-            return ["Name", "Summe", "Art", "Konto", "Kategorie", "Intervall"];
+            return ["Name", "Summe", "Art", "Konto", "Kategorie", "N&auml;chste Ausf&uuml;hrung", "L&ouml;schen"];
     }
 }
 
@@ -140,6 +140,19 @@ function getTransactionDialogTextElements() {
             return ["Here you can add new earnings or new spendings.", "Earning", "Spending", "Amount", "Budget", "Automate", "Name", "Choose budget", "Allocate automatically", "Category"];
         case "de":
             return ["Hier k&ouml;nnen Sie neue Einnahmen oder Ausgaben hinzuf&uuml;gen.", "Einnahme", "Ausgabe", "Betrag", "Konto", "Automatisieren", "Name", "Konto w&auml;hlen", "Automatisch verteilen", "Kategorie"];
+    }
+}
+
+/**
+ * This function returns the text elements of the interval options in the correct language.
+ * @return {String[]} The text elements of the interval options.
+ */
+function getIntervalOptionsTextElements() {
+    switch ( getLanguage() ) {
+        case "en":
+            return ["monthly", "bimonthly", "quarterly", "biannual", "annual"];
+        case "de":
+            return ["monatlich", "zweimonatlich", "viertelj&auml;hrlich", "halbj&auml;hrlich", "j&auml;hrlich"];
     }
 }
 

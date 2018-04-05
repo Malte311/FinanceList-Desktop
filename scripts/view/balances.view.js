@@ -95,6 +95,7 @@ function displayRecurringTransactions() {
                       "<td>" + getRecurringTransactionsHeadings()[3] + "</td>" +
                       "<td>" + getRecurringTransactionsHeadings()[4] + "</td>" +
                       "<td>" + getRecurringTransactionsHeadings()[5] + "</td>" +
+                      "<td>" + getRecurringTransactionsHeadings()[6] + "</td>" +
                       "</tr>";
         // Iterate over all recurring transactions to display them.
         for ( var i = 0; i < recurringTransactions.length; i++ ) {
@@ -109,9 +110,11 @@ function displayRecurringTransactions() {
             content += "<tr><td>" + recurringTransactions[i].name + "</td>" +
                        "<td>" + amount + getCurrencySign() + "</td>" +
                        "<td>" + type + "</td>" +
-                       "<td>" + recurringTransactions[i].budget + "</td>" +
-                       "<td>" + recurringTransactions[i].category + "</td>" +
-                       "<td>" + recurringTransactions[i].interval + " " + getRecurringTransactionsContent()[2] + "</td>" +
+                       "<td>" + (recurringTransactions[i].allocationOn ? "&mdash;" : recurringTransactions[i].budget) + "</td>" +
+                       // If a category exists, display it. Otherwise display "-".
+                       "<td>" + (recurringTransactions[i].category.length > 0 ? recurringTransactions[i].category : "&mdash;") + "</td>" +
+                       "<td>" + recurringTransactions[i].date + "</td>" +
+                       "<td><span onclick=\"deleteRecurringTransaction('" + recurringTransactions[i].name + "')\" class=\"w3-button\"><i class=\"fas fa-times w3-text-red\"></i></span></td>" +
                        "</tr>";
         }
         content += "</table><br>";
@@ -165,6 +168,15 @@ function updateTransactionDialog() {
         // Hide automatic allocation and show budget select.
         $( "#dynamicDiv1" ).hide();
         $( "#dynamicDiv2" ).show();
+    }
+    // Check for automation.
+    // Automation activated:
+    if ( $( "#checkboxInput" )[0].checked ) {
+        $( "#dynamicDiv3" ).show();
+    }
+    // No automation activated:
+    else {
+        $( "#dynamicDiv3" ).hide();
     }
 }
 
