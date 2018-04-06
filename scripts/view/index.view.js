@@ -20,12 +20,14 @@ function displayBalances() {
         var dataObj = getData( getCurrentFileName(), quest );
         // Add all earnings and spendings from this month.
         var totalEarningsThisMonth = 0, totalSpendingsThisMonth = 0;
-        for ( var j = 0; j < dataObj.length; j++ ) {
-            if ( dataObj[j].type === "earning" ) {
-                totalEarningsThisMonth += dataObj[j].amount;
-            }
-            else if ( dataObj[j].type === "spending" ) {
-                totalSpendingsThisMonth += dataObj[j].amount;
+        if ( dataObj !== undefined ) {
+            for ( var j = 0; j < dataObj.length; j++ ) {
+                if ( dataObj[j].type === "earning" ) {
+                    totalEarningsThisMonth = Math.round( (totalEarningsThisMonth + dataObj[j].amount) * 1e2 ) / 1e2;
+                }
+                else if ( dataObj[j].type === "spending" ) {
+                    totalSpendingsThisMonth = Math.round( (totalSpendingsThisMonth + dataObj[j].amount) * 1e2 ) / 1e2;
+                }
             }
         }
         // Calculate the ratio of how much money is left from this months earnings.
@@ -33,7 +35,7 @@ function displayBalances() {
         var color;
         // Positive balance for this month:
         if ( totalEarningsThisMonth - totalSpendingsThisMonth > 0 ) {
-            if ( totalEarningsThisMonth > 0 && totalSpendingsThisMonth !== 0 ) percentage = (totalSpendingsThisMonth / totalEarningsThisMonth) * 100;
+            if ( totalEarningsThisMonth > 0 && totalSpendingsThisMonth !== 0 ) percentage = ((totalEarningsThisMonth - totalSpendingsThisMonth) / totalEarningsThisMonth) * 100;
             color = "green";
         }
         // Balance negative: Red color, percentage still at 100 (so the complete bar is red).
@@ -45,7 +47,7 @@ function displayBalances() {
             color = "gray";
         }
         // We want to display every balance with two decimal places (if there is a comma). Example: Display $2.50 instead of $2.5
-        var balance = totalEarningsThisMonth - totalSpendingsThisMonth;
+        var balance = (Math.round( (totalEarningsThisMonth - totalSpendingsThisMonth) * 1e2 ) / 1e2).toString();
         if ( (totalEarningsThisMonth - totalSpendingsThisMonth).toString().indexOf( "." ) !== -1 ) {
             if ( (totalEarningsThisMonth - totalSpendingsThisMonth).toString().split( "." )[1].length < 2 ) balance += "0";
         }
