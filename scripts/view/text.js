@@ -39,6 +39,19 @@ function getRecentSpendingsMissingDataMessage() {
 }
 
 /**
+ * This function returns text for the recent earnings section in case there are no recent earnings.
+ * @return {String} The text for the recent earnings section in case there are no recent earnings.
+ */
+function getRecentEarningsMissingDataMessage() {
+    switch ( getLanguage() ) {
+        case "en":
+            return "There are no recent earnings yet!";
+        case "de":
+            return "Es gibt bisher keine Einnahmen!";
+    }
+}
+
+/**
  * This function returns text for the all time spendings section in case there are no spendings.
  * @return {String} The text for all time spendings section in case there are no spendings.
  */
@@ -74,6 +87,19 @@ function getRecentSpendingsHeading() {
             return "Recent spendings";
         case "de":
             return "K&uuml;rzliche Ausgaben";
+    }
+}
+
+/**
+ * This function returns text for recent earnings heading in the correct language.
+ * @return {String} The heading for the recent earnings section.
+ */
+function getRecentEarningsHeading() {
+    switch ( getLanguage() ) {
+        case "en":
+            return "Recent earnings";
+        case "de":
+            return "K&uuml;rzliche Einnahmen";
     }
 }
 

@@ -1,5 +1,7 @@
 // This indicates how many recent spendings should be shown.
 const numberOfRecentSpendings = 5;
+// Same for recent earnings
+const numberOfRecentEarnings = numberOfRecentSpendings;
 
 /**
  * This function displays the current balance for each budget.
@@ -52,7 +54,7 @@ function displayBalances() {
 }
 
 /**
- * This function displays five of the recent spendings, if they exist.
+ * This function displays the recent spendings, if they exist.
  */
 function displayRecentSpendings() {
     // Get all .json files which contain data (mainStorage is excluded in getJSONFiles).
@@ -153,6 +155,73 @@ function displaySpendingChart() {
 }
 
 /**
+ * This function displays the recent earnings, if they exist.
+ */
+function displayRecentEarnings() {
+    // Get all .json files which contain data (mainStorage is excluded in getJSONFiles).
+    var JSONFiles = getJSONFiles();
+    // Before searching, we need to sort the files so we can start searching in the newest file.
+    for ( var i = 0; i < JSONFiles.length; i++ ) {
+        // In order to search the files, we reverse the filenames (e.g. "01.2018" => "2018.01").
+        // To do this, we make sure the filenames are in the correct format.
+        // This regular expression makes sure that there are two digits followed by a dot and
+        // another four digits. Nothing else is allowed.
+        if ( /^(\d\d[.]\d\d\d\d)$()/.test( JSONFiles[i] ) ) {
+            // Filename ok? Reverse it.
+            var tmp = JSONFiles[i].split( "." );
+            JSONFiles[i] = tmp[1] + "." + tmp[0];
+        }
+        // Filename invalid? Remove it from array.
+        else {
+            JSONFiles.splice( i, 1 );
+        }
+    }
+    // Now we can sort the files.
+    JSONFiles = JSONFiles.sort();
+    // Declare a quest to search for earnings.
+    var quest = { connector:'or', params:[['type', 'earning']] };
+    // Declare a variable to store the earning data in.
+    var earningData = [];
+    // Search for the recent earnings (they may be in older files, thats why we iterate).
+    // Remember that we need to reverse the names again (undo the reverse).
+    // Also, we loop backwards, because we want to begin with the newest file.
+    for ( var i = JSONFiles.length - 1; i >= 0; i-- ) {
+        // Reverse again to undo the reverse.
+        var tmp = JSONFiles[i].split( "." );
+        JSONFiles[i] = tmp[1] + "." + tmp[0] + ".json";
+        // This appends the data to the existing array (we want to append at the beginning
+        // because the most recent data is at the end).
+        earningData = getData( JSONFiles[i], quest ).concat( earningData );
+        // Found enough data? Stop looping and go on.
+        if ( earningData.length >= numberOfRecentEarnings ) break;
+    }
+    // Make sure that some data exists.
+    if ( earningData.length > 0 ) {
+        // We will append the HTML content to this string.
+        var recentEarningsTable = "<table class=\"w3-table-all w3-striped w3-white\">";
+        // Now, we just need to display the data. Remember that new data is at the end, so
+        // we need to loop backwards.
+        for ( var i = earningData.length - 1; i >= 0; i-- ) {
+            // Sometimes we want to add a single zero (2.5 => 2.50) for a more beautiful display style.
+            var amount = earningData[i].amount;
+            if ( earningData[i].amount.toString().indexOf( "." ) !== -1 ) {
+                if ( earningData[i].amount.toString().split( "." )[1].length < 2 ) amount += "0";
+            }
+            recentEarningsTable += "<tr><td><i class=\"far fa-money-bill-alt w3-text-green w3-large\"></i> " + earningData[i].name + " </td>" +
+                                    "<td><i>" + amount + getCurrencySign() + "</i></td>" +
+                                    "<td><i>" + earningData[i].date + "</i></td></tr>";
+            // Display only numberOfRecentEarnings many items.
+            if ( earningData.length - numberOfRecentEarnings === i ) break;
+        }
+        $( "#recentEarnings" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentEarningsHeading() + " </h3>" + recentEarningsTable + "</table>" );
+    }
+    // Display a message that no data exists yet.
+    else {
+        $( "#recentEarnings" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentEarningsHeading() + " </h3><i>" + getRecentEarningsMissingDataMessage() + "</i>" );
+    }
+}
+
+/**
  * This function displays a chart which visualizes all time earnings.
  */
 function displayEarningChart() {
@@ -196,6 +265,8 @@ function updateView() {
     displayRecentSpendings();
     // Display all time spendings.
     displaySpendingChart();
+    // Display a table of recent earnings.
+    displayRecentEarnings();
     // Display all time earnings.
     displayEarningChart();
 }
