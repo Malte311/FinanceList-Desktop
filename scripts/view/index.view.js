@@ -1,10 +1,11 @@
-// This indicates how many recent spendings should be shown.
-const numberOfRecentSpendings = 5;
-// Same for recent earnings
-const numberOfRecentEarnings = numberOfRecentSpendings;
+/**************************************************************************************************
+ * This file is responsible for the view on the overview page.
+**************************************************************************************************/
 
 /**
- * This function displays the current balance for each budget.
+ * This function displays the current surplus for each budget. This means,
+ * it will display the difference between all earnings from the current month
+ * and all spendings from the current month.
  */
 function displayBalances() {
     // Reset previous content.
@@ -13,28 +14,34 @@ function displayBalances() {
     var currentBudgets = readMainStorage( "budgets" );
     // Display the monthly surplus for every budget.
     for ( var i = 0; i < currentBudgets.length; i++ ) {
-        // Set the name of the budget.
-        $( "#currentBalances" ).append( "<h5><i class=\"fas fa-angle-double-right w3-text-deep-purple\"></i> " + currentBudgets[i][0] + " </h5>" );
-        // Find out the sum of earnings in this month, so we can calculate the surplus.
+        // Set the name of the budget as a heading.
+        $( "#currentBalances" ).append( "<h5><i class=\"fas fa-angle-double-right w3-text-deep-purple\"></i>" + " " + currentBudgets[i][0] + " </h5>" );
+        // Find out the sum of earnings and spendings in this month, so we can calculate the surplus.
         var quest = { connector:'or', params:[['budget', currentBudgets[i][0]]] };
         var dataObj = getData( getCurrentFileName(), quest );
         // Add all earnings and spendings from this month.
         var totalEarningsThisMonth = 0, totalSpendingsThisMonth = 0;
+        // Make sure, that data exists. Otherwise we will stay at a surplus of zero.
         if ( dataObj !== undefined ) {
+            // Now, add up all the amounts for earnings and spendings each.
             for ( var j = 0; j < dataObj.length; j++ ) {
+                // Earning? Increase totalEarningsThisMonth.
                 if ( dataObj[j].type === "earning" ) {
                     totalEarningsThisMonth = Math.round( (totalEarningsThisMonth + dataObj[j].amount) * 1e2 ) / 1e2;
                 }
+                // Spending? Increase totalSpendingsThisMonth.
                 else if ( dataObj[j].type === "spending" ) {
                     totalSpendingsThisMonth = Math.round( (totalSpendingsThisMonth + dataObj[j].amount) * 1e2 ) / 1e2;
                 }
             }
         }
-        // Calculate the ratio of how much money is left from this months earnings.
-        var percentage = 100
+        // Now, find out if the difference between earnings and spendings is
+        // either positive, negative or neutral (zero).
+        var percentage = 100;
         var color;
         // Positive balance for this month:
         if ( totalEarningsThisMonth - totalSpendingsThisMonth > 0 ) {
+            // Calculate the ratio of how much money is left from this months earnings and use the color green.
             if ( totalEarningsThisMonth > 0 && totalSpendingsThisMonth !== 0 ) percentage = ((totalEarningsThisMonth - totalSpendingsThisMonth) / totalEarningsThisMonth) * 100;
             color = "green";
         }
@@ -42,233 +49,135 @@ function displayBalances() {
         else if ( totalEarningsThisMonth - totalSpendingsThisMonth < 0 ) {
             color = "red";
         }
-        // Balance is exactly zero for this month (percentage still at 100):
+        // Balance is exactly zero for this month: Gray color and percentage still at 100:
         else {
             color = "gray";
         }
-        // We want to display every balance with two decimal places (if there is a comma). Example: Display $2.50 instead of $2.5
+        // We want to display $2.50 instead of $2.50000000002 (this may happen since we use floating point numbers),
+        // so we round the balance.
         var balance = (Math.round( (totalEarningsThisMonth - totalSpendingsThisMonth) * 1e2 ) / 1e2).toString();
+        // We want to display every balance with two decimal places (if there is a comma). Example: Display $2.50 instead of $2.5
+        // Does a comma exist?
         if ( (totalEarningsThisMonth - totalSpendingsThisMonth).toString().indexOf( "." ) !== -1 ) {
+            // If so, we check if there are already two decimal digits. If not, we add a zero.
             if ( (totalEarningsThisMonth - totalSpendingsThisMonth).toString().split( "." )[1].length < 2 ) balance += "0";
         }
+        // Now we are ready to display a progress bar which contains the difference.
         $( "#currentBalances" ).append( "<p></p><div class=\"w3-grey\"><div class=\"w3-container w3-center w3-padding w3-" + color + "\" style=\"width:" + percentage + "%;\">" + balance + getCurrencySign() + "</div></div>" );
     }
 }
 
 /**
- * This function displays the recent spendings, if they exist.
+ * This function displays the recent spendings and earnings, if they exist.
+ * @param {String} type The type of transactions we want to display (earning/spending)
  */
-function displayRecentSpendings() {
-    // Get all .json files which contain data (mainStorage is excluded in getJSONFiles).
-    var JSONFiles = getJSONFiles();
-    // Before searching, we need to sort the files so we can start searching in the newest file.
-    for ( var i = 0; i < JSONFiles.length; i++ ) {
-        // In order to search the files, we reverse the filenames (e.g. "01.2018" => "2018.01").
-        // To do this, we make sure the filenames are in the correct format.
-        // This regular expression makes sure that there are two digits followed by a dot and
-        // another four digits. Nothing else is allowed.
-        if ( /^(\d\d[.]\d\d\d\d)$()/.test( JSONFiles[i] ) ) {
-            // Filename ok? Reverse it.
-            var tmp = JSONFiles[i].split( "." );
-            JSONFiles[i] = tmp[1] + "." + tmp[0];
-        }
-        // Filename invalid? Remove it from array.
-        else {
-            JSONFiles.splice( i, 1 );
-        }
-    }
-    // Now we can sort the files.
-    JSONFiles = JSONFiles.sort();
-    // Declare a quest to search for spendings.
-    var quest = { connector:'or', params:[['type', 'spending']] };
-    // Declare a variable to store the spending data in.
-    var spendingData = [];
-    // Search for the recent spendings (they may be in older files, thats why we iterate).
-    // Remember that we need to reverse the names again (undo the reverse).
-    // Also, we loop backwards, because we want to begin with the newest file.
-    for ( var i = JSONFiles.length - 1; i >= 0; i-- ) {
-        // Reverse again to undo the reverse.
-        var tmp = JSONFiles[i].split( "." );
-        JSONFiles[i] = tmp[1] + "." + tmp[0] + ".json";
-        // This appends the data to the existing array (we want to append at the beginning
-        // because the most recent data is at the end).
-        spendingData = getData( JSONFiles[i], quest ).concat( spendingData );
-        // Found enough data? Stop looping and go on.
-        if ( spendingData.length >= numberOfRecentSpendings ) break;
-    }
+function displayRecentTransactions( type ) {
+    // Get recent data.
+    var data = getRecentTransactions( type );
     // Make sure that some data exists.
-    if ( spendingData.length > 0 ) {
+    if ( data.length > 0 ) {
+        // Get the correct limit, in case the limits are different.
+        var limit = (type === "earning" ? numberOfRecentEarnings : numberOfRecentSpendings);
         // We will append the HTML content to this string.
-        var recentSpendingsTable = "<table class=\"w3-table-all w3-striped w3-white\">";
+        var recentTransactionsTable = "<table class=\"w3-table-all w3-striped w3-white\">";
         // Now, we just need to display the data. Remember that new data is at the end, so
         // we need to loop backwards.
-        for ( var i = spendingData.length - 1; i >= 0; i-- ) {
-            // Sometimes we want to add a single zero (2.5 => 2.50) for a more beautiful display style.
-            var amount = spendingData[i].amount;
-            if ( spendingData[i].amount.toString().indexOf( "." ) !== -1 ) {
-                if ( spendingData[i].amount.toString().split( "." )[1].length < 2 ) amount += "0";
+        for ( var i = data.length - 1; i >= 0; i-- ) {
+            // Sometimes we want to add a single zero ($2.5 => $2.50) for a more beautiful display style.
+            var amount = data[i].amount;
+            // Amount has a comma?
+            if ( data[i].amount.toString().indexOf( "." ) !== -1 ) {
+                // If there are less than two decimal digits, add a zero at the end.
+                if ( data[i].amount.toString().split( "." )[1].length < 2 ) amount += "0";
             }
-            recentSpendingsTable += "<tr><td><i class=\"far fa-money-bill-alt w3-text-green w3-large\"></i> " + spendingData[i].name + " </td>" +
-                                    "<td><i>" + amount + getCurrencySign() + "</i></td>" +
-                                    "<td><i>" + spendingData[i].date + "</i></td></tr>";
-            // Display only numberOfRecentSpendings many items.
-            if ( spendingData.length - numberOfRecentSpendings === i ) break;
+            recentTransactionsTable += "<tr><td><i class=\"far fa-money-bill-alt w3-text-green w3-large\"></i>" + " " + data[i].name + " </td>" +
+                                       "<td><i>" + amount + getCurrencySign() + "</i></td>" +
+                                       "<td><i>" + data[i].date + "</i></td></tr>";
+            // Display only limit many items (defined in index.controller.js).
+            if ( data.length - limit === i ) break;
         }
-        $( "#recentSpendings" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentSpendingsHeading() + " </h3>" + recentSpendingsTable + "</table>" );
+        // Earning?
+        if ( type === "earning" ) $( "#recentEarnings" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentEarningsHeading() + " </h3>" + recentTransactionsTable + "</table>" );
+        // Spending?
+        else $( "#recentSpendings" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentSpendingsHeading() + " </h3>" + recentTransactionsTable + "</table>" );
     }
     // Display a message that no data exists yet.
     else {
-        $( "#recentSpendings" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentSpendingsHeading() + " </h3><i>" + getRecentSpendingsMissingDataMessage() + "</i>" );
+        // Earning?
+        if ( type === "earning" ) $( "#recentEarnings" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentEarningsHeading() + " </h3><i>" + getRecentEarningsMissingDataMessage() + "</i>" );
+        // Spending?
+        else $( "#recentSpendings" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentSpendingsHeading() + " </h3><i>" + getRecentSpendingsMissingDataMessage() + "</i>" );
     }
 }
 
 /**
- * This function displays a chart which visualizes all time spendings.
+ * This function displays a chart which visualizes all time transactions.
+ * @param {String} type The type of transactions we want to visualize (earning/spending)
  */
-function displaySpendingChart() {
-    // Reset the canvas in case no data existed before (then the HTML content was overwritten).
-    $( "#spendingChartDiv" ).html( "<canvas id=\"Spendings\" width=\"8000\" height=\"2500\"></canvas>" );
-    // Get a reference to the canvas in which the chart should be.
-    var spendingChart = $( "#Spendings" )[0];
-    // Get all budgets.
-    var allTimeSpendings = readMainStorage( "allTimeSpendings" );
+function displayChart( type ) {
+    // Set the variables in dependency of the transaction type.
+    var transactionChart, allTimeTransactions;
+    // Earning?
+    if ( type === "earning" ) {
+        // Reset the canvas in case no data existed before (then the HTML content was overwritten).
+        $( "#earningChartDiv" ).html( "<canvas id=\"Earnings\" width=\"8000\" height=\"2500\"></canvas>" );
+        // Get a reference to the canvas in which the chart should be.
+        transactionChart = $( "#Earnings" )[0];
+        // Get all budgets.
+        allTimeTransactions = readMainStorage( "allTimeEarnings" );
+    }
+    // Spending?
+    else {
+        // Reset the canvas in case no data existed before (then the HTML content was overwritten).
+        $( "#spendingChartDiv" ).html( "<canvas id=\"Spendings\" width=\"8000\" height=\"2500\"></canvas>" );
+        // Get a reference to the canvas in which the chart should be.
+        transactionChart = $( "#Spendings" )[0];
+        // Get all budgets.
+        allTimeTransactions = readMainStorage( "allTimeSpendings" );
+    }
     // Declare some variables to store the values in them.
     var labels = [], dataset = [];
-    // We will declare a checksum, to make sure there is at least one earning.
+    // We will declare a variable to make sure there is at least one earning/spending.
+    // In addition to that, this will contain the sum of all spendings/earnings.
     var checksum = 0;
     // Iterate over them to get the all time spendings.
-    for ( var i = 0; i < allTimeSpendings.length; i++ ) {
+    for ( var i = 0; i < allTimeTransactions.length; i++ ) {
         // Get the name of every budget.
-        labels.push( allTimeSpendings[i][0] );
+        labels.push( allTimeTransactions[i][0] );
         // Get the balance of
-        dataset.push( allTimeSpendings[i][1] );
-        // Update the checksum
-        checksum += allTimeSpendings[i][1];
+        dataset.push( allTimeTransactions[i][1] );
+        // Add the amount to sum up all transactions.
+        checksum = (Math.round( (checksum + allTimeTransactions[i][1]) * 1e2 ) / 1e2)
     }
-    // Now use the checksum to check if there exists at least one earning.
+    // Now check if there exists at least one earning/spending.
     if ( checksum > 0 ) {
         // Create the chart. The colors are declared as a constant in controller.js.
-        createChart( spendingChart, labels, dataset, colors, colors, readPreference( "chartType" ) );
+        createChart( transactionChart, labels, dataset, colors, colors, readPreference( "chartType" ) );
+        // Display the sum of all time earnings/spendings.
+        if ( type === "earning" ) $( "#earningChartDiv" ).append( "<br><center>" + getAllTimeTransactionsText( "earning" ) + ": " + checksum + getCurrencySign() + "</center>" );
+        else $( "#spendingChartDiv" ).append( "<br><center>" + getAllTimeTransactionsText( "spending" ) + ": " + checksum + getCurrencySign() + "</center>" );
     }
     // Otherwise display a message that there is no data yet.
     else {
-        $( "#spendingChartDiv" ).html( "<i>" + getAllTimeSpendingsMissingDataMessage() + "</i>" );
+        // Earning?
+        if ( type === "earning" ) $( "#earningChartDiv" ).html( "<i>" + getAllTimeEarningsMissingDataMessage() + "</i>" );
+        // Spending?
+        else $( "#spendingChartDiv" ).html( "<i>" + getAllTimeSpendingsMissingDataMessage() + "</i>" );
     }
 }
 
 /**
- * This function displays the recent earnings, if they exist.
- */
-function displayRecentEarnings() {
-    // Get all .json files which contain data (mainStorage is excluded in getJSONFiles).
-    var JSONFiles = getJSONFiles();
-    // Before searching, we need to sort the files so we can start searching in the newest file.
-    for ( var i = 0; i < JSONFiles.length; i++ ) {
-        // In order to search the files, we reverse the filenames (e.g. "01.2018" => "2018.01").
-        // To do this, we make sure the filenames are in the correct format.
-        // This regular expression makes sure that there are two digits followed by a dot and
-        // another four digits. Nothing else is allowed.
-        if ( /^(\d\d[.]\d\d\d\d)$()/.test( JSONFiles[i] ) ) {
-            // Filename ok? Reverse it.
-            var tmp = JSONFiles[i].split( "." );
-            JSONFiles[i] = tmp[1] + "." + tmp[0];
-        }
-        // Filename invalid? Remove it from array.
-        else {
-            JSONFiles.splice( i, 1 );
-        }
-    }
-    // Now we can sort the files.
-    JSONFiles = JSONFiles.sort();
-    // Declare a quest to search for earnings.
-    var quest = { connector:'or', params:[['type', 'earning']] };
-    // Declare a variable to store the earning data in.
-    var earningData = [];
-    // Search for the recent earnings (they may be in older files, thats why we iterate).
-    // Remember that we need to reverse the names again (undo the reverse).
-    // Also, we loop backwards, because we want to begin with the newest file.
-    for ( var i = JSONFiles.length - 1; i >= 0; i-- ) {
-        // Reverse again to undo the reverse.
-        var tmp = JSONFiles[i].split( "." );
-        JSONFiles[i] = tmp[1] + "." + tmp[0] + ".json";
-        // This appends the data to the existing array (we want to append at the beginning
-        // because the most recent data is at the end).
-        earningData = getData( JSONFiles[i], quest ).concat( earningData );
-        // Found enough data? Stop looping and go on.
-        if ( earningData.length >= numberOfRecentEarnings ) break;
-    }
-    // Make sure that some data exists.
-    if ( earningData.length > 0 ) {
-        // We will append the HTML content to this string.
-        var recentEarningsTable = "<table class=\"w3-table-all w3-striped w3-white\">";
-        // Now, we just need to display the data. Remember that new data is at the end, so
-        // we need to loop backwards.
-        for ( var i = earningData.length - 1; i >= 0; i-- ) {
-            // Sometimes we want to add a single zero (2.5 => 2.50) for a more beautiful display style.
-            var amount = earningData[i].amount;
-            if ( earningData[i].amount.toString().indexOf( "." ) !== -1 ) {
-                if ( earningData[i].amount.toString().split( "." )[1].length < 2 ) amount += "0";
-            }
-            recentEarningsTable += "<tr><td><i class=\"far fa-money-bill-alt w3-text-green w3-large\"></i> " + earningData[i].name + " </td>" +
-                                    "<td><i>" + amount + getCurrencySign() + "</i></td>" +
-                                    "<td><i>" + earningData[i].date + "</i></td></tr>";
-            // Display only numberOfRecentEarnings many items.
-            if ( earningData.length - numberOfRecentEarnings === i ) break;
-        }
-        $( "#recentEarnings" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentEarningsHeading() + " </h3>" + recentEarningsTable + "</table>" );
-    }
-    // Display a message that no data exists yet.
-    else {
-        $( "#recentEarnings" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentEarningsHeading() + " </h3><i>" + getRecentEarningsMissingDataMessage() + "</i>" );
-    }
-}
-
-/**
- * This function displays a chart which visualizes all time earnings.
- */
-function displayEarningChart() {
-    // Reset the canvas in case no data existed before (then the HTML content was overwritten).
-    $( "#earningChartDiv" ).html( "<canvas id=\"Earnings\" width=\"8000\" height=\"2500\"></canvas>" );
-    // Get a reference to the canvas in which the chart should be.
-    var earningChart = $( "#Earnings" )[0];
-    // Get all budgets.
-    var allTimeEarnings = readMainStorage( "allTimeEarnings" );
-    // Declare some variables to store the values in them.
-    var labels = [], dataset = [];
-    // We will declare a checksum, to make sure there is at least one earning.
-    var checksum = 0;
-    // Iterate over them to get the all time spendings.
-    for ( var i = 0; i < allTimeEarnings.length; i++ ) {
-        // Get the name of every budget.
-        labels.push( allTimeEarnings[i][0] );
-        // Get the balance of
-        dataset.push( allTimeEarnings[i][1] );
-        // Update the checksum
-        checksum += allTimeEarnings[i][1];
-    }
-    // Now use the checksum to check if there exists at least one earning.
-    if ( checksum > 0 ) {
-        // Create the chart. The colors are declared as a constant in controller.js.
-        createChart( earningChart, labels, dataset, colors, colors, readPreference( "chartType" ) );
-    }
-    // Otherwise display a message that there is no data yet.
-    else {
-        $( "#earningChartDiv" ).html( "<i>" + getAllTimeEarningsMissingDataMessage() + "</i>" );
-    }
-}
-
-/**
- * This function updates the view when changes are made.
+ * This function updates the view anytime changes are made.
  */
 function updateView() {
     // Display current balances.
     displayBalances();
     // Display a table of recent spendings.
-    displayRecentSpendings();
+    displayRecentTransactions( "spending" );
     // Display all time spendings.
-    displaySpendingChart();
+    displayChart( "spending" );
     // Display a table of recent earnings.
-    displayRecentEarnings();
+    displayRecentTransactions( "earning" );
     // Display all time earnings.
-    displayEarningChart();
+    displayChart( "earning" );
 }

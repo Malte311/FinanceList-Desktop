@@ -1,3 +1,7 @@
+/**************************************************************************************************
+ * This file is responsible for the view on the settings page.
+**************************************************************************************************/
+
 /**
  * This function displays the correct chart type. We need to switch case here, since
  * the names are different in various languages.

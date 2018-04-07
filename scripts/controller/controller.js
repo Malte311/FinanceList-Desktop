@@ -1,5 +1,10 @@
+/**************************************************************************************************
+ * This file contains controlling functions which need to be accessed from multiple pages.
+**************************************************************************************************/
+
+// Module to create charts.
 const Chart = require( 'chart.js' );
-// Electron is needed for further modules.
+// Needed for further modules.
 const { remote } = require( 'electron' );
 // Module for dialogues (needed when setting the path or to display error messages).
 const { dialog } = require( 'electron' ).remote;
@@ -23,6 +28,11 @@ function setLanguage( language ) {
             $( "[lang=en]" ).hide();
             $( "[lang=de]" ).show();
             break;
+        // Default: English
+        default:
+            $( "[lang=de]" ).hide();
+            $( "[lang=en]" ).show();
+            break;
     }
     // Save the new language.
     storePreference( "language", language );
@@ -40,13 +50,14 @@ function getLanguage() {
             return "en";
         case "de":
             return "de";
+        // We want English to be our default language.
         default:
             return "en";
     }
 }
 
 /**
- * This function return the currency sign.
+ * This function returns the currency sign.
  * @return {String} An HTML representation of the currency sign.
  */
 function getCurrencySign() {
@@ -65,12 +76,12 @@ function getCurrencySign() {
 }
 
 /**
- * Creates a pie chart to visualize the input data.
- * @param {Object} canvas The canvas which contains the diagram.
+ * Creates a chart to visualize the input data.
+ * @param {Object} canvas The canvas which contains the chart.
  * @param {String[]} categories The labels for the data.
- * @param {number[]} dataset The data that will be visualized.
- * @param {Object[]} bgcolors Backgroundcolors in the diagram.
- * @param {Object[]} bdcolors Bordercolors in the diagram.
+ * @param {float[]} dataset The data that will be visualized.
+ * @param {String[]} bgcolors Backgroundcolors in the diagram.
+ * @param {String[]} bdcolors Bordercolors in the diagram.
  * @param {String} charttype The type of the chart.
  */
 function createChart( canvas, categories, dataset, bgcolors, bdcolors, charttype ) {
@@ -95,7 +106,7 @@ function createChart( canvas, categories, dataset, bgcolors, bdcolors, charttype
 /**
  * This function saves new spending entries in .json files.
  * @param {String} spending The name of the spending.
- * @param {double} sum The cost of the aquired thing.
+ * @param {float} sum The cost of the aquired thing.
  * @param {String} budget The budget from which the sum should be subtracted.
  * @param {String} category The category of the spending.
  * @param {String} date The date for the transaction.
@@ -111,9 +122,11 @@ function addSpending( spending, sum, budget, category, date ) {
     // Search for the correct budget.
     for ( var i = 0; i < allTimeSpendings.length; i++ ) {
         // Found it? Then update the value.
+        // Update all time spendings.
         if ( allTimeSpendings[i][0] === budget ) {
             allTimeSpendings[i][1] += sum;
         }
+        // Update the balance of the budget.
         if ( budgets[i][0] === budget ) {
             budgets[i][1] -= sum;
         }
@@ -126,7 +139,7 @@ function addSpending( spending, sum, budget, category, date ) {
 /**
  * This function saves new earnings entries in .json files.
  * @param {String} earning The name of the earning.
- * @param {double} sum The amount of the earning.
+ * @param {float} sum The amount of the earning.
  * @param {String} budget The budget to which the sum should be added.
  * @param {String} category The category of the earning.
  * @param {String} date The date for the transaction.
@@ -142,7 +155,8 @@ function addEarning( earning, sum, budget, category, date, allocationOn ) {
         // We want to keep track of a rest, because not every sum can be split perfectly.
         var rest = sum;
         for ( var i = 0; i < budgets.length; i++ ) {
-            // No need to calculate anything in case allocation is zero percent.
+            // No need to calculate anything in case allocation is zero percent. This is why
+            // We make sure here, that allocation is bigger than zero.
             if ( allocation[i][1] > 0 ) {
                 // Split the sum: allocation[i][1]/100 is the percentage value, the other stuff is for rounding.
                 var newSum = Math.round( (sum*allocation[i][1]/100) * 1e2) / 1e2;
@@ -183,9 +197,11 @@ function addEarning( earning, sum, budget, category, date, allocationOn ) {
         // Search for the correct budget.
         for ( var i = 0; i < allTimeEarnings.length; i++ ) {
             // Found it? Then update the value.
+            // Update all time earnings.
             if ( allTimeEarnings[i][0] === budget ) {
                 allTimeEarnings[i][1] += sum;
             }
+            // Update the current balance of the budget.
             if ( budgets[i][0] === budget ) {
                 budgets[i][1] += sum;
             }

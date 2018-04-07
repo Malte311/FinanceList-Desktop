@@ -1,3 +1,7 @@
+/**************************************************************************************************
+ * This file is responsible for the view on the balances page.
+**************************************************************************************************/
+
 /**
  * This function creates dialogues for adding, renaming and deleting budgets.
  * @param {String} title The title of the dialog.

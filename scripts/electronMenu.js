@@ -1,8 +1,13 @@
+/**************************************************************************************************
+ * This file creates our application menu in the correct language.
+**************************************************************************************************/
+
 // We use this to find out, which language is selected.
 const JSONhandler = require( './JSONhandler.js' );
 // Systemconfiguration file (e.g. for devMode).
 const config = require( './config.js' );
 
+// This array will contain the menu at the end (we will push all the information to it).
 var menuTemplate = [];
 
 // Set all labels in dependency of the currently selected language.
@@ -20,6 +25,7 @@ switch ( currentLanguage ) {
         break;
 }
 
+// Now, add everything to our template.
 menuTemplate.push({
     label: editLabels[0],
     submenu: [
@@ -66,7 +72,7 @@ menuTemplate.push({
     ]
 });
 
-// devtools
+// devtools?
 if ( config.devMode ) {
     menuTemplate.push({
         label: 'Developer',
@@ -78,5 +84,5 @@ if ( config.devMode ) {
     });
 }
 
-// Export the module.
+// Export the module, so we can use it in our main.js file to create an application menu.
 module.exports = menuTemplate;

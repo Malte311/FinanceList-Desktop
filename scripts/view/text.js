@@ -1,6 +1,11 @@
+/**************************************************************************************************
+ * This file contains only getter for all sorts of text. Since the application is multilingual,
+ * we need to find out which language is selected before we set any text.
+**************************************************************************************************/
+
 /**
  * This function returns text for the "Confirm" button in the correct language.
- * @return {String} The text for the "Confirm" button in a dialog.
+ * @return {String} The text for the "Confirm" button in every dialog.
  */
 function getConfirmButtonText() {
     switch ( getLanguage() ) {
@@ -14,7 +19,7 @@ function getConfirmButtonText() {
 
 /**
  * This function returns text for the "Cancel" button in the correct language.
- * @return {String} The text for the "Cancel" button in a dialog.
+ * @return {String} The text for the "Cancel" button in every dialog.
  */
 function getCancelButtonText() {
     switch ( getLanguage() ) {
@@ -22,84 +27,6 @@ function getCancelButtonText() {
             return "Cancel";
         case "de":
             return "Abbrechen";
-    }
-}
-
-/**
- * This function returns text for the recent spendings section in case there are no recent spendings.
- * @return {String} The text for the recent spendings section in case there are no recent spendings.
- */
-function getRecentSpendingsMissingDataMessage() {
-    switch ( getLanguage() ) {
-        case "en":
-            return "There are no recent spendings yet!";
-        case "de":
-            return "Es gibt bisher keine Ausgaben!";
-    }
-}
-
-/**
- * This function returns text for the recent earnings section in case there are no recent earnings.
- * @return {String} The text for the recent earnings section in case there are no recent earnings.
- */
-function getRecentEarningsMissingDataMessage() {
-    switch ( getLanguage() ) {
-        case "en":
-            return "There are no recent earnings yet!";
-        case "de":
-            return "Es gibt bisher keine Einnahmen!";
-    }
-}
-
-/**
- * This function returns text for the all time spendings section in case there are no spendings.
- * @return {String} The text for all time spendings section in case there are no spendings.
- */
-function getAllTimeSpendingsMissingDataMessage() {
-    switch ( getLanguage() ) {
-        case "en":
-            return "There are no spendings yet!";
-        case "de":
-            return "Es gibt bisher keine Ausgaben!";
-    }
-}
-
-/**
- * This function returns text for the all time earnings section in case there are no earnings.
- * @return {String} The text for all time earnings section in case there are no earnings.
- */
-function getAllTimeEarningsMissingDataMessage() {
-    switch ( getLanguage() ) {
-        case "en":
-            return "There are no earnings yet!";
-        case "de":
-            return "Es gibt bisher keine Einnahmen!";
-    }
-}
-
-/**
- * This function returns text for recent spendings heading in the correct language.
- * @return {String} The heading for the recent spendings section.
- */
-function getRecentSpendingsHeading() {
-    switch ( getLanguage() ) {
-        case "en":
-            return "Recent spendings";
-        case "de":
-            return "K&uuml;rzliche Ausgaben";
-    }
-}
-
-/**
- * This function returns text for recent earnings heading in the correct language.
- * @return {String} The heading for the recent earnings section.
- */
-function getRecentEarningsHeading() {
-    switch ( getLanguage() ) {
-        case "en":
-            return "Recent earnings";
-        case "de":
-            return "K&uuml;rzliche Einnahmen";
     }
 }
 
@@ -163,9 +90,9 @@ function getTransactionDialogTitle() {
 function getTransactionDialogTextElements() {
     switch ( getLanguage() ) {
         case "en":
-            return ["Here you can add new earnings or new spendings.", "Earning", "Spending", "Amount", "Budget", "Automate", "Name", "Choose budget", "Allocate automatically", "Category"];
+            return ["Here you can add new earnings or new spendings.", "Earning", "Spending", "Amount", "Budget", "Automate", "Name", "Choose budget", "Allocate automatically", "Category", "(optionally)"];
         case "de":
-            return ["Hier k&ouml;nnen Sie neue Einnahmen oder Ausgaben hinzuf&uuml;gen.", "Einnahme", "Ausgabe", "Betrag", "Konto", "Automatisieren", "Name", "Konto w&auml;hlen", "Automatisch verteilen", "Kategorie"];
+            return ["Hier k&ouml;nnen Sie neue Einnahmen oder Ausgaben hinzuf&uuml;gen.", "Einnahme", "Ausgabe", "Betrag", "Konto", "Automatisieren", "Name", "Konto w&auml;hlen", "Automatisch verteilen", "Kategorie", "(optional)"];
     }
 }
 

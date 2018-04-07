@@ -1,3 +1,7 @@
+/**************************************************************************************************
+ * This file controls all actions on the balances page.
+**************************************************************************************************/
+
 /**
  * This function initializes the page when its loaded. This means it sets the
  * language and the content.
@@ -43,7 +47,8 @@ function addTransaction() {
                "<div><div><b>" + textElements[6] + "</b><br><input type=\"text\" id=\"nameInput\"></div>" +
                "<div><b>" + textElements[3] + "</b><br><input style=\"width=50px;\" type=\"text\" id=\"sumInput\"></div></div><br>" +
                // Input for category.
-               "<div><b>" + textElements[9] + "</b><br><input type=\"text\" id=\"categoryInput\"></div><br>" +
+               "<div><b>" + textElements[9] + "</b>" + " " + textElements[10] +
+               "<br><input type=\"text\" id=\"categoryInput\"></div><br>" +
                // Choose between manual and automated allocation. Hidden until "earning" is selected.
                "<div id=\"dynamicDiv1\" style=\"display:none;\"><hr>" +
                "<form class=\"w3-center\"><input id=\"manual\" onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"allocation\">" + textElements[7] +

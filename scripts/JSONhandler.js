@@ -1,3 +1,8 @@
+/**************************************************************************************************
+ * This file is for handling the storage (.json files). It does everything related to files and
+ * directories.
+**************************************************************************************************/
+
 // Node FileSystem to read and write in .json files.
 const fs = require( 'fs' );
 // This is only used to get the DefaultDataPath (some sort of Temp directory).
@@ -289,6 +294,8 @@ function moveFiles( from, to ) {
             // Display the error and stop trying to move files (since the destination
             // will be the same and therefore every file would produce an error).
             catch ( err ) {
+                // It would be nicer if we could move files cross device but I did not figure
+                // out how this can be done without getting permission errors.
                 dialog.showErrorBox( "Error", "Cross-device link not permitted." );
                 break;
             }
