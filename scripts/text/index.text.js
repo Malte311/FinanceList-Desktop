@@ -3,80 +3,50 @@
 **************************************************************************************************/
 
 /**
- * This function returns text for the recent spendings section in case there are no recent spendings.
- * @return {String} The text for the recent spendings section in case there are no recent spendings.
+ * This function returns text for the recent earnings/spendings section in case there are no recent earnings/spendings.
+ * @param {String} type The type of the transaction (earning/spending).
+ * @return {String} The text for the recent earnings/spendings section in case there are no recent earnings/spendings.
  */
-function getRecentSpendingsMissingDataMessage() {
+function getRecentTransactionsMissingDataMessage( type ) {
     switch ( getLanguage() ) {
         case "en":
-            return "There are no recent spendings yet!";
+            return (type === "spending" ? "There are no recent spendings yet!" : "There are no recent earnings yet!");
         case "de":
-            return "Es gibt bisher keine Ausgaben!";
+            return (type === "spending" ? "Es gibt bisher keine Ausgaben!" : "Es gibt bisher keine Einnahmen!");
+        default:
+            return (type === "spending" ? "There are no recent spendings yet!" : "There are no recent earnings yet!");
     }
 }
 
 /**
- * This function returns text for the recent earnings section in case there are no recent earnings.
- * @return {String} The text for the recent earnings section in case there are no recent earnings.
+ * This function returns text for the all time earnings/spendings section in case there are no earnings/spendings.
+ * @param {String} type The type of the transaction (earning/spending).
+ * @return {String} The text for all time earnings/spendings section in case there are no earnings/spendings.
  */
-function getRecentEarningsMissingDataMessage() {
+function getAllTimeTransactionsMissingDataMessage( type ) {
     switch ( getLanguage() ) {
         case "en":
-            return "There are no recent earnings yet!";
+            return (type === "spending" ? "There are no spendings yet!" : "There are no earnings yet!");
         case "de":
-            return "Es gibt bisher keine Einnahmen!";
+            return (type === "spending" ? "Es gibt bisher keine Ausgaben!" : "Es gibt bisher keine Einnahmen!");
+        default:
+            return (type === "spending" ? "There are no spendings yet!" : "There are no earnings yet!");
     }
 }
 
 /**
- * This function returns text for the all time spendings section in case there are no spendings.
- * @return {String} The text for all time spendings section in case there are no spendings.
+ * This function returns text for recent earnings/spendings heading in the correct language.
+ * @param {String} type The type of the transaction (earning/spending).
+ * @return {String} The heading for the recent earnings/spendings section.
  */
-function getAllTimeSpendingsMissingDataMessage() {
+function getRecentTransactionsHeading( type ) {
     switch ( getLanguage() ) {
         case "en":
-            return "There are no spendings yet!";
+            return (type === "spending" ? "Recent spendings" : "Recent earnings");
         case "de":
-            return "Es gibt bisher keine Ausgaben!";
-    }
-}
-
-/**
- * This function returns text for the all time earnings section in case there are no earnings.
- * @return {String} The text for all time earnings section in case there are no earnings.
- */
-function getAllTimeEarningsMissingDataMessage() {
-    switch ( getLanguage() ) {
-        case "en":
-            return "There are no earnings yet!";
-        case "de":
-            return "Es gibt bisher keine Einnahmen!";
-    }
-}
-
-/**
- * This function returns text for recent spendings heading in the correct language.
- * @return {String} The heading for the recent spendings section.
- */
-function getRecentSpendingsHeading() {
-    switch ( getLanguage() ) {
-        case "en":
-            return "Recent spendings";
-        case "de":
-            return "K&uuml;rzliche Ausgaben";
-    }
-}
-
-/**
- * This function returns text for recent earnings heading in the correct language.
- * @return {String} The heading for the recent earnings section.
- */
-function getRecentEarningsHeading() {
-    switch ( getLanguage() ) {
-        case "en":
-            return "Recent earnings";
-        case "de":
-            return "K&uuml;rzliche Einnahmen";
+            return (type === "spending" ? "K&uuml;rzliche Ausgaben" : "K&uuml;rzliche Einnahmen");
+        default:
+            return (type === "spending" ? "Recent spendings" : "Recent earnings");
     }
 }
 

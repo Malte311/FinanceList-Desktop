@@ -96,17 +96,12 @@ function displayRecentTransactions( type ) {
             // Display only limit many items (defined in index.controller.js).
             if ( data.length - limit === i ) break;
         }
-        // Earning?
-        if ( type === "earning" ) $( "#recentEarnings" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentEarningsHeading() + " </h3>" + recentTransactionsTable + "</table>" );
-        // Spending?
-        else $( "#recentSpendings" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentSpendingsHeading() + " </h3>" + recentTransactionsTable + "</table>" );
+        // Display the table with recent transactions.
+        $( "#" + type + "Recent" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentTransactionsHeading( type ) + " </h3>" + recentTransactionsTable + "</table>" );
     }
     // Display a message that no data exists yet.
     else {
-        // Earning?
-        if ( type === "earning" ) $( "#recentEarnings" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentEarningsHeading() + " </h3><i>" + getRecentEarningsMissingDataMessage() + "</i>" );
-        // Spending?
-        else $( "#recentSpendings" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentSpendingsHeading() + " </h3><i>" + getRecentSpendingsMissingDataMessage() + "</i>" );
+        $( "#" + type + "Recent" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentTransactionsHeading( type ) + " </h3><i>" + getRecentTransactionsMissingDataMessage( type ) + "</i>" );
     }
 }
 
@@ -115,26 +110,12 @@ function displayRecentTransactions( type ) {
  * @param {String} type The type of transactions we want to visualize (earning/spending)
  */
 function displayChart( type ) {
-    // Set the variables in dependency of the transaction type.
-    var transactionChart, allTimeTransactions;
-    // Earning?
-    if ( type === "earning" ) {
-        // Reset the canvas in case no data existed before (then the HTML content was overwritten).
-        $( "#earningChartDiv" ).html( "<canvas id=\"Earnings\" width=\"8000\" height=\"2500\"></canvas>" );
-        // Get a reference to the canvas in which the chart should be.
-        transactionChart = $( "#Earnings" )[0];
-        // Get all budgets.
-        allTimeTransactions = readMainStorage( "allTimeEarnings" );
-    }
-    // Spending?
-    else {
-        // Reset the canvas in case no data existed before (then the HTML content was overwritten).
-        $( "#spendingChartDiv" ).html( "<canvas id=\"Spendings\" width=\"8000\" height=\"2500\"></canvas>" );
-        // Get a reference to the canvas in which the chart should be.
-        transactionChart = $( "#Spendings" )[0];
-        // Get all budgets.
-        allTimeTransactions = readMainStorage( "allTimeSpendings" );
-    }
+    // Reset the canvas in case no data existed before (then the HTML content was overwritten).
+    $( "#" + type + "ChartDiv" ).html( "<canvas id=\"" + type + "\" width=\"8000\" height=\"2500\"></canvas>" );
+    // Get a reference to the canvas in which the chart should be.
+    var transactionChart = $( "#" + type )[0];
+    // Get all budgets.
+    var allTimeTransactions = (type === "earning" ? readMainStorage( "allTimeEarnings" ) : readMainStorage( "allTimeSpendings" ));
     // Declare some variables to store the values in them.
     var labels = [], dataset = [];
     // We will declare a variable to make sure there is at least one earning/spending.
@@ -154,15 +135,11 @@ function displayChart( type ) {
         // Create the chart. The colors are declared as a constant in controller.js.
         createChart( transactionChart, labels, dataset, colors, colors, readPreference( "chartType" ) );
         // Display the sum of all time earnings/spendings.
-        if ( type === "earning" ) $( "#earningChartDiv" ).append( "<br><center>" + getAllTimeTransactionsText( "earning" ) + ": " + checksum + getCurrencySign() + "</center>" );
-        else $( "#spendingChartDiv" ).append( "<br><center>" + getAllTimeTransactionsText( "spending" ) + ": " + checksum + getCurrencySign() + "</center>" );
+        $( "#" + type + "ChartDiv" ).append( "<br><center>" + getAllTimeTransactionsText( type ) + ": " + checksum + getCurrencySign() + "</center>" );
     }
     // Otherwise display a message that there is no data yet.
     else {
-        // Earning?
-        if ( type === "earning" ) $( "#earningChartDiv" ).html( "<i>" + getAllTimeEarningsMissingDataMessage() + "</i>" );
-        // Spending?
-        else $( "#spendingChartDiv" ).html( "<i>" + getAllTimeSpendingsMissingDataMessage() + "</i>" );
+        $( "#" + type + "ChartDiv" ).html( "<i>" + getAllTimeTransactionsMissingDataMessage( type ) + "</i>" );
     }
 }
 
