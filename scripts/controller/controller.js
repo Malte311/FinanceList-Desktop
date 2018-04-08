@@ -211,3 +211,17 @@ function addEarning( earning, sum, budget, category, date, allocationOn ) {
         writeMainStorage( "allTimeEarnings", allTimeEarnings );
     }
 }
+
+/**
+ * This function shuffles an array.
+ * @param {array} array The array which gets shuffled.
+ */
+function shuffleArray( array ) {
+    var randomIndex, tmp;
+    for ( var i = array.length - 1; i > 0; i-- ) {
+        randomIndex = Math.floor( Math.random() * (i + 1) );
+        tmp = array[i];
+        array[i] = array[randomIndex];
+        array[randomIndex] = tmp;
+    }
+}

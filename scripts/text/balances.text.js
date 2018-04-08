@@ -214,3 +214,69 @@ function getSetAllocationDialogTextElements() {
             return ["Hier k&ouml;nnen Sie ausw&auml;hlen, wie Ihre Einnahmen verteilt werden sollen.", "Automatische Verteilung aktivieren", "Verteilt alle Einnahmen automatisch auf mehrere Konten.", "Konto", "Anteil"];
     }
 }
+
+/**
+ * This function returns the text for the display type (table/graph).
+ * @return {String[]} The text for the display type (table/graph).
+ */
+function getDisplayTypeTextElements() {
+    switch ( getLanguage() ) {
+        case "en":
+            return ["Graph", "Table"];
+        case "de":
+            return ["Graph", "Tabelle"];
+    }
+}
+
+/**
+ * This function returns the headings for the detail overview table.
+ * @return {String[]} The headings for the detail overview table.
+ */
+function getMainContentTableHeadings() {
+    switch ( getLanguage() ) {
+        case "en":
+            return ["Date", "Name", "Amount", "Category", "Budget", "Type"];
+        case "de":
+            return ["Datum", "Name", "Summe", "Kategorie", "Konto", "Art"];
+    }
+}
+
+/**
+ * This function returns the text for the filters in the main content.
+ * @return {String[]} The text for the filters in the main content.
+ */
+function getMainContentFilterText() {
+    switch ( getLanguage() ) {
+        case "en":
+            return ["All transactions", "All budgets", "All types", "Earnings", "Spendings", "All time", "All amounts", "All categories"];
+        case "de":
+            return ["Alle Transaktionen", "Alle Konten", "Alle Arten", "Einnahmen", "Ausgaben", "Gesamter Zeitraum", "Alle Betr&auml;ge", "Alle Kategorien"];
+    }
+}
+
+/**
+ * This function returns the text for the start button in the main content.
+ * @return {String[]} The text for the start button in the main content.
+ */
+function getMainContentStartButtonText() {
+    switch ( getLanguage() ) {
+        case "en":
+            return "Update";
+        case "de":
+            return "Aktualisieren";
+    }
+}
+
+/**
+ * This function returns the type in the correct language (it "translates" the type).
+ * @param {String} type The type (in English).
+ * @return {String} The type in the currently selected language.
+ */
+function getType( type ) {
+    switch ( getLanguage() ) {
+        case "en":
+            return type;
+        case "de":
+            return (type === "earning" ? "Einnahme" : "Ausgabe" );
+    }
+}

@@ -9,6 +9,9 @@
 function loadPage() {
     // We will always set the language first.
     setLanguage( readPreference( "language" ) );
+    // Every time the page is loaded, we shuffle our colors, so the chart will
+    // change its colors every time the page is reloaded.
+    shuffleArray( colors );
     // Display a list of currently available budgets and display every budget in detail.
     updateView();
 }
@@ -51,7 +54,7 @@ function addTransaction() {
                "<br><input type=\"text\" id=\"categoryInput\">" + "  " +
                // Input for the date.
                textElements[7] + ": " +
-               "<input id=\"datepicker\" class=\"w3-round-large w3-light-gray\" href=\"#\" type=\"button\" onclick=\"showDatepicker();\" value=\"" + getCurrentDate() + "\"></div>" +
+               "<input id=\"datepicker\" class=\"w3-round-large w3-light-gray\" type=\"button\" onclick=\"showDatepicker();\" value=\"" + getCurrentDate() + "\"></div>" +
                // Choose between manual and automated allocation. Hidden until "earning" is selected.
                "<div id=\"dynamicDiv1\" style=\"display:none;\"><hr>" +
                "<form class=\"w3-center\"><input id=\"manual\" onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"allocation\">" + textElements[8] +
