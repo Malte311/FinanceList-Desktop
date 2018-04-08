@@ -45,8 +45,14 @@ function executeRecurringTransactions() {
                     newMonth = newMonth - 12;
                     newYear++;
                 }
-                // Save the new date.
-                var date = recurringTransactions[i].date.split( "." )[0] + "." + (newMonth < 10 ? "0" + newMonth.toString() : newMonth.toString()) + "." + newYear.toString();
+                // Save the new date. We want to use a date object to make sure that the date exists. Otherwise the
+                // transaction may occur on days which don't exist, e.g. when we have a transaction on the 31.01. and a monthly interval,
+                // then the next transaction would be on the 31.02, which, of course, does not exist.
+                var dateObj = new Date( newYear.toString() + "-" + (newMonth < 10 ? "0" + newMonth.toString() : newMonth.toString()) + "-" + recurringTransactions[i].date.split( "." )[0] );
+                // Now we can use the date object to make sure we get a date which exists.
+                var date = (dateObj.getDate() < 10 ? "0" + dateObj.getDate().toString() : dateObj.getDate().toString()) + "." + 
+                           ((dateObj.getMonth() + 1) < 10 ? "0" + (dateObj.getMonth() + 1).toString() : (dateObj.getMonth() + 1).toString()) + "." +
+                           dateObj.getFullYear().toString();
                 recurringTransactions[i].date = date;
                 // When we are done with updating, we write the new data back to mainStorage.json (only the date changed).
                 writeMainStorage( "recurring", recurringTransactions );

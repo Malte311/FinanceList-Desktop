@@ -138,9 +138,12 @@ function displayRecurringTransactions() {
  */
 function displayContent() {
     // Reset previous content.
-    $( "#mainContent" ).html( "" );
-
-    //TODO: select a day for each month in a dropdown menu, display currently recurring transaction in a table like the budget overview table
+    $( "#mainContent" ).html( "<div>" +
+                              "<select class=\"w3-select\" id=\"budgetSelect\">" + "<option>A</option>"  + "</select>" +
+                              "<select class=\"w3-select\" id=\"2\">" + "<option>B</option>"  + "</select>" +
+                              "<select class=\"w3-select\" id=\"3\">" + "<option>C</option>"  + "</select>" +
+                              "<button class=\"w3-button w3-white w3-round-xlarge\" onclick=\"\"> Start </button>" +
+                              "</div>" );
 }
 
 /**
