@@ -198,7 +198,18 @@ function getData( file, quest ) {
  * @param {JSON} data The data we want to write in form of a JSON object.
  */
 function storeData( data ) {
-    var dataPath = readPreference( "path" ) + path.sep + getCurrentFileName();
+    // Find out which file we want to use.
+    var dataPath;
+    // Do we want to use the current file?
+    if ( data.date === getCurrentDate() ) {
+        dataPath = readPreference( "path" ) + path.sep + getCurrentFileName();
+    }
+    // We want to use another file.
+    else {
+        dataPath = readPreference( "path" ) + path.sep +
+        data.date.split( "." )[1] + "." +
+        data.date.split( "." )[2] + ".json";
+    }
     // File exists: Write the data in it.
     if ( fs.existsSync( dataPath ) ) {
         // Get existing data, add the new data and then write it.
@@ -206,6 +217,8 @@ function storeData( data ) {
         // of JSON objects.
         var content = JSON.parse( fs.readFileSync( dataPath ) );
         content.push( data );
+        // Sort the data (oldest data first).
+        content = sortData( content );
         fs.writeFileSync( dataPath, JSON.stringify( content ) );
     }
     // File does not exist: Create it and write the data in it.
@@ -230,6 +243,22 @@ function replaceData( file, data ) {
     else {
         fs.appendFileSync( dataPath, JSON.stringify( data ) );
     }
+}
+
+/**
+ * This function sorts data by date (oldest first).
+ * @param {JSON[]} data The data we want to sort.
+ * @return {JSON[]} The sorted data.
+ */
+function sortData( data ) {
+    return data.sort( function( obj1, obj2 ) {
+        // We want to reverse the dates in order to sort them correctly.
+        var obj1Date = obj1.date.split( "." )[2] + "." + obj1.date.split( "." )[1] + "." + obj1.date.split( "." )[0];
+        var obj2Date = obj2.date.split( "." )[2] + "." + obj2.date.split( "." )[1] + "." + obj2.date.split( "." )[0];
+        if ( obj1Date < obj2Date ) return -1;
+        else if ( obj2Date < obj1Date ) return 1;
+        else return 0;
+    });
 }
 
 /**

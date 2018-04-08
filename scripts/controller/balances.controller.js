@@ -326,8 +326,15 @@ function deleteBudget( name ) {
             var quest = { connector : "or", params : paramList };
             // Now, get the complete data.
             var data = getData( allFiles[i] + ".json", quest );
-            // Now replace the data with the new data.
-            replaceData( allFiles[i] + ".json", data );
+            // Make sure that there is data left.
+            if ( data.length > 0 ) {
+                // Now replace the data with the new data.
+                replaceData( allFiles[i] + ".json", data );
+            }
+            // No data left? Delete the file.
+            else {
+                fs.unlinkSync( readPreference( "path" ) + path.sep + allFiles[i] + ".json" );
+            }
         }
     });
 }
