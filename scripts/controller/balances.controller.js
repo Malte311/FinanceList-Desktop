@@ -44,20 +44,20 @@ function addTransaction() {
     var text = textElements[0] + "<form class=\"w3-center\"><input id=\"earning\" onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"type\">" + textElements[1] +
                "<input id=\"spending\" onclick=\"updateTransactionDialog();\" style=\"margin-left:15px;\" type=\"radio\" name=\"type\" checked>" + textElements[2] + "</form><hr>" +
                // Input for name and amount.
-               "<div><div><b>" + textElements[6] + "</b><br><input type=\"text\" id=\"nameInput\"></div>" +
-               "<div><b>" + textElements[3] + "</b><br><input style=\"width=50px;\" type=\"text\" id=\"sumInput\"></div></div><br>" +
+               "<div><div><b>" + textElements[3] + "</b><br><input type=\"text\" id=\"nameInput\"></div>" +
+               "<div><b>" + textElements[4] + "</b><br><input style=\"width=50px;\" type=\"text\" id=\"sumInput\"></div></div><br>" +
                // Input for category.
-               "<div><b>" + textElements[9] + "</b>" + " " + textElements[10] +
+               "<div><b>" + textElements[5] + "</b>" + " " + textElements[6] +
                "<br><input type=\"text\" id=\"categoryInput\"></div><br>" +
                // Choose between manual and automated allocation. Hidden until "earning" is selected.
                "<div id=\"dynamicDiv1\" style=\"display:none;\"><hr>" +
                "<form class=\"w3-center\"><input id=\"manual\" onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"allocation\">" + textElements[7] +
                "<input id=\"autoAllocation\" onclick=\"updateTransactionDialog();\" style=\"margin-left:15px;\" type=\"radio\" name=\"allocation\" checked>" + textElements[8] +
                // Budget select will be displayed at the beginning (because spending is selected as a default).
-               "</form></div><div id=\"dynamicDiv2\"><hr><b>" + textElements[4] + "</b><br>" + "<select id=\"selectInput\">" + options + "</select></div><hr>" +
+               "</form></div><div id=\"dynamicDiv2\"><hr><b>" + textElements[9] + "</b><br>" + "<select id=\"selectInput\">" + options + "</select></div><hr>" +
                // Option to automate this transaction.
                "<div id=\"budgetSelect\"></div>" +
-               "<input type=\"checkbox\" id=\"checkboxInput\" onclick=\"updateTransactionDialog();\">" + textElements[5] +
+               "<input type=\"checkbox\" id=\"checkboxInput\" onclick=\"updateTransactionDialog();\">" + textElements[10] +
                // Another dynamic div, which changes when the checkbox is activated/deactivated.
                "<br><div id=\"dynamicDiv3\" style=\"display:none;\"><select id=\"intervalSelect\">" + intervalOptions + "</select></div>";
     // Now we are able to actually create a dialog.
@@ -70,7 +70,7 @@ function addTransaction() {
         sum = sum.replace( ",", "." );
         // Make sure that the input is ok.
         var inputOk = true;
-        // Make sure that the name is not empty. Category can be empty.
+        // Make sure that the name is not empty. Category can be empty. (sum will be checked below)
         if ( name.length < 1 ) inputOk = false;
         // Make sure that the sum contains no letters and that it contains at least one number.
         if ( /[a-z]/i.test( sum ) || !/\d/.test( sum ) ) inputOk = false;

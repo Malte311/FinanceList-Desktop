@@ -1,5 +1,6 @@
 /**************************************************************************************************
  * This file contains all the text elements for the overview page.
+ * Note: default cases are not needed because getLanguage() will always return a valid string.
 **************************************************************************************************/
 
 /**
@@ -13,8 +14,6 @@ function getRecentTransactionsMissingDataMessage( type ) {
             return (type === "spending" ? "There are no recent spendings yet!" : "There are no recent earnings yet!");
         case "de":
             return (type === "spending" ? "Es gibt bisher keine Ausgaben!" : "Es gibt bisher keine Einnahmen!");
-        default:
-            return (type === "spending" ? "There are no recent spendings yet!" : "There are no recent earnings yet!");
     }
 }
 
@@ -29,8 +28,6 @@ function getAllTimeTransactionsMissingDataMessage( type ) {
             return (type === "spending" ? "There are no spendings yet!" : "There are no earnings yet!");
         case "de":
             return (type === "spending" ? "Es gibt bisher keine Ausgaben!" : "Es gibt bisher keine Einnahmen!");
-        default:
-            return (type === "spending" ? "There are no spendings yet!" : "There are no earnings yet!");
     }
 }
 
@@ -45,8 +42,6 @@ function getRecentTransactionsHeading( type ) {
             return (type === "spending" ? "Recent spendings" : "Recent earnings");
         case "de":
             return (type === "spending" ? "K&uuml;rzliche Ausgaben" : "K&uuml;rzliche Einnahmen");
-        default:
-            return (type === "spending" ? "Recent spendings" : "Recent earnings");
     }
 }
 
@@ -61,7 +56,5 @@ function getAllTimeTransactionsText( type ) {
             return (type === "spending" ? "All time spendings" : "All time earnings");
         case "de":
             return (type === "spending" ? "Gesamtausgaben" : "Gesamteinnahmen");
-        default:
-            return (type === "spending" ? "All time spendings" : "All time earnings");
     }
 }

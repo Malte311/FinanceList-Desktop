@@ -55,9 +55,11 @@ function displayBudgets() {
     var currentBudgets = readMainStorage( "budgets" );
     // Iterate over all budgets to display them.
     for ( var i = 0; i < currentBudgets.length; i++ ) {
-        // Sometimes we want to add a single zero (2.5 => 2.50).
+        // Sometimes we want to add a single zero ($2.5 => $2.50).
         var balance = currentBudgets[i][1];
+        // Balance contains a comma?
         if ( currentBudgets[i][1].toString().indexOf( "." ) !== -1 ) {
+            // Only one decimal digit? Add a zero to the end.
             if ( currentBudgets[i][1].toString().split( "." )[1].length < 2 ) balance += "0";
         }
         // Display all budgets. The first one is a standard budget and can therefore not be deleted.

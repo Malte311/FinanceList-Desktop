@@ -1,6 +1,6 @@
 /**************************************************************************************************
- * This file contains only getter for all sorts of text. Since the application is multilingual,
- * we need to find out which language is selected before we set any text.
+ * This file contains all the text elements for the balances page.
+ * Note: default cases are not needed because getLanguage() will always return a valid string.
 **************************************************************************************************/
 
 /**
@@ -90,9 +90,9 @@ function getTransactionDialogTitle() {
 function getTransactionDialogTextElements() {
     switch ( getLanguage() ) {
         case "en":
-            return ["Here you can add new earnings or new spendings.", "Earning", "Spending", "Amount", "Budget", "Automate", "Name", "Choose budget", "Allocate automatically", "Category", "(optionally)"];
+            return ["Here you can add new earnings or new spendings.", "Earning", "Spending", "Name", "Amount", "Category", "(optionally)", "Choose budget", "Allocate automatically", "Budget", "Automate"];
         case "de":
-            return ["Hier k&ouml;nnen Sie neue Einnahmen oder Ausgaben hinzuf&uuml;gen.", "Einnahme", "Ausgabe", "Betrag", "Konto", "Automatisieren", "Name", "Konto w&auml;hlen", "Automatisch verteilen", "Kategorie", "(optional)"];
+            return ["Hier k&ouml;nnen Sie neue Einnahmen oder Ausgaben hinzuf&uuml;gen.", "Einnahme", "Ausgabe", "Name", "Betrag", "Kategorie", "(optional)", "Konto w&auml;hlen", "Automatisch verteilen", "Konto", "Automatisieren"];
     }
 }
 
