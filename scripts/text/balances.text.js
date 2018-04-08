@@ -90,9 +90,9 @@ function getTransactionDialogTitle() {
 function getTransactionDialogTextElements() {
     switch ( getLanguage() ) {
         case "en":
-            return ["Here you can add new earnings or new spendings.", "Earning", "Spending", "Name", "Amount", "Category", "(optionally)", "Choose budget", "Allocate automatically", "Budget", "Automate"];
+            return ["Here you can add new earnings or new spendings.", "Earning", "Spending", "Name", "Amount", "Category", "(optionally)", "Date", "Choose budget", "Allocate automatically", "Budget", "Automate"];
         case "de":
-            return ["Hier k&ouml;nnen Sie neue Einnahmen oder Ausgaben hinzuf&uuml;gen.", "Einnahme", "Ausgabe", "Name", "Betrag", "Kategorie", "(optional)", "Konto w&auml;hlen", "Automatisch verteilen", "Konto", "Automatisieren"];
+            return ["Hier k&ouml;nnen Sie neue Einnahmen oder Ausgaben hinzuf&uuml;gen.", "Einnahme", "Ausgabe", "Name", "Betrag", "Kategorie", "(optional)", "Datum", "Konto w&auml;hlen", "Automatisch verteilen", "Konto", "Automatisieren"];
     }
 }
 

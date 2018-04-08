@@ -48,16 +48,19 @@ function addTransaction() {
                "<div><b>" + textElements[4] + "</b><br><input style=\"width=50px;\" type=\"text\" id=\"sumInput\"></div></div><br>" +
                // Input for category.
                "<div><b>" + textElements[5] + "</b>" + " " + textElements[6] +
-               "<br><input type=\"text\" id=\"categoryInput\"></div><br>" +
+               "<br><input type=\"text\" id=\"categoryInput\">" + "  " +
+               // Input for the date.
+               textElements[7] + ": " +
+               "<input id=\"datepicker\" class=\"w3-round-large w3-light-gray\" href=\"#\" type=\"button\" onclick=\"showDatepicker();\" value=\"" + getCurrentDate() + "\"></div>" +
                // Choose between manual and automated allocation. Hidden until "earning" is selected.
                "<div id=\"dynamicDiv1\" style=\"display:none;\"><hr>" +
-               "<form class=\"w3-center\"><input id=\"manual\" onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"allocation\">" + textElements[7] +
-               "<input id=\"autoAllocation\" onclick=\"updateTransactionDialog();\" style=\"margin-left:15px;\" type=\"radio\" name=\"allocation\" checked>" + textElements[8] +
+               "<form class=\"w3-center\"><input id=\"manual\" onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"allocation\">" + textElements[8] +
+               "<input id=\"autoAllocation\" onclick=\"updateTransactionDialog();\" style=\"margin-left:15px;\" type=\"radio\" name=\"allocation\" checked>" + textElements[9] +
                // Budget select will be displayed at the beginning (because spending is selected as a default).
-               "</form></div><div id=\"dynamicDiv2\"><hr><b>" + textElements[9] + "</b><br>" + "<select id=\"selectInput\">" + options + "</select></div><hr>" +
+               "</form></div><div id=\"dynamicDiv2\"><hr><b>" + textElements[10] + "</b><br>" + "<select id=\"selectInput\">" + options + "</select></div><hr>" +
                // Option to automate this transaction.
                "<div id=\"budgetSelect\"></div>" +
-               "<input type=\"checkbox\" id=\"checkboxInput\" onclick=\"updateTransactionDialog();\">" + textElements[10] +
+               "<input type=\"checkbox\" id=\"checkboxInput\" onclick=\"updateTransactionDialog();\">" + textElements[11] +
                // Another dynamic div, which changes when the checkbox is activated/deactivated.
                "<br><div id=\"dynamicDiv3\" style=\"display:none;\"><select id=\"intervalSelect\">" + intervalOptions + "</select></div>";
     // Now we are able to actually create a dialog.
@@ -95,13 +98,23 @@ function addTransaction() {
         if ( inputOk ) {
             // Get the selected budget.
             var budget = $( "#selectInput option:selected" ).text();
+            // Get the selected date.
+            var selectedDate = $( "#datepicker" ).datepicker( "getDate" );
+            var date = getCurrentDate();
+            // Make sure, a date was selected.
+            if ( selectedDate !== null && selectedDate !== undefined ) {
+                date = (selectedDate.getDate() < 10 ? "0" + selectedDate.getDate().toString() : selectedDate.getDate().toString()) + "." +
+                       ((selectedDate.getMonth() + 1) < 10 ? "0" + (selectedDate.getMonth() + 1).toString() : (selectedDate.getMonth() + 1).toString()) + "." +
+                       selectedDate.getFullYear();
+            }
+            // Nothing selected? Use the current date (it is already selected above).
             // Find out which type (earning/spending) was selected and
             // execute the correct function.
             if ( $( "#earning" )[0].checked ) {
-                addEarning( name, parseFloat( sum ), budget, category, getCurrentDate(), $( "#autoAllocation" )[0].checked && readMainStorage( "allocationOn" ) );
+                addEarning( name, parseFloat( sum ), budget, category, date, $( "#autoAllocation" )[0].checked && readMainStorage( "allocationOn" ) );
             }
             else if ( $( "#spending" )[0].checked ) {
-                addSpending( name, parseFloat( sum ), budget, category, getCurrentDate() );
+                addSpending( name, parseFloat( sum ), budget, category, date );
             }
 
             // Automation activated?

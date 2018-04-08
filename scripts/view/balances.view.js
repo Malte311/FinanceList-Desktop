@@ -187,6 +187,16 @@ function updateTransactionDialog() {
 }
 
 /**
+ * This function displays the jQuery UI Datepicker.
+ */
+function showDatepicker() {
+    $( "#datepicker" ).datepicker({
+        dateFormat: "dd.mm.yy",
+    });
+    $( "#datepicker" ).datepicker("show");
+}
+
+/**
  * This function updates the view when changes are made.
  */
 function updateView() {
