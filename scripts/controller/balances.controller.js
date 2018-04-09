@@ -150,14 +150,14 @@ function addTransaction() {
                 var type = $( "#earning" )[0].checked ? "earning" : "spending";
                 addRecurringTransaction( name, parseFloat( sum ), budget, category, type, interval );
             }
+            // Close the dialog and update the view.
+            $( this ).dialog( "close" );
+            updateView();
         }
         // Wrong input: Show error message.
         else {
             dialog.showErrorBox( "Error", "Invalid input." );
         }
-        // Close the dialog and update the view.
-        $( this ).dialog( "close" );
-        updateView();
     });
 }
 
