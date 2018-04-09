@@ -14,9 +14,6 @@ const numberOfRecentEarnings = numberOfRecentSpendings;
 function loadPage() {
     // We will always set the language first.
     setLanguage( readPreference( "language" ) );
-    // Every time the page is loaded, we shuffle our colors, so the chart will  
-    // change its colors every time the page is reloaded.
-    shuffleArray( colors );
     // Display all the other content.
     updateView();
 }

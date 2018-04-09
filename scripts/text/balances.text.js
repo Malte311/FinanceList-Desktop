@@ -103,9 +103,9 @@ function getTransactionDialogTextElements() {
 function getIntervalOptionsTextElements() {
     switch ( getLanguage() ) {
         case "en":
-            return ["monthly", "bimonthly", "quarterly", "biannual", "annual"];
+            return ["weekly", "every 4 weeks", "monthly", "bimonthly", "quarterly", "biannual", "annual"];
         case "de":
-            return ["monatlich", "zweimonatlich", "viertelj&auml;hrlich", "halbj&auml;hrlich", "j&auml;hrlich"];
+            return ["w&ouml;chentlich", "alle 4 Wochen", "monatlich", "zweimonatlich", "viertelj&auml;hrlich", "halbj&auml;hrlich", "j&auml;hrlich"];
     }
 }
 

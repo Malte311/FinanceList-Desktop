@@ -9,9 +9,6 @@
 function loadPage() {
     // We will always set the language first.
     setLanguage( readPreference( "language" ) );
-    // Every time the page is loaded, we shuffle our colors, so the chart will
-    // change its colors every time the page is reloaded.
-    shuffleArray( colors );
     // Display a list of currently available budgets and display every budget in detail.
     updateView();
 }
@@ -33,8 +30,8 @@ function addTransaction() {
     // Set options for selecting an interval (when automation is avtivated).
     var intervalOptions = "", intervalOptionsTextElements = getIntervalOptionsTextElements();
     for ( var i = 0; i < intervalOptionsTextElements.length; i++ ) {
-        // Monthly? Set as default (keep in mind that "monthly" has to be index 0 all the time).
-        if ( i === 0 ) {
+        // Monthly? Set as default (keep in mind that "monthly" has to be index 2 all the time).
+        if ( i === 2 ) {
             intervalOptions += "<option selected=\"selected\">" + intervalOptionsTextElements[i] + "</option>";
         }
         // Not monthly? Not selected.
@@ -128,25 +125,40 @@ function addTransaction() {
                 // Select the correct interval.
                 var interval = 1;
                 switch ( $("#intervalSelect")[0].selectedIndex ) {
-                    // Index 0: monthly
+                    // Index 0: weekly interval
                     case 0:
-                        interval = 1;
+                        // One week (7 days) in seconds.
+                        interval = 604800;
                         break;
-                    // Index 1: bimonthly
+                    // Index 1: every 4 weeks interval
                     case 1:
-                        interval = 2;
+                        // Four weeks (28 days) in seconds.
+                        interval = 2419200;
                         break;
-                    // Index 2: quarterly
+                    // Index 2: monthly
                     case 2:
-                        interval = 3;
+                        // The half of bimonthly seconds.
+                        interval = 2628000;
                         break;
-                    // Index 3: biannual
+                    // Index 3: bimonthly
                     case 3:
-                        interval = 6;
+                        // One year seconds divided by 6.
+                        interval = 5256000;
                         break;
-                    // Index 4: annual
+                    // Index 4: quarterly
                     case 4:
-                        interval = 12;
+                        // The half of a half year seconds.
+                        interval = 7884000;
+                        break;
+                    // Index 5: biannual
+                    case 5:
+                        // The half of one year seconds.
+                        interval = 15768000;
+                        break;
+                    // Index 6: annual
+                    case 6:
+                        // One year (365 days) in seconds.
+                        interval = 31536000;
                         break;
                 }
                 var type = $( "#earning" )[0].checked ? "earning" : "spending";
@@ -298,6 +310,15 @@ function deleteBudget( name ) {
                 }
             }
         }
+        // Delete recurring transactions using this budget.
+        var recurringTransactions = readMainStorage( "recurring" );
+        // Search for transactions involving this budget.
+        for ( var i = 0; i < recurringTransactions.length; i++ ) {
+            // Found the budget? Delete it.
+            if ( recurringTransactions[i].budget === name ) {
+                recurringTransactions.splice( i, 1 );
+            }
+        }
         // Save the updated budgets in the mainStorage.json file.
         writeMainStorage( "budgets", updatedBudgets );
         // Again, we do this as well for allTimeEarnings and allTimeSpendings.
@@ -305,6 +326,8 @@ function deleteBudget( name ) {
         writeMainStorage( "allTimeSpendings", updatedAllTimeSpendings );
         // And for allocation as well.
         writeMainStorage( "allocation", newAllocation );
+        // Also, delete recurring transactions.
+        writeMainStorage( "recurring", recurringTransactions );
         // Update the view: Don't display the deleted budget anymore.
         updateView();
         // Close the dialog (since this function is only executed when the OK button is pressed)
@@ -374,11 +397,22 @@ function renameBudget( name ) {
             if ( allocation[i][0] === name ) newAllocation.push( [newName, allocation[i][1]] );
             else newAllocation.push( allocation[i] );
         }
+        // Rename recurring transactions using this budget.
+        var recurringTransactions = readMainStorage( "recurring" );
+        // Search for transactions involving this budget.
+        for ( var i = 0; i < recurringTransactions.length; i++ ) {
+            // Found the budget? Rename it.
+            if ( recurringTransactions[i].budget === name ) {
+                recurringTransactions[i].budget = newName;
+            }
+        }
         // Save the updated budgets in the mainStorage.json file.
         writeMainStorage( "budgets", updatedBudgets );
         // Again, we do this as well for allTimeEarnings and allTimeSpendings.
         writeMainStorage( "allTimeEarnings", updatedAllTimeEarnings );
         writeMainStorage( "allTimeSpendings", updatedAllTimeSpendings );
+        // Also, rename recurring transactions.
+        writeMainStorage( "recurring", recurringTransactions );
         // Same for allocation.
         writeMainStorage( "allocation", newAllocation );
         // Update the view: Display the new name.

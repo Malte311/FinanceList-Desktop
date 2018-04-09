@@ -31,7 +31,7 @@ function executeRecurringTransactions() {
                     addSpending( recurringTransactions[i].name, recurringTransactions[i].amount, recurringTransactions[i].budget, recurringTransactions[i].category, recurringTransactions[i].date );
                 }
                 // Update the recurring transaction entry.
-                recurringTransactions[i].date += interval;
+                recurringTransactions[i].date += recurringTransactions[i].interval;
                 // When we are done with updating, we write the new data back to mainStorage.json (only the date changed).
                 writeMainStorage( "recurring", recurringTransactions );
             }
