@@ -119,7 +119,7 @@ function displayRecurringTransactions() {
                        "<td>" + (recurringTransactions[i].allocationOn ? "&mdash;" : recurringTransactions[i].budget) + "</td>" +
                        // If a category exists, display it. Otherwise display "-".
                        "<td>" + (recurringTransactions[i].category.length > 0 ? recurringTransactions[i].category : "&mdash;") + "</td>" +
-                       "<td>" + recurringTransactions[i].date + "</td>" +
+                       "<td>" + dateToString( recurringTransactions[i].date ) + "</td>" +
                        "<td><span onclick=\"deleteRecurringTransaction('" + recurringTransactions[i].name + "')\" class=\"w3-button\"><i class=\"fas fa-times w3-text-red\"></i></span></td>" +
                        "</tr>";
         }
@@ -224,10 +224,15 @@ function displayContent( displayType ) {
             var transactions = getData( allFiles[i] + ".json", quest );
             // Now, save all the data from this file.
             for ( var j = 0; j < transactions.length; j++ ) {
+                // Display the amount correctly.
+                var amount = transactions[j].amount;
+                if ( amount.toString().indexOf( "." ) !== -1 ) {
+                    if ( amount.toString().split( "." )[1].length < 2 ) amount += "0";
+                }
                 // Add the data to our table.
-                tableContentHTML += "<tr class=\"w3-hover-light-blue\"><td>" + transactions[j].date + "</td>" +
+                tableContentHTML += "<tr class=\"w3-hover-light-blue\"><td>" + dateToString( transactions[j].date ) + "</td>" +
                                     "<td>" + transactions[j].name + "</td>" +
-                                    "<td>" + transactions[j].amount + getCurrencySign() + "</td>" +
+                                    "<td>" + amount + getCurrencySign() + "</td>" +
                                     "<td>" + transactions[j].category + "</td>" +
                                     "<td>" + transactions[j].budget + "</td>" +
                                     "<td>" + getType( transactions[j].type ) + "</td></tr>";

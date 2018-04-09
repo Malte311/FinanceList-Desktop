@@ -54,7 +54,7 @@ function addTransaction() {
                "<br><input type=\"text\" id=\"categoryInput\">" + "  " +
                // Input for the date.
                textElements[7] + ": " +
-               "<input id=\"datepicker\" class=\"w3-round-large w3-light-gray\" type=\"button\" onclick=\"showDatepicker();\" value=\"" + getCurrentDate() + "\"></div>" +
+               "<input id=\"datepicker\" class=\"w3-round-large w3-light-gray\" type=\"button\" onclick=\"showDatepicker();\" value=\"" + dateToString( getCurrentDate() ) + "\"></div>" +
                // Choose between manual and automated allocation. Hidden until "earning" is selected.
                "<div id=\"dynamicDiv1\" style=\"display:none;\"><hr>" +
                "<form class=\"w3-center\"><input id=\"manual\" onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"allocation\">" + textElements[8] +
@@ -103,14 +103,16 @@ function addTransaction() {
             var budget = $( "#selectInput option:selected" ).text();
             // Get the selected date.
             var selectedDate = $( "#datepicker" ).datepicker( "getDate" );
-            var date = getCurrentDate();
+            var date;
             // Make sure, a date was selected.
             if ( selectedDate !== null && selectedDate !== undefined ) {
-                date = (selectedDate.getDate() < 10 ? "0" + selectedDate.getDate().toString() : selectedDate.getDate().toString()) + "." +
-                       ((selectedDate.getMonth() + 1) < 10 ? "0" + (selectedDate.getMonth() + 1).toString() : (selectedDate.getMonth() + 1).toString()) + "." +
-                       selectedDate.getFullYear();
+                // Remember that we want dates in seconds, so we divide by 1000.
+                date = new Date( selectedDate ).getTime() / 1000;
             }
-            // Nothing selected? Use the current date (it is already selected above).
+            // Otherwise use the current date (today).
+            else {
+                date = getCurrentDate()
+            }
             // Find out which type (earning/spending) was selected and
             // execute the correct function.
             if ( $( "#earning" )[0].checked ) {
@@ -148,7 +150,7 @@ function addTransaction() {
                         break;
                 }
                 var type = $( "#earning" )[0].checked ? "earning" : "spending";
-                addRecurringTransaction( name, parseFloat( sum ), budget, category, type, interval );
+                addRecurringTransaction( name, parseFloat( sum ), budget, category, type, interval, date );
             }
             // Close the dialog and update the view.
             $( this ).dialog( "close" );
@@ -168,23 +170,16 @@ function addTransaction() {
  * @param {String} budget The budget for the transaction.
  * @param {String} category The category of the transaction.
  * @param {String} type The type of the transaction.
- * @param {String} interval The interval of the transaction.
+ * @param {number} interval The interval of the transaction (in seconds).
+ * @param {number} date The date of the transaction (in seconds).
  */
-function addRecurringTransaction( name, amount, budget, category, type, interval ) {
+function addRecurringTransaction( name, amount, budget, category, type, interval, date ) {
     // Determine, if this transaction involves the automatic allocation.
     var allocationOn = $( "#earning" )[0].checked && $( "#autoAllocation" )[0].checked && readMainStorage( "allocationOn" );
     // Determine the correct date.
-    var newMonth = parseInt( getCurrentDate().split( "." )[1] ) + interval;
-    var newYear = parseInt( getCurrentDate().split( "." )[2] );
-    // Check if there was an overflow and handle it. (we use while instead of if in case the overflow is over more than one year)
-    while ( newMonth > 12 ) {
-        // Subtract the number of months and update the year.
-        newMonth = newMonth - 12;
-        newYear++;
-    }
-    var date = getCurrentDate().split( "." )[0] + "." + (newMonth < 10 ? "0" + newMonth.toString() : newMonth.toString()) + "." + newYear.toString();
+    var newDate = date + interval;
     // Create a new object and store it (in the mainStorage.json file).
-    var dataObj = {"date": date, "name": name, "amount": amount, "budget": budget, "type": type, "category": category, "interval": interval, "allocationOn": allocationOn};
+    var dataObj = {"date": newDate, "name": name, "amount": amount, "budget": budget, "type": type, "category": category, "interval": interval, "allocationOn": allocationOn};
     // Now, get the existing data and add this data to it.
     var currentRecurringTransactions = readMainStorage( "recurring" );
     currentRecurringTransactions.push( dataObj );

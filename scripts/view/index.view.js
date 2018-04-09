@@ -92,7 +92,7 @@ function displayRecentTransactions( type ) {
             }
             recentTransactionsTable += "<tr><td><i class=\"far fa-money-bill-alt w3-text-green w3-large\"></i>" + " " + data[i].name + " </td>" +
                                        "<td><i>" + amount + getCurrencySign() + "</i></td>" +
-                                       "<td><i>" + data[i].date + "</i></td></tr>";
+                                       "<td><i>" + dateToString( data[i].date ) + "</i></td></tr>";
             // Display only limit many items (defined in index.controller.js).
             if ( data.length - limit === i ) break;
         }
@@ -134,6 +134,10 @@ function displayChart( type ) {
     if ( checksum > 0 ) {
         // Create the chart. The colors are declared as a constant in controller.js.
         createChart( transactionChart, labels, dataset, colors, colors, readPreference( "chartType" ) );
+        // Display the amount correctly.
+        if ( checksum.toString().indexOf( "." ) !== -1 ) {
+            if ( checksum.toString().split( "." )[1].length < 2 ) checksum += "0";
+        }
         // Display the sum of all time earnings/spendings.
         $( "#" + type + "ChartDiv" ).append( "<br><center>" + getAllTimeTransactionsText( type ) + ": " + checksum + getCurrencySign() + "</center>" );
     }

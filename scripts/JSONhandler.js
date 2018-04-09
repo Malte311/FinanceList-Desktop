@@ -151,7 +151,7 @@ function writeMainStorage( field, value ) {
  * This function reads user data (earnings/spendings) in a specified file.
  * @param {String} file The file we want to access (with .json ending!).
  * @param {JSON} quest Contains a connector (or/and) and an array of parameter to
- * filter objects. Example: quest = { connector : "or", params : [["date", "12.8.2018"],["budget", "checking account"]] }
+ * filter objects. Example: quest = { connector : "or", params : [["type", "earning"],["budget", "checking account"]] }
  * @return {JSON array} All the data which matches the quest.
  */
 function getData( file, quest ) {
@@ -199,17 +199,8 @@ function getData( file, quest ) {
  */
 function storeData( data ) {
     // Find out which file we want to use.
-    var dataPath;
-    // Do we want to use the current file?
-    if ( data.date === getCurrentDate() ) {
-        dataPath = readPreference( "path" ) + path.sep + getCurrentFileName();
-    }
-    // We want to use another file.
-    else {
-        dataPath = readPreference( "path" ) + path.sep +
-        data.date.split( "." )[1] + "." +
-        data.date.split( "." )[2] + ".json";
-    }
+    var dateInStringFormat = dateToString( data.date );
+    var dataPath = readPreference( "path" ) + path.sep + dateInStringFormat.split( "." )[1] + "." + dateInStringFormat.split( "." )[2] + ".json";
     // File exists: Write the data in it.
     if ( fs.existsSync( dataPath ) ) {
         // Get existing data, add the new data and then write it.
@@ -252,12 +243,7 @@ function replaceData( file, data ) {
  */
 function sortData( data ) {
     return data.sort( function( obj1, obj2 ) {
-        // We want to reverse the dates in order to sort them correctly.
-        var obj1Date = obj1.date.split( "." )[2] + "." + obj1.date.split( "." )[1] + "." + obj1.date.split( "." )[0];
-        var obj2Date = obj2.date.split( "." )[2] + "." + obj2.date.split( "." )[1] + "." + obj2.date.split( "." )[0];
-        if ( obj1Date < obj2Date ) return -1;
-        else if ( obj2Date < obj1Date ) return 1;
-        else return 0;
+        return parseInt( obj1.date ) - parseInt( obj2.date );
     });
 }
 
@@ -269,19 +255,8 @@ function sortData( data ) {
 function getCurrentFileName() {
     var currentTime = new Date();
     return (currentTime.getMonth() + 1) < 10 ?
-            "0" + (currentTime.getMonth() + 1).toString() + "." + currentTime.getFullYear().toString() + ".json" :
-            (currentTime.getMonth() + 1).toString() + "." + currentTime.getFullYear().toString() + ".json";
-}
-
-/**
- * This function returns the current date.
- * @return {String} The date of today.
- */
-function getCurrentDate() {
-    var currentTime = new Date();
-    return (currentTime.getDate() < 10 ? "0" + currentTime.getDate().toString() : currentTime.getDate().toString()) + "." +
-           ((currentTime.getMonth() + 1) < 10 ? "0" + (currentTime.getMonth() + 1).toString() : (currentTime.getMonth() + 1).toString()) + "." +
-           currentTime.getFullYear().toString();
+           "0" + (currentTime.getMonth() + 1).toString() + "." + currentTime.getFullYear().toString() + ".json" :
+           (currentTime.getMonth() + 1).toString() + "." + currentTime.getFullYear().toString() + ".json";
 }
 
 /**
@@ -338,4 +313,29 @@ function moveFiles( from, to ) {
  */
 function updatePaths() {
     mainStoragePath = readPreference( "path" ) + path.sep + "mainStorage.json";
+}
+
+/**
+ * This function returns a timestamp for the current date.
+ * @return {number} A timestamp (in seconds) of the current date in seconds.
+ */
+function getCurrentDate() {
+    // Divide milliseconds by 1000 to get seconds.
+    return Math.floor( Date.now() / 1000 );
+}
+
+/**
+ * This function converts a timestamp (in seconds) into a date in string format.
+ * @param {number} timestamp The timestamp (in seconds) we want to convert.
+ */
+function dateToString( timestamp ) {
+    // Multiply by 1000 to get milliseconds.
+    var currentTime = new Date( timestamp * 1000 );
+    return (currentTime.getDate() < 10 ?
+                "0" + currentTime.getDate().toString() :
+                currentTime.getDate().toString()) + "." +
+           ((currentTime.getMonth() + 1) < 10 ?
+                "0" + (currentTime.getMonth() + 1).toString() :
+                (currentTime.getMonth() + 1).toString()) + "." +
+           currentTime.getFullYear().toString();
 }
