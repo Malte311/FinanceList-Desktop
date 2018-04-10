@@ -50,9 +50,9 @@ function getCurrentBudgetsHeadings() {
 function getRecurringTransactionsHeadings() {
     switch ( getLanguage() ) {
         case "en":
-            return ["Name", "Amount", "Type", "Budget", "Category", "Next execution", "Delete"];
+            return ["Name", "Amount", "Type", "Budget", "Category", "Next execution", "Interval", "Delete"];
         case "de":
-            return ["Name", "Summe", "Art", "Konto", "Kategorie", "N&auml;chste Ausf&uuml;hrung", "L&ouml;schen"];
+            return ["Name", "Summe", "Art", "Konto", "Kategorie", "N&auml;chste Ausf&uuml;hrung", "Intervall", "L&ouml;schen"];
     }
 }
 

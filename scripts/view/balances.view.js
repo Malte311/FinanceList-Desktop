@@ -102,6 +102,7 @@ function displayRecurringTransactions() {
                       "<td>" + getRecurringTransactionsHeadings()[4] + "</td>" +
                       "<td>" + getRecurringTransactionsHeadings()[5] + "</td>" +
                       "<td>" + getRecurringTransactionsHeadings()[6] + "</td>" +
+                      "<td>" + getRecurringTransactionsHeadings()[7] + "</td>" +
                       "</tr>";
         // Iterate over all recurring transactions to display them.
         for ( var i = 0; i < recurringTransactions.length; i++ ) {
@@ -120,6 +121,7 @@ function displayRecurringTransactions() {
                        // If a category exists, display it. Otherwise display "-".
                        "<td>" + (recurringTransactions[i].category.length > 0 ? recurringTransactions[i].category : "&mdash;") + "</td>" +
                        "<td>" + dateToString( recurringTransactions[i].date ) + "</td>" +
+                       "<td>" + getIntervalOptionsTextElements()[recurringTransactions[i].interval] + "</td>" +
                        "<td><span onclick=\"deleteRecurringTransaction('" + recurringTransactions[i].name + "')\" class=\"w3-button\"><i class=\"fas fa-times w3-text-red\"></i></span></td>" +
                        "</tr>";
         }
