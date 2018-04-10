@@ -128,11 +128,35 @@ function addTransaction() {
             // Close the dialog and update the view.
             $( this ).dialog( "close" );
             updateView();
+            // Add the inputs to our array for autocomplete.
+            var availableNames = readMainStorage( "availableNames" );
+            availableNames.push( name );
+            // Make sure, we have only unique elements.
+            availableNames = availableNames.filter( function( value, index, self ) {
+                return self.indexOf( value ) === index;
+            });
+            var availableCategories = readMainStorage( "availableCategories" );
+            availableCategories.push( category );
+            // Make sure, we have only unique elements.
+            availableCategories = availableCategories.filter( function( value, index, self ) {
+                return self.indexOf( value ) === index;
+            });
+            // Write back to storage.
+            writeMainStorage( "availableNames", availableNames );
+            writeMainStorage( "availableCategories", availableCategories );
         }
         // Wrong input: Show error message.
         else {
             dialog.showErrorBox( "Error", "Invalid input." );
         }
+    });
+
+    // Autocomplete for user inputs.
+    $( "#nameInput" ).autocomplete({
+      source: readMainStorage( "availableNames" )
+    });
+    $( "#categoryInput" ).autocomplete({
+      source: readMainStorage( "availableCategories" )
     });
 }
 
