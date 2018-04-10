@@ -98,6 +98,7 @@ function getTransactionDialogTextElements() {
 
 /**
  * This function returns the text elements of the interval options in the correct language.
+ * Note: THe elements need to be in this order. Changing the order will result in unwanted behaviour.
  * @return {String[]} The text elements of the interval options.
  */
 function getIntervalOptionsTextElements() {

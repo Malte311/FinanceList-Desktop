@@ -211,3 +211,70 @@ function addEarning( earning, sum, budget, category, date, allocationOn ) {
         writeMainStorage( "allTimeEarnings", allTimeEarnings );
     }
 }
+
+/**
+ * This function returns the new date for a recurring transactions.
+ * @param {number} oldDate The old date as a timestamp in seconds.
+ * @param {number} interval The interval (which is the selected index).
+ */
+function getNewDate( oldDate, interval ) {
+    // Intervals, in which we add only days. Therefore, we don't need to check for
+    // overflows in here.
+    if ( interval === 0 || interval === 1 ) {
+        // Weekly interval?
+        if ( interval === 0 ) {
+            // Add exactly 7 days.
+            return oldDate + 604800;
+        }
+        // Every 4 weeks?
+        else if ( interval === 1 ) {
+            // Add exactly 28 days.
+            return oldDate + 2419200;
+        }
+    }
+    // These are all intervals in which overflows can occur. So we need to check for
+    // overflows and handle them in here.
+    else {
+        // Create a new date object (Remember to multiply by 1000 to get milliseconds).
+        var tmp = new Date( oldDate * 1000 );
+        // Keep a reference on the old month (to check for overflows).
+        var oldMonth = tmp.getMonth();
+        // Monthly?
+        if ( interval === 2 ) {
+            // Increment the month by 1 (monthly interval).
+            tmp.setMonth( tmp.getMonth() + 1 );
+        }
+        // Bimonthly?
+        else if ( interval === 3 ) {
+            // Increment the month by 2 (bimonthly interval).
+            tmp.setMonth( tmp.getMonth() + 2 );
+        }
+        // Quarterly
+        else if ( interval === 4 ) {
+            // Increment the month by 3 (quarterly interval).
+            tmp.setMonth( tmp.getMonth() + 3 );
+        }
+        // Biannual?
+        else if ( interval === 5 ) {
+            // Increment the month by 6 (biannual interval).
+            tmp.setMonth( tmp.getMonth() + 6 );
+        }
+        // Annual?
+        else if ( interval === 6 ) {
+            // Increment the month by 12 (annual interval).
+            tmp.setMonth( tmp.getMonth() + 12 );
+        }
+        // Check, if an overflow emerges.
+        if ( oldMonth + 1 !== tmp.getMonth() ) {
+            // Setting the day to zero will give us the last day of the previous month.
+            var newDate = new Date( tmp.getFullYear(), tmp.getMonth(), 0 );
+            // Remember to divide by 1000 because we want to get seconds.
+            return Math.floor( newDate.getTime() / 1000 );
+        }
+        // No overflow?
+        else {
+            // Remember to divide by 1000 because we want to get seconds.
+            return Math.floor( tmp.getTime() / 1000 );
+        }
+    }
+}

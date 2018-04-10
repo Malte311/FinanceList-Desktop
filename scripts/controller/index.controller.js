@@ -28,6 +28,7 @@ function getRecentTransactions( type ) {
     var limit = (type === "earning" ? numberOfRecentEarnings : numberOfRecentSpendings);
     // Get all .json files which contain data (mainStorage is excluded in getJSONFiles).
     var JSONFiles = getJSONFiles();
+    var newJSONFiles = [];
     // Before searching, we need to sort the files so we can start searching in the newest file.
     for ( var i = 0; i < JSONFiles.length; i++ ) {
         // In order to search the files, we reverse the filenames (e.g. "01.2018" => "2018.01").
@@ -38,14 +39,14 @@ function getRecentTransactions( type ) {
             // Filename ok? Reverse it.
             var tmp = JSONFiles[i].split( "." );
             JSONFiles[i] = tmp[1] + "." + tmp[0];
+            newJSONFiles.push( JSONFiles[i] );
         }
-        // Filename invalid? Remove it from array.
-        else {
-            JSONFiles.splice( i, 1 );
-        }
+        // Filename invalid? Remove it from array (don't push anything to the new array).
+        // Note: splice() does not work here, since the array length will be cut
+        // and therefore the loop will end too early.
     }
     // Now we can sort the files.
-    JSONFiles = JSONFiles.sort();
+    JSONFiles = newJSONFiles.sort();
     // Declare a quest to search for the correct type of data.
     var quest = { connector:'or', params:[['type', type]] };
     // Declare a variable to store the data in.

@@ -104,11 +104,11 @@ function addTransaction() {
             // Make sure, a date was selected.
             if ( selectedDate !== null && selectedDate !== undefined ) {
                 // Remember that we want dates in seconds, so we divide by 1000.
-                date = new Date( selectedDate ).getTime() / 1000;
+                date = Math.floor( new Date( selectedDate ).getTime() / 1000 );
             }
             // Otherwise use the current date (today).
             else {
-                date = getCurrentDate()
+                date = getCurrentDate();
             }
             // Find out which type (earning/spending) was selected and
             // execute the correct function.
@@ -122,47 +122,8 @@ function addTransaction() {
             // Automation activated?
             if ( $( "#checkboxInput" )[0].checked ) {
                 // Add a new recurring transaction.
-                // Select the correct interval.
-                var interval = 1;
-                switch ( $("#intervalSelect")[0].selectedIndex ) {
-                    // Index 0: weekly interval
-                    case 0:
-                        // One week (7 days) in seconds.
-                        interval = 604800;
-                        break;
-                    // Index 1: every 4 weeks interval
-                    case 1:
-                        // Four weeks (28 days) in seconds.
-                        interval = 2419200;
-                        break;
-                    // Index 2: monthly
-                    case 2:
-                        // The half of bimonthly seconds.
-                        interval = 2628000;
-                        break;
-                    // Index 3: bimonthly
-                    case 3:
-                        // One year seconds divided by 6.
-                        interval = 5256000;
-                        break;
-                    // Index 4: quarterly
-                    case 4:
-                        // The half of a half year seconds.
-                        interval = 7884000;
-                        break;
-                    // Index 5: biannual
-                    case 5:
-                        // The half of one year seconds.
-                        interval = 15768000;
-                        break;
-                    // Index 6: annual
-                    case 6:
-                        // One year (365 days) in seconds.
-                        interval = 31536000;
-                        break;
-                }
                 var type = $( "#earning" )[0].checked ? "earning" : "spending";
-                addRecurringTransaction( name, parseFloat( sum ), budget, category, type, interval, date );
+                addRecurringTransaction( name, parseFloat( sum ), budget, category, type, $("#intervalSelect")[0].selectedIndex, date );
             }
             // Close the dialog and update the view.
             $( this ).dialog( "close" );
@@ -189,13 +150,17 @@ function addRecurringTransaction( name, amount, budget, category, type, interval
     // Determine, if this transaction involves the automatic allocation.
     var allocationOn = $( "#earning" )[0].checked && $( "#autoAllocation" )[0].checked && readMainStorage( "allocationOn" );
     // Determine the correct date.
-    var newDate = date + interval;
+    var newDate = getNewDate( date, interval );
     // Create a new object and store it (in the mainStorage.json file).
     var dataObj = {"date": newDate, "name": name, "amount": amount, "budget": budget, "type": type, "category": category, "interval": interval, "allocationOn": allocationOn};
     // Now, get the existing data and add this data to it.
     var currentRecurringTransactions = readMainStorage( "recurring" );
     currentRecurringTransactions.push( dataObj );
     writeMainStorage( "recurring", currentRecurringTransactions );
+    // Now, set update to false, because we did not update the new transction yet.
+    writeMainStorage( "update", false );
+    // Update the new transaction.
+    executeRecurringTransactions();
     // This function is called in addTransaction, so no need to update the view here,
     // since it is already done.
 }
@@ -312,11 +277,14 @@ function deleteBudget( name ) {
         }
         // Delete recurring transactions using this budget.
         var recurringTransactions = readMainStorage( "recurring" );
+        var newRecurringTransactions = [];
         // Search for transactions involving this budget.
         for ( var i = 0; i < recurringTransactions.length; i++ ) {
             // Found the budget? Delete it.
-            if ( recurringTransactions[i].budget === name ) {
-                recurringTransactions.splice( i, 1 );
+            if ( recurringTransactions[i].budget !== name ) {
+                // Note: splice() does not work here, since the array length will be cut
+                // and therefore the loop will end too early.
+                newRecurringTransactions.push(  recurringTransactions[i] );
             }
         }
         // Save the updated budgets in the mainStorage.json file.
@@ -327,7 +295,7 @@ function deleteBudget( name ) {
         // And for allocation as well.
         writeMainStorage( "allocation", newAllocation );
         // Also, delete recurring transactions.
-        writeMainStorage( "recurring", recurringTransactions );
+        writeMainStorage( "recurring", newRecurringTransactions );
         // Update the view: Don't display the deleted budget anymore.
         updateView();
         // Close the dialog (since this function is only executed when the OK button is pressed)
