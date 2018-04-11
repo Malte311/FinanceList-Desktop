@@ -249,9 +249,9 @@ function getMainContentTableHeadings() {
 function getMainContentFilterText() {
     switch ( getLanguage() ) {
         case "en":
-            return ["All transactions", "All budgets", "All types", "Earnings", "Spendings", "All time", "All amounts", "All categories"];
+            return ["All budgets", "All types", "Earnings", "Spendings", "All time", "to", "All transactions", "All categories"];
         case "de":
-            return ["Alle Transaktionen", "Alle Konten", "Alle Arten", "Einnahmen", "Ausgaben", "Gesamter Zeitraum", "Alle Betr&auml;ge", "Alle Kategorien"];
+            return ["Alle Konten", "Alle Arten", "Einnahmen", "Ausgaben", "Gesamter Zeitraum", "bis", "Alle Transaktionen", "Alle Kategorien"];
     }
 }
 

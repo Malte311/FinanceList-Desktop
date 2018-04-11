@@ -163,37 +163,114 @@ function displayContentControls() {
         "<div>" +
             "<table align=\"center\">" +
                 "<tr>" +
-                    "<td><select class=\"w3-select\" id=\"nameSelect\">" +
-                        "<option selected=\"selected\">" + getMainContentFilterText()[0] + "</option>" +
-                    "</select></td>" +
-                    "<td><select class=\"w3-select\" id=\"budgetSelect\">" +
-                        "<option selected=\"selected\">" + getMainContentFilterText()[1] + "</option>" + budgetOptions +
-                    "</select></td>" +
-                    "<td><select class=\"w3-select\" id=\"typeSelect\">" +
-                        "<option selected=\"selected\">" + getMainContentFilterText()[2] + "</option>" +
-                        "<option>" + getMainContentFilterText()[3] + "</option>" +
-                        "<option>" + getMainContentFilterText()[4] + "</option>" +
-                    "</select></td>" +
-                    "<td><select class=\"w3-select\" id=\"dateSelect\">" +
-                        "<option selected=\"selected\">" + getMainContentFilterText()[5] + "</option>" +
-                    "</select></td>" +
-                    "<td><select class=\"w3-select\" id=\"amountSelect\">" +
-                        "<option selected=\"selected\">" + getMainContentFilterText()[6] + "</option>" +
-                    "</select></td>" +
-                    "<td><select class=\"w3-select\" id=\"categorySelect\">" +
-                        "<option selected=\"selected\">" + getMainContentFilterText()[7] + "</option>" +
-                    "</select></td>" +
-                    "<td><button class=\"w3-button w3-white w3-round-xlarge\" onclick=\"\">" + getMainContentStartButtonText() + "</button></td>" +
+                    "<td>" +
+                        "<select class=\"w3-select\" id=\"budgetSelect\">" +
+                            "<option selected=\"selected\">" + getMainContentFilterText()[0] + "</option>" + budgetOptions +
+                        "</select>" +
+                    "</td>" +
+                    "<td>" +
+                        "<select class=\"w3-select\" id=\"typeSelect\">" +
+                            "<option selected=\"selected\">" + getMainContentFilterText()[1] + "</option>" +
+                            "<option>" + getMainContentFilterText()[2] + "</option>" +
+                            "<option>" + getMainContentFilterText()[3] + "</option>" +
+                        "</select>" +
+                    "</td>" +
+                    "<td>" +
+                        "<input id=\"dateSelect\" class=\"w3-round-large w3-white\"  onclick=\"showDatepicker('3');\">" +
+                    "</td>" +
+                    "<td>" +
+                        "<input id=\"amountFrom\" type=\"text\" size=\"2\">" + getCurrencySign() + " " + getMainContentFilterText()[5] + " " +
+                        "<input id=\"amountTo\" type=\"text\" size=\"2\">" + getCurrencySign() +
+                    "</td>" +
+                    "<td>" +
+                        "<input id=\"nameSelect\" type=\"text\" size=\"15\" placeholder=\"" + getMainContentFilterText()[6] + "\">" +
+                    "</td>" +
+                    "<td>" +
+                        "<input id=\"categorySelect\" type=\"text\" size=\"15\" placeholder=\"" + getMainContentFilterText()[7] + "\">" +
+                    "</td>" +
+                    "<td>" +
+                        "<button class=\"w3-button w3-white w3-round-xlarge\" onclick=\"updateContent();\">" + getMainContentStartButtonText() + "</button>" +
+                    "</td>" +
                 "</tr>" +
             "</table>" +
         "</div>" );
+    // Activate the datepicker.
+    $( "#dateSelect" ).daterangepicker({
+        initialText: dateToString( getCurrentDate() - 604800 ) + " - " + dateToString( getCurrentDate() ),
+        dateFormat: "dd.mm.yy"
+        // TODO: Language in Datepicker (in the other Datepicker as well) is not always the correct one
+    });
+    // Autocomplete for user inputs.
+    $( "#nameSelect" ).autocomplete({
+      source: readMainStorage( "availableNames" )
+    });
+    $( "#categorySelect" ).autocomplete({
+      source: readMainStorage( "availableCategories" )
+    });
+}
+
+/**
+ * This function updates the content if the user clicks the update button to apply filters.
+ */
+function updateContent() {
+    // Get all the information from input elements.
+    // Get the selected display type (graph/table).
+    var displayType = $( "#graph" )[0].checked ? "graph" : "table";
+    // Find out, if a budget is selected, and if yes, which one.
+    var budget;
+    if ( $( "#budgetSelect" )[0].selectedIndex !== 0 ) {
+        budget = $( "#budgetSelect option:selected" ).text();
+    }
+    else {
+        budget = "";
+    }
+    // Find out, if a type is selected, and if yes, which one.
+    var type;
+    if ( $( "#typeSelect" )[0].selectedIndex !== 0 ) {
+        if ( $( "#typeSelect" )[0].selectedIndex === 1 ) type = "earning";
+        else if ( $( "#typeSelect" )[0].selectedIndex === 2 ) type = "spending";
+    }
+    else {
+        type = "";
+    }
+
+    var date = $( "#dateSelect" ).datepicker( "getDate" ); // Not working yet
+
+
+    var amountFrom = $( "#amountFrom" ).val().trim();
+    var amountTo = $( "#amountTo" ).val().trim();
+    // Find out which name is selected.
+    var name = $( "#nameSelect" ).val().trim();
+    // Find out which category is selected.
+    var category = $( "#categorySelect" ).val().trim();
+
+    // Now display the filtered content.
+
+    console.log(displayType)
+    console.log(budget)
+    console.log(type)
+    console.log(date)
+    console.log(amountFrom)
+    console.log(amountTo)
+    console.log(name)
+    console.log(category)
+
+    //displayContent( displayType, budget, type, date, amountFrom, amountTo, name, category );
 }
 
 /**
  * This function displays the details the user wishes to see.
  * @param {String} displayType This indicates how the data will be displayed (table/graph).
+ * The following are filters for the data.
+ * @param {String} budget Indicates which budget should be displayed.
+ * @param {String} type Indictates which type of transactions should be displayed.
+ * @param {String} date Indictates a date range for transactions to be displayed.
+ * @param {String} amountFrom Indictates a minimum amount for transactions to be displayed.
+ * @param {String} amountTo Indictates a maximum amount for transactions to be displayed.
+ * @param {String} name Indictates which transactions should be displayed (by name).
+ * @param {String} category Indictates which category should be displayed.
  */
-function displayContent( displayType ) {
+function displayContent( displayType, budget, type, date, amountFrom, amountTo, name, category ) {
     // Display the real content.
     // Display a graph?
     if ( displayType === "graph" ) {
@@ -201,7 +278,22 @@ function displayContent( displayType ) {
         $( "#mainContent" ).html( "<br><canvas id=\"graphCanvas\"></canvas>" );
 
         // TODO find out which data the user wants to see => apply filter and display the chart
-        createChart( $( "#graphCanvas" )[0], ["a","b"], [1,2], colors, colors, readPreference( "chartType" ) );
+        // var paramList = [];
+        // if ( budget.length > 0 ) paramList.push( ["budget", budget] );
+        // if ( type.length > 0 ) paramList.push( ["type", type] );
+        //
+        // var quest = { connector : "and", params : paramList };
+        // var data = [];
+        // var allFiles = getJSONFiles();
+        // for ( var i = 0; i < allFiles.length; i++ ) {
+        //     data = getData( allFiles[i] + ".json", quest ).concat( data );
+        // }
+        // var dataset = [], labels = [];
+        // for ( var i = 0; i < data.length; i++ ) {
+        //     dataset.push( data[i].amount );
+        //     labels.push( data[i].name );
+        // }
+        //createChart( $( "#graphCanvas" )[0], dataset, labels, colors, colors, readPreference( "chartType" ) );
     }
     // Display a table?
     else if ( displayType === "table" ) {
@@ -313,7 +405,7 @@ function updateView() {
     displayBudgets();
     // Display the budgets in detail.
     displayContentControls();
-    displayContent( "graph" );
+    displayContent( "graph", "", "", "", "", "" );
     // Display a list of currently recurring transactions.
     displayRecurringTransactions();
 }
