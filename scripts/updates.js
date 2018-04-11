@@ -21,19 +21,32 @@ function executeRecurringTransactions() {
             // Transaction should occur on 01.01.2020 and has a monthly interval. The user does not
             // log in until 03.04.2020. Now the transaction needs to be executed multiple times, not just once.
             while ( recurringTransactions[i].nextDate <= getCurrentDate() ) {
-                // Execute the correct transaction.
-                // Earning? => addEarning(...)
-                if ( recurringTransactions[i].type === "earning" ) {
-                    addEarning( recurringTransactions[i].name, recurringTransactions[i].amount, recurringTransactions[i].budget, recurringTransactions[i].category, recurringTransactions[i].nextDate, recurringTransactions[i].allocationOn );
+                // End date not existing or not reached yet?
+                if ( recurringTransactions[i].endDate < 0 || (recurringTransactions[i].endDate > 0 && recurringTransactions[i].nextDate <= recurringTransactions[i].endDate) ) {
+                    // Execute the correct transaction.
+                    // Earning? => addEarning(...)
+                    if ( recurringTransactions[i].type === "earning" ) {
+                        addEarning( recurringTransactions[i].name, recurringTransactions[i].amount, recurringTransactions[i].budget, recurringTransactions[i].category, recurringTransactions[i].nextDate, recurringTransactions[i].allocationOn );
+                    }
+                    // Spending? => addSpending(...)
+                    else if ( recurringTransactions[i].type === "spending" ) {
+                        addSpending( recurringTransactions[i].name, recurringTransactions[i].amount, recurringTransactions[i].budget, recurringTransactions[i].category, recurringTransactions[i].nextDate );
+                    }
+                    // Update the recurring transaction entry.
+                    recurringTransactions[i].nextDate = getNewDate( recurringTransactions[i].startDate, recurringTransactions[i].nextDate, recurringTransactions[i].interval );
+                    // When we are done with updating, we write the new data back to mainStorage.json (only the date changed).
+                    writeMainStorage( "recurring", recurringTransactions );
                 }
-                // Spending? => addSpending(...)
-                else if ( recurringTransactions[i].type === "spending" ) {
-                    addSpending( recurringTransactions[i].name, recurringTransactions[i].amount, recurringTransactions[i].budget, recurringTransactions[i].category, recurringTransactions[i].nextDate );
+                // End date reached?
+                else {
+                    // Delete the recurring transaction.
+                    deleteRecurringTransaction( recurringTransactions[i].name );
                 }
-                // Update the recurring transaction entry.
-                recurringTransactions[i].nextDate = getNewDate( recurringTransactions[i].startDate, recurringTransactions[i].nextDate, recurringTransactions[i].interval );
-                // When we are done with updating, we write the new data back to mainStorage.json (only the date changed).
-                writeMainStorage( "recurring", recurringTransactions );
+            }
+            // End date exists and got reached?
+            if ( recurringTransactions[i].endDate > 0 && recurringTransactions[i].nextDate > recurringTransactions[i].endDate ) {
+                // Delete the recurring transaction.
+                deleteRecurringTransaction( recurringTransactions[i].name );
             }
         }
         // Set update to true, because we are done with updating for this session.

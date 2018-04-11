@@ -213,6 +213,27 @@ function addEarning( earning, sum, budget, category, date, allocationOn ) {
 }
 
 /**
+ * This function deletes a recurring transaction.
+ * @param {String} name The name of the transaction we want to delete.
+ */
+function deleteRecurringTransaction( name ) {
+    // Get current transactions.
+    var currentRecurringTransactions = readMainStorage( "recurring" );
+    // Search the transaction we want to delete.
+    for ( var i = 0; i < currentRecurringTransactions.length; i++ ) {
+        // Found it? Delete it and stop.
+        if ( currentRecurringTransactions[i].name === name ) {
+            currentRecurringTransactions.splice( i, 1 );
+            break;
+        }
+    }
+    // Write back to mainStorage.json.
+    writeMainStorage( "recurring", currentRecurringTransactions );
+    // Update the view: Don't display the transaction anymore.
+    updateView();
+}
+
+/**
  * This function returns the new date for a recurring transactions.
  * @param {number} startDate The start date as a timestamp in seconds.
  * (we need this to keep the correct day after overflows)

@@ -103,6 +103,7 @@ function displayRecurringTransactions() {
                       "<td>" + getRecurringTransactionsHeadings()[5] + "</td>" +
                       "<td>" + getRecurringTransactionsHeadings()[6] + "</td>" +
                       "<td>" + getRecurringTransactionsHeadings()[7] + "</td>" +
+                      "<td>" + getRecurringTransactionsHeadings()[8] + "</td>" +
                       "</tr>";
         // Iterate over all recurring transactions to display them.
         for ( var i = 0; i < recurringTransactions.length; i++ ) {
@@ -122,6 +123,7 @@ function displayRecurringTransactions() {
                        "<td>" + (recurringTransactions[i].category.length > 0 ? recurringTransactions[i].category : "&mdash;") + "</td>" +
                        "<td>" + dateToString( recurringTransactions[i].nextDate ) + "</td>" +
                        "<td>" + getIntervalOptionsTextElements()[recurringTransactions[i].interval] + "</td>" +
+                       "<td>" + (recurringTransactions[i].endDate > 0 ? dateToString( recurringTransactions[i].endDate ) : "&mdash;") + "</td>" +
                        "<td><span onclick=\"deleteRecurringTransaction('" + recurringTransactions[i].name + "')\" class=\"w3-button\"><i class=\"fas fa-times w3-text-red\"></i></span></td>" +
                        "</tr>";
         }
@@ -292,12 +294,15 @@ function updateTransactionDialog() {
 
 /**
  * This function displays the jQuery UI Datepicker.
+ * @param {String} number The number of the datepicker we want to display.
  */
-function showDatepicker() {
-    $( "#datepicker" ).datepicker({
+function showDatepicker( number ) {
+    $( "#datepicker" + number ).datepicker({
         dateFormat: "dd.mm.yy",
+        // Min date: tomorrow
+        minDate: (number === "2" ? new Date( (getCurrentDate() + 86400) * 1000 ) : null)
     });
-    $( "#datepicker" ).datepicker("show");
+    $( "#datepicker" + number ).datepicker("show");
 }
 
 /**

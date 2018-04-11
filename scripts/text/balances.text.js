@@ -50,9 +50,9 @@ function getCurrentBudgetsHeadings() {
 function getRecurringTransactionsHeadings() {
     switch ( getLanguage() ) {
         case "en":
-            return ["Name", "Amount", "Type", "Budget", "Category", "Next execution", "Interval", "Delete"];
+            return ["Name", "Amount", "Type", "Budget", "Category", "Next execution", "Interval", "End date", "Delete"];
         case "de":
-            return ["Name", "Summe", "Art", "Konto", "Kategorie", "N&auml;chste Ausf&uuml;hrung", "Intervall", "L&ouml;schen"];
+            return ["Name", "Summe", "Art", "Konto", "Kategorie", "N&auml;chste Ausf&uuml;hrung", "Intervall", "Enddatum", "L&ouml;schen"];
     }
 }
 
@@ -90,9 +90,9 @@ function getTransactionDialogTitle() {
 function getTransactionDialogTextElements() {
     switch ( getLanguage() ) {
         case "en":
-            return ["Here you can add new earnings or new spendings.", "Earning", "Spending", "Name", "Amount", "Category", "(optionally)", "Date", "Choose budget", "Allocate automatically", "Budget", "Automate"];
+            return ["Here you can add new earnings or new spendings.", "Earning", "Spending", "Name", "Amount", "Category", "(optionally)", "Date", "Choose budget", "Allocate automatically", "Budget", "Automate", "End date", "never"];
         case "de":
-            return ["Hier k&ouml;nnen Sie neue Einnahmen oder Ausgaben hinzuf&uuml;gen.", "Einnahme", "Ausgabe", "Name", "Betrag", "Kategorie", "(optional)", "Datum", "Konto w&auml;hlen", "Automatisch verteilen", "Konto", "Automatisieren"];
+            return ["Hier k&ouml;nnen Sie neue Einnahmen oder Ausgaben hinzuf&uuml;gen.", "Einnahme", "Ausgabe", "Name", "Betrag", "Kategorie", "(optional)", "Datum", "Konto w&auml;hlen", "Automatisch verteilen", "Konto", "Automatisieren", "Enddatum", "nie"];
     }
 }
 

@@ -51,7 +51,7 @@ function addTransaction() {
                "<br><input type=\"text\" id=\"categoryInput\">" + "  " +
                // Input for the date.
                textElements[7] + ": " +
-               "<input id=\"datepicker\" class=\"w3-round-large w3-light-gray\" type=\"button\" onclick=\"showDatepicker();\" value=\"" + dateToString( getCurrentDate() ) + "\"></div>" +
+               "<input id=\"datepicker1\" class=\"w3-round-large w3-light-gray\" type=\"button\" onclick=\"showDatepicker('1');\" value=\"" + dateToString( getCurrentDate() ) + "\"></div>" +
                // Choose between manual and automated allocation. Hidden until "earning" is selected.
                "<div id=\"dynamicDiv1\" style=\"display:none;\"><hr>" +
                "<form class=\"w3-center\"><input id=\"manual\" onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"allocation\">" + textElements[8] +
@@ -62,7 +62,11 @@ function addTransaction() {
                "<div id=\"budgetSelect\"></div>" +
                "<input type=\"checkbox\" id=\"checkboxInput\" onclick=\"updateTransactionDialog();\">" + textElements[11] +
                // Another dynamic div, which changes when the checkbox is activated/deactivated.
-               "<br><div id=\"dynamicDiv3\" style=\"display:none;\"><select id=\"intervalSelect\">" + intervalOptions + "</select></div>";
+               "<br>" +
+               "<div id=\"dynamicDiv3\" style=\"display:none;\">" +
+                   "<select id=\"intervalSelect\">" + intervalOptions + "</select>" + "  " + textElements[12] + ": " +
+                   "<input id=\"datepicker2\" class=\"w3-round-large w3-light-gray\" type=\"button\" onclick=\"showDatepicker('2');\" value=\"" + textElements[13] + "\">" +
+               "</div>";
     // Now we are able to actually create a dialog.
     createDialog( getTransactionDialogTitle(), text, function() {
         // Save the inputs and then execute the right function to add a new entry.
@@ -99,8 +103,8 @@ function addTransaction() {
             // Get the selected budget.
             var budget = $( "#selectInput option:selected" ).text();
             // Get the selected date.
-            var selectedDate = $( "#datepicker" ).datepicker( "getDate" );
-            var date;
+            var selectedDate = $( "#datepicker1" ).datepicker( "getDate" );
+            var date, endDate;
             // Make sure, a date was selected.
             if ( selectedDate !== null && selectedDate !== undefined ) {
                 // Remember that we want dates in seconds, so we divide by 1000.
@@ -110,6 +114,10 @@ function addTransaction() {
             else {
                 date = getCurrentDate();
             }
+            var selectedEndDate = $( "#datepicker2" ).datepicker( "getDate" );
+            if ( selectedEndDate !== null && selectedEndDate !== undefined ) endDate = Math.floor( new Date( $( "#datepicker2" ).datepicker( "getDate" ) ).getTime() / 1000 );
+            // End date -1 means there is no end date.
+            else endDate = -1;
             // Find out which type (earning/spending) was selected and
             // execute the correct function.
             if ( $( "#earning" )[0].checked ) {
@@ -123,7 +131,7 @@ function addTransaction() {
             if ( $( "#checkboxInput" )[0].checked ) {
                 // Add a new recurring transaction.
                 var type = $( "#earning" )[0].checked ? "earning" : "spending";
-                addRecurringTransaction( name, parseFloat( sum ), budget, category, type, $("#intervalSelect")[0].selectedIndex, date );
+                addRecurringTransaction( name, parseFloat( sum ), budget, category, type, $("#intervalSelect")[0].selectedIndex, date, endDate );
             }
             // Close the dialog and update the view.
             $( this ).dialog( "close" );
@@ -169,45 +177,28 @@ function addTransaction() {
  * @param {String} type The type of the transaction.
  * @param {number} interval The interval of the transaction (in seconds).
  * @param {number} date The date of the transaction (in seconds).
+ * @param {number} endDate The date on which the transactions ends (-1 if it never ends).
  */
-function addRecurringTransaction( name, amount, budget, category, type, interval, date ) {
+function addRecurringTransaction( name, amount, budget, category, type, interval, date, endDate ) {
     // Determine, if this transaction involves the automatic allocation.
     var allocationOn = $( "#earning" )[0].checked && $( "#autoAllocation" )[0].checked && readMainStorage( "allocationOn" );
     // Determine the correct date.
     var newDate = getNewDate( date, date, interval );
-    // Create a new object and store it (in the mainStorage.json file).
-    var dataObj = {"startDate": date, "nextDate": newDate, "name": name, "amount": amount, "budget": budget, "type": type, "category": category, "interval": interval, "allocationOn": allocationOn};
-    // Now, get the existing data and add this data to it.
-    var currentRecurringTransactions = readMainStorage( "recurring" );
-    currentRecurringTransactions.push( dataObj );
-    writeMainStorage( "recurring", currentRecurringTransactions );
-    // Now, set update to false, because we did not update the new transction yet.
-    writeMainStorage( "update", false );
-    // Update the new transaction.
-    executeRecurringTransactions();
-    // This function is called in addTransaction, so no need to update the view here,
-    // since it is already done.
-}
-
-/**
- * This function deletes a recurring transaction.
- * @param {String} name The name of the transaction we want to delete.
- */
-function deleteRecurringTransaction( name ) {
-    // Get current transactions.
-    var currentRecurringTransactions = readMainStorage( "recurring" );
-    // Search the transaction we want to delete.
-    for ( var i = 0; i < currentRecurringTransactions.length; i++ ) {
-        // Found it? Delete it and stop.
-        if ( currentRecurringTransactions[i].name === name ) {
-            currentRecurringTransactions.splice( i, 1 );
-            break;
-        }
+    // Just continue, if the transaction recurrs at least once. (either no end date or end date is not reached yet)
+    if ( endDate < 0 || (endDate > 0 && newDate <= endDate) ) {
+        // Create a new object and store it (in the mainStorage.json file).
+        var dataObj = {"startDate": date, "nextDate": newDate, "endDate": endDate, "name": name, "amount": amount, "budget": budget, "type": type, "category": category, "interval": interval, "allocationOn": allocationOn};
+        // Now, get the existing data and add this data to it.
+        var currentRecurringTransactions = readMainStorage( "recurring" );
+        currentRecurringTransactions.push( dataObj );
+        writeMainStorage( "recurring", currentRecurringTransactions );
+        // Now, set update to false, because we did not update the new transction yet.
+        writeMainStorage( "update", false );
+        // Update the new transaction.
+        executeRecurringTransactions();
+        // This function is called in addTransaction, so no need to update the view here,
+        // since it is already done.
     }
-    // Write back to mainStorage.json.
-    writeMainStorage( "recurring", currentRecurringTransactions );
-    // Update the view: Don't display the transaction anymore.
-    updateView();
 }
 
 /**
