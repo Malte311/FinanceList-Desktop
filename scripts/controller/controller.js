@@ -214,10 +214,12 @@ function addEarning( earning, sum, budget, category, date, allocationOn ) {
 
 /**
  * This function returns the new date for a recurring transactions.
+ * @param {number} startDate The start date as a timestamp in seconds.
+ * (we need this to keep the correct day after overflows)
  * @param {number} oldDate The old date as a timestamp in seconds.
  * @param {number} interval The interval (which is the selected index).
  */
-function getNewDate( oldDate, interval ) {
+function getNewDate( startDate, oldDate, interval ) {
     // Intervals, in which we add only days. Therefore, we don't need to check for
     // overflows in here.
     if ( interval === 0 || interval === 1 ) {
@@ -263,6 +265,10 @@ function getNewDate( oldDate, interval ) {
         else if ( interval === 6 ) {
             // Increment the month by 12 (annual interval).
             tmp.setMonth( tmp.getMonth() + 12 );
+        }
+        // Make sure that we keep the correct day, in case no overflow happened.
+        if ( oldMonth + 1 === tmp.getMonth() ) {
+            tmp.setDate( new Date( startDate * 1000 ).getDate() );
         }
         // Check, if an overflow emerges.
         if ( oldMonth + 1 !== tmp.getMonth() ) {

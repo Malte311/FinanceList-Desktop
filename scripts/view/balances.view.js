@@ -120,7 +120,7 @@ function displayRecurringTransactions() {
                        "<td>" + (recurringTransactions[i].allocationOn ? "&mdash;" : recurringTransactions[i].budget) + "</td>" +
                        // If a category exists, display it. Otherwise display "-".
                        "<td>" + (recurringTransactions[i].category.length > 0 ? recurringTransactions[i].category : "&mdash;") + "</td>" +
-                       "<td>" + dateToString( recurringTransactions[i].date ) + "</td>" +
+                       "<td>" + dateToString( recurringTransactions[i].nextDate ) + "</td>" +
                        "<td>" + getIntervalOptionsTextElements()[recurringTransactions[i].interval] + "</td>" +
                        "<td><span onclick=\"deleteRecurringTransaction('" + recurringTransactions[i].name + "')\" class=\"w3-button\"><i class=\"fas fa-times w3-text-red\"></i></span></td>" +
                        "</tr>";

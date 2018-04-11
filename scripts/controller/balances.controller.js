@@ -174,9 +174,9 @@ function addRecurringTransaction( name, amount, budget, category, type, interval
     // Determine, if this transaction involves the automatic allocation.
     var allocationOn = $( "#earning" )[0].checked && $( "#autoAllocation" )[0].checked && readMainStorage( "allocationOn" );
     // Determine the correct date.
-    var newDate = getNewDate( date, interval );
+    var newDate = getNewDate( date, date, interval );
     // Create a new object and store it (in the mainStorage.json file).
-    var dataObj = {"date": newDate, "name": name, "amount": amount, "budget": budget, "type": type, "category": category, "interval": interval, "allocationOn": allocationOn};
+    var dataObj = {"startDate": date, "nextDate": newDate, "name": name, "amount": amount, "budget": budget, "type": type, "category": category, "interval": interval, "allocationOn": allocationOn};
     // Now, get the existing data and add this data to it.
     var currentRecurringTransactions = readMainStorage( "recurring" );
     currentRecurringTransactions.push( dataObj );

@@ -20,18 +20,18 @@ function executeRecurringTransactions() {
             // We want to use "while" instead of "if", here is an example why:
             // Transaction should occur on 01.01.2020 and has a monthly interval. The user does not
             // log in until 03.04.2020. Now the transaction needs to be executed multiple times, not just once.
-            while ( recurringTransactions[i].date <= getCurrentDate() ) {
+            while ( recurringTransactions[i].nextDate <= getCurrentDate() ) {
                 // Execute the correct transaction.
                 // Earning? => addEarning(...)
                 if ( recurringTransactions[i].type === "earning" ) {
-                    addEarning( recurringTransactions[i].name, recurringTransactions[i].amount, recurringTransactions[i].budget, recurringTransactions[i].category, recurringTransactions[i].date, recurringTransactions[i].allocationOn );
+                    addEarning( recurringTransactions[i].name, recurringTransactions[i].amount, recurringTransactions[i].budget, recurringTransactions[i].category, recurringTransactions[i].nextDate, recurringTransactions[i].allocationOn );
                 }
                 // Spending? => addSpending(...)
                 else if ( recurringTransactions[i].type === "spending" ) {
-                    addSpending( recurringTransactions[i].name, recurringTransactions[i].amount, recurringTransactions[i].budget, recurringTransactions[i].category, recurringTransactions[i].date );
+                    addSpending( recurringTransactions[i].name, recurringTransactions[i].amount, recurringTransactions[i].budget, recurringTransactions[i].category, recurringTransactions[i].nextDate );
                 }
                 // Update the recurring transaction entry.
-                recurringTransactions[i].date = getNewDate( recurringTransactions[i].date, recurringTransactions[i].interval );
+                recurringTransactions[i].nextDate = getNewDate( recurringTransactions[i].startDate, recurringTransactions[i].nextDate, recurringTransactions[i].interval );
                 // When we are done with updating, we write the new data back to mainStorage.json (only the date changed).
                 writeMainStorage( "recurring", recurringTransactions );
             }
