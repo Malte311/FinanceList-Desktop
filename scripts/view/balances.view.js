@@ -154,9 +154,9 @@ function displayContentControls() {
     $( "#mainContentControls" ).html(
         // Display a selection for display types (graph/table).
         "<form class=\"w3-center\">" +
-            "<input id=\"graph\" onclick=\"displayContent('graph');\" type=\"radio\" name=\"type\" checked>" +
+            "<input id=\"graph\" onclick=\"displayContent('graph', '', '', '', '', '', '', '', '');\" type=\"radio\" name=\"type\" checked>" +
             getDisplayTypeTextElements()[0] +
-            "<input id=\"table\" onclick=\"displayContent('table');\" style=\"margin-left:15px;\" type=\"radio\" name=\"type\">" +
+            "<input id=\"table\" onclick=\"displayContent('table', '', '', '', '', '', '', '', '');\" style=\"margin-left:15px;\" type=\"radio\" name=\"type\">" +
             getDisplayTypeTextElements()[1] +
         "</form><hr>" +
         // Display filters for the user so they can choose which data they want to see.
@@ -195,10 +195,23 @@ function displayContentControls() {
             "</table>" +
         "</div>" );
     // Activate the datepicker.
+    var textElements = getRangeDatePickerPresetRangesTextElements();
     $( "#dateSelect" ).daterangepicker({
         initialText: dateToString( getCurrentDate() - 604800 ) + " - " + dateToString( getCurrentDate() ),
-        dateFormat: "dd.mm.yy"
-        // TODO: Language in Datepicker (in the other Datepicker as well) is not always the correct one
+        dateFormat: "dd.mm.yy",
+        applyButtonText: getRangeDatePickerApplyButtonText(),
+        clearButtonText: getRangeDatePickerClearButtonText(),
+        cancelButtonText: getRangeDatePickerCancelButtonText(),
+        presetRanges: [
+				{text: textElements[0], dateStart: function() { return moment() }, dateEnd: function() { return moment() } },
+				{text: textElements[1], dateStart: function() { return moment().subtract('days', 1) }, dateEnd: function() { return moment().subtract('days', 1) } },
+				{text: textElements[2], dateStart: function() { return moment().subtract('days', 6) }, dateEnd: function() { return moment() } },
+				{text: textElements[3], dateStart: function() { return moment().subtract('days', 7).isoWeekday(1) }, dateEnd: function() { return moment().subtract('days', 7).isoWeekday(7) } },
+				{text: textElements[4], dateStart: function() { return moment().startOf('month') }, dateEnd: function() { return moment() } },
+				{text: textElements[5], dateStart: function() { return moment().subtract('month', 1).startOf('month') }, dateEnd: function() { return moment().subtract('month', 1).endOf('month') } },
+				{text: textElements[6], dateStart: function() { return moment().startOf('year') }, dateEnd: function() { return moment() } },
+                {text: textElements[7], dateStart: function() { return moment().subtract('year', 1).startOf('year') }, dateEnd: function() { return moment().subtract('year', 1).endOf('year') } }
+		]
     });
     // Autocomplete for user inputs.
     $( "#nameSelect" ).autocomplete({
@@ -234,8 +247,12 @@ function updateContent() {
         type = "";
     }
 
-    var date = $( "#dateSelect" ).datepicker( "getDate" ); // Not working yet
-
+    var date = $( "#dateSelect" ).daterangepicker( "getRange" );
+    var startDate = null, endDate = null;
+    if ( date !== null && date !== undefined ) {
+        startDate = date.start;
+        endDate = date.end;
+    }
 
     var amountFrom = $( "#amountFrom" ).val().trim();
     var amountTo = $( "#amountTo" ).val().trim();
@@ -249,13 +266,14 @@ function updateContent() {
     console.log(displayType)
     console.log(budget)
     console.log(type)
-    console.log(date)
+    console.log(startDate)
+    console.log(endDate)
     console.log(amountFrom)
     console.log(amountTo)
     console.log(name)
     console.log(category)
 
-    //displayContent( displayType, budget, type, date, amountFrom, amountTo, name, category );
+    displayContent( displayType, budget, type, startDate, endDate, amountFrom, amountTo, name, category );
 }
 
 /**
@@ -264,36 +282,89 @@ function updateContent() {
  * The following are filters for the data.
  * @param {String} budget Indicates which budget should be displayed.
  * @param {String} type Indictates which type of transactions should be displayed.
- * @param {String} date Indictates a date range for transactions to be displayed.
+ * @param {Object} startDate Indictates the start of the date range for transactions to be displayed.
+ * @param {Object} endDate Indictates the end of the date range for transactions to be displayed.
  * @param {String} amountFrom Indictates a minimum amount for transactions to be displayed.
  * @param {String} amountTo Indictates a maximum amount for transactions to be displayed.
  * @param {String} name Indictates which transactions should be displayed (by name).
  * @param {String} category Indictates which category should be displayed.
  */
-function displayContent( displayType, budget, type, date, amountFrom, amountTo, name, category ) {
+function displayContent( displayType, budget, type, startDate, endDate, amountFrom, amountTo, name, category ) {
+    // Get all data before displaying anthing.
+    // Find out which data the user wants to see => apply filter and display the chart
+    var paramList = [];
+    if ( budget.length > 0 ) paramList.push( ["budget", budget] );
+    if ( type.length > 0 ) paramList.push( ["type", type] );
+    if ( name.length > 0 ) paramList.push( ["name", name] );
+    if ( category.length > 0 ) paramList.push( ["category", category] );
+
+    var quest;
+    if ( paramList.length > 0 ) {
+        quest = { connector : "and", params : paramList };
+    }
+    else {
+        // No filters applied? Select all data.
+        quest = { connector : "or", params : [["type", "earning"], ["type", "spending"]] };
+    }
+    var data = [];
+    var allFiles = getJSONFiles();
+    for ( var i = 0; i < allFiles.length; i++ ) {
+        data = getData( allFiles[i] + ".json", quest ).concat( data );
+    }
+
+    var dateFilter = startDate !== null && endDate !== null;
+    var amountFilter = amountFrom.length > 0 || amountTo.length > 0;
+
+    console.log( "datfilter: " + dateFilter.toString() )
+    console.log( "amountFilter: " + amountFilter.toString() )
+
+    if ( !(checkAmountInput( amountFrom, true ) && checkAmountInput( amountTo, true )) ) {
+        $( "#mainContent" ).html( "<center><i>" + getInvalidInputMessage() + "</i></center>" );
+        return;
+    }
+
     // Display the real content.
     // Display a graph?
+    // TODO: Split this function into two functions (one for graph, one for table)
     if ( displayType === "graph" ) {
         // Create a canvas for our chart.
         $( "#mainContent" ).html( "<br><canvas id=\"graphCanvas\"></canvas>" );
+        var dataset = [], labels = [];
 
-        // TODO find out which data the user wants to see => apply filter and display the chart
-        // var paramList = [];
-        // if ( budget.length > 0 ) paramList.push( ["budget", budget] );
-        // if ( type.length > 0 ) paramList.push( ["type", type] );
-        //
-        // var quest = { connector : "and", params : paramList };
-        // var data = [];
-        // var allFiles = getJSONFiles();
-        // for ( var i = 0; i < allFiles.length; i++ ) {
-        //     data = getData( allFiles[i] + ".json", quest ).concat( data );
-        // }
-        // var dataset = [], labels = [];
-        // for ( var i = 0; i < data.length; i++ ) {
-        //     dataset.push( data[i].amount );
-        //     labels.push( data[i].name );
-        // }
-        //createChart( $( "#graphCanvas" )[0], dataset, labels, colors, colors, readPreference( "chartType" ) );
+        for ( var i = 0; i < data.length; i++ ) {
+            // Apply the remaining filters
+            if ( dateFilter ) {
+                if ( amountFilter ) {
+                    // both filters (date and amount)
+                    if ( data[i].date * 1000 >= startDate.getTime() && data[i].date * 1000 <= endDate.getTime() &&
+                         parseFloat( amountFrom ) >= data[i].amount && parseFloat( amountTo ) <= data[i].amount ) {
+                        dataset.push( data[i].amount );
+                        labels.push( data[i].name );
+                    }
+                }
+                else {
+                    // only date filter
+                    if ( data[i].date * 1000 >= new Date( startDate ).getTime() && data[i].date * 1000 <= new Date( endDate ).getTime() ) {
+                        dataset.push( data[i].amount );
+                        labels.push( data[i].name );
+                    }
+                }
+            }
+            else if ( amountFilter ) {
+                // only amount filter
+                if ( parseFloat( amountFrom ) >= data[i].amount && parseFloat( amountTo ) <= data[i].amount ) {
+                    dataset.push( data[i].amount );
+                    labels.push( data[i].name );
+                }
+            }
+            // No filter required
+            else {
+                console.log("no filter")
+                dataset.push( data[i].amount );
+                labels.push( data[i].name );
+            }
+        }
+        createChart( $( "#graphCanvas" )[0], dataset, labels, colors, colors, readPreference( "chartType" ) );
     }
     // Display a table?
     else if ( displayType === "table" ) {
@@ -304,36 +375,25 @@ function displayContent( displayType, budget, type, date, amountFrom, amountTo, 
             tableHeadingsHTML += "<td><b>" + tableHeadingsText[i] + "</b></td>";
         }
         // Get all files, to search for the data.
-        var allFiles = getJSONFiles();
-        // Find out, which data is wanted.
-
-
-        // TODO find out which data the user wants to see => apply filter
-        var parameter = [["type", "earning"],["type", "spending"]];
-        var quest = { connector : "or", params : parameter };
-
 
         // Get the content for the table.
         var tableContentHTML = "";
-        for ( var i = 0; i < allFiles.length; i++ ) {
-            // Get the data for the current file.
-            var transactions = getData( allFiles[i] + ".json", quest );
-            // Now, save all the data from this file.
-            for ( var j = 0; j < transactions.length; j++ ) {
-                // Display the amount correctly.
-                var amount = transactions[j].amount;
-                if ( amount.toString().indexOf( "." ) !== -1 ) {
-                    if ( amount.toString().split( "." )[1].length < 2 ) amount += "0";
-                }
-                // Add the data to our table.
-                tableContentHTML += "<tr class=\"w3-hover-light-blue\"><td>" + dateToString( transactions[j].date ) + "</td>" +
-                                    "<td>" + transactions[j].name + "</td>" +
-                                    "<td>" + amount + getCurrencySign() + "</td>" +
-                                    "<td>" + transactions[j].category + "</td>" +
-                                    "<td>" + transactions[j].budget + "</td>" +
-                                    "<td>" + getType( transactions[j].type ) + "</td></tr>";
+
+        for ( var j = 0; j < data.length; j++ ) {
+            // Display the amount correctly.
+            var amount = data[j].amount;
+            if ( amount.toString().indexOf( "." ) !== -1 ) {
+                if ( amount.toString().split( "." )[1].length < 2 ) amount += "0";
             }
+            // Add the data to our table.
+            tableContentHTML += "<tr class=\"w3-hover-light-blue\"><td>" + dateToString( data[j].date ) + "</td>" +
+                                "<td>" + data[j].name + "</td>" +
+                                "<td>" + amount + getCurrencySign() + "</td>" +
+                                "<td>" + data[j].category + "</td>" +
+                                "<td>" + data[j].budget + "</td>" +
+                                "<td>" + getType( data[j].type ) + "</td></tr>";
         }
+
         // Display the table containing the data.
         $( "#mainContent" ).html( "<br><table class=\"w3-table-all w3-round\">" +
                                   "<tr>" + tableHeadingsHTML + "</tr>" +
@@ -405,7 +465,7 @@ function updateView() {
     displayBudgets();
     // Display the budgets in detail.
     displayContentControls();
-    displayContent( "graph", "", "", "", "", "" );
+    displayContent( "graph", "", "", "", "", "", "", "", "" );
     // Display a list of currently recurring transactions.
     displayRecurringTransactions();
 }

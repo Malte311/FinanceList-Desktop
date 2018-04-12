@@ -305,3 +305,28 @@ function getNewDate( startDate, oldDate, interval ) {
         }
     }
 }
+
+/**
+ * This function checks if an input for an amount is valid.
+ * @param {String} input The input we want to check.
+ * @param {bool} emptyOk This indicates if an empty input is ok.
+ * @return {bool} A boolean which indiates if the amount is valid.
+ */
+function checkAmountInput( input, emptyOk ) {
+    if ( emptyOk && input === "" ) return true;
+    if ( /[a-z]/i.test( input ) || !/\d/.test( input ) ) return false;
+    // Some character is not a digit? Make sure that this is only a single dot.
+    // Also, make sure that there are not more than two decimal places.
+    if ( /\D/.test ( input ) ) {
+        // No dot or more than one dot found?
+        // (Remember that we already found at least one non digit character, so there has to be a dot)
+        if ( input.indexOf( "." ) === -1 || input.replace( ".", "" ).length + 1 < input.length ) return false;
+        // Any other non digit characters found?
+        if ( /\D/.test( input.replace( ".", "" ) ) ) return false;
+        // More than two decimal digits in the sum?
+        // Remember that the input was already checked, so there is exactly one dot.
+        if ( input.split( "." )[1].length > 2 ) return false;
+        // Note: Inputs like .5 are okay since parseFloat( ".5" ) = 0.5
+    }
+    return true;
+}

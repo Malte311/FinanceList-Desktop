@@ -12,8 +12,7 @@ function getConfirmButtonText() {
         case "en":
             return "Confirm";
         case "de":
-            // This is no HTML, not sure how to handle the umlaut.
-            return "Bestätigen";
+            return "Best\u00e4tigen";
     }
 }
 
@@ -78,8 +77,7 @@ function getTransactionDialogTitle() {
         case "en":
             return "Add transaction";
         case "de":
-            // This is no HTML, not sure how to handle the umlaut.
-            return "Eintrag hinzufügen";
+            return "Eintrag hinzuf\u00fcgen";
     }
 }
 
@@ -119,8 +117,7 @@ function getAddBudgetDialogTitle() {
         case "en":
             return "Add budget";
         case "de":
-            // This is no HTML, not sure how to handle the umlaut.
-            return "Konto hinzufügen";
+            return "Konto hinzuf\u00fcgen";
     }
 }
 
@@ -146,8 +143,7 @@ function getDeleteBudgetDialogTitle() {
         case "en":
             return "Delete budget";
         case "de":
-            // This is no HTML, not sure how to handle the umlaut.
-            return "Konto löschen";
+            return "Konto l\u00f6schen";
     }
 }
 
@@ -279,5 +275,70 @@ function getType( type ) {
             return type;
         case "de":
             return (type === "earning" ? "Einnahme" : "Ausgabe" );
+    }
+}
+
+/**
+ * This function returns the text for the apply button in the rangedatepicker.
+ * @return {String} The text of the apply button in the rangedatepicker.
+ */
+function getRangeDatePickerApplyButtonText() {
+    switch ( getLanguage() ) {
+        case "en":
+            return "Apply";
+        case "de":
+            return "Anwenden";
+    }
+}
+
+/**
+ * This function returns the text for the clear button in the rangedatepicker.
+ * @return {String} The text of the clear button in the rangedatepicker.
+ */
+function getRangeDatePickerClearButtonText() {
+    switch ( getLanguage() ) {
+        case "en":
+            return "Clear";
+        case "de":
+            return "Zur\u00fccksetzen";
+    }
+}
+
+/**
+ * This function returns the text for the cancel button in the rangedatepicker.
+ * @return {String} The text of the cancel button in the rangedatepicker.
+ */
+function getRangeDatePickerCancelButtonText() {
+    switch ( getLanguage() ) {
+        case "en":
+            return "Cancel";
+        case "de":
+            return "Abbrechen";
+    }
+}
+
+/**
+ * This function returns the text elements for the preset ranges in the rangedatepicker.
+ * @return {String[]} The text elements of the preset ranges in the rangedatepicker.
+ */
+function getRangeDatePickerPresetRangesTextElements() {
+    switch ( getLanguage() ) {
+        case "en":
+            return ["Today", "Yesterday", "Last 7 days", "Last week (Mo-Su)", "Current month", "Previous month", "Current Year", "Last year", "All time"];
+        case "de":
+            return ["Heute", "Gestern", "Letzte 7 Tage", "Letzte Woche (Mo-So)", "Aktueller Monat", "Letzter Monat", "Aktuelles Jahr", "Letztes Jahr", "Gesamter Zeitraum"];
+    }
+}
+
+/**
+ * This function returns the message for invalid inputs.
+ * @return {String} The message for invalid inputs.
+ */
+function getInvalidInputMessage() {
+    switch ( getLanguage() ) {
+        case "en":
+            return "Invalid input!";
+        case "de":
+            return "Ung&uuml;ltige Eingabe!"
     }
 }
