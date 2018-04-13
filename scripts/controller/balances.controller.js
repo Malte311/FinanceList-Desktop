@@ -512,3 +512,96 @@ function setAllocationOn() {
         writeMainStorage( "allocationOn", false );
     }
 }
+
+/**
+ * This function activates the date range picker on a specified element.
+ * @param {String} id The id of the element on which the date range picker should be displayed.
+ */
+function activateDateRangePicker( id ) {
+    // Get all the text we need in the correct language.
+    var textElements = getRangeDatePickerPresetRangesTextElements();
+    // Create a new date range picker.
+    $( id ).daterangepicker({
+        initialText: dateToString( getCurrentDate() - 604800 ) + " - " + dateToString( getCurrentDate() ),
+        dateFormat: "dd.mm.yy",
+        applyButtonText: getRangeDatePickerApplyButtonText(),
+        clearButtonText: getRangeDatePickerClearButtonText(),
+        cancelButtonText: getRangeDatePickerCancelButtonText(),
+        presetRanges: [
+				{text: textElements[0], dateStart: function() { return moment() }, dateEnd: function() { return moment() } },
+				{text: textElements[1], dateStart: function() { return moment().subtract('days', 1) }, dateEnd: function() { return moment().subtract('days', 1) } },
+				{text: textElements[2], dateStart: function() { return moment().subtract('days', 6) }, dateEnd: function() { return moment() } },
+				{text: textElements[3], dateStart: function() { return moment().subtract('days', 7).isoWeekday(1) }, dateEnd: function() { return moment().subtract('days', 7).isoWeekday(7) } },
+				{text: textElements[4], dateStart: function() { return moment().startOf('month') }, dateEnd: function() { return moment() } },
+				{text: textElements[5], dateStart: function() { return moment().subtract('month', 1).startOf('month') }, dateEnd: function() { return moment().subtract('month', 1).endOf('month') } },
+				{text: textElements[6], dateStart: function() { return moment().startOf('year') }, dateEnd: function() { return moment() } },
+                {text: textElements[7], dateStart: function() { return moment().subtract('year', 1).startOf('year') }, dateEnd: function() { return moment().subtract('year', 1).endOf('year') } }
+		]
+    });
+}
+
+/**
+ * This function updates the content if the user clicks the update button to apply filters.
+ */
+function updateContent() {
+    // Get all the information from input elements and save them in variables first.
+    // Get the selected display type (graph/table).
+    var displayType = $( "#graph" )[0].checked ? "graph" : "table";
+    // Find out, if a budget is selected, and if yes, which one.
+    var budget;
+    // Budget selected?
+    if ( $( "#budgetSelect" )[0].selectedIndex !== 0 ) {
+        // Get the name of the selected budget.
+        budget = $( "#budgetSelect option:selected" ).text();
+    }
+    // No budget selected?
+    else {
+        // Save an empty string.
+        budget = "";
+    }
+    // Find out, if a type is selected, and if yes, which one.
+    var type;
+    // Type selected?
+    if ( $( "#typeSelect" )[0].selectedIndex !== 0 ) {
+        // Find out which type is selected.
+        // Earning?
+        if ( $( "#typeSelect" )[0].selectedIndex === 1 ) type = "earning";
+        // Spending?
+        else if ( $( "#typeSelect" )[0].selectedIndex === 2 ) type = "spending";
+    }
+    // No type selected?
+    else {
+        // Save an empty string.
+        type = "";
+    }
+    // Get the input from the date range picker to get a date range.
+    var date = $( "#dateSelect" ).daterangepicker( "getRange" );
+    // Set start and end date to null, in case nothing was selected.
+    var startDate = null, endDate = null;
+    // Date selected? (No date selected will leave startDate and endDate with null)
+    if ( date !== null && date !== undefined ) {
+        // Get the selected start and end date.
+        startDate = date.start;
+        endDate = date.end;
+    }
+    // Get the input for amounts. If they are empty, we save the empty string.
+    var amountFrom = $( "#amountFrom" ).val().trim();
+    var amountTo = $( "#amountTo" ).val().trim();
+    // Find out which name is selected. If no name is selected, we save the empty string.
+    var name = $( "#nameSelect" ).val().trim();
+    // Find out which category is selected. If no category is selected, we save the empty string.
+    var category = $( "#categorySelect" ).val().trim();
+    // Now display the filtered content.
+
+    console.log(displayType)
+    console.log(budget)
+    console.log(type)
+    console.log(startDate)
+    console.log(endDate)
+    console.log(amountFrom)
+    console.log(amountTo)
+    console.log(name)
+    console.log(category)
+
+    displayContent( displayType, budget, type, startDate, endDate, amountFrom, amountTo, name, category );
+}

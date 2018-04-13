@@ -195,24 +195,7 @@ function displayContentControls() {
             "</table>" +
         "</div>" );
     // Activate the datepicker.
-    var textElements = getRangeDatePickerPresetRangesTextElements();
-    $( "#dateSelect" ).daterangepicker({
-        initialText: dateToString( getCurrentDate() - 604800 ) + " - " + dateToString( getCurrentDate() ),
-        dateFormat: "dd.mm.yy",
-        applyButtonText: getRangeDatePickerApplyButtonText(),
-        clearButtonText: getRangeDatePickerClearButtonText(),
-        cancelButtonText: getRangeDatePickerCancelButtonText(),
-        presetRanges: [
-				{text: textElements[0], dateStart: function() { return moment() }, dateEnd: function() { return moment() } },
-				{text: textElements[1], dateStart: function() { return moment().subtract('days', 1) }, dateEnd: function() { return moment().subtract('days', 1) } },
-				{text: textElements[2], dateStart: function() { return moment().subtract('days', 6) }, dateEnd: function() { return moment() } },
-				{text: textElements[3], dateStart: function() { return moment().subtract('days', 7).isoWeekday(1) }, dateEnd: function() { return moment().subtract('days', 7).isoWeekday(7) } },
-				{text: textElements[4], dateStart: function() { return moment().startOf('month') }, dateEnd: function() { return moment() } },
-				{text: textElements[5], dateStart: function() { return moment().subtract('month', 1).startOf('month') }, dateEnd: function() { return moment().subtract('month', 1).endOf('month') } },
-				{text: textElements[6], dateStart: function() { return moment().startOf('year') }, dateEnd: function() { return moment() } },
-                {text: textElements[7], dateStart: function() { return moment().subtract('year', 1).startOf('year') }, dateEnd: function() { return moment().subtract('year', 1).endOf('year') } }
-		]
-    });
+    activateDateRangePicker( "#dateSelect" );
     // Autocomplete for user inputs.
     $( "#nameSelect" ).autocomplete({
       source: readMainStorage( "availableNames" )
@@ -222,59 +205,7 @@ function displayContentControls() {
     });
 }
 
-/**
- * This function updates the content if the user clicks the update button to apply filters.
- */
-function updateContent() {
-    // Get all the information from input elements.
-    // Get the selected display type (graph/table).
-    var displayType = $( "#graph" )[0].checked ? "graph" : "table";
-    // Find out, if a budget is selected, and if yes, which one.
-    var budget;
-    if ( $( "#budgetSelect" )[0].selectedIndex !== 0 ) {
-        budget = $( "#budgetSelect option:selected" ).text();
-    }
-    else {
-        budget = "";
-    }
-    // Find out, if a type is selected, and if yes, which one.
-    var type;
-    if ( $( "#typeSelect" )[0].selectedIndex !== 0 ) {
-        if ( $( "#typeSelect" )[0].selectedIndex === 1 ) type = "earning";
-        else if ( $( "#typeSelect" )[0].selectedIndex === 2 ) type = "spending";
-    }
-    else {
-        type = "";
-    }
 
-    var date = $( "#dateSelect" ).daterangepicker( "getRange" );
-    var startDate = null, endDate = null;
-    if ( date !== null && date !== undefined ) {
-        startDate = date.start;
-        endDate = date.end;
-    }
-
-    var amountFrom = $( "#amountFrom" ).val().trim();
-    var amountTo = $( "#amountTo" ).val().trim();
-    // Find out which name is selected.
-    var name = $( "#nameSelect" ).val().trim();
-    // Find out which category is selected.
-    var category = $( "#categorySelect" ).val().trim();
-
-    // Now display the filtered content.
-
-    console.log(displayType)
-    console.log(budget)
-    console.log(type)
-    console.log(startDate)
-    console.log(endDate)
-    console.log(amountFrom)
-    console.log(amountTo)
-    console.log(name)
-    console.log(category)
-
-    displayContent( displayType, budget, type, startDate, endDate, amountFrom, amountTo, name, category );
-}
 
 /**
  * This function displays the details the user wishes to see.
@@ -290,115 +221,116 @@ function updateContent() {
  * @param {String} category Indictates which category should be displayed.
  */
 function displayContent( displayType, budget, type, startDate, endDate, amountFrom, amountTo, name, category ) {
+    // Before doing anything, we check if the input is valid.
+    // Input invalid?
+    if ( !(checkAmountInput( amountFrom, true ) && checkAmountInput( amountTo, true )) ) {
+        // Display an error message and stop executing this function.
+        $( "#mainContent" ).html( "<center><i>" + getInvalidInputMessage() + "</i></center>" );
+        return;
+    }
     // Get all data before displaying anthing.
-    // Find out which data the user wants to see => apply filter and display the chart
+    // Find out which data the user wants to see, then apply filter and display the chart.
     var paramList = [];
     if ( budget.length > 0 ) paramList.push( ["budget", budget] );
     if ( type.length > 0 ) paramList.push( ["type", type] );
     if ( name.length > 0 ) paramList.push( ["name", name] );
     if ( category.length > 0 ) paramList.push( ["category", category] );
-
+    // Now, create a quest. If no parameter were selected, we get all data unfiltered.
     var quest;
+    // At least one filter?
     if ( paramList.length > 0 ) {
         quest = { connector : "and", params : paramList };
     }
+    // No filter?
     else {
         // No filters applied? Select all data.
         quest = { connector : "or", params : [["type", "earning"], ["type", "spending"]] };
     }
+    // Get all the matching data from every available file.
     var data = [];
     var allFiles = getJSONFiles();
     for ( var i = 0; i < allFiles.length; i++ ) {
+        // Append new data to the data we already found.
         data = getData( allFiles[i] + ".json", quest ).concat( data );
     }
-
-    var dateFilter = startDate !== null && endDate !== null;
-    var amountFilter = amountFrom.length > 0 || amountTo.length > 0;
-
-    console.log( "datfilter: " + dateFilter.toString() )
-    console.log( "amountFilter: " + amountFilter.toString() )
-
-    if ( !(checkAmountInput( amountFrom, true ) && checkAmountInput( amountTo, true )) ) {
-        $( "#mainContent" ).html( "<center><i>" + getInvalidInputMessage() + "</i></center>" );
-        return;
-    }
-
-    // Display the real content.
-    // Display a graph?
-    // TODO: Split this function into two functions (one for graph, one for table)
-    if ( displayType === "graph" ) {
-        // Create a canvas for our chart.
-        $( "#mainContent" ).html( "<br><canvas id=\"graphCanvas\"></canvas>" );
-        var dataset = [], labels = [];
-
+    // Date selected?
+    if ( startDate !== null && endDate !== null ) {
+        // Filter the data again.
+        var newData = [];
         for ( var i = 0; i < data.length; i++ ) {
-            // Apply the remaining filters
-            if ( dateFilter ) {
-                if ( amountFilter ) {
-                    // both filters (date and amount)
-                    if ( data[i].date * 1000 >= startDate.getTime() && data[i].date * 1000 <= endDate.getTime() &&
-                         parseFloat( amountFrom ) >= data[i].amount && parseFloat( amountTo ) <= data[i].amount ) {
-                        dataset.push( data[i].amount );
-                        labels.push( data[i].name );
-                    }
-                }
-                else {
-                    // only date filter
-                    if ( data[i].date * 1000 >= new Date( startDate ).getTime() && data[i].date * 1000 <= new Date( endDate ).getTime() ) {
-                        dataset.push( data[i].amount );
-                        labels.push( data[i].name );
-                    }
-                }
-            }
-            else if ( amountFilter ) {
-                // only amount filter
-                if ( parseFloat( amountFrom ) >= data[i].amount && parseFloat( amountTo ) <= data[i].amount ) {
-                    dataset.push( data[i].amount );
-                    labels.push( data[i].name );
-                }
-            }
-            // No filter required
-            else {
-                console.log("no filter")
-                dataset.push( data[i].amount );
-                labels.push( data[i].name );
-            }
+            // TODO: Apply date filter.
         }
-        createChart( $( "#graphCanvas" )[0], dataset, labels, colors, colors, readPreference( "chartType" ) );
+        data = newData;
     }
-    // Display a table?
-    else if ( displayType === "table" ) {
-        // Create the headings for the table.
-        var tableHeadingsText = getMainContentTableHeadings();
-        var tableHeadingsHTML = "";
-        for ( var i = 0; i < tableHeadingsText.length; i++ ) {
-            tableHeadingsHTML += "<td><b>" + tableHeadingsText[i] + "</b></td>";
+    // At least one input field not empty?
+    if ( amountFrom.length > 0 || amountTo.length > 0 ) {
+        // Filter the data again.
+        var newData = [];
+        for ( var i = 0; i < data.length; i++ ) {
+            // Amount within the specified range?
+            // TODO: Applay amount filter. Keep in mind the szenario that only one of amountFrom and amountTo is selected and the other is an empty string. parseFloat("") => NaN
         }
-        // Get all files, to search for the data.
-
-        // Get the content for the table.
-        var tableContentHTML = "";
-
-        for ( var j = 0; j < data.length; j++ ) {
-            // Display the amount correctly.
-            var amount = data[j].amount;
-            if ( amount.toString().indexOf( "." ) !== -1 ) {
-                if ( amount.toString().split( "." )[1].length < 2 ) amount += "0";
-            }
-            // Add the data to our table.
-            tableContentHTML += "<tr class=\"w3-hover-light-blue\"><td>" + dateToString( data[j].date ) + "</td>" +
-                                "<td>" + data[j].name + "</td>" +
-                                "<td>" + amount + getCurrencySign() + "</td>" +
-                                "<td>" + data[j].category + "</td>" +
-                                "<td>" + data[j].budget + "</td>" +
-                                "<td>" + getType( data[j].type ) + "</td></tr>";
-        }
-
-        // Display the table containing the data.
-        $( "#mainContent" ).html( "<br><table class=\"w3-table-all w3-round\">" +
-                                  "<tr>" + tableHeadingsHTML + "</tr>" +
-                                  tableContentHTML + "</table>" );
+        data = newData;
     }
+    // Data exists?
+    if ( data.length > 0 ) {
+        // Display the real content. Display a graph?
+        if ( displayType === "graph" ) {
+            displayGraph( data );
+        }
+        // Display a table?
+        else if ( displayType === "table" ) {
+            displayTable( data );
+        }
+    }
+    // No data found?
+    else {
+        // Display a message that no data was found.
+        $( "#mainContent" ).html( "<center><i>" + getMissingTransactionsMessage() + "</i></center>" );
+    }
+}
+
+function displayGraph( data ) {
+    // Create a canvas for our chart.
+    $( "#mainContent" ).html( "<br><canvas id=\"graphCanvas\"></canvas>" );
+    var dataset = [], labels = [];
+    // Get the dataset (amounts) and labels (names).
+    for ( var i = 0; i < data.length; i++ ) {
+        // Add the amount and name for our graph.
+        dataset.push( data[i].amount );
+        labels.push( data[i].name );
+    }
+    // Now we can display the graph.
+    createChart( $( "#graphCanvas" )[0], dataset, labels, colors, colors, readPreference( "chartType" ) );
+}
+
+function displayTable( data ) {
+    // Create the headings for the table.
+    var tableHeadingsText = getMainContentTableHeadings();
+    var tableHeadingsHTML = "";
+    for ( var i = 0; i < tableHeadingsText.length; i++ ) {
+        tableHeadingsHTML += "<td><b>" + tableHeadingsText[i] + "</b></td>";
+    }
+    // Get the content for the table.
+    var tableContentHTML = "";
+    for ( var j = 0; j < data.length; j++ ) {
+        // Display the amount correctly.
+        var amount = data[j].amount;
+        if ( amount.toString().indexOf( "." ) !== -1 ) {
+            if ( amount.toString().split( "." )[1].length < 2 ) amount += "0";
+        }
+        // Add the data to our table.
+        tableContentHTML += "<tr class=\"w3-hover-light-blue\"><td>" + dateToString( data[j].date ) + "</td>" +
+                            "<td>" + data[j].name + "</td>" +
+                            "<td>" + amount + getCurrencySign() + "</td>" +
+                            "<td>" + data[j].category + "</td>" +
+                            "<td>" + data[j].budget + "</td>" +
+                            "<td>" + getType( data[j].type ) + "</td></tr>";
+    }
+    // Display the table containing the data.
+    $( "#mainContent" ).html( "<br><table class=\"w3-table-all w3-round\">" +
+                              "<tr>" + tableHeadingsHTML + "</tr>" +
+                              tableContentHTML + "</table>" );
 }
 
 /**

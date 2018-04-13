@@ -342,3 +342,16 @@ function getInvalidInputMessage() {
             return "Ung&uuml;ltige Eingabe!"
     }
 }
+
+/**
+ * This function returns the message in case no transaction was found.
+ * @return {String} The message in case no transaction was found.
+ */
+function getMissingTransactionsMessage() {
+    switch ( getLanguage() ) {
+        case "en":
+            return "No transactions found!";
+        case "de":
+            return "Es wurden keine Transaktionen gefunden!"
+    }
+}
