@@ -264,9 +264,10 @@ function displayContent( displayType, budget, type, startDate, endDate, amountFr
             }
         }
     }
-    // No date filter? Search all files.
+    // No date filter? Apply the standard range (current month).
     else {
-        files = getJSONFiles();
+        // Returns the current file (without .json ending).
+        files.push( getCurrentFileName().substring( 0, getCurrentFileName().lastIndexOf( "." ) ) );
     }
     // Get all the matching data from every available file.
     var data = [];
@@ -329,7 +330,8 @@ function displayGraph( data ) {
         labels.push( data[i].name );
     }
     // Now we can display the graph.
-    createChart( $( "#graphCanvas" )[0], dataset, labels, colors, colors, readPreference( "chartType" ) );
+    console.log(dataset)
+    createChart( $( "#graphCanvas" )[0], labels, dataset, colors, colors, readPreference( "chartType" ) );
 }
 
 function displayTable( data ) {

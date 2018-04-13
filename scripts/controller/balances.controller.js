@@ -520,9 +520,11 @@ function setAllocationOn() {
 function activateDateRangePicker( id ) {
     // Get all the text we need in the correct language.
     var textElements = getRangeDatePickerPresetRangesTextElements();
+    var currentDate = new Date( getCurrentDate() * 1000 );
     // Create a new date range picker.
     $( id ).daterangepicker({
-        initialText: dateToString( getCurrentDate() - 604800 ) + " - " + dateToString( getCurrentDate() ),
+        // First day of the month? Only display this single day. Otherwise display the current month.
+        initialText: currentDate.getDate() === 1 ? dateToString( getCurrentDate() ) : dateToString( new Date( currentDate.getFullYear(), currentDate.getMonth(), 1 ).getTime() / 1000 ) + " - " + dateToString( getCurrentDate() ),
         dateFormat: "dd.mm.yy",
         applyButtonText: getRangeDatePickerApplyButtonText(),
         clearButtonText: getRangeDatePickerClearButtonText(),
