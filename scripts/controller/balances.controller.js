@@ -592,16 +592,5 @@ function updateContent() {
     // Find out which category is selected. If no category is selected, we save the empty string.
     var category = $( "#categorySelect" ).val().trim();
     // Now display the filtered content.
-
-    console.log(displayType)
-    console.log(budget)
-    console.log(type)
-    console.log(startDate)
-    console.log(endDate)
-    console.log(amountFrom)
-    console.log(amountTo)
-    console.log(name)
-    console.log(category)
-
     displayContent( displayType, budget, type, startDate, endDate, amountFrom, amountTo, name, category );
 }
