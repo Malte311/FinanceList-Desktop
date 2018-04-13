@@ -289,12 +289,16 @@ function displayContent( displayType, budget, type, startDate, endDate, amountFr
         }
         // Date not within the specified range? Continue without pushing the data.
         // Start date exists?
-        if ( startDate !== null && startDate.getDate() > new Date( data[i].date * 1000 ).getDate() ) {
-            continue;
+        if ( startDate !== null && startDate.getMonth() === new Date( data[i].date * 1000 ).getMonth() ) {
+            if ( startDate.getDate() > new Date( data[i].date * 1000 ).getDate() ) {
+                continue;
+            }
         }
         // End date exists?
-        if ( endDate !== null && endDate.getDate() < new Date( data[i].date * 1000 ).getDate() ) {
-            continue;
+        if ( endDate !== null && endDate.getMonth() === new Date( data[i].date * 1000 ).getMonth() ) {
+            if ( endDate.getDate() < new Date( data[i].date * 1000 ).getDate() ) {
+                continue;
+            }
         }
         // If we passed the filters above, we can push the data.
         newData.push( data[i] );
@@ -330,7 +334,6 @@ function displayGraph( data ) {
         labels.push( data[i].name );
     }
     // Now we can display the graph.
-    console.log(dataset)
     createChart( $( "#graphCanvas" )[0], labels, dataset, colors, colors, readPreference( "chartType" ) );
 }
 

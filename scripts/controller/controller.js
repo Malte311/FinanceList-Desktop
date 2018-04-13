@@ -313,6 +313,7 @@ function getNewDate( startDate, oldDate, interval ) {
  * @return {bool} A boolean which indiates if the amount is valid.
  */
 function checkAmountInput( input, emptyOk ) {
+    input = input.replace( ",", "." );
     if ( emptyOk && input === "" ) return true;
     if ( /[a-z]/i.test( input ) || !/\d/.test( input ) ) return false;
     // Some character is not a digit? Make sure that this is only a single dot.

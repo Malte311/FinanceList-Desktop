@@ -596,3 +596,29 @@ function updateContent() {
     // Now display the filtered content.
     displayContent( displayType, budget, type, startDate, endDate, amountFrom, amountTo, name, category );
 }
+
+/**
+ * This function creates a new dialog to execute transfers.
+ */
+function executeTransfer() {
+    // Get all current budgets.
+    var currentBudgets = readMainStorage( "budgets" );
+    // Iterate over them
+    var optionsFrom = "", optionsTo = "";
+    for ( var i = 0; i < currentBudgets.length; i++ ) {
+        optionsFrom += "<option>" + currentBudgets[i][0] + "</option>";
+        optionsTo += "<option>" + currentBudgets[i][0] + "</option>";
+    }
+    var text = getTransferDialogTextElements()[0] +
+               "<br><hr>" +
+               "<table class=\"w3-table-all\">" +
+               "<tr><th>" + getTransferDialogTextElements()[1] + "</th>" +
+               "<th>" + getTransferDialogTextElements()[2] + "</th></tr>" +
+               "<tr><td><select class=\"w3-select\" id=\"budgetFrom\">" + optionsFrom + "</select></td>" +
+               "<td><select class=\"w3-select\" id=\"budgetTo\">" + optionsTo + "</select></td></tr></table>" +
+               "<br><hr>" + "<b>" + getTransferDialogTextElements()[3] + "</b>: " + "<input style=\"width=50px;\" type=\"text\" id=\"transferAmount\">";
+    // Create a new dialog.
+    createDialog( getTransferDialogTitle(), text, function() {
+
+    });
+}

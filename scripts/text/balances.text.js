@@ -339,7 +339,7 @@ function getInvalidInputMessage() {
         case "en":
             return "Invalid input!";
         case "de":
-            return "Ung&uuml;ltige Eingabe!"
+            return "Ung&uuml;ltige Eingabe!";
     }
 }
 
@@ -352,6 +352,32 @@ function getMissingTransactionsMessage() {
         case "en":
             return "No transactions found!";
         case "de":
-            return "Es wurden keine Transaktionen gefunden!"
+            return "Es wurden keine Transaktionen gefunden!";
+    }
+}
+
+/**
+ * This function returns the text elements for the transfer dialog.
+ * @return {String[]} The text elements for the transfer dialog.
+ */
+function getTransferDialogTextElements() {
+    switch ( getLanguage() ) {
+        case "en":
+            return ["Here you can transfer money between your budgets.", "From", "To", "Amount"];
+        case "de":
+            return ["Hier k&ouml;nnen Sie Geld zwischen Ihren Konten &uuml;bertragen.", "Von", "Nach", "Betrag"];
+    }
+}
+
+/**
+ * This function returns the title for the transfer dialog.
+ * @return {String} The title for the transfer dialog.
+ */
+function getTransferDialogTitle() {
+    switch ( getLanguage() ) {
+        case "en":
+            return "Transfer money";
+        case "de":
+            return "Geld \u00fcbertragen";
     }
 }
