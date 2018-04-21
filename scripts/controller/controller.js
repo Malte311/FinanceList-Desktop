@@ -85,7 +85,15 @@ function getCurrencySign() {
  * @param {String} charttype The type of the chart.
  */
 function createChart( canvas, categories, dataset, bgcolors, bdcolors, charttype ) {
-     spendingChart = new Chart( canvas, {
+    // Make sure, that there are enough colors.
+    while ( dataset.length > bgcolors.length ) {
+        // Add the same colors again and again until we have enough colors.
+        bgcolors = bgcolors.concat( bgcolors );
+    }
+    // Get the same colors for the background.
+    bdcolors = bgcolors;
+    // Create a new chart.
+     new Chart( canvas, {
         type: charttype,
         data: {
             labels: categories,
