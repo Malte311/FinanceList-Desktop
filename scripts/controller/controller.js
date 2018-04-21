@@ -65,13 +65,13 @@ function getCurrencySign() {
     var currentCurrency = readPreference( "currency" );
     switch ( currentCurrency ) {
         case "Euro":
-            return "&euro;";
+            return "\u20AC";
         case "Dollar":
-            return "&dollar;";
+            return "\u0024";
         case "Pound":
-            return "&pound;";
+            return "\u00A3";
         default:
-            return "&euro;";
+            return "\u20AC";
     }
 }
 
@@ -104,8 +104,15 @@ function createChart( canvas, categories, dataset, bgcolors, bdcolors, charttype
                 borderWidth: 0
             }]
         },
-        // Don't show axes.
         options: {
+            tooltips: {
+                callbacks: {
+                    label: function( tooltipItem, chartData ) {
+                        return chartData.labels[tooltipItem.index] + ': ' + chartData.datasets[0].data[tooltipItem.index] + getCurrencySign();
+                    }
+                }
+            },
+            // Don't show axes.
             display: false
         }
     });
