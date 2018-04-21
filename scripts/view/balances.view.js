@@ -154,9 +154,9 @@ function displayContentControls() {
     $( "#mainContentControls" ).html(
         // Display a selection for display types (graph/table).
         "<form class=\"w3-center\">" +
-            "<input id=\"graph\" onclick=\"displayContent('graph', '', '', null, null, '', '', '', '');\" type=\"radio\" name=\"type\" checked>" +
+            "<input id=\"graph\" onclick=\"updateContent();\" type=\"radio\" name=\"type\" checked>" +
             getDisplayTypeTextElements()[0] +
-            "<input id=\"table\" onclick=\"displayContent('table', '', '', null, null, '', '', '', '');\" style=\"margin-left:15px;\" type=\"radio\" name=\"type\">" +
+            "<input id=\"table\" onclick=\"updateContent();\" style=\"margin-left:15px;\" type=\"radio\" name=\"type\">" +
             getDisplayTypeTextElements()[1] +
         "</form><hr>" +
         // Display filters for the user so they can choose which data they want to see.
@@ -170,9 +170,9 @@ function displayContentControls() {
                     "</td>" +
                     "<td>" +
                         "<select class=\"w3-select\" id=\"typeSelect\">" +
-                            "<option selected=\"selected\">" + getMainContentFilterText()[1] + "</option>" +
+                            "<option>" + getMainContentFilterText()[1] + "</option>" +
                             "<option>" + getMainContentFilterText()[2] + "</option>" +
-                            "<option>" + getMainContentFilterText()[3] + "</option>" +
+                            "<option selected=\"selected\">" + getMainContentFilterText()[3] + "</option>" +
                         "</select>" +
                     "</td>" +
                     "<td>" +
@@ -204,8 +204,6 @@ function displayContentControls() {
       source: readMainStorage( "availableCategories" )
     });
 }
-
-
 
 /**
  * This function displays the details the user wishes to see.
@@ -429,8 +427,8 @@ function updateView() {
     // Display a list of currently available budgets.
     displayBudgets();
     // Display the budgets in detail.
+    updateContent();
     displayContentControls();
-    displayContent( "graph", "", "", null, null, "", "", "", "" );
     // Display a list of currently recurring transactions.
     displayRecurringTransactions();
 }
