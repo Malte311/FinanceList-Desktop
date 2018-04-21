@@ -22,7 +22,13 @@
     "chart.js": "^2.7.2",
     "electron": "~1.8.2",
     "electron-json-storage": "^4.0.2",
+    "electron-packager": "^12.0.1",
     "jquery": "^3.3.1"
+  },
+  "scripts": {
+  "package-mac": "electron-packager ./ --platform=darwin --arch=x64 --asar --icon=./img/tab.icns --prune=true --out=./application/",
+  "package-win": "electron-packager ./ --platform=win32 --arch=x64 --asar --icon=./img/tab.ico --prune=true --out=./application/",
+  "package-linux": "electron-packager ./ --platform=linux --arch=x64 --asar --icon=./img/tab.png --prune=true --out=./application/"
   },
   "dependencies": {
     "npm": "^5.8.0"
