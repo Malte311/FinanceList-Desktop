@@ -619,6 +619,51 @@ function executeTransfer() {
                "<br><hr>" + "<b>" + getTransferDialogTextElements()[3] + "</b>: " + "<input style=\"width=50px;\" type=\"text\" id=\"transferAmount\">";
     // Create a new dialog.
     createDialog( getTransferDialogTitle(), text, function() {
-
+        // Get input.
+        var budgetFrom = $( "#budgetFrom option:selected" ).text();
+        var budgetTo = $( "#budgetTo option:selected" ).text();
+        var amountInput = $( "#transferAmount" ).val().trim();
+        // Input valid?
+        if ( checkAmountInput( amountInput, false ) ) {
+            // Add the transfer.
+            addTransfer( budgetFrom, budgetTo, parseFloat( amountInput ) );
+            // Close the dialog and update the view.
+            $( this ).dialog( "close" );
+            updateView();
+        }
+        // Invalid input?
+        else {
+            dialog.showErrorBox( "Error", "Invalid input" );
+        }
     });
+}
+
+/**
+ * This function transfers money from one budget to another.
+ * @param {String} budgetFrom The budget from which we want to transfer money.
+ * @param {String} budgetTo The budget to which we want to transfer money.
+ * @param {float} amount The amount we want to transfer.
+ */
+function addTransfer( budgetFrom, budgetTo, amount ) {
+    // We just need to calculate if the budgets are different.
+    if ( budgetFrom !== budgetTo ) {
+        // Search for the correct budgets.
+        var budgets = readMainStorage( "budgets" );
+        for ( var i = 0; i < budgets.length; i++ ) {
+            // Update the balances for the budgets.
+            if ( budgets[i][0] === budgetFrom ) {
+                // Make sure, that the amount is not too big (the money must exist).
+                if ( amount > budgets[i][1] ) {
+                    dialog.showErrorBox( "Error", "Not enough money available!" );
+                    break;
+                }
+                budgets[i][1] = Math.round( (budgets[i][1] - amount) * 1e2 ) / 1e2;
+            }
+            if ( budgets[i][0] === budgetTo ) {
+                budgets[i][1] = Math.round( (budgets[i][1] + amount) * 1e2 ) / 1e2;
+            }
+        }
+        // Write back to main storage.
+        writeMainStorage( "budgets", budgets );
+    }
 }

@@ -124,11 +124,11 @@ function addSpending( spending, sum, budget, category, date ) {
         // Found it? Then update the value.
         // Update all time spendings.
         if ( allTimeSpendings[i][0] === budget ) {
-            allTimeSpendings[i][1] += sum;
+            allTimeSpendings[i][1] = Math.round( (allTimeSpendings[i][1] + sum) * 1e2 ) / 1e2;
         }
         // Update the balance of the budget.
         if ( budgets[i][0] === budget ) {
-            budgets[i][1] -= sum;
+            budgets[i][1] = Math.round( (budgets[i][1] - sum) * 1e2 ) / 1e2;
         }
     }
     // Write back to storage.
