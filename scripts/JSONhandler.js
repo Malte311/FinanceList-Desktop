@@ -10,7 +10,7 @@ const storage = require( 'electron-json-storage' );
 // We use this module to get the correct path seperator (only needed to display it correctly).
 const path = require( 'path' );
 // A default settings.json object.
-const defaultObj = {"windowSize":"1920x1080","fullscreen":false,"language":"en","path": __dirname + path.sep + "data","currency":"Euro","chartType":"pie"};
+const defaultObj = {"windowSize":"1920x1080","fullscreen":false,"language":"en","path": storage.getDefaultDataPath() + path.sep + "data","currency":"Euro","chartType":"pie"};
 // A default mainStorage.json object.
 const defaultStorageObj = {"budgets":[["checking account", 0.0]],"currentDate":getCurrentDate(),"allTimeEarnings":[["checking account", 0.0]],"allTimeSpendings":[["checking account", 0.0]],"allocationOn":false,"allocation":[["checking account", 100]],"recurring":[],"update":false,"availableNames":[],"availableCategories":[]};
 // The path to the settings.json file.
@@ -18,8 +18,51 @@ const settingsPath = storage.getDefaultDataPath() + path.sep + "settings.json";
 // The path to the mainStorage.json file (no constant since the path can be changed at runtime).
 var mainStoragePath = readPreference( "path" ) + path.sep + "mainStorage.json";
 // This is for reading the settings.json file in the main process.
-module.exports.getPreference = ( name ) => readPreference( name );
-module.exports.initStorage = () => initMainStorage();
+module.exports.readPreference = ( name ) => readPreference( name );
+module.exports.initStorage = () => initStorage();
+
+/**
+ * This function initializes the storage. This means, we create a mainStorage.json
+ * file if it is missing or we update it if it exists. This file keeps track of all the data.
+ * The initMainStorage() function is called when the application is started.
+ */
+function initStorage() {
+    // Create directories, if they doesn't exist yet.
+    var path = readPreference( "path" );
+    if ( !fs.existsSync( path ) ) createPath( path );
+    // Check if the file exists. If not, create it.
+    if ( fs.existsSync( mainStoragePath ) ) {
+        // File exists, so we check if it needs to get updated.
+        var mainStorageObj = JSON.parse( fs.readFileSync( mainStoragePath ) );
+        // Missing default budget? Create it.
+        if ( mainStorageObj.budgets === undefined || mainStorageObj.budgets.length < 1 || mainStorageObj.budgets.length === undefined ) {
+            writeMainStorage( "budgets", defaultStorageObj.budgets );
+        }
+        // Set the current date to today.
+        writeMainStorage( "currentDate", getCurrentDate() );
+        // Set update to false, because the check for updates did not happen yet.
+        writeMainStorage( "update", false );
+    }
+    // File does not exist: Create it and write default values in it.
+    else {
+        fs.appendFileSync( mainStoragePath, JSON.stringify( defaultStorageObj ) );
+    }
+}
+
+/**
+ * This function creates missing paths.
+ */
+function createPath( newPath ) {
+	var start = "";
+	newPath.split( path.sep ).forEach( function ( folder ) {
+		if ( folder.length > 0 ) {
+			start += folder + path.sep;
+			if ( !fs.existsSync( start ) ) {
+				fs.mkdirSync( start );
+			}
+		}
+	});
+}
 
 /**
  * This function reads a field in the settings.json file.
@@ -27,6 +70,11 @@ module.exports.initStorage = () => initMainStorage();
  * @return {Object} The corresponding value of the field.
  */
 function readPreference( name ) {
+    // Path missing? Create it.
+    var path = storage.getDefaultDataPath();
+    if ( !fs.existsSync( path ) ) {
+        createPath( path );
+    }
     // Check if the file exists. If not, create it.
     if ( fs.existsSync( settingsPath ) ) {
         var settingsObj = JSON.parse( fs.readFileSync( settingsPath ) );
@@ -51,6 +99,9 @@ function readPreference( name ) {
  * @param {Object} value The value we want to set for the corresponding field.
  */
 function storePreference( name, value ) {
+    // Path missing? Create it.
+    var path = storage.getDefaultDataPath();
+    if ( !fs.existsSync( path ) ) createPath( path );
     // Check if the file exists. If not, create it.
     if ( fs.existsSync( settingsPath ) ) {
         var settingsObj = JSON.parse( fs.readFileSync( settingsPath ) );
@@ -66,36 +117,6 @@ function storePreference( name, value ) {
         var settingsObj = JSON.parse( fs.readFileSync( settingsPath ) );
         settingsObj[name] = value;
         fs.writeFileSync( settingsPath, JSON.stringify( settingsObj ) );
-    }
-}
-
-/**
- * This function initializes the storage. This means, we create a mainStorage.json
- * file if it is missing or we update it if it exists. This file keeps track of all the data.
- * The initMainStorage() function is called when the application is started.
- */
-function initMainStorage() {
-    // Create directory, if it doesn't exist yet.
-    var path = readPreference( "path" );
-    if ( !fs.existsSync( path ) ) {
-        fs.mkdirSync( path );
-    }
-    // Check if the file exists. If not, create it.
-    if ( fs.existsSync( mainStoragePath ) ) {
-        // File exists, so we check if it needs to get updated.
-        var mainStorageObj = JSON.parse( fs.readFileSync( mainStoragePath ) );
-        // Missing default budget? Create it.
-        if ( mainStorageObj.budgets === undefined || mainStorageObj.budgets.length < 1 || mainStorageObj.budgets.length === undefined ) {
-            writeMainStorage( "budgets", defaultStorageObj.budgets );
-        }
-        // Set the current date to today.
-        writeMainStorage( "currentDate", getCurrentDate() );
-        // Set update to false, because the check for updates did not happen yet.
-        writeMainStorage( "update", false );
-    }
-    // File does not exist: Create it and write default values in it.
-    else {
-        fs.appendFileSync( mainStoragePath, JSON.stringify( defaultStorageObj ) );
     }
 }
 

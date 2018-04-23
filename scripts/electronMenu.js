@@ -13,15 +13,15 @@ var menuTemplate = [];
 // Set all labels in dependency of the currently selected language.
 var editLabels, windowLabels;
 
-var currentLanguage = JSONhandler.getPreference( "language" );
+var currentLanguage = JSONhandler.readPreference( "language" );
 switch ( currentLanguage ) {
     case "en":
         editLabels = ["Edit", "Undo", "Redo", "Cut", "Copy", "Paste"];
-        windowLabels = ["Window", "Reload", "Minimize", "Close"];
+        windowLabels = ["Window", "Reload", "Minimize", "Close", "Exit"];
         break;
     case "de":
         editLabels = ["Bearbeiten", "Rückgängig", "Wiederholen", "Ausschneiden", "Kopieren", "Einfügen"];
-        windowLabels = ["Fenster", "Neu laden", "Minimieren", "Schließen"];
+        windowLabels = ["Fenster", "Neu laden", "Minimieren", "Schließen", "Beenden"];
         break;
 }
 
@@ -69,6 +69,10 @@ menuTemplate.push({
             label: windowLabels[3],
             role: 'close'
         },
+        {
+            label: windowLabels[4],
+            role: 'quit'
+        }
     ]
 });
 
@@ -78,8 +82,7 @@ if ( config.devMode ) {
         label: 'Developer',
         submenu: [
             { role: 'forcereload' },
-            { role: 'toggledevtools' },
-            { role: 'quit' }
+            { role: 'toggledevtools' }
         ]
     });
 }

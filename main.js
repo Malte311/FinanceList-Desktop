@@ -16,14 +16,15 @@ let mainWindow
 
 function createWindow () {
     // Read the stored data to select the window size and window mode.
-    var screenWidth, screenHeight;
+    var screenWidth, screenHeight, fullscreen;
     try {
         // Note: If there are no numbers found to be parsed, this fails and
         // we will set default values. If the numbers are nonsense, the window
         // will still appear (numbers too big won't matter and negative numbers
         // won't matter as well). That's why we don't do further checking on the numbers.
-        screenWidth = parseInt( JSONhandler.getPreference( "windowSize" ).split( "x" )[0] );
-        screenHeight = parseInt( JSONhandler.getPreference( "windowSize" ).split( "x" )[1] );
+        screenWidth = parseInt( JSONhandler.readPreference( "windowSize" ).split( "x" )[0] );
+        screenHeight = parseInt( JSONhandler.readPreference( "windowSize" ).split( "x" )[1] );
+        fullscreen = JSONhandler.readPreference( "fullscreen" );
     }
     // In case the file is corrupted, we set some default values.
     catch ( err ) {
@@ -32,7 +33,6 @@ function createWindow () {
         screenWidth = 1920;
         screenHeight = 1080;
     }
-    var fullscreen = JSONhandler.getPreference( "fullscreen" );
     // We want make sure, fullscreen is a boolean type value. Otherwise
     // we might get into trouble when setting the "fullscreen" option of our mainWindow.
     if ( fullscreen !== true && fullscreen !== false ) fullscreen = false;
