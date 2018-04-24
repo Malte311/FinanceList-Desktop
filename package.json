@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron .",
     "package-mac": "electron-packager ./ --platform=darwin --arch=x64 --asar --icon=./img/tab.icns --prune=true --out=./application/",
-    "create-dmg": "electron-installer-dmg ./application/FinanceList-Desktop-darwin-x64/FinanceList-Desktop.app FinanceList-Desktop",
+    "create-dmg": "electron-installer-dmg ./application/FinanceList-Desktop-darwin-x64/FinanceList-Desktop.app FinanceList-Desktop-mac-x64",
     "package-win": "electron-packager ./ --platform=win32 --arch=x64 --asar --icon=./img/tab.ico --prune=true --out=./application/",
     "package-linux": "electron-packager ./ --platform=linux --arch=x64 --asar --icon=./img/tab.png --prune=true --out=./application/"
   },
