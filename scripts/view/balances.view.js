@@ -328,7 +328,12 @@ function displayGraph( data ) {
     // Get the dataset (amounts) and labels (names).
     for ( var i = 0; i < data.length; i++ ) {
         // Add the amount and name for our graph.
-        dataset.push( data[i].amount );
+        // Display the amount correctly.
+        var amount = data[i].amount;
+        if ( amount.toString().indexOf( "." ) !== -1 ) {
+            if ( amount.toString().split( "." )[1].length < 2 ) amount += "0";
+        }
+        dataset.push( amount );
         labels.push( data[i].name );
     }
     // Now we can display the graph.

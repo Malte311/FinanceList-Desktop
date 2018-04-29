@@ -88,7 +88,7 @@ function createChart( canvas, categories, dataset, bgcolors, bdcolors, charttype
     // Make sure, that there are enough colors.
     while ( dataset.length > bgcolors.length ) {
         // Add the same colors again and again until we have enough colors.
-        bgcolors = bgcolors.concat( bgcolors );
+        bgcolors = bgcolors.concat( colors );
     }
     // Get the same colors for the background.
     bdcolors = bgcolors;

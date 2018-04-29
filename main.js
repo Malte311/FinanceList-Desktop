@@ -4,7 +4,7 @@
 **************************************************************************************************/
 
 const electron = require( 'electron' );
-// Systemconfiguration file.
+// Configuration file.
 const config = require( './scripts/config.js' );
 // Module to read the settings.json file (we need this to get the window size
 // and to initialize the storage, which means create missing paths and files).
