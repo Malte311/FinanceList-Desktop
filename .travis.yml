@@ -1,0 +1,19 @@
+language: node_js
+
+os: osx
+
+node_js:
+  - "iojs"
+  - "7"
+
+branches:
+  only:
+    - "master"
+
+deploy:
+  provider: pages
+  api_key: $GITHUB_TOKEN
+  local-dir: "out"
+  skip_cleanup: true
+  on:
+    branch: master
