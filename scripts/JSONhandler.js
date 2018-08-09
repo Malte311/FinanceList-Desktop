@@ -173,7 +173,7 @@ function writeMainStorage( field, value ) {
  * @param {String} file The file we want to access (with .json ending!).
  * @param {JSON} quest Contains a connector (or/and) and an array of parameter to
  * filter objects. Example: quest = { connector : "or", params : [["type", "earning"],["budget", "checking account"]] }
- * @return {JSON array} All the data which matches the quest.
+ * @return {JSON[]} All the data which matches the quest.
  */
 function getData( file, quest ) {
     // Get the data object we want to access.
@@ -282,7 +282,7 @@ function getCurrentFileName() {
 
 /**
  * This function returns all JSON files in the current data directory.
- * @return {String array} An array containing the names of all .json files.
+ * @return {String[]} An array containing the names of all .json files.
  */
 function getJSONFiles() {
     // First, get all files. Then exclude every file which is not a .json file.
