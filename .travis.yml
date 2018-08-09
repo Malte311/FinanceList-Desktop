@@ -15,14 +15,14 @@ before_deploy: ./build.sh
 deploy:
   - provider: pages
     github-token: $GITHUB_TOKEN
-    local-dir: "out"
+    local-dir: "./out"
     skip_cleanup: true
     on:
       branch: master
   - provider: releases
     api_key: $GITHUB_TOKEN
     file:
-      - "FinanceList-Desktop-linux-x64.zip"
-      - "FinanceList-Desktop-mac-x64.dmg"
-      - "FinanceList-Desktop-win32-x64.zip"
+      - "./application/FinanceList-Desktop-win32-x64.zip"
+      - "./application/FinanceList-Desktop-linux-x64.zip"
+      - "./application/FinanceList-Desktop-mac-x64.dmg"
     skip_cleanup: true
