@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "test": "mocha",
     "package-mac": "electron-packager ./ --platform=darwin --arch=x64 --asar --icon=./img/tab.icns --prune=true --out=./application/",
     "create-dmg": "electron-installer-dmg ./application/FinanceList-Desktop-darwin-x64/FinanceList-Desktop.app FinanceList-Desktop-mac-x64",
     "package-win": "electron-packager ./ --platform=win32 --arch=x64 --asar --icon=./img/tab.ico --prune=true --out=./application/",
@@ -32,6 +33,7 @@
     "electron-json-storage": "^4.1.0",
     "jquery": "^3.3.1",
     "jsdoc": "^3.5.5",
+    "mocha": "^5.2.0",
     "npm": "^5.8.0",
     "path": "^0.12.7"
   }
