@@ -1,7 +1,6 @@
-/**************************************************************************************************
- * This file is the entry point of our app. It creates the window and an application menu.
- * It loads the index.html and displays the window when done loading everything.
-**************************************************************************************************/
+/**
+ * This file is the entry point of our app. It creates the window and loads the index.html file.
+ */
 
 const electron = require( 'electron' );
 // Configuration file.
@@ -14,6 +13,9 @@ const JSONhandler = require( './scripts/JSONhandler.js' );
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
+/**
+ * Creates the application window.
+ */
 function createWindow () {
     // Read the stored data to select the window size and window mode.
     var screenWidth, screenHeight, fullscreen;

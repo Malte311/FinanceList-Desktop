@@ -2,6 +2,8 @@
  * This file is responsible for the view on the overview page.
 **************************************************************************************************/
 
+var textfile;
+
 /**
  * This function displays the current surplus for each budget. This means,
  * it will display the difference between all earnings from the current month
@@ -97,7 +99,7 @@ function displayRecentTransactions( type ) {
             if ( data.length - limit === i ) break;
         }
         // Display the table with recent transactions.
-        $( "#" + type + "Recent" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentTransactionsHeading( type ) + " </h3>" + recentTransactionsTable + "</table>" );
+        $( "#" + type + "Recent" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getTextFromJSON( textfile, type === "spending" ? "recentSpendings" : "recentEarnings" ) + " </h3>" + recentTransactionsTable + "</table>" );
     }
     // Display a message that no data exists yet.
     else {
@@ -151,6 +153,7 @@ function displayChart( type ) {
  * This function updates the view anytime changes are made.
  */
 function updateView() {
+    textfile = "./text/index_" + getLanguage() + ".json";
     // Display current balances.
     displayBalances();
     // Display a table of recent spendings.

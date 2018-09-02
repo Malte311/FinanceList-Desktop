@@ -90,8 +90,9 @@
         <!-- JavaScript initialization -->
         <script>
             // This function checks, if some recurring transactions need to be executed
-            // and executes them, if so.
-            executeRecurringTransactions();
+            // and executes them, if so. In addition to that, the user gets a notification in case
+            // there is a newer version of the application available.
+            updateApplication();
             const $ = require( 'jquery' );
             loadPage();
         </script>

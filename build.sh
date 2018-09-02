@@ -1,3 +1,4 @@
+# Install wine to run package-win
 npm install wine-darwin
 # Setup ~/.wine by running a command
 ./node_modules/.bin/wine hostnamene
@@ -11,4 +12,5 @@ zip -r FinanceList-Desktop-linux-x64.zip application/FinanceList-Desktop-linux-x
 npm run package-mac
 npm run create-dmg
 
+# Documentation, generated in directory ./out
 jsdoc -r scripts
