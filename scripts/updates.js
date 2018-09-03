@@ -5,6 +5,12 @@
  * @author Malte311
  */
 
+const electron = require( 'electron' );
+const request = require( 'request' );
+const compareVersions = require('compare-versions');
+
+var hasUpdate = false;
+
 /**
  * Updates the application (searches for newer versions and executes recurring transactions).
  */
@@ -81,4 +87,46 @@ function executeRecurringTransactions() {
  */
 function checkForUpdates() {
 
+    var options = {
+        url: "https://api.github.com/repos/Malte311/FinanceList-Desktop/contents/package.json",
+        headers: {
+				"User-Agent": "FinanceList-Desktop by Malte311"
+		}
+    };
+
+    // Compare current version to the latest version on GitHub
+    function response( e, resp, body ) {
+        if ( !e && resp.statusCode == 200 ) {
+            body = JSON.parse( body );
+
+            var package_json = new Buffer( body.content, 'base64' ).toString( 'ascii' );
+            package_json = JSON.parse( package_json );
+
+            hasUpdate = compareVersions( remote.app.getVersion(), package_json.version ) < 0;
+
+            showUpdateNotification();
+        }
+    }
+
+    request( options, response );
+}
+
+/**
+ * Shows a notification in case a new version of this application is available.
+ */
+function showUpdateNotification() {
+    if ( hasUpdate ) {
+        var textdata = readJSONFile( "./text/updates_" + getLanguage() + ".json" );
+        dialog.showMessageBox({
+            type: "info",
+            title: textdata["updateAvailable"],
+            message: textdata["updateMessage"],
+            buttons: [textdata["download"], textdata["later"]],
+            cancelId: 1
+        }, function ( num ) {
+            if ( num == 0 ) {
+                electron.shell.openExternal( "https://github.com/malte311/FinanceList-Desktop/releases/latest" );
+            }
+        });
+    }
 }

@@ -99,7 +99,7 @@ function displayRecentTransactions( type ) {
             if ( data.length - limit === i ) break;
         }
         // Display the table with recent transactions.
-        $( "#" + type + "Recent" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getTextFromJSON( textfile, type === "spending" ? "recentSpendings" : "recentEarnings" ) + " </h3>" + recentTransactionsTable + "</table>" );
+        $( "#" + type + "Recent" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentTransactionsHeading( type ) + " </h3>" + recentTransactionsTable + "</table>" );
     }
     // Display a message that no data exists yet.
     else {

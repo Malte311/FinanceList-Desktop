@@ -364,9 +364,8 @@ function dateToString( timestamp ) {
 /**
  * Returns texts in the correct language.
  * @param {String} filename The name of the file containing the text.
- * @param {String} key The key of the data we want to get.
- * @return {String} The corresponding data to the given key.
+ * @return {JSON} The corresponding data in JSON format.
  */
-function getTextFromJSON( filename, key ) {
-    return JSON.parse( fs.readFileSync( filename ) )[key];
+function readJSONFile( filename ) {
+    return JSON.parse( fs.readFileSync( filename ) );
 }

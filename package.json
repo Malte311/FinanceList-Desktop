@@ -29,10 +29,12 @@
   },
   "dependencies": {
     "chart.js": "^2.7.2",
+    "compare-versions": "^3.4.0",
     "electron-json-storage": "^4.1.0",
     "jquery": "^3.3.1",
     "jsdoc": "^3.5.5",
     "npm": "^5.8.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "request": "^2.88.0"
   }
 }
