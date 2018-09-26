@@ -7,7 +7,7 @@
 
 const electron = require( 'electron' );
 const request = require( 'request' );
-const compareVersions = require('compare-versions');
+const compareVersions = require( 'compare-versions' );
 
 var hasUpdate = false;
 
@@ -86,7 +86,6 @@ function executeRecurringTransactions() {
  * Checks for updates. If an update is available, the user gets a notification.
  */
 function checkForUpdates() {
-
     var options = {
         url: "https://api.github.com/repos/Malte311/FinanceList-Desktop/contents/package.json",
         headers: {
@@ -107,7 +106,6 @@ function checkForUpdates() {
             showUpdateNotification();
         }
     }
-
     request( options, response );
 }
 
@@ -116,7 +114,7 @@ function checkForUpdates() {
  */
 function showUpdateNotification() {
     if ( hasUpdate ) {
-        var textdata = readJSONFile( "./text/updates_" + getLanguage() + ".json" );
+        var textdata = readJSONFile( "./text/updates_" + getLanguage() + ".json.js" );
         dialog.showMessageBox({
             type: "info",
             title: textdata["updateAvailable"],
