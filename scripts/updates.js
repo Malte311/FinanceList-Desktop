@@ -1,6 +1,6 @@
 /**
  * This file is for updates. Every time the application is started, the functions in here
- * will be exectuted first to check for updates.
+ * will be exectuted first to check for updates (and to keep transactions up to date)
  *
  * @author Malte311
  */
