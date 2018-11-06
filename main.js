@@ -1,5 +1,8 @@
 /**
- * This file is the entry point of our app. It creates the window and loads the index.html file.
+ * This file is the entry point of our app.
+ * It creates the window and loads the index.html file.
+ *
+ * @author Malte311
  */
 
 const electron = require( 'electron' );

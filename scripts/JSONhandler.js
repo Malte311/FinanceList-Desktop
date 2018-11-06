@@ -1,7 +1,9 @@
-/**************************************************************************************************
- * This file is for handling the storage (.json files). It does everything related to files and
- * directories.
-**************************************************************************************************/
+/**
+ * This file is for handling the storage (.json files).
+ * It does everything related to files and directories.
+ *
+ * @author Malte311
+ */
 
 // Node FileSystem to read and write in .json files.
 const fs = require( 'fs' );
@@ -17,6 +19,7 @@ const defaultStorageObj = {"budgets":[["checking account", 0.0]],"currentDate":g
 const settingsPath = storage.getDefaultDataPath() + path.sep + "settings.json";
 // The path to the mainStorage.json file (no constant since the path can be changed at runtime).
 var mainStoragePath = readPreference( "path" ) + path.sep + "mainStorage.json";
+var currentFile = readPreference( "path" ) + path.sep + getCurrentFileName();
 // This is for reading the settings.json file in the main process.
 module.exports.readPreference = ( name ) => readPreference( name );
 module.exports.initStorage = () => initStorage();
@@ -29,8 +32,16 @@ module.exports.initStorage = () => initStorage();
 function initStorage() {
     // Create directories, if they doesn't exist yet.
     var path = readPreference( "path" );
-    if ( !fs.existsSync( path ) ) createPath( path );
-    // Check if the file exists. If not, create it.
+    if ( !fs.existsSync( path ) ) {
+        createPath( path );
+    }
+
+    // Create the current file, if it is missing
+    if ( !fs.existsSync(currentFile) ) {
+        fs.appendFileSync( currentFile, "[]" );
+    }
+
+    // Check if the mainstorage file exists. If not, create it.
     if ( fs.existsSync( mainStoragePath ) ) {
         // File exists, so we check if it needs to get updated.
         var mainStorageObj = JSON.parse( fs.readFileSync( mainStoragePath ) );
