@@ -1,6 +1,8 @@
-/**************************************************************************************************
+/**
  * This file creates our application menu in the correct language.
-**************************************************************************************************/
+ *
+ * @author Malte311
+ */
 
 // We use this to find out, which language is selected.
 const JSONhandler = require( './JSONhandler.js' );
