@@ -9,6 +9,8 @@ const electron = require( 'electron' );
 const request = require( 'request' );
 const compareVersions = require( 'compare-versions' );
 
+const repoURL = "https://api.github.com/repos/Malte311/FinanceList-Desktop/contents/package.json";
+const latestRelease = "https://github.com/malte311/FinanceList-Desktop/releases/latest";
 var hasUpdate = false;
 
 /**
@@ -87,9 +89,9 @@ function executeRecurringTransactions() {
  */
 function checkForUpdates() {
     var options = {
-        url: "https://api.github.com/repos/Malte311/FinanceList-Desktop/contents/package.json",
+        url: repoURL,
         headers: {
-				"User-Agent": "FinanceList-Desktop by Malte311"
+            "User-Agent": "FinanceList-Desktop by Malte311"
 		}
     };
 
@@ -123,7 +125,7 @@ function showUpdateNotification() {
             cancelId: 1
         }, function ( num ) {
             if ( num == 0 ) {
-                electron.shell.openExternal( "https://github.com/malte311/FinanceList-Desktop/releases/latest" );
+                electron.shell.openExternal( latestRelease );
             }
         });
     }

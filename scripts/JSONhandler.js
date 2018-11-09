@@ -12,9 +12,15 @@ const storage = require( 'electron-json-storage' );
 // We use this module to get the correct path seperator (only needed to display it correctly).
 const path = require( 'path' );
 // A default settings.json object.
-const defaultObj = {"windowSize":"1920x1080","fullscreen":false,"language":"en","path": storage.getDefaultDataPath() + path.sep + "data","currency":"Euro","chartType":"pie"};
+const defaultObj = {"windowSize":"1920x1080","fullscreen":false,"language":"en",
+                    "path": storage.getDefaultDataPath() + path.sep + "data",
+                    "currency":"Euro","chartType":"pie"};
 // A default mainStorage.json object.
-const defaultStorageObj = {"budgets":[["checking account", 0.0]],"currentDate":getCurrentDate(),"allTimeEarnings":[["checking account", 0.0]],"allTimeSpendings":[["checking account", 0.0]],"allocationOn":false,"allocation":[["checking account", 100]],"recurring":[],"update":false,"availableNames":[],"availableCategories":[]};
+const defaultStorageObj = {"budgets":[["checking account", 0.0]],"currentDate":getCurrentDate(),
+                           "allTimeEarnings":[["checking account", 0.0]],
+                           "allTimeSpendings":[["checking account", 0.0]],"allocationOn":false,
+                           "allocation":[["checking account", 100]],"recurring":[],"update":false,
+                           "availableNames":[],"availableCategories":[]};
 // The path to the settings.json file.
 const settingsPath = storage.getDefaultDataPath() + path.sep + "settings.json";
 // The path to the mainStorage.json file (no constant since the path can be changed at runtime).
@@ -46,7 +52,9 @@ function initStorage() {
         // File exists, so we check if it needs to get updated.
         var mainStorageObj = JSON.parse( fs.readFileSync( mainStoragePath ) );
         // Missing default budget? Create it.
-        if ( mainStorageObj.budgets === undefined || mainStorageObj.budgets.length < 1 || mainStorageObj.budgets.length === undefined ) {
+        if ( mainStorageObj.budgets === undefined
+                || mainStorageObj.budgets.length < 1
+                || mainStorageObj.budgets.length === undefined ) {
             writeMainStorage( "budgets", defaultStorageObj.budgets );
         }
         // Set the current date to today.
@@ -183,7 +191,8 @@ function writeMainStorage( field, value ) {
  * This function reads user data (earnings/spendings) in a specified file.
  * @param {String} file The file we want to access (with .json ending!).
  * @param {JSON} quest Contains a connector (or/and) and an array of parameter to
- * filter objects. Example: quest = { connector : "or", params : [["type", "earning"],["budget", "checking account"]] }
+ * filter objects. Example:
+ * quest = { connector : "or", params : [["type", "earning"],["budget", "checking account"]] }
  * @return {JSON[]} All the data which matches the quest.
  */
 function getData( file, quest ) {
@@ -232,7 +241,9 @@ function getData( file, quest ) {
 function storeData( data ) {
     // Find out which file we want to use.
     var dateInStringFormat = dateToString( data.date );
-    var dataPath = readPreference( "path" ) + path.sep + dateInStringFormat.split( "." )[1] + "." + dateInStringFormat.split( "." )[2] + ".json";
+    var dataPath = readPreference( "path" ) + path.sep
+                                            + dateInStringFormat.split( "." )[1] + "."
+                                            + dateInStringFormat.split( "." )[2] + ".json";
     // File exists: Write the data in it.
     if ( fs.existsSync( dataPath ) ) {
         // Get existing data, add the new data and then write it.
@@ -287,8 +298,10 @@ function sortData( data ) {
 function getCurrentFileName() {
     var currentTime = new Date();
     return (currentTime.getMonth() + 1) < 10 ?
-           "0" + (currentTime.getMonth() + 1).toString() + "." + currentTime.getFullYear().toString() + ".json" :
-           (currentTime.getMonth() + 1).toString() + "." + currentTime.getFullYear().toString() + ".json";
+           "0" + (currentTime.getMonth() + 1).toString() +
+           "." + currentTime.getFullYear().toString() + ".json" :
+           (currentTime.getMonth() + 1).toString() + 
+           "." + currentTime.getFullYear().toString() + ".json";
 }
 
 /**

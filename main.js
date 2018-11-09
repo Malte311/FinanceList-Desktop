@@ -22,6 +22,8 @@ let mainWindow
 function createWindow () {
     // Read the stored data to select the window size and window mode.
     var screenWidth, screenHeight, fullscreen;
+    var mainScreenWidth = electron.screen.getPrimaryDisplay().size.width;
+    var mainScreenHeight = electron.screen.getPrimaryDisplay().size.height;
     try {
         // Note: If there are no numbers found to be parsed, this fails and
         // we will set default values. If the numbers are nonsense, the window
@@ -31,12 +33,10 @@ function createWindow () {
         screenHeight = parseInt( JSONhandler.readPreference( "windowSize" ).split( "x" )[1] );
         fullscreen = JSONhandler.readPreference( "fullscreen" );
     }
-    // In case the file is corrupted, we set some default values.
+    // In case the file is corrupted, we set some default values (size of the main screen).
     catch ( err ) {
-        // Note: As stated above, even if the monitor is less than these values,
-        // the window will still appear (the window will be as big as possible).
-        screenWidth = 1920;
-        screenHeight = 1080;
+        screenWidth = mainScreenWidth;
+        screenHeight = mainScreenHeight;
     }
     // We want make sure, fullscreen is a boolean type value. Otherwise
     // we might get into trouble when setting the "fullscreen" option of our mainWindow.
@@ -51,6 +51,11 @@ function createWindow () {
         fullscreen: fullscreen,
         show: false
     });
+
+    // Maximize window if it is at least as big as the screen size 
+    if ( screenWidth >= mainScreenWidth && screenHeight >= mainScreenHeight ) {
+        mainWindow.maximize();
+    }
 
     // and load the index.html of the app.
     mainWindow.loadURL('file://' + __dirname + '/index.html' );

@@ -1,6 +1,8 @@
-/**************************************************************************************************
+/**
  * This file is responsible for the view on the settings page.
-**************************************************************************************************/
+ *
+ * @author Malte311
+ */
 
 /**
  * This function displays the correct chart type. We need to switch case here, since
@@ -12,7 +14,8 @@ function displayChartType() {
     switch ( getLanguage() ) {
         case "en":
             // Capitalize the chart type and display it.
-            $( "#currentChartType" ).text( currentChartType.replace( /\b\w/g, l => l.toUpperCase() ) + " chart" );
+            $( "#currentChartType" ).text(
+                currentChartType.replace( /\b\w/g, l => l.toUpperCase() ) + " chart" );
             break;
         case "de":
             // In German it is a bit more difficult. We need another identifier

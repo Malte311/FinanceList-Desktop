@@ -2,6 +2,8 @@
  * This file controls all actions on the settings page.
 **************************************************************************************************/
 
+const electron = require( 'electron' );
+
 /**
  * This function initializes the page when its loaded. This means it sets the
  * language and the dynamic content.
@@ -28,6 +30,14 @@ function setWindowSize( size ) {
         // Set the new size.
         win.setSize( newWidth, newHeight );
         win.center();
+
+        // Maximize window if it is at least as big as the screen size
+        var mainScreenWidth = electron.screen.getPrimaryDisplay().size.width;
+        var mainScreenHeight = electron.screen.getPrimaryDisplay().size.height;
+        if ( newWidth >= mainScreenWidth && newHeight >= mainScreenHeight ) {
+            win.maximize();
+        }
+
         // Save the new size. We get the existing data and add a value for the language.
         storePreference( "windowSize", newWidth + "x" + newHeight );
         // Update the view to display the newly selected size.

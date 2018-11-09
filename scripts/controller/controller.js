@@ -1,6 +1,8 @@
-/**************************************************************************************************
+/**
  * This file contains controlling functions which need to be accessed from multiple pages.
-**************************************************************************************************/
+ *
+ * @author Malte311
+ */
 
 // Module to create charts.
 const Chart = require( 'chart.js' );
