@@ -1,8 +1,11 @@
-/**************************************************************************************************
+/**
  * This file is responsible for the view on the overview page.
-**************************************************************************************************/
+ *
+ * @author Malte311
+ */
 
 var textfile;
+var textElements;
 
 /**
  * This function displays the current surplus for each budget. This means,
@@ -99,11 +102,11 @@ function displayRecentTransactions( type ) {
             if ( data.length - limit === i ) break;
         }
         // Display the table with recent transactions.
-        $( "#" + type + "Recent" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentTransactionsHeading( type ) + " </h3>" + recentTransactionsTable + "</table>" );
+        $( "#" + type + "Recent" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + (type == "spending" ? textElements.recentSpendings : textElements.recentEarnings) + " </h3>" + recentTransactionsTable + "</table>" );
     }
     // Display a message that no data exists yet.
     else {
-        $( "#" + type + "Recent" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + getRecentTransactionsHeading( type ) + " </h3><i>" + getRecentTransactionsMissingDataMessage( type ) + "</i>" );
+        $( "#" + type + "Recent" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + (type == "spending" ? textElements.recentSpendings : textElements.recentEarnings) + " </h3><i>" + (type == "spending" ? textElements.noRecentSpendings : textElements.noRecentEarnings) + "</i>" );
     }
 }
 
@@ -141,11 +144,11 @@ function displayChart( type ) {
             if ( checksum.toString().split( "." )[1].length < 2 ) checksum += "0";
         }
         // Display the sum of all time earnings/spendings.
-        $( "#" + type + "ChartDiv" ).append( "<br><center>" + getAllTimeTransactionsText( type ) + ": " + checksum + getCurrencySign() + "</center>" );
+        $( "#" + type + "ChartDiv" ).append( "<br><center>" + (type == "spending" ? textElements.allTimeSpendings : textElements.allTimeEarnings) + ": " + checksum + getCurrencySign() + "</center>" );
     }
     // Otherwise display a message that there is no data yet.
     else {
-        $( "#" + type + "ChartDiv" ).html( "<i>" + getAllTimeTransactionsMissingDataMessage( type ) + "</i>" );
+        $( "#" + type + "ChartDiv" ).html( "<i>" + (type == "spending" ? textElements.noSpendings : textElements.noEarnings) + "</i>" );
     }
 }
 
@@ -154,6 +157,7 @@ function displayChart( type ) {
  */
 function updateView() {
     textfile = "./text/index_" + getLanguage() + ".json.js";
+    textElements = readJSONFile( textfile );
     // Display current balances.
     displayBalances();
     // Display a table of recent spendings.

@@ -1,6 +1,10 @@
 {
-    "noRecentEarnings":"Es gibt bisher keine Einnahmen!",
-    "noRecentSpendings":"Es gibt bisher keine Ausgaben!",
-    "recentEarnings":"K&uuml;rzliche Einnahmen",
-    "recentSpendings":"K&uuml;rzliche Ausgaben"
+    "noRecentSpendings": "Es gibt bisher keine Ausgaben!",
+    "noRecentEarnings": "Es gibt bisher keine Einnahmen!",
+    "noSpendings": "Es gibt bisher keine Ausgaben!",
+    "noEarnings": "Es gibt bisher keine Einnahmen!",
+    "recentSpendings": "K&uuml;rzliche Ausgaben",
+    "recentEarnings": "K&uuml;rzliche Einnahmen",
+    "allTimeSpendings": "Gesamtausgaben",
+    "allTimeEarnings": "Gesamteinnahmen"
 }

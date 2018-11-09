@@ -13,7 +13,8 @@ const { dialog } = require( 'electron' ).remote;
 // Neccessary to set the window size.
 const win = remote.getCurrentWindow();
 // This saves available colors for charts.
-const colors = ['rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'];
+const colors = ['rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'];
 
 /**
  * This function sets the language.
@@ -110,7 +111,8 @@ function createChart( canvas, categories, dataset, bgcolors, bdcolors, charttype
             tooltips: {
                 callbacks: {
                     label: function( tooltipItem, chartData ) {
-                        return chartData.labels[tooltipItem.index] + ': ' + chartData.datasets[0].data[tooltipItem.index] + getCurrencySign();
+                        return chartData.labels[tooltipItem.index] + ': ' +
+                               chartData.datasets[0].data[tooltipItem.index] + getCurrencySign();
                     }
                 }
             },
@@ -130,7 +132,8 @@ function createChart( canvas, categories, dataset, bgcolors, bdcolors, charttype
  */
 function addSpending( spending, sum, budget, category, date ) {
     // Create a JSON object containing the data.
-    var spendingObj = {"date": date, "name": spending, "amount": sum, "budget": budget, "type": "spending", "category": category};
+    var spendingObj = {"date": date, "name": spending, "amount": sum, "budget": budget,
+                       "type": "spending", "category": category};
     // Now store the data in the corresponding .json file.
     storeData( spendingObj );
     // Update the reference in the mainStorage.
@@ -191,7 +194,8 @@ function addEarning( earning, sum, budget, category, date, allocationOn ) {
                     if ( i === budgets.length - 1 ) newSum = Math.round( (newSum + rest) * 1e2 ) / 1e2;
                 }
                 // Save the earning data.
-                var earningObj = {"date": date, "name": earning, "amount": newSum, "budget": budgets[i][0], "type": "earning", "category": category};
+                var earningObj = {"date": date, "name": earning, "amount": newSum,
+                                  "budget": budgets[i][0], "type": "earning", "category": category};
                 storeData( earningObj );
                 // Now, update allTimeEarnings and the current balance.
                 allTimeEarnings[i][1] = Math.round( (allTimeEarnings[i][1] + newSum) * 1e2 ) / 1e2;
@@ -205,7 +209,8 @@ function addEarning( earning, sum, budget, category, date, allocationOn ) {
     // Don't split the sum
     else {
         // Create a JSON object containing the data.
-        var earningObj = {"date": date, "name": earning, "amount": sum, "budget": budget, "type": "earning", "category": category};
+        var earningObj = {"date": date, "name": earning, "amount": sum, "budget": budget,
+                          "type": "earning", "category": category};
         // Now store the data in the corresponding .json file.
         storeData( earningObj );
         // Update the reference in the mainStorage.

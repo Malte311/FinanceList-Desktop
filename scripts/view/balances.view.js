@@ -1,6 +1,11 @@
-/**************************************************************************************************
+/**
  * This file is responsible for the view on the balances page.
-**************************************************************************************************/
+ *
+ * @author Malte311
+ */
+
+var textfile;
+var textElements;
 
 /**
  * This function creates dialogues for adding, renaming and deleting budgets.
@@ -26,11 +31,11 @@ function createDialog( title, text, okFunction ) {
     	},
     	buttons : [
             {
-                text: getConfirmButtonText(),
+                text: textElements.confirm,
                 click: okFunction
 		    },
             {
-                text: getCancelButtonText(),
+                text: textElements.cancel,
                 click: function() {
                     $( this ).dialog( "close" );
                 }
@@ -45,11 +50,11 @@ function createDialog( title, text, okFunction ) {
 function displayBudgets() {
     // Reset previous content, set the table heading.
     var content = "<table class=\"w3-table-all w3-round w3-twothird\">" +
-                  "<tr><td>" + getCurrentBudgetsHeadings()[0] + "</td>" +
-                  "<td>" + getCurrentBudgetsHeadings()[1] + "</td>" +
-                  "<td>" + getCurrentBudgetsHeadings()[2] + "</td>" +
+                  "<tr><td>" + textElements.currentBudgetsHeadings[0] + "</td>" +
+                  "<td>" + textElements.currentBudgetsHeadings[1] + "</td>" +
+                  "<td>" + textElements.currentBudgetsHeadings[2] + "</td>" +
                   (readMainStorage( "allocationOn" ) ?
-                  "<td>" + getCurrentBudgetsHeadings()[3] + "</td></tr>" :
+                  "<td>" + textElements.currentBudgetsHeadings[3] + "</td></tr>" :
                   "</tr>");
     // Get all budgets to iterate over them.
     var currentBudgets = readMainStorage( "budgets" );
@@ -95,15 +100,15 @@ function displayRecurringTransactions() {
     if ( recurringTransactions.length > 0 ) {
         // Reset previous content.
         var content = "<table class=\"w3-table-all w3-round w3-twothird\"><tr>" +
-                      "<td>" + getRecurringTransactionsHeadings()[0] + "</td>" +
-                      "<td>" + getRecurringTransactionsHeadings()[1] + "</td>" +
-                      "<td>" + getRecurringTransactionsHeadings()[2] + "</td>" +
-                      "<td>" + getRecurringTransactionsHeadings()[3] + "</td>" +
-                      "<td>" + getRecurringTransactionsHeadings()[4] + "</td>" +
-                      "<td>" + getRecurringTransactionsHeadings()[5] + "</td>" +
-                      "<td>" + getRecurringTransactionsHeadings()[6] + "</td>" +
-                      "<td>" + getRecurringTransactionsHeadings()[7] + "</td>" +
-                      "<td>" + getRecurringTransactionsHeadings()[8] + "</td>" +
+                      "<td>" + textElements.recurringTransactionsHeadings[0] + "</td>" +
+                      "<td>" + textElements.recurringTransactionsHeadings[1] + "</td>" +
+                      "<td>" + textElements.recurringTransactionsHeadings[2] + "</td>" +
+                      "<td>" + textElements.recurringTransactionsHeadings[3] + "</td>" +
+                      "<td>" + textElements.recurringTransactionsHeadings[4] + "</td>" +
+                      "<td>" + textElements.recurringTransactionsHeadings[5] + "</td>" +
+                      "<td>" + textElements.recurringTransactionsHeadings[6] + "</td>" +
+                      "<td>" + textElements.recurringTransactionsHeadings[7] + "</td>" +
+                      "<td>" + textElements.recurringTransactionsHeadings[8] + "</td>" +
                       "</tr>";
         // Iterate over all recurring transactions to display them.
         for ( var i = 0; i < recurringTransactions.length; i++ ) {
@@ -113,7 +118,7 @@ function displayRecurringTransactions() {
                 if ( recurringTransactions[i].amount.toString().split( "." )[1].length < 2 ) amount += "0";
             }
             // Set the type in dependecy of the current language.
-            var type = ( recurringTransactions[i].type === "earning" ? getRecurringTransactionsContent()[0] : getRecurringTransactionsContent()[1] );
+            var type = ( recurringTransactions[i].type === "earning" ? textElements.recurringTransactionsContent[0] : textElements.recurringTransactionsContent[1] );
             // Add all the data to our content.
             content += "<tr><td>" + recurringTransactions[i].name + "</td>" +
                        "<td>" + amount + getCurrencySign() + "</td>" +
@@ -122,7 +127,7 @@ function displayRecurringTransactions() {
                        // If a category exists, display it. Otherwise display "-".
                        "<td>" + (recurringTransactions[i].category.length > 0 ? recurringTransactions[i].category : "&mdash;") + "</td>" +
                        "<td>" + dateToString( recurringTransactions[i].nextDate ) + "</td>" +
-                       "<td>" + getIntervalOptionsTextElements()[recurringTransactions[i].interval] + "</td>" +
+                       "<td>" + textElements.intervalOptionsTextElements[recurringTransactions[i].interval] + "</td>" +
                        "<td>" + (recurringTransactions[i].endDate > 0 ? dateToString( recurringTransactions[i].endDate ) : "&mdash;") + "</td>" +
                        "<td><span onclick=\"deleteRecurringTransaction('" + recurringTransactions[i].name + "')\" class=\"w3-button\"><i class=\"fas fa-times w3-text-red\"></i></span></td>" +
                        "</tr>";
@@ -133,7 +138,7 @@ function displayRecurringTransactions() {
     }
     // No recurring transactions:
     else {
-        $( "#recurringTransactions" ).html( "<i>" + getRecurringTransactionsContent()[3] + "</i>" );
+        $( "#recurringTransactions" ).html( "<i>" + textElements.recurringTransactionsContent[3] + "</i>" );
     }
 }
 
@@ -155,9 +160,9 @@ function displayContentControls() {
         // Display a selection for display types (graph/table).
         "<form class=\"w3-center\">" +
             "<input id=\"graph\" onclick=\"updateContent();\" type=\"radio\" name=\"type\" checked>" +
-            getDisplayTypeTextElements()[0] +
+            textElements.displayTypes[0] +
             "<input id=\"table\" onclick=\"updateContent();\" style=\"margin-left:15px;\" type=\"radio\" name=\"type\">" +
-            getDisplayTypeTextElements()[1] +
+            textElements.displayTypes[1] +
         "</form><hr>" +
         // Display filters for the user so they can choose which data they want to see.
         "<div>" +
@@ -165,31 +170,31 @@ function displayContentControls() {
                 "<tr>" +
                     "<td>" +
                         "<select class=\"w3-select\" id=\"budgetSelect\">" +
-                            "<option selected=\"selected\">" + getMainContentFilterText()[0] + "</option>" + budgetOptions +
+                            "<option selected=\"selected\">" + textElements.mainContentFilterText[0] + "</option>" + budgetOptions +
                         "</select>" +
                     "</td>" +
                     "<td>" +
                         "<select class=\"w3-select\" id=\"typeSelect\">" +
-                            "<option>" + getMainContentFilterText()[1] + "</option>" +
-                            "<option>" + getMainContentFilterText()[2] + "</option>" +
-                            "<option selected=\"selected\">" + getMainContentFilterText()[3] + "</option>" +
+                            "<option>" + textElements.mainContentFilterText[1] + "</option>" +
+                            "<option>" + textElements.mainContentFilterText[2] + "</option>" +
+                            "<option selected=\"selected\">" + textElements.mainContentFilterText[3] + "</option>" +
                         "</select>" +
                     "</td>" +
                     "<td>" +
                         "<input id=\"dateSelect\" class=\"w3-round-large w3-white\"  onclick=\"showDatepicker('3');\">" +
                     "</td>" +
                     "<td>" +
-                        "<input id=\"amountFrom\" type=\"text\" size=\"2\">" + getCurrencySign() + " " + getMainContentFilterText()[5] + " " +
+                        "<input id=\"amountFrom\" type=\"text\" size=\"2\">" + getCurrencySign() + " " + textElements.mainContentFilterText[5] + " " +
                         "<input id=\"amountTo\" type=\"text\" size=\"2\">" + getCurrencySign() +
                     "</td>" +
                     "<td>" +
-                        "<input id=\"nameSelect\" type=\"text\" size=\"15\" placeholder=\"" + getMainContentFilterText()[6] + "\">" +
+                        "<input id=\"nameSelect\" type=\"text\" size=\"15\" placeholder=\"" + textElements.mainContentFilterText[6] + "\">" +
                     "</td>" +
                     "<td>" +
-                        "<input id=\"categorySelect\" type=\"text\" size=\"15\" placeholder=\"" + getMainContentFilterText()[7] + "\">" +
+                        "<input id=\"categorySelect\" type=\"text\" size=\"15\" placeholder=\"" + textElements.mainContentFilterText[7] + "\">" +
                     "</td>" +
                     "<td>" +
-                        "<button class=\"w3-button w3-white w3-round-xlarge\" onclick=\"updateContent();\">" + getMainContentStartButtonText() + "</button>" +
+                        "<button class=\"w3-button w3-white w3-round-xlarge\" onclick=\"updateContent();\">" + textElements.update + "</button>" +
                     "</td>" +
                 "</tr>" +
             "</table>" +
@@ -223,7 +228,7 @@ function displayContent( displayType, budget, type, startDate, endDate, amountFr
     // Input invalid?
     if ( !(checkAmountInput( amountFrom, true ) && checkAmountInput( amountTo, true )) ) {
         // Display an error message and stop executing this function.
-        $( "#mainContent" ).html( "<center><i>" + getInvalidInputMessage() + "</i></center>" );
+        $( "#mainContent" ).html( "<center><i>" + textElements.invalidInput + "</i></center>" );
         return;
     }
     // Get all data before displaying anthing.
@@ -317,7 +322,7 @@ function displayContent( displayType, budget, type, startDate, endDate, amountFr
     // No data found?
     else {
         // Display a message that no data was found.
-        $( "#mainContent" ).html( "<center><i>" + getMissingTransactionsMessage() + "</i></center>" );
+        $( "#mainContent" ).html( "<center><i>" + textElements.noTransactions + "</i></center>" );
     }
 }
 
@@ -342,7 +347,7 @@ function displayGraph( data ) {
 
 function displayTable( data ) {
     // Create the headings for the table.
-    var tableHeadingsText = getMainContentTableHeadings();
+    var tableHeadingsText = textElements.mainContentTableHeadings;
     var tableHeadingsHTML = "";
     for ( var i = 0; i < tableHeadingsText.length; i++ ) {
         tableHeadingsHTML += "<td><b>" + tableHeadingsText[i] + "</b></td>";
@@ -361,7 +366,7 @@ function displayTable( data ) {
                             "<td>" + amount + getCurrencySign() + "</td>" +
                             "<td>" + data[j].category + "</td>" +
                             "<td>" + data[j].budget + "</td>" +
-                            "<td>" + getType( data[j].type ) + "</td></tr>";
+                            "<td>" + (data[j].type == "earning" ? textElements.earning : textElements.spending) + "</td></tr>";
     }
     // Display the table containing the data.
     $( "#mainContent" ).html( "<br><table class=\"w3-table-all w3-round\">" +
@@ -429,6 +434,8 @@ function showDatepicker( number ) {
  * This function updates the view when changes are made.
  */
 function updateView() {
+    textfile = "./text/balances_" + getLanguage() + ".json.js";
+    textElements = readJSONFile( textfile );
     // Display a list of currently available budgets.
     displayBudgets();
     // Display the budgets in detail.
