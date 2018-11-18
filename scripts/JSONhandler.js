@@ -202,7 +202,7 @@ function getData( file, quest ) {
     if ( fs.existsSync( dataPath ) ) {
         var dataStorageObj = JSON.parse( fs.readFileSync( dataPath ) );
         // Filter the data and return an array with appropriate data.
-        return dataStorageObj.filter( (dat) => {
+        var data = dataStorageObj.filter( (dat) => {
             var ret = null;
             quest.params.some( (qu) => {
                 // We do not need an exact match, e.g. when searching for "ticket", we want to
@@ -247,11 +247,75 @@ function getData( file, quest ) {
             // (2) connector = "and" and no mismatch was found.
             return ( quest.connector === "or" ) ? false : true;
         });
+        // Display partitioned entries as one entry. Only neccessary for earnings, since
+        // spendings can not be partitioned.
+        var toJoin = [];
+        var allJoins = [];
+        for ( var i = 0; i < data.length - 1; i++ ) {
+            // The timestamp acts as an identifier since it is unique
+            // (data is sorted by time)
+            if ( data[i].date === data[i + 1].date
+                    && data[i].type === "earning" && data[i + 1].type === "earning" ) {
+                // Remember indices of equal IDs
+                toJoin.push( i );
+                toJoin.push( i + 1 );
+            }
+            // Join entries
+            else if ( toJoin.length > 1 ) {
+                allJoins.push( toJoin );
+                // Reset entries to join
+                toJoin = [];
+            }
+        }
+        if ( toJoin.length > 1 ) {
+            allJoins.push( toJoin );
+            toJoin = [];
+        }
+
+        if ( allJoins.length > 0 ) {
+            data = joinData( allJoins, data );
+        }
+
+        return data;
     }
     // File does not exist: Return undefined.
     else {
         return undefined;
     }
+}
+
+/**
+ * Joins entries to one entry (just for a nicer display style, the storage remains unchanged).
+ * @param {[number[]]} indices The indices we want to join. Every array specifies indicies which
+ * we want to join. We might have more than 1 of these arrays, so this parameter is an array of arrays.
+ * @param {Object[]} data Contains the entries.
+ * @return {Object[]} The data with joined entries.
+ */
+function joinData( indices, data ) {
+    // Remove duplicates
+    for ( var i = 0; i < indices.length; i++ ) {
+        var elem = indices[i];
+        elem = elem.filter( function(item, pos) {
+            return elem.indexOf(item) == pos;
+        });
+        indices[i] = elem;
+    }
+
+    // Join every array of indices. We go backward, because the indices would change otherwise
+    // after a join.
+    for ( var i = indices.length - 1; i >= 0; i-- ) {
+        var newEntry = data[indices[i][0]];
+        for ( var j = 0; j < indices[i].length; j++ ) {
+            if ( !newEntry.budget.toLowerCase().includes(data[indices[i][j]].budget.toLowerCase()) ) {
+                newEntry.budget += ", " + data[indices[i][j]].budget;
+                newEntry.amount = Math.round( (newEntry.amount + data[indices[i][j]].amount) * 1e2 ) / 1e2;
+            }
+        }
+        data[indices[i][0]] = newEntry;
+        data.splice( indices[i][0] + 1, indices[i].length - 1 );
+    }
+
+    return data;
 }
 
 /**
