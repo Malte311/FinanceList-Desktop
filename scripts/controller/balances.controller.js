@@ -622,15 +622,15 @@ function activateDateRangePicker( id ) {
             },
 			{text: textElementsLocal[1],
                 dateStart: function() {
-                    return moment().subtract('days', 1)
+                    return moment().subtract(1, 'days')
                 },
                 dateEnd: function() {
-                    return moment().subtract('days', 1)
+                    return moment().subtract(1, 'days')
                 }
             },
 			{text: textElementsLocal[2],
                 dateStart: function() {
-                    return moment().subtract('days', 6)
+                    return moment().subtract(6, 'days')
                 },
                 dateEnd: function() {
                     return moment()
@@ -638,10 +638,10 @@ function activateDateRangePicker( id ) {
             },
 			{text: textElementsLocal[3],
                 dateStart: function() {
-                    return moment().subtract('days', 7).isoWeekday(1)
+                    return moment().subtract(7, 'days').isoWeekday(1)
                 },
                 dateEnd: function() {
-                    return moment().subtract('days', 7).isoWeekday(7)
+                    return moment().subtract(7, 'days').isoWeekday(7)
                 }
             },
 			{text: textElementsLocal[4],
@@ -654,10 +654,10 @@ function activateDateRangePicker( id ) {
             },
 			{text: textElementsLocal[5],
                 dateStart: function() {
-                    return moment().subtract('month', 1).startOf('month')
+                    return moment().subtract(1, 'month').startOf('month')
                 },
                 dateEnd: function() {
-                    return moment().subtract('month', 1).endOf('month')
+                    return moment().subtract(1, 'month').endOf('month')
                 }
             },
 			{text: textElementsLocal[6],
@@ -670,10 +670,10 @@ function activateDateRangePicker( id ) {
             },
             {text: textElementsLocal[7],
                 dateStart: function() {
-                    return moment().subtract('year', 1).startOf('year')
+                    return moment().subtract(1, 'year').startOf('year')
                 },
                 dateEnd: function() {
-                    return moment().subtract('year', 1).endOf('year')
+                    return moment().subtract(1, 'year').endOf('year')
                 }
             }
 		]

@@ -15,6 +15,7 @@ const win = remote.getCurrentWindow();
 // This saves available colors for charts.
 const colors = ['rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)',
                 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'];
+const colorSeparator = 'rgba(150, 255, 120, 1)';
 
 /**
  * This function sets the language.
@@ -88,15 +89,20 @@ function getCurrencySign() {
  * @param {String} charttype The type of the chart.
  */
 function createChart( canvas, categories, dataset, bgcolors, bdcolors, charttype ) {
-    // Make sure, that there are enough colors.
+    // Make sure, that enough colors are available.
     while ( dataset.length > bgcolors.length ) {
         // Add the same colors again and again until we have enough colors.
         bgcolors = bgcolors.concat( colors );
     }
+    // Make sure, that two adjacent parts do not have the same color.
+    if ( bgcolors[dataset.length - 1] == bgcolors[0] ) {
+        bgcolors[dataset.length - 1] = colorSeparator;
+    }
     // Get the same colors for the background.
     bdcolors = bgcolors;
+
     // Create a new chart.
-     new Chart( canvas, {
+    new Chart( canvas, {
         type: charttype,
         data: {
             labels: categories,
