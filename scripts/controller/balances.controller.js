@@ -80,7 +80,7 @@ function addTransaction() {
                     "<input id=\"autoAllocation\" onclick=\"updateTransactionDialog();\"" +
                     "style=\"margin-left:15px;\" type=\"radio\" name=\"allocation\" checked>" +
                     textElementsLocal[9] + "</form>" +
-               "</div>"
+               "</div>" +
                // Budget select will be displayed at the beginning
                // (because spending is selected as a default).
                "<div id=\"dynamicDiv2\"><hr><b>" +
