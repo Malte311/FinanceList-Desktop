@@ -27,5 +27,7 @@
     "invalidInput": "Invalid input!",
     "noTransactions": "No transactions found!",
     "transferDialogTextElements": ["Here you can transfer money between your budgets.", "From", "To", "Amount"],
-    "transfer": "Transfer money"
+    "transfer": "Transfer money",
+    "overallBalance": "Overall balance",
+    "totalSum": "Total sum"
 }

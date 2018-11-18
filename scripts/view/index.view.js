@@ -17,6 +17,7 @@ function displayBalances() {
     $( "#currentBalances" ).html( "" );
     // Get all budgets to iterate over them.
     var currentBudgets = readMainStorage( "budgets" );
+    var totalSum = 0;
     // Display the monthly surplus for every budget.
     for ( var i = 0; i < currentBudgets.length; i++ ) {
         // Set the name of the budget as a heading.
@@ -70,15 +71,28 @@ function displayBalances() {
         }
         // We want to display $2.50 instead of $2.50000000002 (this may happen since we use floating point numbers),
         // so we round the balance.
-        var balance = beautifyAmount(
-            (Math.round( (totalEarningsThisMonth - totalSpendingsThisMonth) * 1e2 ) / 1e2).toString()
-        );
+        var balance = Math.round( (totalEarningsThisMonth - totalSpendingsThisMonth) * 1e2 ) / 1e2;
+        totalSum += balance;
+        balance = beautifyAmount( balance );
+
         // Now we are ready to display a progress bar which contains the difference.
         $( "#currentBalances" ).append(
             "<p></p><div class=\"w3-grey\"><div class=\"w3-container w3-center w3-padding w3-" +
             color + "\" style=\"width:" + percentage + "%;\">" + balance + getCurrencySign() +
             "</div></div>"
         );
+
+        // After doing this for all budgets, we display the total sum for the current month.
+        if ( i == currentBudgets.length - 1 ) {
+            totalSum = beautifyAmount( Math.round( totalSum * 1e2 ) / 1e2 );
+            $( "#currentBalances" ).append(
+                "<br>" +
+                "<center>" +
+                    textElements.totalSum + ": " +
+                    totalSum + getCurrencySign() +
+                "</center>"
+            );
+        }
     }
 }
 

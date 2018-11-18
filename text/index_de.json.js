@@ -6,5 +6,6 @@
     "recentSpendings": "K&uuml;rzliche Ausgaben",
     "recentEarnings": "K&uuml;rzliche Einnahmen",
     "allTimeSpendings": "Gesamtausgaben",
-    "allTimeEarnings": "Gesamteinnahmen"
+    "allTimeEarnings": "Gesamteinnahmen",
+    "totalSum": "Gesamtsumme"
 }

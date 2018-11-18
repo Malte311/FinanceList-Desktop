@@ -27,5 +27,7 @@
     "invalidInput": "Ung&uuml;ltige Eingabe!",
     "noTransactions": "Es wurden keine Transaktionen gefunden!",
     "transferDialogTextElements": ["Hier k&ouml;nnen Sie Geld zwischen Ihren Konten &uuml;bertragen.", "Von", "Nach", "Betrag"],
-    "transfer": "Geld \u00fcbertragen"
+    "transfer": "Geld \u00fcbertragen",
+    "overallBalance": "Gesamtbilanz",
+    "totalSum": "Gesamtsumme"
 }

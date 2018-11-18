@@ -58,9 +58,11 @@ function displayBudgets() {
                   "</tr>");
     // Get all budgets to iterate over them.
     var currentBudgets = readMainStorage( "budgets" );
+    var overallBalance = 0;
     // Iterate over all budgets to display them.
     for ( var i = 0; i < currentBudgets.length; i++ ) {
         var balance = beautifyAmount( currentBudgets[i][1] );
+        overallBalance += currentBudgets[i][1];
         // Display all budgets. The first one is a standard budget and can therefore not
         // be deleted. Note that currentBudgets is an array of arrays
         // (name of the budget and its current balance).
@@ -84,6 +86,12 @@ function displayBudgets() {
     content += "</table><br>";
     // Display the content.
     $( "#currentBudgets" ).html( content );
+
+    // Display the overall balance
+    overallBalance = beautifyAmount( Math.round( overallBalance * 1e2 ) / 1e2 );
+    $( "#overallBalance" ).html(
+        "<br>" + textElements.overallBalance + ": " + overallBalance + getCurrencySign()
+    );
 }
 
 /**
@@ -301,6 +309,7 @@ function displayContent( displayType, budget, type, startDate, endDate, amountFr
     }
     // Filter the data again.
     var newData = [];
+    var totalSum = 0;
     for ( var i = 0; i < data.length; i++ ) {
         // Amount not within the specified range? Continue without pushing the data.
         // Minimum amount exists?
@@ -326,6 +335,7 @@ function displayContent( displayType, budget, type, startDate, endDate, amountFr
         }
         // If we passed the filters above, we can push the data.
         newData.push( data[i] );
+        totalSum += data[i].amount;
     }
     // Save the filtered data.
     data = newData;
@@ -339,6 +349,13 @@ function displayContent( displayType, budget, type, startDate, endDate, amountFr
         else if ( displayType === "table" ) {
             displayTable( data );
         }
+        totalSum = beautifyAmount( Math.round( totalSum * 1e2 ) / 1e2 );
+        $( '#mainContent' ).append(
+            "<br>" +
+            "<center>" +
+                textElements.totalSum + ": " + totalSum + getCurrencySign() +
+            "</center>"
+        );
     }
     // No data found?
     else {

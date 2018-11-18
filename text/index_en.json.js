@@ -6,5 +6,6 @@
     "recentSpendings": "Recent spendings",
     "recentEarnings": "Recent earnings",
     "allTimeSpendings": "All time spendings",
-    "allTimeEarnings": "All time earnings"
+    "allTimeEarnings": "All time earnings",
+    "totalSum": "Total sum"
 }
