@@ -43,31 +43,62 @@ function addTransaction() {
     }
     // Set the complete content for the dialog.
     // First two lines are radio buttons to select between earning and spending.
-    var text = textElementsLocal[0] + "<form class=\"w3-center\"><input id=\"earning\" onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"type\">" + textElementsLocal[1] +
-               "<input id=\"spending\" onclick=\"updateTransactionDialog();\" style=\"margin-left:15px;\" type=\"radio\" name=\"type\" checked>" + textElementsLocal[2] + "</form><hr>" +
+    var text = textElementsLocal[0] +
+               "<form class=\"w3-center\"><input id=\"earning\"" +
+                    "onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"type\">" +
+                    textElementsLocal[1] +
+                    "<input id=\"spending\" onclick=\"updateTransactionDialog();\"" +
+                    "style=\"margin-left:15px;\" type=\"radio\" name=\"type\" checked>" +
+                    textElementsLocal[2] +
+               "</form><hr>" +
                // Input for name and amount.
-               "<div><div><b>" + textElementsLocal[3] + "</b><br><input type=\"text\" id=\"nameInput\"></div>" +
-               "<div><b>" + textElementsLocal[4] + "</b><br><input style=\"width=50px;\" type=\"text\" id=\"sumInput\"></div></div><br>" +
+               "<div>" +
+                    "<div>" +
+                        "<b>" + textElementsLocal[3] +
+                        "</b><br><input type=\"text\" id=\"nameInput\">" +
+                    "</div>" +
+                    "<div>" +
+                        "<b>" + textElementsLocal[4] +
+                        "</b><br><input style=\"width=50px;\" type=\"text\" id=\"sumInput\">" +
+                    "</div>" +
+               "</div><br>" +
                // Input for category.
-               "<div><b>" + textElementsLocal[5] + "</b>" + " " + textElementsLocal[6] +
-               "<br><input type=\"text\" id=\"categoryInput\">" + "  " +
-               // Input for the date.
-               textElementsLocal[7] + ": " +
-               "<input id=\"datepicker1\" class=\"w3-round-large w3-light-gray\" type=\"button\" onclick=\"showDatepicker('1');\" value=\"" + dateToString( getCurrentDate() ) + "\"></div>" +
+               "<div>" +
+                    "<b>" + textElementsLocal[5] + "</b>" + " " + textElementsLocal[6] +
+                    "<br><input type=\"text\" id=\"categoryInput\">" + "  " +
+                    // Input for the date.
+                    textElementsLocal[7] + ": " +
+                    "<input id=\"datepicker1\" class=\"w3-round-large w3-light-gray\"" +
+                    "type=\"button\" onclick=\"showDatepicker('1');\"" +
+                    "value=\"" + dateToString( getCurrentDate() ) + "\">" +
+               "</div>" +
                // Choose between manual and automated allocation. Hidden until "earning" is selected.
                "<div id=\"dynamicDiv1\" style=\"display:none;\"><hr>" +
-               "<form class=\"w3-center\"><input id=\"manual\" onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"allocation\">" + textElementsLocal[8] +
-               "<input id=\"autoAllocation\" onclick=\"updateTransactionDialog();\" style=\"margin-left:15px;\" type=\"radio\" name=\"allocation\" checked>" + textElementsLocal[9] +
-               // Budget select will be displayed at the beginning (because spending is selected as a default).
-               "</form></div><div id=\"dynamicDiv2\"><hr><b>" + textElementsLocal[10] + "</b><br>" + "<select id=\"selectInput\">" + options + "</select></div><hr>" +
+                    "<form class=\"w3-center\"><input id=\"manual\"" +
+                    "onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"allocation\">" +
+                    textElementsLocal[8] +
+                    "<input id=\"autoAllocation\" onclick=\"updateTransactionDialog();\"" +
+                    "style=\"margin-left:15px;\" type=\"radio\" name=\"allocation\" checked>" +
+                    textElementsLocal[9] + "</form>" +
+               "</div>"
+               // Budget select will be displayed at the beginning
+               // (because spending is selected as a default).
+               "<div id=\"dynamicDiv2\"><hr><b>" +
+                    textElementsLocal[10] + "</b><br>" +
+                    "<select id=\"selectInput\">" + options + "</select>" +
+               "</div><hr>" +
                // Option to automate this transaction.
                "<div id=\"budgetSelect\"></div>" +
-               "<input type=\"checkbox\" id=\"checkboxInput\" onclick=\"updateTransactionDialog();\">" + textElementsLocal[11] +
+               "<input type=\"checkbox\" id=\"checkboxInput\"" +
+               "onclick=\"updateTransactionDialog();\">" + textElementsLocal[11] +
                // Another dynamic div, which changes when the checkbox is activated/deactivated.
                "<br>" +
                "<div id=\"dynamicDiv3\" style=\"display:none;\">" +
-                   "<select id=\"intervalSelect\">" + intervalOptions + "</select>" + "  " + textElementsLocal[12] + ": " +
-                   "<input id=\"datepicker2\" class=\"w3-round-large w3-light-gray\" type=\"button\" onclick=\"showDatepicker('2');\" value=\"" + textElementsLocal[13] + "\">" +
+                   "<select id=\"intervalSelect\">" + intervalOptions + "</select>" +
+                   "  " + textElementsLocal[12] + ": " +
+                   "<input id=\"datepicker2\" class=\"w3-round-large w3-light-gray\"" +
+                   "type=\"button\" onclick=\"showDatepicker('2');\" value=\"" +
+                   textElementsLocal[13] + "\">" +
                "</div>";
     // Now we are able to actually create a dialog.
     createDialog( textElements.addTransaction, text, function() {
@@ -117,13 +148,19 @@ function addTransaction() {
                 date = getCurrentDate();
             }
             var selectedEndDate = $( "#datepicker2" ).datepicker( "getDate" );
-            if ( selectedEndDate !== null && selectedEndDate !== undefined ) endDate = Math.floor( new Date( $( "#datepicker2" ).datepicker( "getDate" ) ).getTime() / 1000 );
+            if ( selectedEndDate !== null && selectedEndDate !== undefined ) {
+                endDate = Math.floor(
+                    new Date( $( "#datepicker2" ).datepicker( "getDate" ) ).getTime() / 1000 );
+            }
             // End date -1 means there is no end date.
-            else endDate = -1;
+            else {
+                endDate = -1;
+            }
             // Find out which type (earning/spending) was selected and
             // execute the correct function.
             if ( $( "#earning" )[0].checked ) {
-                addEarning( name, parseFloat( sum ), budget, category, date, $( "#autoAllocation" )[0].checked && readMainStorage( "allocationOn" ) );
+                addEarning( name, parseFloat( sum ), budget, category, date,
+                    $( "#autoAllocation" )[0].checked && readMainStorage( "allocationOn" ) );
             }
             else if ( $( "#spending" )[0].checked ) {
                 addSpending( name, parseFloat( sum ), budget, category, date );
@@ -133,7 +170,8 @@ function addTransaction() {
             if ( $( "#checkboxInput" )[0].checked ) {
                 // Add a new recurring transaction.
                 var type = $( "#earning" )[0].checked ? "earning" : "spending";
-                addRecurringTransaction( name, parseFloat( sum ), budget, category, type, $("#intervalSelect")[0].selectedIndex, date, endDate );
+                addRecurringTransaction( name, parseFloat( sum ), budget, category, type,
+                    $("#intervalSelect")[0].selectedIndex, date, endDate );
             }
             // Close the dialog and update the view.
             $( this ).dialog( "close" );
@@ -183,13 +221,18 @@ function addTransaction() {
  */
 function addRecurringTransaction( name, amount, budget, category, type, interval, date, endDate ) {
     // Determine, if this transaction involves the automatic allocation.
-    var allocationOn = $( "#earning" )[0].checked && $( "#autoAllocation" )[0].checked && readMainStorage( "allocationOn" );
+    var allocationOn = $( "#earning" )[0].checked &&
+                       $( "#autoAllocation" )[0].checked &&
+                       readMainStorage( "allocationOn" );
     // Determine the correct date.
     var newDate = getNewDate( date, date, interval );
-    // Just continue, if the transaction recurrs at least once. (either no end date or end date is not reached yet)
+    // Just continue, if the transaction recurrs at least once.
+    // (either no end date or end date is not reached yet)
     if ( endDate < 0 || (endDate > 0 && newDate <= endDate) ) {
         // Create a new object and store it (in the mainStorage.json file).
-        var dataObj = {"startDate": date, "nextDate": newDate, "endDate": endDate, "name": name, "amount": amount, "budget": budget, "type": type, "category": category, "interval": interval, "allocationOn": allocationOn};
+        var dataObj = {"startDate": date, "nextDate": newDate, "endDate": endDate, "name": name,
+                       "amount": amount, "budget": budget, "type": type, "category": category,
+                       "interval": interval, "allocationOn": allocationOn};
         // Now, get the existing data and add this data to it.
         var currentRecurringTransactions = readMainStorage( "recurring" );
         currentRecurringTransactions.push( dataObj );
@@ -209,7 +252,8 @@ function addRecurringTransaction( name, amount, budget, category, type, interval
  */
 function addBudget() {
     // Add an input field to the dialog
-    createDialog( textElements.addBudget, textElements.budgetName + "<br><input type=\"text\" id=\"dialogInput\">", function() {
+    createDialog( textElements.addBudget,
+                  textElements.budgetName + "<br><input type=\"text\" id=\"dialogInput\">", function() {
         // Get all currently available budgets.
         var currentBudgets = readMainStorage( "budgets" );
         // Save the new budget (the input from the user).
@@ -264,9 +308,12 @@ function deleteBudget( name ) {
         // Also delete it in allocation.
         var allocation = readMainStorage( "allocation" );
         // We add all budgets except the one we want to delete.
-        var updatedBudgets = [], updatedAllTimeEarnings = [], updatedAllTimeSpendings = [], newAllocation = [];
-        // Search for the correct budget to delete it.
-        // (Note that all arrays have the same length and the same order, so we can use the same index)
+        var updatedBudgets = [],
+            updatedAllTimeEarnings = [],
+            updatedAllTimeSpendings = [],
+            newAllocation = [];
+        // Search for the correct budget to delete it. (Note that all arrays
+        // have the same length and the same order, so we can use the same index)
         for ( var i = 0; i < currentBudgets.length; i++ ) {
             // Add all budgets except the one we want to delete.
             if ( currentBudgets[i][0] !== name ) {
@@ -283,11 +330,13 @@ function deleteBudget( name ) {
             if ( allocation[i][0] !== name ) {
                 newAllocation.push( allocation[i] );
             }
-            // Remember that the sum of allocation amounts could be changed now. Make sure it will be 100 percent again.
+            // Remember that the sum of allocation amounts could be changed now.
+            // Make sure it will be 100 percent again.
             else {
                 // More than 0 percent allocation ratio?
                 if ( allocation[i][1] > 0 ) {
-                    // Add the amount to the standard budget (the standard budget is at index 0).
+                    // Add the amount to the standard budget
+                    // (the standard budget is at index 0).
                     newAllocation[0][1] += allocation[i][1];
                 }
             }
@@ -351,7 +400,8 @@ function deleteBudget( name ) {
  */
 function renameBudget( name ) {
     // Add an input field.
-    createDialog( textElements.renameBudget, textElements.newBudgetName + "<br><input type=\"text\" id=\"dialogInput\">", function() {
+    createDialog( textElements.renameBudget,
+                  textElements.newBudgetName + "<br><input type=\"text\" id=\"dialogInput\">", function() {
         // Get all currently available budgets.
         var currentBudgets = readMainStorage( "budgets" );
         // Rename the budget in all time earnings/spendings as well.
@@ -360,7 +410,10 @@ function renameBudget( name ) {
         // For allocation as well.
         var allocation = readMainStorage( "allocation" );
         // We add all budgets to this (and the renamed one with its new name)
-        var updatedBudgets = [], updatedAllTimeEarnings = [], updatedAllTimeSpendings = [], newAllocation = [];
+        var updatedBudgets = [],
+            updatedAllTimeEarnings = [],
+            updatedAllTimeSpendings = [],
+            newAllocation = [];
         var newName = $( "#dialogInput" ).val().trim();
         // Iterate over them to find the one we want to rename.
         // Remember that all the fields are all in the same order, so we can use the same index.
@@ -374,13 +427,26 @@ function renameBudget( name ) {
                 updatedBudgets.push( currentBudgets[i] );
             }
             // Do the same for allTimeEarnings and allTimeSpendings.
-            if ( allTimeEarnings[i][0] === name ) updatedAllTimeEarnings.push( [newName, allTimeEarnings[i][1]] );
-            else updatedAllTimeEarnings.push( allTimeEarnings[i] );
-            if ( allTimeSpendings[i][0] === name ) updatedAllTimeSpendings.push( [newName, allTimeSpendings[i][1]] );
-            else updatedAllTimeSpendings.push( allTimeSpendings[i] );
+            if ( allTimeEarnings[i][0] === name ) {
+                updatedAllTimeEarnings.push( [newName, allTimeEarnings[i][1]] );
+            }
+            else {
+                updatedAllTimeEarnings.push( allTimeEarnings[i] );
+            }
+
+            if ( allTimeSpendings[i][0] === name ) {
+                updatedAllTimeSpendings.push( [newName, allTimeSpendings[i][1]] );
+            }
+            else {
+                updatedAllTimeSpendings.push( allTimeSpendings[i] );
+            }
             // And for allocation as well.
-            if ( allocation[i][0] === name ) newAllocation.push( [newName, allocation[i][1]] );
-            else newAllocation.push( allocation[i] );
+            if ( allocation[i][0] === name ) {
+                newAllocation.push( [newName, allocation[i][1]] );
+            }
+            else {
+                newAllocation.push( allocation[i] );
+            }
         }
         // Rename recurring transactions using this budget.
         var recurringTransactions = readMainStorage( "recurring" );
@@ -439,14 +505,17 @@ function setAllocation() {
     // Additionally, the indizes are corresponding, so we don't need further checking.
     // (Obviously, this is only true if nobody manipulated the .json file)
     for ( var i = 0; i < currentBudgets.length; i++ ) {
-        // We need a precise id of every selection (every budget has its own selection with 10 options in it).
+        // We need a precise id of every selection
+        // (every budget has its own selection with 10 options in it).
         var currentAllocationHTML = "";
-        // We want to loop from 0 to 10, because the options should range from 0 to 100 percent, with an increase of 10 per step.
+        // We want to loop from 0 to 10, because the options should range
+        // from 0 to 100 percent, with an increase of 10 per step.
         for ( var j = 0; j <= 10; j++ ) {
             // We display the previously selected value as selected.
             if ( j * 10 === currentAllocation[i][1] ) {
                 // Note that we have 10 options for every budget.
-                currentAllocationHTML += "<option selected=\"selected\">" + currentAllocation[i][1] + "&percnt;</option>";
+                currentAllocationHTML +=
+                    "<option selected=\"selected\">" + currentAllocation[i][1] + "&percnt;</option>";
             }
             // This is for every other value (not previously selected).
             else {
@@ -456,11 +525,18 @@ function setAllocation() {
         // This holds the lines of the table.
         currentBudgetsHTML += "<tr class=\"w3-hover-light-blue\">" +
                               "<td>" + currentBudgets[i][0] + "</td>" +
-                              "<td><select class=\"w3-select\" id=\"percentageSelect" + i.toString() + "\">" + currentAllocationHTML + "</select></td></tr>";
+                              "<td><select class=\"w3-select\" id=\"percentageSelect"
+                              + i.toString() + "\">" + currentAllocationHTML +
+                              "</select></td></tr>";
     }
     // This holds the checkbox to activate/deactivate the allocation (and a tooltip).
-    var activateCheckBox = "<br><br>" + "<input type=\"checkbox\" id=\"autoAllocation\"> " + textElementsLocal[1] + " " +
-                           "<div class=\"tooltip\"><i class=\"fas fa-info-circle\"></i><span class=\"tooltiptext\">" + textElementsLocal[2] + "</span></div>";
+    var activateCheckBox = "<br><br>" +
+                           "<input type=\"checkbox\" id=\"autoAllocation\"> " +
+                           textElementsLocal[1] + " " +
+                           "<div class=\"tooltip\">" +
+                           "<i class=\"fas fa-info-circle\"></i><span class=\"tooltiptext\">" +
+                           textElementsLocal[2] +
+                           "</span></div>";
     // Now combine the elements to set the complete content of the dialog.
     var text = textElementsLocal[0] + activateCheckBox +
                "<br><hr>" +
@@ -526,20 +602,80 @@ function activateDateRangePicker( id ) {
     // Create a new date range picker.
     $( id ).daterangepicker({
         // First day of the month? Only display this single day. Otherwise display the current month.
-        initialText: currentDate.getDate() === 1 ? dateToString( getCurrentDate() ) : dateToString( new Date( currentDate.getFullYear(), currentDate.getMonth(), 1 ).getTime() / 1000 ) + " - " + dateToString( getCurrentDate() ),
+        initialText: currentDate.getDate() === 1 ?
+                     dateToString( getCurrentDate() ) :
+                     dateToString( new Date( currentDate.getFullYear(),
+                                             currentDate.getMonth(), 1 ).getTime() / 1000 ) +
+                                             " - " + dateToString( getCurrentDate() ),
         dateFormat: "dd.mm.yy",
         applyButtonText: textElements.apply,
         clearButtonText: textElements.clear,
         cancelButtonText: textElements.cancel,
         presetRanges: [
-				{text: textElementsLocal[0], dateStart: function() { return moment() }, dateEnd: function() { return moment() } },
-				{text: textElementsLocal[1], dateStart: function() { return moment().subtract('days', 1) }, dateEnd: function() { return moment().subtract('days', 1) } },
-				{text: textElementsLocal[2], dateStart: function() { return moment().subtract('days', 6) }, dateEnd: function() { return moment() } },
-				{text: textElementsLocal[3], dateStart: function() { return moment().subtract('days', 7).isoWeekday(1) }, dateEnd: function() { return moment().subtract('days', 7).isoWeekday(7) } },
-				{text: textElementsLocal[4], dateStart: function() { return moment().startOf('month') }, dateEnd: function() { return moment() } },
-				{text: textElementsLocal[5], dateStart: function() { return moment().subtract('month', 1).startOf('month') }, dateEnd: function() { return moment().subtract('month', 1).endOf('month') } },
-				{text: textElementsLocal[6], dateStart: function() { return moment().startOf('year') }, dateEnd: function() { return moment() } },
-                {text: textElementsLocal[7], dateStart: function() { return moment().subtract('year', 1).startOf('year') }, dateEnd: function() { return moment().subtract('year', 1).endOf('year') } }
+			{text: textElementsLocal[0],
+                dateStart: function() {
+                    return moment()
+                },
+                dateEnd: function() {
+                    return moment()
+                }
+            },
+			{text: textElementsLocal[1],
+                dateStart: function() {
+                    return moment().subtract('days', 1)
+                },
+                dateEnd: function() {
+                    return moment().subtract('days', 1)
+                }
+            },
+			{text: textElementsLocal[2],
+                dateStart: function() {
+                    return moment().subtract('days', 6)
+                },
+                dateEnd: function() {
+                    return moment()
+                }
+            },
+			{text: textElementsLocal[3],
+                dateStart: function() {
+                    return moment().subtract('days', 7).isoWeekday(1)
+                },
+                dateEnd: function() {
+                    return moment().subtract('days', 7).isoWeekday(7)
+                }
+            },
+			{text: textElementsLocal[4],
+                dateStart: function() {
+                    return moment().startOf('month')
+                },
+                dateEnd: function() {
+                    return moment()
+                }
+            },
+			{text: textElementsLocal[5],
+                dateStart: function() {
+                    return moment().subtract('month', 1).startOf('month')
+                },
+                dateEnd: function() {
+                    return moment().subtract('month', 1).endOf('month')
+                }
+            },
+			{text: textElementsLocal[6],
+                dateStart: function() {
+                    return moment().startOf('year')
+                },
+                dateEnd: function() {
+                    return moment()
+                }
+            },
+            {text: textElementsLocal[7],
+                dateStart: function() {
+                    return moment().subtract('year', 1).startOf('year')
+                },
+                dateEnd: function() {
+                    return moment().subtract('year', 1).endOf('year')
+                }
+            }
 		]
     });
 }
@@ -598,7 +734,8 @@ function updateContent() {
         // Find out which category is selected. If no category is selected, we save the empty string.
         var category = $( "#categorySelect" ).val().trim();
         // Now display the filtered content.
-        displayContent( displayType, budget, type, startDate, endDate, amountFrom, amountTo, name, category );
+        displayContent( displayType, budget, type, startDate, endDate, amountFrom,
+                        amountTo, name, category );
     }
     // No controls available yet: Set default values.
     else {
@@ -623,9 +760,12 @@ function executeTransfer() {
                "<table class=\"w3-table-all\">" +
                "<tr><th>" + textElements.transferDialogTextElements[1] + "</th>" +
                "<th>" + textElements.transferDialogTextElements[2] + "</th></tr>" +
-               "<tr><td><select class=\"w3-select\" id=\"budgetFrom\">" + optionsFrom + "</select></td>" +
-               "<td><select class=\"w3-select\" id=\"budgetTo\">" + optionsTo + "</select></td></tr></table>" +
-               "<br><hr>" + "<b>" + textElements.transferDialogTextElements[3] + "</b>: " + "<input style=\"width=50px;\" type=\"text\" id=\"transferAmount\">";
+               "<tr><td><select class=\"w3-select\" id=\"budgetFrom\">" + optionsFrom +
+               "</select></td>" +
+               "<td><select class=\"w3-select\" id=\"budgetTo\">" + optionsTo +
+               "</select></td></tr></table>" +
+               "<br><hr>" + "<b>" + textElements.transferDialogTextElements[3] +
+               "</b>: " + "<input style=\"width=50px;\" type=\"text\" id=\"transferAmount\">";
     // Create a new dialog.
     createDialog( textElements.transfer, text, function() {
         // Get input.
