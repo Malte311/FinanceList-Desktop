@@ -385,7 +385,7 @@ function displayTable( data ) {
     var tableHeadingsText = textElements.mainContentTableHeadings;
     var tableHeadingsHTML = "";
     for ( var i = 0; i < tableHeadingsText.length; i++ ) {
-        tableHeadingsHTML += "<td><b>" + tableHeadingsText[i] + "</b></td>";
+        tableHeadingsHTML += "<th onclick='sortTable(" + i + ")'><b>" + tableHeadingsText[i] + "</b></th>";
     }
     // Get the content for the table.
     var tableContentHTML = "";
@@ -404,7 +404,7 @@ function displayTable( data ) {
                             "</td></tr>";
     }
     // Display the table containing the data.
-    $( "#mainContent" ).html( "<br><table class=\"w3-table-all w3-round\">" +
+    $( "#mainContent" ).html( "<br><table id='overviewTable' class=\"w3-table-all w3-round\">" +
                               "<tr>" + tableHeadingsHTML + "</tr>" +
                               tableContentHTML + "</table>" );
 }

@@ -27,3 +27,12 @@
     pointer-events: none;
     opacity: 0.4;
 }
+
+th {
+    cursor: pointer;
+}
+
+th:hover {
+    color: #000!important;
+    background-color: #87CEEB!important;
+}
