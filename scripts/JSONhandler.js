@@ -205,18 +205,39 @@ function getData( file, quest ) {
         return dataStorageObj.filter( (dat) => {
             var ret = null;
             quest.params.some( (qu) => {
-                // At least one param matched? Return true (ret=true) because connector is "or".
-                if ( quest.connector === "or" ) {
-                    if ( dat[qu[0]] === qu[1] ) {
-                        ret = true;
-                        return true;
+                // We do not need an exact match, e.g. when searching for "ticket", we want to
+                // find entries called "bus ticket"
+                if ( qu[0] === "name" || qu[0] === "category" ) {
+                    // At least one param matched? Return true (ret=true) because connector is "or".
+                    if ( quest.connector === "or" ) {
+                        if ( dat[qu[0]].toLowerCase().includes(qu[1].toLowerCase()) ) {
+                            ret = true;
+                            return true;
+                        }
+                    }
+                    // One param does not match => "and" connector can not be satisfied (ret=false).
+                    else {
+                        if ( !dat[qu[0]].toLowerCase().includes(qu[1].toLowerCase()) ) {
+                            ret = false;
+                            return true;
+                        }
                     }
                 }
-                // One param does not match => "and" connector can not be satisfied (ret=false).
+                // Exact match is neccessary for all other fields
                 else {
-                    if ( dat[qu[0]] !== qu[1] ) {
-                        ret = false;
-                        return true;
+                    // At least one param matched? Return true (ret=true) because connector is "or".
+                    if ( quest.connector === "or" ) {
+                        if ( dat[qu[0]] === qu[1] ) {
+                            ret = true;
+                            return true;
+                        }
+                    }
+                    // One param does not match => "and" connector can not be satisfied (ret=false).
+                    else {
+                        if ( dat[qu[0]] !== qu[1] ) {
+                            ret = false;
+                            return true;
+                        }
                     }
                 }
             });
@@ -300,7 +321,7 @@ function getCurrentFileName() {
     return (currentTime.getMonth() + 1) < 10 ?
            "0" + (currentTime.getMonth() + 1).toString() +
            "." + currentTime.getFullYear().toString() + ".json" :
-           (currentTime.getMonth() + 1).toString() + 
+           (currentTime.getMonth() + 1).toString() +
            "." + currentTime.getFullYear().toString() + ".json";
 }
 
