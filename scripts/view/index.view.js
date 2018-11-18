@@ -20,8 +20,13 @@ function displayBalances() {
     // Display the monthly surplus for every budget.
     for ( var i = 0; i < currentBudgets.length; i++ ) {
         // Set the name of the budget as a heading.
-        $( "#currentBalances" ).append( "<h5><i class=\"fas fa-angle-double-right w3-text-deep-purple\"></i>" + " " + currentBudgets[i][0] + " </h5>" );
-        // Find out the sum of earnings and spendings in this month, so we can calculate the surplus.
+        $( "#currentBalances" ).append(
+            "<h5><i class=\"fas fa-angle-double-right w3-text-deep-purple\"></i>" + " " +
+                currentBudgets[i][0] +
+            " </h5>"
+        );
+        // Find out the sum of earnings and spendings in this month,
+        // so we can calculate the surplus.
         var quest = { connector:'or', params:[['budget', currentBudgets[i][0]]] };
         var dataObj = getData( getCurrentFileName(), quest );
         // Add all earnings and spendings from this month.
@@ -32,11 +37,13 @@ function displayBalances() {
             for ( var j = 0; j < dataObj.length; j++ ) {
                 // Earning? Increase totalEarningsThisMonth.
                 if ( dataObj[j].type === "earning" ) {
-                    totalEarningsThisMonth = Math.round( (totalEarningsThisMonth + dataObj[j].amount) * 1e2 ) / 1e2;
+                    totalEarningsThisMonth =
+                        Math.round( (totalEarningsThisMonth + dataObj[j].amount) * 1e2 ) / 1e2;
                 }
                 // Spending? Increase totalSpendingsThisMonth.
                 else if ( dataObj[j].type === "spending" ) {
-                    totalSpendingsThisMonth = Math.round( (totalSpendingsThisMonth + dataObj[j].amount) * 1e2 ) / 1e2;
+                    totalSpendingsThisMonth =
+                        Math.round( (totalSpendingsThisMonth + dataObj[j].amount) * 1e2 ) / 1e2;
                 }
             }
         }
@@ -46,8 +53,11 @@ function displayBalances() {
         var color;
         // Positive balance for this month:
         if ( totalEarningsThisMonth - totalSpendingsThisMonth > 0 ) {
-            // Calculate the ratio of how much money is left from this months earnings and use the color green.
-            if ( totalEarningsThisMonth > 0 && totalSpendingsThisMonth !== 0 ) percentage = ((totalEarningsThisMonth - totalSpendingsThisMonth) / totalEarningsThisMonth) * 100;
+            // Calculate the ratio of how much money is left from this months
+            // earnings and use the color green.
+            if ( totalEarningsThisMonth > 0 && totalSpendingsThisMonth !== 0 ) {
+                percentage = ((totalEarningsThisMonth - totalSpendingsThisMonth) / totalEarningsThisMonth) * 100;
+            }
             color = "green";
         }
         // Balance negative: Red color, percentage still at 100 (so the complete bar is red).
@@ -60,15 +70,15 @@ function displayBalances() {
         }
         // We want to display $2.50 instead of $2.50000000002 (this may happen since we use floating point numbers),
         // so we round the balance.
-        var balance = (Math.round( (totalEarningsThisMonth - totalSpendingsThisMonth) * 1e2 ) / 1e2).toString();
-        // We want to display every balance with two decimal places (if there is a comma). Example: Display $2.50 instead of $2.5
-        // Does a comma exist?
-        if ( (totalEarningsThisMonth - totalSpendingsThisMonth).toString().indexOf( "." ) !== -1 ) {
-            // If so, we check if there are already two decimal digits. If not, we add a zero.
-            if ( (totalEarningsThisMonth - totalSpendingsThisMonth).toString().split( "." )[1].length < 2 ) balance += "0";
-        }
+        var balance = beautifyAmount(
+            (Math.round( (totalEarningsThisMonth - totalSpendingsThisMonth) * 1e2 ) / 1e2).toString()
+        );
         // Now we are ready to display a progress bar which contains the difference.
-        $( "#currentBalances" ).append( "<p></p><div class=\"w3-grey\"><div class=\"w3-container w3-center w3-padding w3-" + color + "\" style=\"width:" + percentage + "%;\">" + balance + getCurrencySign() + "</div></div>" );
+        $( "#currentBalances" ).append(
+            "<p></p><div class=\"w3-grey\"><div class=\"w3-container w3-center w3-padding w3-" +
+            color + "\" style=\"width:" + percentage + "%;\">" + balance + getCurrencySign() +
+            "</div></div>"
+        );
     }
 }
 
@@ -88,25 +98,37 @@ function displayRecentTransactions( type ) {
         // Now, we just need to display the data. Remember that new data is at the end, so
         // we need to loop backwards.
         for ( var i = data.length - 1; i >= 0; i-- ) {
-            // Sometimes we want to add a single zero ($2.5 => $2.50) for a more beautiful display style.
-            var amount = data[i].amount;
-            // Amount has a comma?
-            if ( data[i].amount.toString().indexOf( "." ) !== -1 ) {
-                // If there are less than two decimal digits, add a zero at the end.
-                if ( data[i].amount.toString().split( "." )[1].length < 2 ) amount += "0";
-            }
-            recentTransactionsTable += "<tr><td><i class=\"far fa-money-bill-alt w3-text-green w3-large\"></i>" + " " + data[i].name + " </td>" +
+            var amount = beautifyAmount( data[i].amount );
+            recentTransactionsTable += "<tr><td><i class=\"far fa-money-bill-alt w3-text-green w3-large\"></i>" +
+                                       " " + data[i].name + " </td>" +
                                        "<td><i>" + amount + getCurrencySign() + "</i></td>" +
                                        "<td><i>" + dateToString( data[i].date ) + "</i></td></tr>";
             // Display only limit many items (defined in index.controller.js).
             if ( data.length - limit === i ) break;
         }
         // Display the table with recent transactions.
-        $( "#" + type + "Recent" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + (type == "spending" ? textElements.recentSpendings : textElements.recentEarnings) + " </h3>" + recentTransactionsTable + "</table>" );
+        $( "#" + type + "Recent" ).html(
+            "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " +
+            (type == "spending" ?
+            textElements.recentSpendings :
+            textElements.recentEarnings) +
+            " </h3>" +
+            recentTransactionsTable + "</table>"
+        );
     }
     // Display a message that no data exists yet.
     else {
-        $( "#" + type + "Recent" ).html( "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " + (type == "spending" ? textElements.recentSpendings : textElements.recentEarnings) + " </h3><i>" + (type == "spending" ? textElements.noRecentSpendings : textElements.noRecentEarnings) + "</i>" );
+        $( "#" + type + "Recent" ).html(
+            "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " +
+            (type == "spending" ?
+            textElements.recentSpendings :
+            textElements.recentEarnings) +
+            " </h3><i>" +
+            (type == "spending" ?
+            textElements.noRecentSpendings :
+            textElements.noRecentEarnings) +
+            "</i>"
+        );
     }
 }
 
@@ -116,11 +138,14 @@ function displayRecentTransactions( type ) {
  */
 function displayChart( type ) {
     // Reset the canvas in case no data existed before (then the HTML content was overwritten).
-    $( "#" + type + "ChartDiv" ).html( "<canvas id=\"" + type + "\" width=\"8000\" height=\"2500\"></canvas>" );
+    $( "#" + type + "ChartDiv" ).html(
+        "<canvas id=\"" + type + "\" width=\"8000\" height=\"2500\"></canvas>" );
     // Get a reference to the canvas in which the chart should be.
     var transactionChart = $( "#" + type )[0];
     // Get all budgets.
-    var allTimeTransactions = (type === "earning" ? readMainStorage( "allTimeEarnings" ) : readMainStorage( "allTimeSpendings" ));
+    var allTimeTransactions = (type === "earning" ?
+                              readMainStorage( "allTimeEarnings" ) :
+                              readMainStorage( "allTimeSpendings" ));
     // Declare some variables to store the values in them.
     var labels = [], dataset = [];
     // We will declare a variable to make sure there is at least one earning/spending.
@@ -130,25 +155,34 @@ function displayChart( type ) {
     for ( var i = 0; i < allTimeTransactions.length; i++ ) {
         // Get the name of every budget.
         labels.push( allTimeTransactions[i][0] );
-        // Get the balance of
-        dataset.push( allTimeTransactions[i][1] );
+        // Get the balance of every budget
+        dataset.push( beautifyAmount( allTimeTransactions[i][1] ) );
         // Add the amount to sum up all transactions.
-        checksum = (Math.round( (checksum + allTimeTransactions[i][1]) * 1e2 ) / 1e2)
+        checksum = (Math.round( (checksum + allTimeTransactions[i][1]) * 1e2 ) / 1e2);
     }
     // Now check if there exists at least one earning/spending.
     if ( checksum > 0 ) {
+        checksum = beautifyAmount( checksum );
         // Create the chart. The colors are declared as a constant in controller.js.
-        createChart( transactionChart, labels, dataset, colors, colors, readPreference( "chartType" ) );
-        // Display the amount correctly.
-        if ( checksum.toString().indexOf( "." ) !== -1 ) {
-            if ( checksum.toString().split( "." )[1].length < 2 ) checksum += "0";
-        }
+        createChart( transactionChart, labels, dataset, colors, colors,
+                     readPreference( "chartType" ) );
         // Display the sum of all time earnings/spendings.
-        $( "#" + type + "ChartDiv" ).append( "<br><center>" + (type == "spending" ? textElements.allTimeSpendings : textElements.allTimeEarnings) + ": " + checksum + getCurrencySign() + "</center>" );
+        $( "#" + type + "ChartDiv" ).append(
+            "<br><center>" +
+            (type == "spending" ?
+            textElements.allTimeSpendings :
+            textElements.allTimeEarnings) + ": " +
+            checksum + getCurrencySign() + "</center>"
+        );
     }
     // Otherwise display a message that there is no data yet.
     else {
-        $( "#" + type + "ChartDiv" ).html( "<i>" + (type == "spending" ? textElements.noSpendings : textElements.noEarnings) + "</i>" );
+        $( "#" + type + "ChartDiv" ).html(
+            "<i>" + (type == "spending" ?
+                    textElements.noSpendings :
+                    textElements.noEarnings) +
+            "</i>"
+        );
     }
 }
 

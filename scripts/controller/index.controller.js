@@ -1,6 +1,8 @@
-/**************************************************************************************************
+/**
  * This file controls all actions on the overview page.
-**************************************************************************************************/
+ *
+ * @author Malte311
+ */
 
 // This indicates how many recent spendings should be shown.
 const numberOfRecentSpendings = 5;

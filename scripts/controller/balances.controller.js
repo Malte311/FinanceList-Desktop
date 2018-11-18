@@ -1,6 +1,8 @@
-/**************************************************************************************************
+/**
  * This file controls all actions on the balances page.
-**************************************************************************************************/
+ *
+ * @author Malte311
+ */
 
 /**
  * This function initializes the page when its loaded. This means it sets the

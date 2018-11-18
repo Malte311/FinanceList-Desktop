@@ -49,8 +49,8 @@ function createDialog( title, text, okFunction ) {
  */
 function displayBudgets() {
     // Reset previous content, set the table heading.
-    var content = "<table class=\"w3-table-all w3-round w3-twothird\">" +
-                  "<tr><td>" + textElements.currentBudgetsHeadings[0] + "</td>" +
+    var content = "<table class=\"w3-table-all w3-round w3-twothird\">" + "<tr>" +
+                  "<td>" + textElements.currentBudgetsHeadings[0] + "</td>" +
                   "<td>" + textElements.currentBudgetsHeadings[1] + "</td>" +
                   "<td>" + textElements.currentBudgetsHeadings[2] + "</td>" +
                   (readMainStorage( "allocationOn" ) ?
@@ -60,22 +60,18 @@ function displayBudgets() {
     var currentBudgets = readMainStorage( "budgets" );
     // Iterate over all budgets to display them.
     for ( var i = 0; i < currentBudgets.length; i++ ) {
-        // Sometimes we want to add a single zero ($2.5 => $2.50).
-        var balance = currentBudgets[i][1];
-        // Balance contains a comma?
-        if ( currentBudgets[i][1].toString().indexOf( "." ) !== -1 ) {
-            // Only one decimal digit? Add a zero to the end.
-            if ( currentBudgets[i][1].toString().split( "." )[1].length < 2 ) balance += "0";
-        }
-        // Display all budgets. The first one is a standard budget and can therefore not be deleted.
-        // Note that currentBudgets is an array of arrays (name of the budget and its current balance).
+        var balance = beautifyAmount( currentBudgets[i][1] );
+        // Display all budgets. The first one is a standard budget and can therefore not
+        // be deleted. Note that currentBudgets is an array of arrays
+        // (name of the budget and its current balance).
         content += "<tr><td>" + currentBudgets[i][0] + "</td>" +
                    "<td>" + balance + getCurrencySign() + "</td>" +
-                   "<td>" + "<span onclick=\"renameBudget('" + currentBudgets[i][0] + "');\" class=\"w3-button\">" +
-                   "<i class=\"fas fa-edit\"></i></span>";
+                   "<td>" + "<span onclick=\"renameBudget('" + currentBudgets[i][0] + "');\"" +
+                   "class=\"w3-button\"><i class=\"fas fa-edit\"></i></span>";
         // Every other budget (not default) can be deleted.
         if ( i !== 0 ) {
-            content += "<span onclick=\"deleteBudget('" + currentBudgets[i][0] + "');\" class=\"w3-button\"><i class=\"fas fa-times w3-text-red\"></i></span></li>";
+            content += "<span onclick=\"deleteBudget('" + currentBudgets[i][0] + "');\"" +
+                       "class=\"w3-button\"><i class=\"fas fa-times w3-text-red\"></i></span></li>";
         }
         content += "</td>";
         // Allocation enabled? Display the ratios.
@@ -112,24 +108,29 @@ function displayRecurringTransactions() {
                       "</tr>";
         // Iterate over all recurring transactions to display them.
         for ( var i = 0; i < recurringTransactions.length; i++ ) {
-            // Sometimes we want to add a single zero (2.5 => 2.50) for a more beautiful display style.
-            var amount = recurringTransactions[i].amount;
-            if ( recurringTransactions[i].amount.toString().indexOf( "." ) !== -1 ) {
-                if ( recurringTransactions[i].amount.toString().split( "." )[1].length < 2 ) amount += "0";
-            }
+            var amount = beautifyAmount( recurringTransactions[i].amount );
             // Set the type in dependecy of the current language.
-            var type = ( recurringTransactions[i].type === "earning" ? textElements.recurringTransactionsContent[0] : textElements.recurringTransactionsContent[1] );
+            var type = ( recurringTransactions[i].type === "earning" ?
+                         textElements.recurringTransactionsContent[0] :
+                         textElements.recurringTransactionsContent[1] );
             // Add all the data to our content.
             content += "<tr><td>" + recurringTransactions[i].name + "</td>" +
                        "<td>" + amount + getCurrencySign() + "</td>" +
                        "<td>" + type + "</td>" +
-                       "<td>" + (recurringTransactions[i].allocationOn ? "&mdash;" : recurringTransactions[i].budget) + "</td>" +
+                       "<td>" + (recurringTransactions[i].allocationOn ?
+                                 "&mdash;" :
+                                 recurringTransactions[i].budget) + "</td>" +
                        // If a category exists, display it. Otherwise display "-".
-                       "<td>" + (recurringTransactions[i].category.length > 0 ? recurringTransactions[i].category : "&mdash;") + "</td>" +
+                       "<td>" + (recurringTransactions[i].category.length > 0 ?
+                                 recurringTransactions[i].category :
+                                 "&mdash;") + "</td>" +
                        "<td>" + dateToString( recurringTransactions[i].nextDate ) + "</td>" +
                        "<td>" + textElements.intervalOptionsTextElements[recurringTransactions[i].interval] + "</td>" +
-                       "<td>" + (recurringTransactions[i].endDate > 0 ? dateToString( recurringTransactions[i].endDate ) : "&mdash;") + "</td>" +
-                       "<td><span onclick=\"deleteRecurringTransaction('" + recurringTransactions[i].name + "')\" class=\"w3-button\"><i class=\"fas fa-times w3-text-red\"></i></span></td>" +
+                       "<td>" + (recurringTransactions[i].endDate > 0 ?
+                                 dateToString( recurringTransactions[i].endDate ) :
+                                 "&mdash;") + "</td>" +
+                       "<td><span onclick=\"deleteRecurringTransaction('" + recurringTransactions[i].name + "')\"" +
+                       "class=\"w3-button\"><i class=\"fas fa-times w3-text-red\"></i></span></td>" +
                        "</tr>";
         }
         content += "</table><br>";
@@ -153,15 +154,18 @@ function displayContentControls() {
     var budgetOptions = "";
     // Display an option for every available budget, so the user can select any budget.
     for ( var i = 0; i < currentBudgets.length; i++ ) {
-        budgetOptions += "<option value=\"" + currentBudgets[i][0] + "\">" + currentBudgets[i][0] + "</option>";
+        budgetOptions += "<option value=\"" + currentBudgets[i][0] + "\">" +
+                                              currentBudgets[i][0] + "</option>";
     }
     // Set the content (and reset previous content).
     $( "#mainContentControls" ).html(
         // Display a selection for display types (graph/table).
         "<form class=\"w3-center\">" +
-            "<input id=\"graph\" onclick=\"updateContent();\" type=\"radio\" name=\"type\" checked>" +
+            "<input id=\"graph\" onclick=\"updateContent();\"" +
+            "type=\"radio\" name=\"type\" checked>" +
             textElements.displayTypes[0] +
-            "<input id=\"table\" onclick=\"updateContent();\" style=\"margin-left:15px;\" type=\"radio\" name=\"type\">" +
+            "<input id=\"table\" onclick=\"updateContent();\" style=\"margin-left:15px;\"" +
+            "type=\"radio\" name=\"type\">" +
             textElements.displayTypes[1] +
         "</form><hr>" +
         // Display filters for the user so they can choose which data they want to see.
@@ -170,31 +174,40 @@ function displayContentControls() {
                 "<tr>" +
                     "<td>" +
                         "<select class=\"w3-select\" id=\"budgetSelect\">" +
-                            "<option selected=\"selected\">" + textElements.mainContentFilterText[0] + "</option>" + budgetOptions +
+                            "<option selected=\"selected\">" +
+                                textElements.mainContentFilterText[0] +
+                            "</option>" + budgetOptions +
                         "</select>" +
                     "</td>" +
                     "<td>" +
                         "<select class=\"w3-select\" id=\"typeSelect\">" +
                             "<option>" + textElements.mainContentFilterText[1] + "</option>" +
                             "<option>" + textElements.mainContentFilterText[2] + "</option>" +
-                            "<option selected=\"selected\">" + textElements.mainContentFilterText[3] + "</option>" +
+                            "<option selected=\"selected\">" +
+                                textElements.mainContentFilterText[3] +
+                            "</option>" +
                         "</select>" +
                     "</td>" +
                     "<td>" +
-                        "<input id=\"dateSelect\" class=\"w3-round-large w3-white\"  onclick=\"showDatepicker('3');\">" +
+                        "<input id=\"dateSelect\" class=\"w3-round-large w3-white\"" +
+                        "onclick=\"showDatepicker('3');\">" +
                     "</td>" +
                     "<td>" +
-                        "<input id=\"amountFrom\" type=\"text\" size=\"2\">" + getCurrencySign() + " " + textElements.mainContentFilterText[5] + " " +
+                        "<input id=\"amountFrom\" type=\"text\" size=\"2\">" + getCurrencySign() +
+                        " " + textElements.mainContentFilterText[5] + " " +
                         "<input id=\"amountTo\" type=\"text\" size=\"2\">" + getCurrencySign() +
                     "</td>" +
                     "<td>" +
-                        "<input id=\"nameSelect\" type=\"text\" size=\"15\" placeholder=\"" + textElements.mainContentFilterText[6] + "\">" +
+                        "<input id=\"nameSelect\" type=\"text\" size=\"15\" placeholder=\"" +
+                        textElements.mainContentFilterText[6] + "\">" +
                     "</td>" +
                     "<td>" +
-                        "<input id=\"categorySelect\" type=\"text\" size=\"15\" placeholder=\"" + textElements.mainContentFilterText[7] + "\">" +
+                        "<input id=\"categorySelect\" type=\"text\" size=\"15\" placeholder=\"" +
+                        textElements.mainContentFilterText[7] + "\">" +
                     "</td>" +
                     "<td>" +
-                        "<button class=\"w3-button w3-white w3-round-xlarge\" onclick=\"updateContent();\">" + textElements.update + "</button>" +
+                        "<button class=\"w3-button w3-white w3-round-xlarge\"" +
+                        "onclick=\"updateContent();\">" + textElements.update + "</button>" +
                     "</td>" +
                 "</tr>" +
             "</table>" +
@@ -223,7 +236,8 @@ function displayContentControls() {
  * @param {String} name Indictates which transactions should be displayed (by name).
  * @param {String} category Indictates which category should be displayed.
  */
-function displayContent( displayType, budget, type, startDate, endDate, amountFrom, amountTo, name, category ) {
+function displayContent( displayType, budget, type, startDate, endDate, amountFrom, amountTo,
+                         name, category ) {
     // Before doing anything, we check if the input is valid.
     // Input invalid?
     if ( !(checkAmountInput( amountFrom, true ) && checkAmountInput( amountTo, true )) ) {
@@ -254,14 +268,21 @@ function displayContent( displayType, budget, type, startDate, endDate, amountFr
     // Date selected?
     if ( startDate !== null && endDate !== null ) {
         // Get start and end date as a file name (reversed file name).
-        var startDateFileName = startDate.getFullYear() + "." + ((startDate.getMonth() + 1) < 10 ? "0" + (startDate.getMonth() + 1) : (startDate.getMonth() + 1));
-        var endDateFileName = endDate.getFullYear() + "." + ((endDate.getMonth() + 1) < 10 ? "0" + (endDate.getMonth() + 1) : (endDate.getMonth() + 1));
+        var startDateFileName = startDate.getFullYear() + "." +
+                                ((startDate.getMonth() + 1) < 10 ?
+                                "0" + (startDate.getMonth() + 1) :
+                                (startDate.getMonth() + 1));
+        var endDateFileName = endDate.getFullYear() + "." +
+                              ((endDate.getMonth() + 1) < 10 ?
+                              "0" + (endDate.getMonth() + 1) :
+                              (endDate.getMonth() + 1));
         // For comparing, we need to reverse file names.
         var allFiles = getJSONFiles();
         for ( var i = 0; i < allFiles.length; i++ ) {
             // Reverse file name.
             var tmp = allFiles[i].split( "." )[1] + "." + allFiles[i].split( "." )[0];
-            // Check if the file is in the given range (Note: This will only filter months and years).
+            // Check if the file is in the given range
+            // (Note: This will only filter months and years).
             if ( startDateFileName <= tmp && endDateFileName >= tmp ) {
                 files.push( allFiles[i] );
             }
@@ -333,16 +354,13 @@ function displayGraph( data ) {
     // Get the dataset (amounts) and labels (names).
     for ( var i = 0; i < data.length; i++ ) {
         // Add the amount and name for our graph.
-        // Display the amount correctly.
-        var amount = data[i].amount;
-        if ( amount.toString().indexOf( "." ) !== -1 ) {
-            if ( amount.toString().split( "." )[1].length < 2 ) amount += "0";
-        }
+        var amount = beautifyAmount( data[i].amount );
         dataset.push( amount );
         labels.push( data[i].name );
     }
     // Now we can display the graph.
-    createChart( $( "#graphCanvas" )[0], labels, dataset, colors, colors, readPreference( "chartType" ) );
+    createChart( $( "#graphCanvas" )[0], labels, dataset, colors, colors,
+                 readPreference( "chartType" ) );
 }
 
 function displayTable( data ) {
@@ -355,18 +373,18 @@ function displayTable( data ) {
     // Get the content for the table.
     var tableContentHTML = "";
     for ( var j = 0; j < data.length; j++ ) {
-        // Display the amount correctly.
-        var amount = data[j].amount;
-        if ( amount.toString().indexOf( "." ) !== -1 ) {
-            if ( amount.toString().split( "." )[1].length < 2 ) amount += "0";
-        }
+        var amount = beautifyAmount( data[j].amount );
         // Add the data to our table.
-        tableContentHTML += "<tr class=\"w3-hover-light-blue\"><td>" + dateToString( data[j].date ) + "</td>" +
+        tableContentHTML += "<tr class=\"w3-hover-light-blue\">" +
+                            "<td>" + dateToString( data[j].date ) + "</td>" +
                             "<td>" + data[j].name + "</td>" +
                             "<td>" + amount + getCurrencySign() + "</td>" +
                             "<td>" + data[j].category + "</td>" +
                             "<td>" + data[j].budget + "</td>" +
-                            "<td>" + (data[j].type == "earning" ? textElements.earning : textElements.spending) + "</td></tr>";
+                            "<td>" + (data[j].type == "earning" ?
+                                     textElements.earning :
+                                     textElements.spending) +
+                            "</td></tr>";
     }
     // Display the table containing the data.
     $( "#mainContent" ).html( "<br><table class=\"w3-table-all w3-round\">" +
