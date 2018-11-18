@@ -286,7 +286,7 @@ function getData( file, quest ) {
 
 /**
  * Joins entries to one entry (just for a nicer display style, the storage remains unchanged).
- * @param {[number[]]} indices The indices we want to join. Every array specifies indicies which
+ * @param {number[][]} indices The indices we want to join. Every array specifies indicies which
  * we want to join. We might have more than 1 of these arrays, so this parameter is an array of arrays.
  * @param {Object[]} data Contains the entries.
  * @return {Object[]} The data with joined entries.

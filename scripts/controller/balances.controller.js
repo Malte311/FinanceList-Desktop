@@ -611,6 +611,13 @@ function activateDateRangePicker( id ) {
         applyButtonText: textElements.apply,
         clearButtonText: textElements.clear,
         cancelButtonText: textElements.cancel,
+        datepickerOptions: {
+            monthNames : textElements.monthNames,
+            monthNamesShort : textElements.monthNamesShort,
+            dayNames: textElements.dayNames,
+            dayNamesShort : textElements.dayNamesShort,
+            dayNamesMin : textElements.dayNamesMin
+        },
         presetRanges: [
 			{text: textElementsLocal[0],
                 dateStart: function() {
@@ -674,6 +681,16 @@ function activateDateRangePicker( id ) {
                 },
                 dateEnd: function() {
                     return moment().subtract(1, 'year').endOf('year')
+                }
+            },
+            {text: textElementsLocal[8],
+                dateStart: function() {
+                    var date = dateToString(readJSONFile(
+                        readPreference( "path" ) + path.sep + getJSONFiles()[0] + ".json")[0].date).split( "." );
+                    return moment( date[2] + "-" + date[1] + "-" + date[0] )
+                },
+                dateEnd: function() {
+                    return moment()
                 }
             }
 		]

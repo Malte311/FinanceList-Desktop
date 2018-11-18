@@ -460,7 +460,12 @@ function showDatepicker( number ) {
     $( "#datepicker" + number ).datepicker({
         dateFormat: "dd.mm.yy",
         // Min date: tomorrow
-        minDate: (number === "2" ? new Date( (getCurrentDate() + 86400) * 1000 ) : null)
+        minDate: (number === "2" ? new Date( (getCurrentDate() + 86400) * 1000 ) : null),
+        monthNames : textElements.monthNames,
+        monthNamesShort : textElements.monthNamesShort,
+        dayNames: textElements.dayNames,
+        dayNamesShort : textElements.dayNamesShort,
+        dayNamesMin : textElements.dayNamesMin
     });
     $( "#datepicker" + number ).datepicker("show");
 }
