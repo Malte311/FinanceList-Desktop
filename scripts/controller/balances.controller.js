@@ -508,18 +508,18 @@ function setAllocation() {
         // We need a precise id of every selection
         // (every budget has its own selection with 10 options in it).
         var currentAllocationHTML = "";
-        // We want to loop from 0 to 10, because the options should range
-        // from 0 to 100 percent, with an increase of 10 per step.
-        for ( var j = 0; j <= 10; j++ ) {
+        // We want to loop from 0 to 20, because the options should range
+        // from 0 to 100 percent, with an increase of 5% per step.
+        for ( var j = 0; j <= 20; j++ ) {
             // We display the previously selected value as selected.
-            if ( j * 10 === currentAllocation[i][1] ) {
+            if ( j * 5 === currentAllocation[i][1] ) {
                 // Note that we have 10 options for every budget.
                 currentAllocationHTML +=
                     "<option selected=\"selected\">" + currentAllocation[i][1] + "&percnt;</option>";
             }
             // This is for every other value (not previously selected).
             else {
-                currentAllocationHTML += "<option>" + (j * 10).toString() + "&percnt;</option>";
+                currentAllocationHTML += "<option>" + (j * 5).toString() + "&percnt;</option>";
             }
         }
         // This holds the lines of the table.
