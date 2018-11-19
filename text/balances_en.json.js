@@ -2,7 +2,7 @@
     "confirm": "Confirm",
     "cancel": "Cancel",
     "currentBudgetsHeadings": ["Budget", "Balance", "Rename/Delete", "Allocation ratio"],
-    "recurringTransactionsHeadings": ["Name", "Amount", "Type", "Budget", "Category", "Next execution", "Interval", "End date", "Delete"],
+    "recurringTransactionsHeadings": ["Name", "Amount", "Type", "Budget", "Category", "Next execution", "Interval", "End date", "Delete", "Edit"],
     "recurringTransactionsContent": ["earning", "spending", "days", "No recurring transactions available."],
     "addTransaction": "Add transaction",
     "transactionDialogTextElements": ["Here you can add new earnings or new spendings.", "Earning", "Spending", "Name", "Amount", "Category", "(optionally)", "Date", "Choose budget", "Allocate automatically", "Budget", "Automate", "End date", "never"],
@@ -34,5 +34,6 @@
     "monthNamesShort": [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ],
 	"dayNames": [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ],
 	"dayNamesShort": [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ],
-	"dayNamesMin": [ "Su","Mo","Tu","We","Th","Fr","Sa" ]
+	"dayNamesMin": [ "Su","Mo","Tu","We","Th","Fr","Sa" ],
+    "editRecurringTransaction": ["Edit", "Amount", "Interval", "Update next execution"]
 }

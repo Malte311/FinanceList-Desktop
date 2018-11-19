@@ -113,6 +113,7 @@ function displayRecurringTransactions() {
                       "<td>" + textElements.recurringTransactionsHeadings[6] + "</td>" +
                       "<td>" + textElements.recurringTransactionsHeadings[7] + "</td>" +
                       "<td>" + textElements.recurringTransactionsHeadings[8] + "</td>" +
+                      "<td>" + textElements.recurringTransactionsHeadings[9] + "</td>" +
                       "</tr>";
         // Iterate over all recurring transactions to display them.
         for ( var i = 0; i < recurringTransactions.length; i++ ) {
@@ -137,8 +138,10 @@ function displayRecurringTransactions() {
                        "<td>" + (recurringTransactions[i].endDate > 0 ?
                                  dateToString( recurringTransactions[i].endDate ) :
                                  "&mdash;") + "</td>" +
-                       "<td><span onclick=\"deleteRecurringTransaction('" + recurringTransactions[i].name + "')\"" +
+                       "<td><span onclick=\"deleteRecurringTransaction('" + recurringTransactions[i].name + "'," + i + ")\"" +
                        "class=\"w3-button\"><i class=\"fas fa-times w3-text-red\"></i></span></td>" +
+                       "<td><span onclick=\"editRecurringTransaction('" + recurringTransactions[i].name + "'," + i + ")\"" +
+                       "class=\"w3-button\"><i class=\"fas fa-edit\"></i></span></td>" +
                        "</tr>";
         }
         content += "</table><br>";

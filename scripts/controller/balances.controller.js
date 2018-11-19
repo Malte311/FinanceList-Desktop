@@ -241,12 +241,72 @@ function addRecurringTransaction( name, amount, budget, category, type, interval
         var currentRecurringTransactions = readMainStorage( "recurring" );
         currentRecurringTransactions.push( dataObj );
         writeMainStorage( "recurring", currentRecurringTransactions );
-        // Now, set update to false, because we did not update the new transction yet.
+        // Now, set update to false, because we did not update the new transaction yet.
         writeMainStorage( "update", false );
         // Update the new transaction.
         executeRecurringTransactions();
         // This function is called in addTransaction, so no need to update the view here,
         // since it is already done.
+    }
+}
+
+/**
+ * This function edits a recurring transaction with a given name.
+ * @param {String} name The name of the recurring transaction we want to edit.
+ * @param {number} index The index of the transaction (the name is not unique).
+ */
+function editRecurringTransaction( name, index ) {
+    var textElementsLocal = textElements.editRecurringTransaction;
+    var currentRecurringTransactions = readMainStorage( "recurring" );
+    var transaction = null;
+
+    // Search the transaction we want to edit.
+    for ( var i = 0; i < currentRecurringTransactions.length; i++ ) {
+        if ( currentRecurringTransactions[i].name === name && i == index ) {
+            transaction = currentRecurringTransactions[i];
+            break;
+        }
+    }
+
+    if ( transaction != null ) {
+        var content = textElementsLocal[1] + "<br>" +
+                      "<input type=\"text\" id=\"recAmountInput\" value='" +
+                      transaction.amount + "'>" + getCurrencySign() + "<br><hr>" +
+                      textElementsLocal[2] + "<br>" +
+                      "<select class=\"w3-select\" id=\"recIntSelect\">" + "<br>";
+
+        var intervals = textElements.intervalOptionsTextElements;
+        for ( var i = 0; i < intervals.length; i++ ) {
+            if ( transaction.interval == i ) {
+                content += "<option selected=\"selected\">" + intervals[i] + "</option>";
+            }
+            else {
+                content += "<option>" + intervals[i] + "</option>";
+            }
+        }
+        content += "</select>";
+
+        createDialog( textElementsLocal[0], content, function() {
+            var amountInput = $( "#recAmountInput" ).val().trim();
+            var intervalSelect = $( "#recIntSelect" )[0].selectedIndex;
+
+            if ( checkAmountInput( amountInput, false ) ) {
+                // Something changed?
+                if ( amountInput != transaction.amount || intervalSelect != transaction.interval ) {
+                    transaction.amount = amountInput;
+                    transaction.interval = intervalSelect;
+                    currentRecurringTransactions[index] = transaction;
+
+                    // Write back to mainStorage.json.
+                    writeMainStorage( "recurring", currentRecurringTransactions );
+                    updateView();
+                }
+                $( this ).dialog( "close" );
+            }
+            else {
+                dialog.showErrorBox( "Error", "Invalid input" );
+            }
+        });
     }
 }
 

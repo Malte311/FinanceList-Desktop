@@ -243,14 +243,15 @@ function addEarning( earning, sum, budget, category, date, allocationOn ) {
 /**
  * This function deletes a recurring transaction.
  * @param {String} name The name of the transaction we want to delete.
+ * @param {number} index The index of the transaction (the name is not unique).
  */
-function deleteRecurringTransaction( name ) {
+function deleteRecurringTransaction( name, index ) {
     // Get current transactions.
     var currentRecurringTransactions = readMainStorage( "recurring" );
     // Search the transaction we want to delete.
     for ( var i = 0; i < currentRecurringTransactions.length; i++ ) {
         // Found it? Delete it and stop.
-        if ( currentRecurringTransactions[i].name === name ) {
+        if ( currentRecurringTransactions[i].name === name && i == index ) {
             currentRecurringTransactions.splice( i, 1 );
             break;
         }
