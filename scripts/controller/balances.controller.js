@@ -837,7 +837,7 @@ function addTransfer( budgetFrom, budgetTo, amount ) {
 /**
  * This function sorts a table by a given parameter.
  * @param {number} n The number which specifies the sorting parameter:
- * 0: Datum, 1: Name, 2: Summe, 3: Kategorie, 4: Konto, 5: Art
+ * 0: Date, 1: Name, 2: Sum, 3: Category, 4: Budget, 5: Type
  * This function is taken from: https://www.w3schools.com/howto/howto_js_sort_table.asp
  */
 function sortTable( n ) {
@@ -860,14 +860,14 @@ function sortTable( n ) {
             y = rows[i + 1].getElementsByTagName( "TD" )[n];
             // Check if the two rows should switch place, based on the direction, asc or desc:
             if ( dir == "asc" ) {
-                if ( x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase() ) {
+                if ( compare(x.innerHTML.toLowerCase(), y.innerHTML.toLowerCase(), n) ) {
                     // If so, mark as a switch and break the loop:
                     shouldSwitch = true;
                     break;
                 }
             }
             else if ( dir == "desc" ) {
-                if ( x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase() ) {
+                if ( compare(y.innerHTML.toLowerCase(), x.innerHTML.toLowerCase(), n) ) {
                     // If so, mark as a switch and break the loop:
                     shouldSwitch = true;
                     break;
@@ -890,4 +890,27 @@ function sortTable( n ) {
             }
         }
     }
+}
+
+/**
+ * Compares two strings s1, s2. Sometimes we need a special treatment.
+ * @param {String} s1 The first string.
+ * @param {String} s2 The second string.
+ * @param {number} n Specifies the type:
+ * 0: date (has to be reversed for comparison),
+ * 2: sum (has to be compared as a number instead of as a string)
+ * @return {bool} Returns if s1 > s2
+ */
+function compare( s1, s2, n ) {
+    // reversing required
+    if ( n == 0 ) {
+        s1 = s1.split( "" ).reverse().join( "" );
+        s2 = s2.split( "" ).reverse().join( "" );
+    }
+    // float comparison required
+    else if ( n == 2 ) {
+        s1 = parseFloat( s1 );
+        s2 = parseFloat( s2 );
+    }
+    return s1 > s2;
 }
