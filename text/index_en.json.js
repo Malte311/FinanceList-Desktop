@@ -1,3 +1,4 @@
+module.exports =
 {
     "noRecentSpendings": "There are no recent spendings yet!",
     "noRecentEarnings": "There are no recent earnings yet!",

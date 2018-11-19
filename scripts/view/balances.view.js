@@ -4,7 +4,6 @@
  * @author Malte311
  */
 
-var textfile;
 var textElements;
 
 /**
@@ -477,8 +476,7 @@ function showDatepicker( number ) {
  * This function updates the view when changes are made.
  */
 function updateView() {
-    textfile = "./text/balances_" + getLanguage() + ".json.js";
-    textElements = readJSONFile( textfile );
+    textElements = require( "../text/balances_" + getLanguage() + ".json.js" );
     // Display a list of currently available budgets.
     displayBudgets();
     // Display the budgets in detail.

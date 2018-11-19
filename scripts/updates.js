@@ -116,7 +116,7 @@ function checkForUpdates() {
  */
 function showUpdateNotification() {
     if ( hasUpdate ) {
-        var textdata = readJSONFile( "./text/updates_" + getLanguage() + ".json.js" );
+        var textdata = require( "./text/updates_" + getLanguage() + ".json.js" );
         dialog.showMessageBox({
             type: "info",
             title: textdata["updateAvailable"],

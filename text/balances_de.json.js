@@ -1,3 +1,4 @@
+module.exports =
 {
     "confirm": "Best\u00e4tigen",
     "cancel": "Abbrechen",
