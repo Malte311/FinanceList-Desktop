@@ -365,14 +365,36 @@ function replaceData( file, data ) {
 }
 
 /**
- * This function sorts data by date (oldest first).
+ * This function sorts data by date (oldest first) and then by name.
  * @param {JSON[]} data The data we want to sort.
  * @return {JSON[]} The sorted data.
  */
 function sortData( data ) {
     return data.sort( function( obj1, obj2 ) {
-        return parseInt( obj1.date ) - parseInt( obj2.date );
+        return sortFunction( obj1, obj2 );
     });
+}
+
+/**
+ * Sorts objects by date and then by name.
+ * @param {JSON} a The first object to compare.
+ * @param {JSON} b The second object to compare.
+ * @return {number} -1 in case the first object is older; 1 in case the second
+ * object is older; with same dates: -1 if first object is alphabetically smaller,
+ * 1 if second object is alphabetically smaller, 0 else
+ */
+function sortFunction( a, b ) {
+    var o1 = a["date"];
+    var o2 = b["date"];
+
+    var p1 = a["name"].toLowerCase();
+    var p2 = b["name"].toLowerCase();
+
+    if (o1 < o2) return -1;
+    if (o1 > o2) return 1;
+    if (p1 < p2) return -1;
+    if (p1 > p2) return 1;
+    return 0;
 }
 
 /**
@@ -468,6 +490,28 @@ function dateToString( timestamp ) {
                 "0" + (currentTime.getMonth() + 1).toString() :
                 (currentTime.getMonth() + 1).toString()) + "." +
            currentTime.getFullYear().toString();
+}
+
+/**
+ * Makes sure that a given timestamp is not already used. If it is, we add one second to it.
+ * @param {number} date The date as a timestamp.
+ * @return {number} A unique timestamp for the date.
+ */
+function uniqueDate( date ) {
+    var dateInStringFormat = dateToString( date );
+    var correspondingFile  = readPreference( "path" ) + path.sep
+                           + dateInStringFormat.split( "." )[1] + "."
+                           + dateInStringFormat.split( "." )[2] + ".json";
+    var content = readJSONFile( correspondingFile );
+
+    // one for-loop is enough because the file is sorted by date. So if we add one, we can detect
+    // duplicates again.
+    for ( var i = 0; i < content.length; i++ ) {
+        if ( content[i].date === date ) {
+            date = date + 1;
+        }
+    }
+    return date;
 }
 
 /**

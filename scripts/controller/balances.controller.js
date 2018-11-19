@@ -156,6 +156,10 @@ function addTransaction() {
             else {
                 endDate = -1;
             }
+
+            // Make sure that the date as a timestamp is unique
+            date = uniqueDate( date );
+
             // Find out which type (earning/spending) was selected and
             // execute the correct function.
             if ( $( "#earning" )[0].checked ) {
@@ -904,8 +908,8 @@ function sortTable( n ) {
 function compare( s1, s2, n ) {
     // reversing required
     if ( n == 0 ) {
-        s1 = s1.split( "" ).reverse().join( "" );
-        s2 = s2.split( "" ).reverse().join( "" );
+        s1 = s1.split( "." )[2] + "." + s1.split( "." )[1] + "." + s1.split( "." )[0];
+        s2 = s2.split( "." )[2] + "." + s2.split( "." )[1] + "." + s2.split( "." )[0];
     }
     // float comparison required
     else if ( n == 2 ) {

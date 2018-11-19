@@ -3,3 +3,4 @@ data
 application
 out
 *.dmg
+log.txt
