@@ -1,4 +1,4 @@
-# FinanceList
+# FinanceList-Desktop
 
 ![Build Status](https://travis-ci.com/Malte311/FinanceList-Desktop.svg?token=peoMTzKpBjcCaX8BZgzt&branch=master)
 
