@@ -40,7 +40,6 @@ function createUniqueTimestamps() {
     log += "=====================================================================\r\n\r\n";
 
     if ( config.log ) {
-        // Write log
         fs.appendFileSync( storage.getDefaultDataPath() + path.sep + "log.txt", log );
     }
 }
