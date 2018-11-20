@@ -6,6 +6,8 @@
  * @author Malte311
  */
 
+const config = require( './scripts/config.js' );
+
 /**
  * Loops through all available data and makes sure that every timestamp is unique.
  * Of course, partitioned entries keep the same timestamp.
@@ -36,8 +38,11 @@ function createUniqueTimestamps() {
     });
     log += "Finished!\r\n";
     log += "=====================================================================\r\n\r\n";
-    // Write log
-    fs.appendFileSync( "log.txt", log );
+
+    if ( config.log ) {
+        // Write log
+        fs.appendFileSync( storage.getDefaultDataPath() + path.sep + "log.txt", log );
+    }
 }
 
 /**
@@ -55,8 +60,10 @@ function differentEntries( e1, e2 ) {
            e1.budget == e2.budget);
 }
 
+var currentVersion = remote.app.getVersion();
+var lastUpdate = readPreference( "versionUpdate" );
 // Function call only once
-if ( readPreference("timestampsUpdated") != true ) {
+if ( (lastUpdate === undefined || currentVersion > lastUpdate) && config.updateNeeded ) {
     createUniqueTimestamps();
-    storePreference( "timestampsUpdated", true );
+    storePreference( "versionUpdate", currentVersion );
 }

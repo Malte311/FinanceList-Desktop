@@ -6,5 +6,7 @@
 
 module.exports = {
     // Devtools on?
-	devMode : true
+	devMode : false,
+	log : true,
+	updateNeeded : true
 }
