@@ -11,6 +11,7 @@ const fs = require( 'fs' );
 const storage = require( 'electron-json-storage' );
 // We use this module to get the correct path seperator (only needed to display it correctly).
 const path = require( 'path' );
+const os = require( 'os' );
 // A default settings.json object.
 const defaultObj = {"windowSize":"1920x1080","fullscreen":false,"language":"en",
                     "path": storage.getDefaultDataPath() + path.sep + "data",
@@ -72,7 +73,13 @@ function initStorage() {
  * This function creates missing paths.
  */
 function createPath( newPath ) {
-	var start = "";
+    var start;
+    if ( os.platfrom() === "win32" ) {
+        start = "";
+    }
+    else {
+        start = "/";
+    }
 	newPath.split( path.sep ).forEach( function ( folder ) {
 		if ( folder.length > 0 ) {
 			start += folder + path.sep;
