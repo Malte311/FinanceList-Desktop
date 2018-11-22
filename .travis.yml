@@ -28,9 +28,9 @@ deploy:
   - provider: releases
     api_key: $GITHUB_TOKEN
     file:
-      - "FinanceList-Desktop-win32-x64.zip"
-      - "FinanceList-Desktop-linux-x64.zip"
-      - "FinanceList-Desktop-mac-x64.dmg"
+      - "application/FinanceList-Desktop-win32-x64.zip"
+      - "application/FinanceList-Desktop-linux-x64.zip"
+      - "application/FinanceList-Desktop-mac-x64.dmg"
     skip_cleanup: true
     on:
       tags: true
