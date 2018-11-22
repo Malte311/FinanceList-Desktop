@@ -30,7 +30,7 @@ deploy:
     file:
       - "application/FinanceList-Desktop-win32-x64.zip"
       - "application/FinanceList-Desktop-linux-x64.zip"
-      - "application/FinanceList-Desktop-mac-x64.dmg"
+      - "FinanceList-Desktop-mac-x64.dmg"
     skip_cleanup: true
     on:
       tags: true
