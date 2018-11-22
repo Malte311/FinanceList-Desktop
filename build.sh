@@ -4,10 +4,10 @@ npm install wine-darwin
 ./node_modules/.bin/wine hostnamene
 
 npm run package-win
-zip -r FinanceList-Desktop-win32-x64.zip application/FinanceList-Desktop-win32-x64
+zip -r -9 FinanceList-Desktop-win32-x64.zip application/FinanceList-Desktop-win32-x64
 
 npm run package-linux
-zip -r FinanceList-Desktop-linux-x64.zip application/FinanceList-Desktop-linux-x64
+zip -r -9 FinanceList-Desktop-linux-x64.zip application/FinanceList-Desktop-linux-x64
 
 npm run package-mac
 npm run create-dmg
