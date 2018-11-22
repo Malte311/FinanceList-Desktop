@@ -4,7 +4,7 @@
  * @author Malte311
  */
 
-const isDev = require('electron-is-dev');
+const isDev = require( 'electron-is-dev' );
 
 module.exports = {
     // Devtools on?
