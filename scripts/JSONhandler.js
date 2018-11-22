@@ -74,7 +74,7 @@ function initStorage() {
  */
 function createPath( newPath ) {
     var start;
-    if ( os.platfrom() === "win32" ) {
+    if ( os.platform() === "win32" ) {
         start = "";
     }
     else {
