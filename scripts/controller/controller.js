@@ -13,8 +13,9 @@ const { dialog } = require( 'electron' ).remote;
 // Neccessary to set the window size.
 const win = remote.getCurrentWindow();
 // This saves available colors for charts.
-const colors = ['rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'];
+const colors = ['rgba(255,99,132,1)', 'rgba(0, 162, 235, 1)', 'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)',
+                'rgba(255, 0, 255, 1)', 'rgba(255, 255, 102, 1)', 'rgba(80, 189, 255, 1)'];
 const colorSeparator = 'rgba(150, 255, 120, 1)';
 
 /**
