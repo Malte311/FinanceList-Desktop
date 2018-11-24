@@ -52,7 +52,7 @@ function createWindow () {
         show: false
     });
 
-    // Maximize window if it is at least as big as the screen size 
+    // Maximize window if it is at least as big as the screen size
     if ( screenWidth >= mainScreenWidth && screenHeight >= mainScreenHeight ) {
         mainWindow.maximize();
     }
@@ -71,6 +71,11 @@ function createWindow () {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         mainWindow = null
+    });
+
+    mainWindow.on( 'close', function() {
+        var size = mainWindow.getSize();
+        JSONhandler.storePreference( "windowSize", size[0] + "x" + size[1] );
     });
 
     // load menu in the correct language. Unfortunately, the menu won't update

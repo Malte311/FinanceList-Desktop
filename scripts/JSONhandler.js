@@ -29,6 +29,7 @@ var mainStoragePath = readPreference( "path" ) + path.sep + "mainStorage.json";
 var currentFile = readPreference( "path" ) + path.sep + getCurrentFileName();
 // This is for reading the settings.json file in the main process.
 module.exports.readPreference = ( name ) => readPreference( name );
+module.exports.storePreference = ( name, value ) => storePreference( name, value );
 module.exports.initStorage = () => initStorage();
 
 /**
