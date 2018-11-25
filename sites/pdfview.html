@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <!-- head -->
+    <head>
+        <!-- general settings -->
+        <title> FinanceList - A finance managing tool </title>
+        <link rel="shortcut icon" href="img/tab.ico">
+        <meta charset="UTF-8">
+        <!-- scripts -->
+        <script language="javascript" src="../scripts/JSONhandler.js"></script>
+        <script language="javascript" src="../scripts/controller/controller.js"></script>
+        <script language="javascript" src="../scripts/view/pdfview.js"></script>
+        <!-- stylesheets -->
+        <link rel="stylesheet" type="text/css" href="../style/w3.min.css">
+        <link rel="stylesheet" type="text/css" href="../style/fontawesome/css/fontawesome-all.min.css">
+        <link rel="stylesheet" type="text/css" href="../style/style.css">
+    </head>
+    <body class="w3-light-grey">
+        <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
+            <center><span class="w3-bar-item w3-center" lang="de"> Monatsbericht </span></center>
+            <center><span class="w3-bar-item w3-center" lang="en"> Monthly overview </span></center>
+        </div>
+        <div class="w3-container" style="margin-right:50px;margin-bottom:50px;">
+            <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="window.location.href='./balances.html';" href="#"> Back </button>
+            <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="window.location.href='./balances.html';" href="#"> Zurück </button>
+            <button class="w3-button w3-blue w3-round-xlarge" lang="en" onclick="printToPDF();" href="#"> Back </button>
+            <button class="w3-button w3-blue w3-round-xlarge" lang="de" onclick="printToPDF();" href="#"> Zurück </button>
+        </div>
+        <script>
+            window.$ = window.jQuery = require( 'jquery' );
+        </script>
+        <script language="javascript" src="../scripts/lib/jquery-ui.min.js"></script>
+        <script language="javascript" src="../scripts/lib/jquery.comiseo.daterangepicker.js"></script>
+        <script>
+            setLanguage( readPreference( "language" ) );
+            initPdfView();
+        </script>
+    </body>
+</html>

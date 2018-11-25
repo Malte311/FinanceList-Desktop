@@ -530,3 +530,11 @@ function uniqueDate( date ) {
 function readJSONFile( filename ) {
     return JSON.parse( fs.readFileSync( filename ) );
 }
+
+/**
+ * Writes data to PDF files.
+ */
+function writePDF( pdfPath, data ) {
+    pdfPath = pdfPath[0] + path.sep + dateToString( getCurrentDate() ) + ".pdf";
+    fs.writeFileSync( pdfPath, data );
+}
