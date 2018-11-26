@@ -20,11 +20,14 @@
             <center><span class="w3-bar-item w3-center" lang="de"> Monatsbericht </span></center>
             <center><span class="w3-bar-item w3-center" lang="en"> Monthly overview </span></center>
         </div>
-        <div class="w3-container" style="margin-right:50px;margin-bottom:50px;">
-            <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="window.location.href='./balances.html';" href="#"> Back </button>
-            <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="window.location.href='./balances.html';" href="#"> Zurück </button>
-            <button class="w3-button w3-blue w3-round-xlarge" lang="en" onclick="printToPDF();" href="#"> Back </button>
-            <button class="w3-button w3-blue w3-round-xlarge" lang="de" onclick="printToPDF();" href="#"> Zurück </button>
+        <div class="w3-main" style="margin-left:250px;margin-top:45px;">
+            <div id="dialogDiv"></div>
+            <div class="w3-container" style="margin-right:50px;margin-bottom:50px;">
+                <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="window.location.href='./balances.html';" href="#"> Back </button>
+                <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="window.location.href='./balances.html';" href="#"> Zur&uuml;ck </button>
+                <button class="w3-button w3-blue w3-round-xlarge" lang="en" onclick="printToPDF();" href="#"> Create PDF </button>
+                <button class="w3-button w3-blue w3-round-xlarge" lang="de" onclick="printToPDF();" href="#"> PDF erstellen </button>
+            </div>
         </div>
         <script>
             window.$ = window.jQuery = require( 'jquery' );
@@ -32,8 +35,8 @@
         <script language="javascript" src="../scripts/lib/jquery-ui.min.js"></script>
         <script language="javascript" src="../scripts/lib/jquery.comiseo.daterangepicker.js"></script>
         <script>
+            var textElements = require( "../text/pdfview_" + getLanguage() + ".json.js" );
             setLanguage( readPreference( "language" ) );
-            initPdfView();
         </script>
     </body>
 </html>

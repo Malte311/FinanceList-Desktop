@@ -6,9 +6,10 @@
 
 /**
  * Initializes the PDF view page.
+ * @param {String} month Month for which the overview should be created.
  */
-function initPdfView() {
-
+function initPdfView( month ) {
+    window.location.href='pdfview.html';
 }
 
 /**

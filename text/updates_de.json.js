@@ -1,7 +1,7 @@
-module.exports = 
+module.exports =
 {
-    "updateAvailable":"Update verfügbar",
-    "updateMessage":"Es ist eine neue Version von FinanceList-Desktop verfügbar!",
+    "updateAvailable":"Update verf\u00fcgbar",
+    "updateMessage":"Es ist eine neue Version von FinanceList-Desktop verf\u00fcgbar!",
     "download":"Herunterladen",
-    "later":"Später"
+    "later":"Sp\u00e4ter"
 }

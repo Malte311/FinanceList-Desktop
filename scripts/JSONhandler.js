@@ -533,6 +533,8 @@ function readJSONFile( filename ) {
 
 /**
  * Writes data to PDF files.
+ * @param {String} pdfPath Directory in which the PDF should be saved.
+ * @param {Object} data The data we want to print to PDF.
  */
 function writePDF( pdfPath, data ) {
     pdfPath = pdfPath[0] + path.sep + dateToString( getCurrentDate() ) + ".pdf";

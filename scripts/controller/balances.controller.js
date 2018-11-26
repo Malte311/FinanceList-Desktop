@@ -978,3 +978,29 @@ function compare( s1, s2, n ) {
     }
     return s1 > s2;
 }
+
+/**
+ * Lets the user choose the month for which an overview should be created.
+ * After the selection, the user is navigated to the PDF view.
+ */
+function chooseMonth() {
+    var content = textElements.chooseMonthText;
+    content += "<br><select class=\"w3-select\" id=\"monthSelect\">";
+    var jsonFiles = getJSONFiles();
+    var currentFileName = getCurrentFileName();
+    currentFileName = currentFileName.substring( 0, currentFileName.lastIndexOf( "." ) );
+
+    for ( var i = 0; i < jsonFiles.length; i++ ) {
+        if ( currentFileName === jsonFiles[i] ) {
+            content += "<option selected=\"selected\">" + jsonFiles[i] + "</option>";
+        }
+        else {
+            content += "<option>" + jsonFiles[i] + "</option>";
+        }
+    }
+    content += "</select>";
+
+    createDialog( textElements.chooseMonthTitle, content, function() {
+        initPdfView( $( "#monthSelect option:selected" ).text() );
+    });
+}

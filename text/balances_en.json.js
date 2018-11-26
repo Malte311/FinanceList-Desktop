@@ -36,5 +36,7 @@ module.exports =
 	"dayNames": [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ],
 	"dayNamesShort": [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ],
 	"dayNamesMin": [ "Su","Mo","Tu","We","Th","Fr","Sa" ],
-    "editRecurringTransaction": ["Edit", "Amount", "Interval", "Update next execution"]
+    "editRecurringTransaction": ["Edit", "Amount", "Interval", "Update next execution"],
+    "chooseMonthText": "For which month would you like to create an overview?",
+    "chooseMonthTitle": "Choose a month"
 }
