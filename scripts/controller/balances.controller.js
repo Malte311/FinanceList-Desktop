@@ -293,7 +293,7 @@ function editRecurringTransaction( name, index ) {
             if ( checkAmountInput( amountInput, false ) ) {
                 // Something changed?
                 if ( amountInput != transaction.amount || intervalSelect != transaction.interval ) {
-                    transaction.amount = amountInput;
+                    transaction.amount = parseFloat( amountInput );
                     transaction.interval = intervalSelect;
                     currentRecurringTransactions[index] = transaction;
 
