@@ -8,6 +8,7 @@
         <meta charset="UTF-8">
         <!-- scripts -->
         <script language="javascript" src="../scripts/JSONhandler.js"></script>
+        <script language="javascript" src="../scripts/view/view.js"></script>
         <script language="javascript" src="../scripts/controller/controller.js"></script>
         <script language="javascript" src="../scripts/view/pdfview.js"></script>
         <!-- stylesheets -->
@@ -16,19 +17,34 @@
         <link rel="stylesheet" type="text/css" href="../style/style.css">
     </head>
     <body class="w3-light-grey">
-        <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
-            <center><span class="w3-bar-item w3-center" lang="de"> Monatsbericht </span></center>
-            <center><span class="w3-bar-item w3-center" lang="en"> Monthly overview </span></center>
-        </div>
-        <div class="w3-main" style="margin-left:250px;margin-top:45px;">
-            <div id="dialogDiv"></div>
-            <div class="w3-container" style="margin-right:50px;margin-bottom:50px;">
-                <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="window.location.href='./balances.html';" href="#"> Back </button>
-                <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="window.location.href='./balances.html';" href="#"> Zur&uuml;ck </button>
-                <button class="w3-button w3-blue w3-round-xlarge" lang="en" onclick="printToPDF();" href="#"> Create PDF </button>
-                <button class="w3-button w3-blue w3-round-xlarge" lang="de" onclick="printToPDF();" href="#"> PDF erstellen </button>
+        <center>
+            <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
+                <center><span class="w3-bar-item w3-center" lang="de"> Monatsbericht </span></center>
+                <center><span class="w3-bar-item w3-center" lang="en"> Monthly overview </span></center>
             </div>
-        </div>
+            <hr style="border-color:black;">
+            <div class="w3-main" style="margin-left:100px;margin-top:100px;">
+                <div id="dialogDiv"></div>
+                <div align="center" class="w3-container w3-row">
+                    <span class="w3-xlarge" lang="en"> Spendings and earnings in this month </span>
+                    <span class="w3-xlarge" lang="de"> Ausgaben und Einnahmen in diesem Monat </span>
+                </div>
+                <div id="cashflowChartDiv" style="margin-right:100px;"><canvas id="cashflowChart" ></canvas></div>
+                <hr style="border-color:black;">
+                <div align="center" class="w3-container w3-row">
+                    <span class="w3-xlarge" lang="en"> Spendings and earnings by budget </span>
+                    <span class="w3-xlarge" lang="de"> Ausgaben und Einnahmen pro Konto </span>
+                </div>
+                <div id="budgetChartDiv" style="margin-right:100px;"><canvas id="budgetChart" ></canvas></div>
+                <hr style="border-color:black;">
+                <div class="w3-container" style="margin-right:100px;margin-bottom:50px;margin-top:50px;">
+                    <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="window.location.href='./balances.html';" href="#"> Back </button>
+                    <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="window.location.href='./balances.html';" href="#"> Zur&uuml;ck </button>
+                    <button class="w3-button w3-blue w3-round-xlarge" lang="en" onclick="printToPDF();" href="#"> Create PDF </button>
+                    <button class="w3-button w3-blue w3-round-xlarge" lang="de" onclick="printToPDF();" href="#"> PDF erstellen </button>
+                </div>
+            </div>
+        </center>
         <script>
             window.$ = window.jQuery = require( 'jquery' );
         </script>
@@ -37,6 +53,9 @@
         <script>
             var textElements = require( "../text/pdfview_" + getLanguage() + ".json.js" );
             setLanguage( readPreference( "language" ) );
+            $( function() {
+                initPdfView();
+            });
         </script>
     </body>
 </html>

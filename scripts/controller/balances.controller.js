@@ -1001,6 +1001,6 @@ function chooseMonth() {
     content += "</select>";
 
     createDialog( textElements.chooseMonthTitle, content, function() {
-        initPdfView( $( "#monthSelect option:selected" ).text() );
+        window.location.href = './pdfview.html?month=' + $( "#monthSelect option:selected" ).text();
     });
 }
