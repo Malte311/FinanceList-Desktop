@@ -29,13 +29,21 @@ function createCashflowChart() {
 
     var totalAmounts = getTotalAmount( data );
 
-    createChart(
+    var datasets = [{
+        data: [
+            beautifyAmount( totalAmounts[1] ),
+            beautifyAmount( totalAmounts[0] )
+        ],
+        backgroundColor: ['rgba(255,99,132,1)', 'rgba(150, 255, 120, 1)'],
+        borderColor: ['rgba(255,99,132,1)', 'rgba(150, 255, 120, 1)'],
+        borderWidth: borderWidth
+    }];
+
+    createPrintChart(
         document.getElementById( "cashflowChart" ),
         [textElements.spendings, textElements.earnings],
-        [totalAmounts[1], totalAmounts[0]],
-        ['rgba(255,99,132,0.2)', 'rgba(150, 255, 120, 0.2)'],
-        ['rgba(255,99,132,1)', 'rgba(150, 255, 120, 1)'],
-        'bar'
+        datasets,
+        'doughnut'
     );
 }
 
@@ -56,37 +64,60 @@ function createBudgetChart() {
         totalSpendings.push( totalAmounts[1] );
     }
 
-    new Chart( document.getElementById( "budgetChart" ), {
-        type: 'bar',
+    var datasets = [{
+        label: textElements.spendings,
+        data: totalSpendings,
+        backgroundColor: 'rgba(255,99,132,0.2)',
+        borderColor: 'rgba(255,99,132,1)',
+        borderWidth: borderWidth
+    },
+    {
+        label: textElements.earnings,
+        data: totalEarnings,
+        backgroundColor: 'rgba(150, 255, 120, 0.2)',
+        borderColor: 'rgba(150, 255, 120, 1)',
+        borderWidth: borderWidth
+    }];
+
+    createPrintChart(
+        document.getElementById( "budgetChart" ),
+        labels,
+        datasets,
+        'bar'
+    );
+}
+
+/**
+ * Creates charts for printing to PDF format.
+ * @param {Object} canvas The canvas which contains the chart.
+ * @param {String[]} labels The labels for the data.
+ * @param {Object[]} datasets The data that will be visualized.
+ * @param {String} charttype The type of the chart.
+ */
+function createPrintChart( canvas, labels, datasets, charttype ) {
+    new Chart( canvas, {
+        type: charttype,
         data: {
             labels: labels,
-            datasets: [{
-                data: totalSpendings,
-                backgroundColor: 'rgba(255,99,132,0.2)',
-                borderColor: 'rgba(255,99,132,1)',
-                borderWidth: borderWidth
-            },
-            {
-                data: totalEarnings,
-                backgroundColor: 'rgba(150, 255, 120, 0.2)',
-                borderColor: 'rgba(150, 255, 120, 1)',
-                borderWidth: borderWidth
-            }]
+            datasets: datasets
         },
         options: {
             tooltips: {
                 callbacks: {
                     label: function( tooltipItem, chartData ) {
                         return chartData.labels[tooltipItem.index] + ': ' +
-                               chartData.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + getCurrencySign();
+                               chartData.datasets[0].data[tooltipItem.index] + getCurrencySign();
                     }
                 }
             },
-            legend: {
-                    display: false
-            },
-            // Don't show axes.
-            display: false
+            plugins: {
+                labels: {
+                    render: function( args ) {
+                        return "" + args.value + getCurrencySign();
+                    },
+                    showZero: true
+                }
+            }
         }
     });
 }
@@ -106,8 +137,8 @@ function getTotalAmount( data ) {
             spendings = Math.round( (spendings + data[i].amount) * 1e2 ) / 1e2;
         }
     }
-    earnings = parseFloat( beautifyAmount( earnings ) );
-    spendings = parseFloat( beautifyAmount( spendings ) );
+    earnings = beautifyAmount( earnings );
+    spendings = beautifyAmount( spendings );
 
     return [earnings, spendings];
 }
@@ -121,7 +152,7 @@ function printToPDF() {
     });
 
     if ( pdfPath !== null && pdfPath !== undefined ) {
-        win.webContents.printToPDF( {}, function( error, data ) {
+        win.webContents.printToPDF( {pageSize: 'A4', printBackground: false}, function( error, data ) {
             if ( error ) {
                 console.log( error );
             }
