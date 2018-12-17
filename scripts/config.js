@@ -4,11 +4,11 @@
  * @author Malte311
  */
 
-const isDev = require( 'electron-is-dev' );
+const isRunningInAsar = require( 'electron-is-running-in-asar' );
 
 module.exports = {
     // Devtools on?
-	devMode : isDev,
+	devMode : !isRunningInAsar(),
 	log : false,
 	updateNeeded : false
 }

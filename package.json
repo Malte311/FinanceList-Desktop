@@ -1,6 +1,6 @@
 {
   "name": "FinanceList-Desktop",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A finance managing tool",
   "main": "main.js",
   "scripts": {
@@ -32,7 +32,7 @@
   "dependencies": {
     "chart.js": "^2.7.3",
     "compare-versions": "^3.4.0",
-    "electron-is-dev": "^1.0.1",
+    "electron-is-running-in-asar": "^1.0.0",
     "electron-json-storage": "^4.1.0",
     "jquery": "^3.3.1",
     "request": "^2.88.0"
