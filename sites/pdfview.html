@@ -41,7 +41,14 @@
             </div>
             <div id="budgetChartDiv"><canvas id="budgetChart" ></canvas></div>
             <hr style="border-color:black;">
-            <div class="w3-container">
+            <div align="center" class="w3-container w3-row">
+                <span class="w3-xlarge" lang="en"> Monthly surplus by budget </span>
+                <span class="w3-xlarge" lang="de"> Monatlicher Überschuss pro Konto </span>
+                <br>
+            </div>
+            <div id="surplusChartDiv"><canvas id="surplusChart" ></canvas></div>
+            <hr style="border-color:black;">
+            <div class="w3-container" style="margin-bottom:50px;">
                 <button class="w3-button w3-white w3-round-xlarge" lang="en" onclick="window.location.href='./balances.html';" href="#"> Back </button>
                 <button class="w3-button w3-white w3-round-xlarge" lang="de" onclick="window.location.href='./balances.html';" href="#"> Zur&uuml;ck </button>
                 <button class="w3-button w3-blue w3-round-xlarge" lang="en" onclick="printToPDF();" href="#"> Create PDF </button>

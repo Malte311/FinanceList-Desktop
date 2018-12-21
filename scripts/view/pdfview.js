@@ -16,6 +16,7 @@ function initPdfView() {
 
     createCashflowChart();
     createBudgetChart();
+    createSurplusChart();
 
     borderWidth = 0;
 }
@@ -34,8 +35,8 @@ function createCashflowChart() {
             beautifyAmount( totalAmounts[1] ),
             beautifyAmount( totalAmounts[0] )
         ],
-        backgroundColor: ['rgba(255,99,132,1)', 'rgba(150, 255, 120, 1)'],
-        borderColor: ['rgba(255,99,132,1)', 'rgba(150, 255, 120, 1)'],
+        backgroundColor: ['rgba(255, 99, 132, 1)', 'rgba(150, 255, 120, 1)'],
+        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(150, 255, 120, 1)'],
         borderWidth: borderWidth
     }];
 
@@ -43,7 +44,8 @@ function createCashflowChart() {
         document.getElementById( "cashflowChart" ),
         [textElements.spendings, textElements.earnings],
         datasets,
-        'doughnut'
+        'doughnut',
+        {}
     );
 }
 
@@ -67,8 +69,8 @@ function createBudgetChart() {
     var datasets = [{
         label: textElements.spendings,
         data: totalSpendings,
-        backgroundColor: 'rgba(255,99,132,0.2)',
-        borderColor: 'rgba(255,99,132,1)',
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: borderWidth
     },
     {
@@ -83,7 +85,48 @@ function createBudgetChart() {
         document.getElementById( "budgetChart" ),
         labels,
         datasets,
-        'bar'
+        'bar',
+        {}
+    );
+}
+
+/**
+ * Creates the surplus chart.
+ */
+function createSurplusChart() {
+    var currentBudgets = readMainStorage( "budgets" );
+
+    var labels = [], totalSurplus = [];
+    for ( var i = 0; i < currentBudgets.length; i++ ) {
+        var data = getData( selectedMonth + ".json",
+                            { connector:'or', params:[["budget", currentBudgets[i][0]]] } );
+
+        labels.push( currentBudgets[i][0] );
+        var totalAmounts = getTotalAmount( data );
+        totalSurplus.push( totalAmounts[0] - totalAmounts[1] );
+    }
+
+    var bgcolors = [], bdcolors = [];
+    totalSurplus.forEach( elem => {
+        bgcolors.push(elem > 0 ? 'rgba(150, 255, 120, 0.2)' : 'rgba(255, 99, 132, 0.2)');
+        bdcolors.push(elem > 0 ? 'rgba(150, 255, 120, 1)' : 'rgba(255, 99, 132, 1)');
+    });
+
+    var datasets = [{
+        data: totalSurplus,
+        backgroundColor: bgcolors,
+        borderColor: bdcolors,
+        borderWidth: borderWidth
+    }];
+
+    createPrintChart(
+        document.getElementById( "surplusChart" ),
+        labels,
+        datasets,
+        'bar',
+        {
+            display: false
+        }
     );
 }
 
@@ -93,8 +136,19 @@ function createBudgetChart() {
  * @param {String[]} labels The labels for the data.
  * @param {Object[]} datasets The data that will be visualized.
  * @param {String} charttype The type of the chart.
+ * @param {Object} legend The legend of the chart.
  */
-function createPrintChart( canvas, labels, datasets, charttype ) {
+function createPrintChart( canvas, labels, datasets, charttype, legend ) {
+    var scales = charttype == 'bar' ? {
+        xAxes: [{
+            ticks: {
+                stepSize: 1,
+                min: 0,
+                autoSkip: false
+            }
+        }]
+    } : {};
+
     new Chart( canvas, {
         type: charttype,
         data: {
@@ -117,7 +171,9 @@ function createPrintChart( canvas, labels, datasets, charttype ) {
                     },
                     showZero: true
                 }
-            }
+            },
+            legend: legend,
+            scales: scales
         }
     });
 }
