@@ -74,8 +74,16 @@ function createWindow () {
     });
 
     mainWindow.on( 'close', function() {
-        var size = mainWindow.getSize();
-        JSONhandler.storePreference( "windowSize", size[0] + "x" + size[1] );
+        if (!mainWindow.isMaximized()) {
+            var size = mainWindow.getSize();
+            JSONhandler.storePreference( "windowSize", size[0] + "x" + size[1] );
+        }
+    });
+
+    mainWindow.on( 'maximize', function() {
+        JSONhandler.storePreference( "windowSize",
+                                     electron.screen.getPrimaryDisplay().size.width + "x" +
+                                     electron.screen.getPrimaryDisplay().size.height );
     });
 
     // load menu in the correct language. Unfortunately, the menu won't update
