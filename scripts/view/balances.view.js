@@ -402,7 +402,10 @@ function displayTable( data ) {
                             "<td>" + data[j].budget + "</td>" +
                             "<td>" + (data[j].type == "earning" ?
                                      textElements.earning :
-                                     textElements.spending) +
+                                     textElements.spending) + "</td>" +
+                            "<td>" + "<span onclick=\"deleteEntry('" + data[j].date + "');\"" +
+                            "class=\"w3-button\">" +
+                            "<i class=\"fas fa-times w3-text-red\"></i></span></li>" +
                             "</td></tr>";
     }
     // Display the table containing the data.

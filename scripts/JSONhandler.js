@@ -373,6 +373,51 @@ function replaceData( file, data ) {
 }
 
 /**
+ * Deletes a given entry in a given file.
+ * @param {String} file The file which contains the data.
+ * @param {String} data The id (timestamp) of the data we want to delete.
+ */
+function deleteData( file, data ) {
+    var dataPath = readPreference( "path" ) + path.sep + file;
+    if ( fs.existsSync( dataPath ) ) {
+        var content = readJSONFile( dataPath );
+        var newContent = [];
+        for ( var i = 0; i < content.length; i++ ) {
+            if ( parseInt( data ) != content[i].date ) {
+                newContent.push( content[i] );
+            }
+            else {
+                var budgets = readMainStorage( "budgets" );
+                for ( var j = 0; j < budgets.length; j++ ) {
+                    if ( budgets[j][0] == content[i].budget ) {
+                        if ( content[i].type == "earning" ) {
+                            budgets[j][1] -= content[i].amount;
+                        }
+                        else if ( content[i].type == "spending" ) {
+                            budgets[j][1] += content[i].amount;
+                        }
+                    }
+                }
+                writeMainStorage( "budgets", budgets );
+
+                var allTimeTransactions = content[i].type == "earning" ?
+                                          readMainStorage( "allTimeEarnings" ) :
+                                          readMainStorage( "allTimeSpendings" );
+                for ( var j = 0; j < allTimeTransactions.length; j++ ) {
+                    if ( allTimeTransactions[j][0] == content[i].budget ) {
+                        allTimeTransactions[j][1] -= content[i].amount;
+                    }
+                }
+                writeMainStorage( content[i].type == "earning" ?
+                                  "allTimeEarnings" :
+                                  "allTimeSpendings", allTimeTransactions );
+            }
+        }
+        fs.writeFileSync( dataPath, JSON.stringify( newContent ) );
+    }
+}
+
+/**
  * This function sorts data by date (oldest first) and then by name.
  * @param {JSON[]} data The data we want to sort.
  * @return {JSON[]} The sorted data.

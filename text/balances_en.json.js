@@ -17,7 +17,7 @@ module.exports =
     "autoAllocation": "Automated allocation",
     "allocationDialogTextElements": ["Here you can select how your earnings should be distributed.", "Activate automated allocation", "Distribute all earnings automatically to your budgets.", "Budget", "Percentage"],
     "displayTypes": ["Graph", "Table"],
-    "mainContentTableHeadings": ["Date", "Name", "Amount", "Category", "Budget", "Type"],
+    "mainContentTableHeadings": ["Date", "Name", "Amount", "Category", "Budget", "Type", "Delete"],
     "mainContentFilterText": ["All budgets", "All types", "Earnings", "Spendings", "All time", "to", "All transactions", "All categories"],
     "update": "Update",
     "earning": "Earning",
@@ -38,5 +38,7 @@ module.exports =
 	"dayNamesMin": [ "Su","Mo","Tu","We","Th","Fr","Sa" ],
     "editRecurringTransaction": ["Edit", "Amount", "Interval", "Update next execution"],
     "chooseMonthText": "For which month would you like to create an overview?",
-    "chooseMonthTitle": "Choose a month"
+    "chooseMonthTitle": "Choose a month",
+    "reallyDeleteEntry": "Do you really want to delete this entry?",
+    "reallyDeleteEntryTitle": "Delete entry"
 }

@@ -17,7 +17,7 @@ module.exports =
     "autoAllocation": "Automatische Aufteilung",
     "allocationDialogTextElements": ["Hier k&ouml;nnen Sie ausw&auml;hlen, wie Ihre Einnahmen verteilt werden sollen.", "Automatische Verteilung aktivieren", "Verteilt alle Einnahmen automatisch auf mehrere Konten.", "Konto", "Anteil"],
     "displayTypes": ["Graph", "Tabelle"],
-    "mainContentTableHeadings": ["Datum", "Name", "Summe", "Kategorie", "Konto", "Art"],
+    "mainContentTableHeadings": ["Datum", "Name", "Summe", "Kategorie", "Konto", "Art", "L\u00f6schen"],
     "mainContentFilterText": ["Alle Konten", "Alle Arten", "Einnahmen", "Ausgaben", "Gesamter Zeitraum", "bis", "Alle Transaktionen", "Alle Kategorien"],
     "update": "Aktualisieren",
     "earning": "Einnahme",
@@ -38,5 +38,7 @@ module.exports =
 	"dayNamesMin": [ "So","Mo","Di","Mi","Do","Fr","Sa" ],
     "editRecurringTransaction": ["Bearbeiten", "Summe", "Intervall", "N\u00e4chste Ausf\u00fchrung anpassen"],
     "chooseMonthText": "F\u00fcr welchen Monat soll eine \u00dcbersicht erstellt werden?",
-    "chooseMonthTitle": "W\u00e4hlen Sie einen Monat aus"
+    "chooseMonthTitle": "W\u00e4hlen Sie einen Monat aus",
+    "reallyDeleteEntry": "Wollen Sie diesen Eintrag wirklich l\u00f6schen?",
+    "reallyDeleteEntryTitle": "Eintrag l\u00f6schen"
 }
