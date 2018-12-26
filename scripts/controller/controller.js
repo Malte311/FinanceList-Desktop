@@ -17,8 +17,10 @@ const colors = ['rgba(255, 99, 132, 1)', 'rgba(0, 162, 235, 1)', 'rgba(255, 206,
                 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)',
                 'rgba(255, 100, 170, 1)', 'rgba(255, 255, 102, 1)', 'rgba(80, 189, 255, 1)'];
 const colorSeparator = 'rgba(150, 255, 120, 1)';
-
+const maxStrLen = 100;
+const maxSWLen = 30;
 var borderWidth = 0;
+
 /**
  * This function sets the language.
  * @param {String} language The new language.
@@ -347,6 +349,7 @@ function getNewDate( startDate, oldDate, interval ) {
  * @return {bool} A boolean which indiates if the amount is valid.
  */
 function checkAmountInput( input, emptyOk ) {
+    if ( input.length > maxStrLen ) return false;
     input = input.replace( ",", "." );
     if ( emptyOk && input === "" ) return true;
     if ( /[a-z]/i.test( input ) || !/\d/.test( input ) ) return false;

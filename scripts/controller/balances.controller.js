@@ -106,31 +106,15 @@ function addTransaction() {
         var name = $( "#nameInput" ).val().trim();
         var sum = $( "#sumInput" ).val().trim();
         var category = $( "#categoryInput" ).val().trim();
-        // Replace all commas with dots to make sure that parseFloat() works as intended.
-        sum = sum.replace( ",", "." );
         // Make sure that the input is ok.
-        var inputOk = true;
-        // Make sure that the name is not empty. Category can be empty. (sum will be checked below)
-        if ( name.length < 1 ) inputOk = false;
-        // Make sure that the sum contains no letters and that it contains at least one number.
-        if ( /[a-z]/i.test( sum ) || !/\d/.test( sum ) ) inputOk = false;
-        // Some character is not a digit? Make sure that this is only a single dot.
-        // Also, make sure that there are not more than two decimal places.
-        if ( /\D/.test ( sum ) ) {
-            // No dot or more than one dot found?
-            // (Remember that we already found at least one non digit character, so there has to be a dot)
-            if ( sum.indexOf( "." ) === -1 || sum.replace( ".", "" ).length + 1 < sum.length ) inputOk = false;
-            // Any other non digit characters found?
-            if ( /\D/.test( sum.replace( ".", "" ) ) ) inputOk = false;
-            // More than two decimal digits in the sum?
-            if ( inputOk ) {
-                // Remember that the input was already checked, so there is exactly one dot.
-                if ( sum.split( "." )[1].length > 2 ) {
-                    inputOk = false;
-                }
-            }
-            // Note: Inputs like .5 are okay since parseFloat( ".5" ) = 0.5
-        }
+        var inputOk = checkAmountInput( sum, false );
+        if ( name.length > maxStrLen || category.length > maxStrLen ) inputOk = false;
+        name.split(" ").forEach( e => {
+            if ( e.length > maxSWLen ) inputOk = false;
+        });
+        category.split(" ").forEach( e => {
+            if ( e.length > maxSWLen ) inputOk = false;
+        });
         // Input ok? Then continue.
         if ( inputOk ) {
             // Get the selected budget.
@@ -199,7 +183,10 @@ function addTransaction() {
         }
         // Wrong input: Show error message.
         else {
-            dialog.showErrorBox( "Error", "Invalid input." );
+            dialog.showErrorBox( "Invalid input",
+            "The amount is not a valid number or your input is too long" +
+            " (max. " + maxSWLen + " characters per word and max. " + maxStrLen +
+            " characters in total allowed)!" );
         }
     });
 
@@ -322,6 +309,13 @@ function addBudget() {
         var currentBudgets = readMainStorage( "budgets" );
         // Save the new budget (the input from the user).
         var newBudget = $( "#dialogInput" ).val().trim();
+        if ( newBudget.length > maxSWLen ) {
+            dialog.showErrorBox( "Invalid input", "The name can be " +
+                                 maxSWLen +
+                                 " characters long at maximum!" );
+            $( this ).dialog( "close" );
+            return;
+        }
         // This is for checking if the entered name already exists.
         var alreadyExists = false;
         // This loop is just for making sure the entered input is not existing yet.
