@@ -3,6 +3,19 @@
 ![Build Status](https://travis-ci.com/Malte311/FinanceList-Desktop.svg?token=peoMTzKpBjcCaX8BZgzt&branch=master)
 
 FinanceList is a simple finance managing tool. For more information on how to use this tool, take a look at the [wiki](https://github.com/Malte311/FinanceList-Desktop/wiki). There should also be an online demo version soon.
+***
+## Features
+![Features](https://github.com/Malte311/FinanceList-Desktop/blob/master/res/balances_page.gif)
+FinanceList allows you to keep track of your finances with ease. Some of the included features are:
+
+- Filter data by any parameter
+- Add recurring transactions which get executed automatically in a given time interval
+- Allocate sums automatically between different budgets
+- Export a monthly overview as a `.pdf`-file
+- And many more! [Download FinanceList and try them out!](https://github.com/Malte311/FinanceList-Desktop/releases)
+
+For more information about this application, visit the FinanceList [wiki](https://github.com/Malte311/FinanceList-Desktop/wiki).
+You can request new features at any time [here](https://github.com/Malte311/FinanceList-Desktop/issues/new/choose).
 
 ***
 ## Installation
