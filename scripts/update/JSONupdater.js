@@ -62,7 +62,7 @@ function differentEntries( e1, e2 ) {
 var currentVersion = remote.app.getVersion();
 var lastUpdate = readPreference( "versionUpdate" );
 // Function call only once
-if ( (lastUpdate === undefined || currentVersion > lastUpdate) && config.updateNeeded ) {
+if ( lastUpdate === undefined || lastUpdate <= "1.0.0" ) {
     createUniqueTimestamps();
     storePreference( "versionUpdate", currentVersion );
 }
