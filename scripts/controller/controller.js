@@ -349,7 +349,7 @@ function getNewDate( startDate, oldDate, interval ) {
  * @return {bool} A boolean which indiates if the amount is valid.
  */
 function checkAmountInput( input, emptyOk ) {
-    if ( input.length > maxStrLen ) return false;
+    if ( input.length > maxSWLen ) return false;
     input = input.replace( ",", "." );
     if ( emptyOk && input === "" ) return true;
     if ( /[a-z]/i.test( input ) || !/\d/.test( input ) ) return false;

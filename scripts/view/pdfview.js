@@ -103,7 +103,8 @@ function createSurplusChart() {
 
         labels.push( currentBudgets[i][0] );
         var totalAmounts = getTotalAmount( data );
-        totalSurplus.push( totalAmounts[0] - totalAmounts[1] );
+        var result = Math.round( (parseFloat(totalAmounts[0]) - parseFloat(totalAmounts[1])) * 1e2 ) / 1e2;
+        totalSurplus.push( beautifyAmount(result) );
     }
 
     var bgcolors = [], bdcolors = [];
