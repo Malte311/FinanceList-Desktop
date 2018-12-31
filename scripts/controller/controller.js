@@ -328,7 +328,7 @@ function getNewDate( startDate, oldDate, interval ) {
             tmp.setDate( new Date( startDate * 1000 ).getDate() );
         }
         // Check, if an overflow emerges.
-        if ( oldMonth + 1 !== tmp.getMonth() ) {
+        if ( (oldMonth + 1) % 12 !== tmp.getMonth() % 12 ) {
             // Setting the day to zero will give us the last day of the previous month.
             var newDate = new Date( tmp.getFullYear(), tmp.getMonth(), 0 );
             // Remember to divide by 1000 because we want to get seconds.
