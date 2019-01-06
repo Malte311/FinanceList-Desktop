@@ -471,6 +471,15 @@ function getCurrentFileName() {
 function getJSONFiles() {
     // First, get all files. Then exclude every file which is not a .json file.
     var allFiles = fs.readdirSync( readPreference( "path" ) );
+    allFiles.sort( (a, b) => {
+        var aSplit = a.split( "." );
+        var bSplit = b.split( "." );
+        if (aSplit[1] < bSplit[1]) return -1;
+        if (aSplit[1] > bSplit[1]) return 1;
+        if (aSplit[0] < bSplit[0]) return -1;
+        if (aSplit[0] > bSplit[0]) return 1;
+        return 0;
+    });
     // Only add .json files to this empty array.
     var JSONFiles = [];
     // Search for files which are not .json format.
