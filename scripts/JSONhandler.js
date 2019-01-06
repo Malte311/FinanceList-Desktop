@@ -391,10 +391,10 @@ function deleteData( file, data ) {
                 for ( var j = 0; j < budgets.length; j++ ) {
                     if ( budgets[j][0] == content[i].budget ) {
                         if ( content[i].type == "earning" ) {
-                            budgets[j][1] -= content[i].amount;
+                            budgets[j][1] = Math.round( (budgets[j][1] - content[i].amount) * 1e2 ) / 1e2;
                         }
                         else if ( content[i].type == "spending" ) {
-                            budgets[j][1] += content[i].amount;
+                            budgets[j][1] = Math.round( (budgets[j][1] + content[i].amount) * 1e2 ) / 1e2;
                         }
                     }
                 }
@@ -405,7 +405,7 @@ function deleteData( file, data ) {
                                           readMainStorage( "allTimeSpendings" );
                 for ( var j = 0; j < allTimeTransactions.length; j++ ) {
                     if ( allTimeTransactions[j][0] == content[i].budget ) {
-                        allTimeTransactions[j][1] -= content[i].amount;
+                        allTimeTransactions[j][1] = Math.round( (allTimeTransactions[j][1] - content[i].amount) * 1e2 ) / 1e2;
                     }
                 }
                 writeMainStorage( content[i].type == "earning" ?
