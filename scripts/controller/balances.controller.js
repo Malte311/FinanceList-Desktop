@@ -107,6 +107,7 @@ function addTransaction() {
         var sum = $( "#sumInput" ).val().trim();
         var category = $( "#categoryInput" ).val().trim();
         // Make sure that the input is ok.
+        sum = sum.replace( ",", "." );
         var inputOk = checkAmountInput( sum, false );
         if ( name.length > maxStrLen || category.length > maxStrLen ) inputOk = false;
         name.split(" ").forEach( e => {
