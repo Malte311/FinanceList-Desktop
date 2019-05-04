@@ -234,11 +234,11 @@ function addEarning( earning, sum, budget, category, date, allocationOn ) {
             // Found it? Then update the value.
             // Update all time earnings.
             if ( allTimeEarnings[i][0] === budget ) {
-                allTimeEarnings[i][1] += sum;
+				allTimeEarnings[i][1] = Math.round( (allTimeEarnings[i][1] + sum) * 1e2 ) / 1e2;
             }
             // Update the current balance of the budget.
             if ( budgets[i][0] === budget ) {
-                budgets[i][1] += sum;
+				budgets[i][1] = Math.round( (budgets[i][1] + sum) * 1e2 ) / 1e2;
             }
         }
         // Write back to storage.
