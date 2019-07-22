@@ -49,11 +49,11 @@ function createDialog( title, text, okFunction ) {
 function displayBudgets() {
     // Reset previous content, set the table heading.
     var content = "<table class=\"w3-table-all w3-round w3-twothird\">" + "<tr>" +
-                  "<td>" + textElements.currentBudgetsHeadings[0] + "</td>" +
-                  "<td>" + textElements.currentBudgetsHeadings[1] + "</td>" +
-                  "<td>" + textElements.currentBudgetsHeadings[2] + "</td>" +
+                  "<td><b>" + textElements.currentBudgetsHeadings[0] + "</b></td>" +
+                  "<td><b>" + textElements.currentBudgetsHeadings[1] + "</b></td>" +
+                  "<td><b>" + textElements.currentBudgetsHeadings[2] + "</b></td>" +
                   (readMainStorage( "allocationOn" ) ?
-                  "<td>" + textElements.currentBudgetsHeadings[3] + "</td></tr>" :
+                  "<td><b>" + textElements.currentBudgetsHeadings[3] + "</b></td></tr>" :
                   "</tr>");
     // Get all budgets to iterate over them.
     var currentBudgets = readMainStorage( "budgets" );
@@ -65,7 +65,7 @@ function displayBudgets() {
         // Display all budgets. The first one is a standard budget and can therefore not
         // be deleted. Note that currentBudgets is an array of arrays
         // (name of the budget and its current balance).
-        content += "<tr><td>" + currentBudgets[i][0] + "</td>" +
+        content += "<tr class=\"w3-hover-light-blue\"><td>" + currentBudgets[i][0] + "</td>" +
                    "<td>" + balance + getCurrencySign() + "</td>" +
                    "<td>" + "<span onclick=\"renameBudget('" + currentBudgets[i][0] + "');\"" +
                    "class=\"w3-button\"><i class=\"fas fa-edit\"></i></span>";
@@ -103,16 +103,16 @@ function displayRecurringTransactions() {
     if ( recurringTransactions.length > 0 ) {
         // Reset previous content.
         var content = "<table class=\"w3-table-all w3-round w3-twothird\"><tr>" +
-                      "<td>" + textElements.recurringTransactionsHeadings[0] + "</td>" +
-                      "<td>" + textElements.recurringTransactionsHeadings[1] + "</td>" +
-                      "<td>" + textElements.recurringTransactionsHeadings[2] + "</td>" +
-                      "<td>" + textElements.recurringTransactionsHeadings[3] + "</td>" +
-                      "<td>" + textElements.recurringTransactionsHeadings[4] + "</td>" +
-                      "<td>" + textElements.recurringTransactionsHeadings[5] + "</td>" +
-                      "<td>" + textElements.recurringTransactionsHeadings[6] + "</td>" +
-                      "<td>" + textElements.recurringTransactionsHeadings[7] + "</td>" +
-                      "<td>" + textElements.recurringTransactionsHeadings[8] + "</td>" +
-                      "<td>" + textElements.recurringTransactionsHeadings[9] + "</td>" +
+                      "<td><b>" + textElements.recurringTransactionsHeadings[0] + "</b></td>" +
+                      "<td><b>" + textElements.recurringTransactionsHeadings[1] + "</b></td>" +
+                      "<td><b>" + textElements.recurringTransactionsHeadings[2] + "</b></td>" +
+                      "<td><b>" + textElements.recurringTransactionsHeadings[3] + "</b></td>" +
+                      "<td><b>" + textElements.recurringTransactionsHeadings[4] + "</b></td>" +
+                      "<td><b>" + textElements.recurringTransactionsHeadings[5] + "</b></td>" +
+                      "<td><b>" + textElements.recurringTransactionsHeadings[6] + "</b></td>" +
+                      "<td><b>" + textElements.recurringTransactionsHeadings[7] + "</b></td>" +
+                      "<td><b>" + textElements.recurringTransactionsHeadings[8] + "</b></td>" +
+                      "<td><b>" + textElements.recurringTransactionsHeadings[9] + "</b></td>" +
                       "</tr>";
         // Iterate over all recurring transactions to display them.
         for ( var i = 0; i < recurringTransactions.length; i++ ) {
@@ -122,7 +122,7 @@ function displayRecurringTransactions() {
                          textElements.recurringTransactionsContent[0] :
                          textElements.recurringTransactionsContent[1] );
             // Add all the data to our content.
-            content += "<tr><td>" + recurringTransactions[i].name + "</td>" +
+            content += "<tr class=\"w3-hover-light-blue\"><td>" + recurringTransactions[i].name + "</td>" +
                        "<td>" + amount + getCurrencySign() + "</td>" +
                        "<td>" + type + "</td>" +
                        "<td>" + (recurringTransactions[i].allocationOn ?
