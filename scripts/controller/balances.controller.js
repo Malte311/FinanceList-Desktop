@@ -1001,6 +1001,36 @@ function chooseMonth() {
 }
 
 /**
+ * Lets the user choose the year for which an overview should be created.
+ * After the selection, the user is navigated to the PDF view.
+ */
+function chooseYear() {
+	var content = textElements.chooseYearText + "<br><select class=\"w3-select\" id=\"yearSelect\">";
+    var jsonFiles = getJSONFiles();
+	var currentYear = getCurrentFileName();
+	currentYear = currentYear.substring( currentYear.indexOf( "." ) + 1, currentYear.lastIndexOf( "." ) );
+	var alreadySeen = [];
+
+	for ( var i = 0; i < jsonFiles.length; i++ ) {
+		var year = jsonFiles[i].substring(jsonFiles[i].lastIndexOf(".") + 1);
+
+		if ( !alreadySeen.includes(year) && year == currentYear ) {
+			content += "<option selected=\"selected\">" + year + "</option>";
+			alreadySeen.push( year );
+		}
+		else if ( !alreadySeen.includes(year) ) {
+			content += "<option>" + year + "</option>";
+			alreadySeen.push( year );
+		}
+	}
+	content += "</select>";
+
+	createDialog(textElements.chooseYearTitle, content, function() {
+		window.location.href = './pdfview.html?year=' + $( "#yearSelect option:selected" ).text();
+	});
+}
+
+/**
  * Deletes a given entry.
  * @param {String} entry The id (timestamp) of the entry we want to delete.
  */

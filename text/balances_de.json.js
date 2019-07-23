@@ -40,5 +40,7 @@ module.exports =
     "chooseMonthText": "F\u00fcr welchen Monat soll eine \u00dcbersicht erstellt werden?",
     "chooseMonthTitle": "W\u00e4hlen Sie einen Monat aus",
     "reallyDeleteEntry": "Wollen Sie diesen Eintrag wirklich l\u00f6schen?",
-    "reallyDeleteEntryTitle": "Eintrag l\u00f6schen"
+	"reallyDeleteEntryTitle": "Eintrag l\u00f6schen",
+	"chooseYearText": "F\u00fcr welches Jahr soll eine \u00dcbersicht erstellt werden?",
+    "chooseYearTitle": "W\u00e4hlen Sie ein Jahr aus"
 }

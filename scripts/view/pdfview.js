@@ -6,27 +6,57 @@
 
 // For file selection
 const urlParams = new URLSearchParams( window.location.search );
-const selectedMonth = urlParams.get( 'month' );
+var selectedMonth = urlParams.get( 'month' );
+const selectedYear = urlParams.get( 'year' );
 
 /**
  * Initializes the PDF view page.
  */
 function initPdfView() {
-    borderWidth = 2;
-
+	addText();
+	
+	borderWidth = 2;
     createCashflowChart();
     createBudgetChart();
     createSurplusChart();
-
     borderWidth = 0;
+}
+
+/**
+ * Adds the correct text in the correct language.
+ */
+function addText() {
+	var headings = selectedMonth != null ? textElements.monthlyHeadings : textElements.yearlyHeadings;
+
+	for (var i = 0; i < textElements.monthlyHeadings.length; i++) {
+		$( `#div${i}` ).append(
+			`<span class="w3-xlarge"> ${headings[i]} </span><br>`
+		);
+	}
 }
 
 /**
  * Creates the cashflow chart.
  */
 function createCashflowChart() {
-    var data = getData( selectedMonth + ".json",
-                        { connector:'or', params:[["type", "earning"], ["type", "spending"]] } );
+	var data = [];
+	if (selectedYear != null) {
+		var jsonFiles = getJSONFiles();
+		for (var i = 0; i < jsonFiles.length; i++) {
+			if (jsonFiles[i].substring(jsonFiles[i].indexOf(".") + 1) == selectedYear ) {
+				data = data.concat(
+					getData(
+							jsonFiles[i] + ".json", 
+							{ connector:'or', params:[["type", "earning"], ["type", "spending"]] }
+					)
+				);
+			}
+		}
+	}
+	else {
+		data = getData( selectedMonth + ".json",
+						{ connector:'or', params:[["type", "earning"], ["type", "spending"]] } );
+	}
 
     var totalAmounts = getTotalAmount( data );
 
@@ -54,17 +84,39 @@ function createCashflowChart() {
  */
 function createBudgetChart() {
     var currentBudgets = readMainStorage( "budgets" );
+	var labels = [], totalEarnings = [], totalSpendings = [], data = [];
+	
+	if (selectedYear != null) {
+		var jsonFiles = getJSONFiles();
+		for ( var i = 0; i < currentBudgets.length; i++ ) {
+			data = [];
 
-    var labels = [], totalEarnings = [], totalSpendings = [];
-    for ( var i = 0; i < currentBudgets.length; i++ ) {
-        var data = getData( selectedMonth + ".json",
-                            { connector:'or', params:[["budget", currentBudgets[i][0]]] } );
-
-        labels.push( currentBudgets[i][0] );
-        var totalAmounts = getTotalAmount( data );
-        totalEarnings.push( totalAmounts[0] );
-        totalSpendings.push( totalAmounts[1] );
-    }
+			for ( var j = 0; j < jsonFiles.length; j++ ) {
+				if ( jsonFiles[j].substring(jsonFiles[j].indexOf(".") + 1) == selectedYear ) {
+					data = data.concat(
+							getData( jsonFiles[j] + ".json",
+									{ connector:'or', params:[["budget", currentBudgets[i][0]]] } )
+					);
+				}
+			}
+	
+			labels.push( currentBudgets[i][0] );
+			var totalAmounts = getTotalAmount( data );
+			totalEarnings.push( totalAmounts[0] );
+			totalSpendings.push( totalAmounts[1] );
+		}
+	}
+	else {
+		for ( var i = 0; i < currentBudgets.length; i++ ) {
+			data = getData( selectedMonth + ".json",
+								{ connector:'or', params:[["budget", currentBudgets[i][0]]] } );
+	
+			labels.push( currentBudgets[i][0] );
+			var totalAmounts = getTotalAmount( data );
+			totalEarnings.push( totalAmounts[0] );
+			totalSpendings.push( totalAmounts[1] );
+		}
+	}
 
     var datasets = [{
         label: textElements.spendings,
@@ -95,17 +147,39 @@ function createBudgetChart() {
  */
 function createSurplusChart() {
     var currentBudgets = readMainStorage( "budgets" );
+    var labels = [], totalSurplus = [], data = [];
 
-    var labels = [], totalSurplus = [];
-    for ( var i = 0; i < currentBudgets.length; i++ ) {
-        var data = getData( selectedMonth + ".json",
-                            { connector:'or', params:[["budget", currentBudgets[i][0]]] } );
+	if ( selectedYear != null ) {
+		var jsonFiles = getJSONFiles();
+		for ( var i = 0; i < currentBudgets.length; i++ ) {
+			data = [];
 
-        labels.push( currentBudgets[i][0] );
-        var totalAmounts = getTotalAmount( data );
-        var result = Math.round( (parseFloat(totalAmounts[0]) - parseFloat(totalAmounts[1])) * 1e2 ) / 1e2;
-        totalSurplus.push( beautifyAmount(result) );
-    }
+			for ( var j = 0; j < jsonFiles.length; j++ ) {
+				if ( jsonFiles[j].substring(jsonFiles[j].indexOf(".") + 1) == selectedYear ) {
+					data = data.concat(
+						getData( jsonFiles[j] + ".json",
+								{ connector:'or', params:[["budget", currentBudgets[i][0]]] } )
+					);
+				}
+			}
+	
+			labels.push( currentBudgets[i][0] );
+			var totalAmounts = getTotalAmount( data );
+			var result = Math.round( (parseFloat(totalAmounts[0]) - parseFloat(totalAmounts[1])) * 1e2 ) / 1e2;
+			totalSurplus.push( beautifyAmount(result) );
+		}
+	}
+	else {
+		for ( var i = 0; i < currentBudgets.length; i++ ) {
+			data = getData( selectedMonth + ".json",
+								{ connector:'or', params:[["budget", currentBudgets[i][0]]] } );
+	
+			labels.push( currentBudgets[i][0] );
+			var totalAmounts = getTotalAmount( data );
+			var result = Math.round( (parseFloat(totalAmounts[0]) - parseFloat(totalAmounts[1])) * 1e2 ) / 1e2;
+			totalSurplus.push( beautifyAmount(result) );
+		}
+	}
 
     var bgcolors = [], bdcolors = [];
     totalSurplus.forEach( elem => {
