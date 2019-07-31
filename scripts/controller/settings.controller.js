@@ -1,6 +1,7 @@
 /**
  * This file controls all actions on the settings page.
  *
+ * @module settingsController
  * @author Malte311
  */
 

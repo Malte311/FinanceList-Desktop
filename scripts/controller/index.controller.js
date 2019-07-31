@@ -1,6 +1,7 @@
 /**
  * This file controls all actions on the overview page.
  *
+ * @module indexController
  * @author Malte311
  */
 

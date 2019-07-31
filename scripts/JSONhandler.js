@@ -2,6 +2,7 @@
  * This file is for handling the storage (.json files).
  * It does everything related to files and directories.
  *
+ * @module JSONhandler
  * @author Malte311
  */
 

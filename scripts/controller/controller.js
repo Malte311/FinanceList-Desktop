@@ -1,6 +1,7 @@
 /**
  * This file contains controlling functions which need to be accessed from multiple pages.
  *
+ * @module controller
  * @author Malte311
  */
 

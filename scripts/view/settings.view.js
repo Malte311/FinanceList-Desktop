@@ -1,6 +1,7 @@
 /**
  * This file is responsible for the view on the settings page.
  *
+ * @module settingsView
  * @author Malte311
  */
 

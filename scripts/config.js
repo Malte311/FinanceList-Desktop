@@ -1,6 +1,7 @@
 /**
  * This file is holding the applications configuration.
  *
+ * @module config
  * @author Malte311
  */
 

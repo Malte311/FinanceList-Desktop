@@ -1,6 +1,7 @@
 /**
  * This file creates our application menu in the correct language.
  *
+ * @module electronMenu
  * @author Malte311
  */
 

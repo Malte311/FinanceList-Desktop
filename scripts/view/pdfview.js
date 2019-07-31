@@ -1,6 +1,7 @@
 /**
  * This file creates a PDF view.
  *
+ * @module pdfview
  * @author Malte311
  */
 

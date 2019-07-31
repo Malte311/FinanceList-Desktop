@@ -1,6 +1,7 @@
 /**
  * This file controls all actions on the help page.
  *
+ * @module helpController
  * @author Malte311
  */
 

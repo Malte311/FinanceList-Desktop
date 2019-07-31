@@ -1,6 +1,7 @@
 /**
  * This file is responsible for the view on the overview page.
  *
+ * @module indexView
  * @author Malte311
  */
 

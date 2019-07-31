@@ -1,6 +1,7 @@
 /**
  * This file controls all actions on the balances page.
- *
+ * 
+ * @module balancesController
  * @author Malte311
  */
 

@@ -1,6 +1,7 @@
 /**
  * This file is responsible for the view on the balances page.
  *
+ * @module balancesView
  * @author Malte311
  */
 

@@ -1,6 +1,7 @@
 /**
  * This file provides some function for displaying elements.
  *
+ * @module view
  * @author Malte311
  */
 

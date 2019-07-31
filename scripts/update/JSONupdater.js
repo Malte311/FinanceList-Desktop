@@ -3,6 +3,7 @@
  * It simply makes sure, that all timestamps are unique (because this functionality was
  * missing in version 0.9.1).
  *
+ * @module JSONupdater
  * @author Malte311
  */
 
