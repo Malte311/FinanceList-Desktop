@@ -46,7 +46,10 @@ function updateView() {
     // Maybe we need to display checkboxes as checked, if they were previously selected.
     if ( readPreference( "fullscreen" ) === true ) {
         $( "#fullscreen" )[0].checked = true;
-    }
+	}
+	if ( readPreference( "backup" ) === true ) {
+		$( "#backup" )[0].checked = true;
+	}
     // Display currently selected path.
     $( "#currentPath" ).text( readPreference( "path" ) );
     // Display currenctly selected currency.

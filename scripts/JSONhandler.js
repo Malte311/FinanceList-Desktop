@@ -16,7 +16,7 @@ const os = require( 'os' );
 // A default settings.json object.
 const defaultObj = {"windowSize":"1920x1080","fullscreen":false,"language":"en",
                     "path": storage.getDefaultDataPath() + path.sep + "data",
-                    "currency":"Euro","chartType":"pie"};
+                    "currency":"Euro","chartType":"pie","backup":false,"backupFail":false};
 // A default mainStorage.json object.
 const defaultStorageObj = {"budgets":[["checking account", 0.0]],"currentDate":getCurrentDate(),
                            "allTimeEarnings":[["checking account", 0.0]],
@@ -32,6 +32,7 @@ var currentFile = readPreference( "path" ) + path.sep + getCurrentFileName();
 module.exports.readPreference = ( name ) => readPreference( name );
 module.exports.storePreference = ( name, value ) => storePreference( name, value );
 module.exports.initStorage = () => initStorage();
+module.exports.createBackup = () => createBackup();
 
 /**
  * This function initializes the storage. This means, we create a mainStorage.json
@@ -594,4 +595,30 @@ function readJSONFile( filename ) {
 function writePDF( pdfPath, data ) {
     pdfPath = pdfPath[0] + path.sep + selectedMonth + ".pdf";
     fs.writeFileSync( pdfPath, data );
+}
+
+/**
+ * Creates a backup of the data.
+ */
+function createBackup() {
+	var allFiles = fs.readdirSync(readPreference("path"));
+    // Iterate over all the files and create a copy of them.
+    for (var i = 0; i < allFiles.length; i++) {
+        if (allFiles[i].endsWith(".json")) {
+			try { // (Cross disk will cause an error)
+				var data = fs.readFileSync(readPreference("path") + path.sep + allFiles[i]);
+				// Only write if file is new or it was changed.
+				if (fs.existsSync(readPreference("backupPath") + path.sep + allFiles[i])) {
+					if (!Buffer.from(data).equals(fs.readFileSync(readPreference("backupPath") + path.sep + allFiles[i]))) {
+						fs.writeFileSync(readPreference("backupPath") + path.sep + allFiles[i], data);
+					}
+				} else {
+					fs.writeFileSync(readPreference("backupPath") + path.sep + allFiles[i], data);
+				}
+            } catch (err) {
+				storePreference("backupFail", true);
+                break;
+            }
+        }
+	}
 }

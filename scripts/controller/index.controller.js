@@ -18,7 +18,12 @@ function loadPage() {
     // We will always set the language first.
     setLanguage( readPreference( "language" ) );
     // Display all the other content.
-    updateView();
+	updateView();
+	
+	if (readPreference("backupFail")) {
+		dialog.showErrorBox("Backup failed", "The backup was not successful last time. Please note that cross-disk is not supported.");
+		storePreference("backupFail", false);
+	}
 }
 
 /**

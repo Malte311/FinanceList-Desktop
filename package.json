@@ -27,11 +27,11 @@
     "electron-installer-dmg": "^0.2.1",
     "electron-packager": "^12.2.0",
     "jsdoc": "^3.6.3",
-    "npm": "^6.10.1"
+    "npm": "^6.10.3"
   },
   "dependencies": {
     "chart.js": "^2.8.0",
-    "compare-versions": "^3.5.0",
+    "compare-versions": "^3.5.1",
     "electron-is-running-in-asar": "^1.0.0",
     "electron-json-storage": "^4.1.6",
     "jquery": "^3.4.1",

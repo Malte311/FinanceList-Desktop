@@ -77,7 +77,11 @@ function createWindow () {
         if (!mainWindow.isMaximized()) {
             var size = mainWindow.getSize();
             JSONhandler.storePreference( "windowSize", size[0] + "x" + size[1] );
-        }
+		}
+		
+		if (JSONhandler.readPreference("backup")) {
+			JSONhandler.createBackup();
+		}
     });
 
     mainWindow.on( 'maximize', function() {
