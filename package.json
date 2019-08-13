@@ -1,6 +1,6 @@
 {
   "name": "FinanceList-Desktop",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A finance managing tool",
   "main": "main.js",
   "scripts": {
