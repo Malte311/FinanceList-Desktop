@@ -593,7 +593,7 @@ function readJSONFile( filename ) {
  * @param {Object} data The data we want to print to PDF.
  */
 function writePDF( pdfPath, data ) {
-    pdfPath = pdfPath[0] + path.sep + selectedMonth + ".pdf";
+    pdfPath = pdfPath[0] + path.sep + (selectedMonth != null ? selectedMonth : selectedYear) + ".pdf";
     fs.writeFileSync( pdfPath, data );
 }
 
