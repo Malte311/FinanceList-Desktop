@@ -68,7 +68,7 @@ function initStorage() {
     }
     // File does not exist: Create it and write default values in it.
     else {
-        fs.appendFileSync( mainStoragePath, JSON.stringify( defaultStorageObj ) );
+        fs.appendFileSync( mainStoragePath, JSON.stringify( defaultStorageObj, null, 4 ) );
     }
 }
 
@@ -117,7 +117,7 @@ function readPreference( name ) {
     }
     // File does not exist: Create it, write default values and return a default value.
     else {
-        fs.appendFileSync( settingsPath, JSON.stringify( defaultObj ) );
+        fs.appendFileSync( settingsPath, JSON.stringify( defaultObj, null, 4 ) );
         return defaultObj[name];
     }
 }
@@ -135,17 +135,17 @@ function storePreference( name, value ) {
     if ( fs.existsSync( settingsPath ) ) {
         var settingsObj = JSON.parse( fs.readFileSync( settingsPath ) );
         settingsObj[name] = value;
-        fs.writeFileSync( settingsPath, JSON.stringify( settingsObj ) );
+        fs.writeFileSync( settingsPath, JSON.stringify( settingsObj, null, 4 ) );
     }
     // File does not exist: Create it and write default values in it.
     // When done, we can set the value.
     else {
         // Create default file.
-        fs.appendFileSync( settingsPath, JSON.stringify( defaultObj ) );
+        fs.appendFileSync( settingsPath, JSON.stringify( defaultObj, null, 4 ) );
         // Change the value of the specified field.
         var settingsObj = JSON.parse( fs.readFileSync( settingsPath ) );
         settingsObj[name] = value;
-        fs.writeFileSync( settingsPath, JSON.stringify( settingsObj ) );
+        fs.writeFileSync( settingsPath, JSON.stringify( settingsObj, null, 4 ) );
     }
 }
 
@@ -168,7 +168,7 @@ function readMainStorage( field ) {
     }
     // File does not exist: Create it, write default values and return a default value.
     else {
-        fs.appendFileSync( mainStoragePath, JSON.stringify( defaultStorageObj ) );
+        fs.appendFileSync( mainStoragePath, JSON.stringify( defaultStorageObj, null, 4 ) );
         return defaultStorageObj[field];
     }
 }
@@ -183,17 +183,17 @@ function writeMainStorage( field, value ) {
     if ( fs.existsSync( mainStoragePath ) ) {
         var mainStorageObj = JSON.parse( fs.readFileSync( mainStoragePath ) );
         mainStorageObj[field] = value;
-        fs.writeFileSync( mainStoragePath, JSON.stringify( mainStorageObj ) );
+        fs.writeFileSync( mainStoragePath, JSON.stringify( mainStorageObj, null, 4 ) );
     }
     // File does not exist: Create it and write default values in it.
     // When done, we can set the value.
     else {
         // Create default file.
-        fs.appendFileSync( mainStoragePath, JSON.stringify( defaultStorageObj ) );
+        fs.appendFileSync( mainStoragePath, JSON.stringify( defaultStorageObj, null, 4 ) );
         // Change the value of the specified field.
         var mainStorageObj = JSON.parse( fs.readFileSync( mainStoragePath ) );
         mainStorageObj[field] = value;
-        fs.writeFileSync( mainStoragePath, JSON.stringify( mainStorageObj ) );
+        fs.writeFileSync( mainStoragePath, JSON.stringify( mainStorageObj, null, 4 ) );
     }
 }
 
@@ -237,17 +237,35 @@ function getData( file, quest ) {
                 else {
                     // At least one param matched? Return true (ret=true) because connector is "or".
                     if ( quest.connector === "or" ) {
-                        if ( dat[qu[0]] === qu[1] ) {
-                            ret = true;
-                            return true;
-                        }
+						if (qu[0] === "budget") { // Handle multiple budgets like "b1, b2, b3"
+							let budgets = dat[qu[0]].split(",");
+							ret = budgets.some((value, index, array) => {
+								return value.trim() === qu[1];
+							});
+							
+							if (ret) return true;
+						} else {
+							if ( dat[qu[0]] === qu[1] ) {
+								ret = true;
+								return true;
+							}
+						}
                     }
                     // One param does not match => "and" connector can not be satisfied (ret=false).
                     else {
-                        if ( dat[qu[0]] !== qu[1] ) {
-                            ret = false;
-                            return true;
-                        }
+						if (qu[0] === "budget") { // Handle multiple budgets like "b1, b2, b3"
+							let budgets = dat[qu[0]].split(",");
+							ret = !budgets.every((value, index, array) => {
+								return value.trim() !== qu[1];
+							});
+
+							if (!ret) return true;
+						} else {
+							if ( dat[qu[0]] !== qu[1] ) {
+								ret = false;
+								return true;
+							}
+						}
                     }
                 }
             });
@@ -348,12 +366,12 @@ function storeData( data ) {
         content.push( data );
         // Sort the data (oldest data first).
         content = sortData( content );
-        fs.writeFileSync( dataPath, JSON.stringify( content ) );
+        fs.writeFileSync( dataPath, JSON.stringify( content, null, 4 ) );
     }
     // File does not exist: Create it and write the data in it.
     else {
         // The content is an array containing JSON objects.
-        fs.appendFileSync( dataPath, "[" + JSON.stringify( data ) + "]" );
+        fs.appendFileSync( dataPath, "[" + JSON.stringify( data, null, 4 ) + "]" );
     }
 }
 
@@ -366,11 +384,11 @@ function replaceData( file, data ) {
     var dataPath = readPreference( "path" ) + path.sep + file;
     // File exists: Overwrite the data in it.
     if ( fs.existsSync( dataPath ) ) {
-        fs.writeFileSync( dataPath, JSON.stringify( data ) );
+        fs.writeFileSync( dataPath, JSON.stringify( data, null, 4 ) );
     }
     // File does not exist: Create it and write the data in it.
     else {
-        fs.appendFileSync( dataPath, JSON.stringify( data ) );
+        fs.appendFileSync( dataPath, JSON.stringify( data, null, 4 ) );
     }
 }
 
@@ -415,7 +433,7 @@ function deleteData( file, data ) {
                                   "allTimeSpendings", allTimeTransactions );
             }
         }
-        fs.writeFileSync( dataPath, JSON.stringify( newContent ) );
+        fs.writeFileSync( dataPath, JSON.stringify( newContent, null, 4 ) );
     }
 }
 
