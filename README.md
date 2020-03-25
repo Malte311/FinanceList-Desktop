@@ -5,7 +5,7 @@
 FinanceList is a simple finance managing tool. For more information on how to use this tool, take a look at the [wiki](https://github.com/Malte311/FinanceList-Desktop/wiki).
 ***
 ## Features
-![Features](https://github.com/Malte311/FinanceList-Desktop/blob/master/res/balances_page.gif)
+![Features](https://github.com/Malte311/FinanceList-Desktop/blob/master/screenshots/balances_page.gif)
 FinanceList allows you to keep track of your finances with ease. Some of the included features are:
 
 - Filter data by any parameter

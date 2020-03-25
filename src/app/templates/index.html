@@ -4,20 +4,20 @@
     <head>
         <!-- general settings -->
         <title> FinanceList - A finance managing tool </title>
-        <link rel="shortcut icon" href="img/tab.ico">
+        <link rel="shortcut icon" href="../img/tab.ico">
         <meta charset="UTF-8">
         <!-- scripts -->
-        <script language="javascript" src="scripts/view/view.js"></script>
-        <script language="javascript" src="scripts/JSONhandler.js"></script>
-        <script language="javascript" src="scripts/controller/controller.js"></script>
-        <script language="javascript" src="scripts/view/index.view.js"></script>
-        <script language="javascript" src="scripts/controller/index.controller.js"></script>
-        <script language="javascript" src="scripts/updates.js"></script>
-        <script language="javascript" src="scripts/update/JSONupdater.js"></script>
+        <script language="javascript" src="../scripts/view/view.js"></script>
+        <script language="javascript" src="../scripts/JSONhandler.js"></script>
+        <script language="javascript" src="../scripts/controller/controller.js"></script>
+        <script language="javascript" src="../scripts/view/index.view.js"></script>
+        <script language="javascript" src="../scripts/controller/index.controller.js"></script>
+        <script language="javascript" src="../scripts/updates.js"></script>
+        <script language="javascript" src="../scripts/update/JSONupdater.js"></script>
         <!-- stylesheets -->
-        <link rel="stylesheet" type="text/css" href="style/w3.min.css">
-        <link rel="stylesheet" type="text/css" href="style/fontawesome/css/fontawesome-all.min.css">
-        <link rel="stylesheet" type="text/css" href="style/style.css">
+        <link rel="stylesheet" type="text/css" href="../style/w3.min.css">
+        <link rel="stylesheet" type="text/css" href="../style/fontawesome/css/fontawesome-all.min.css">
+        <link rel="stylesheet" type="text/css" href="../style/style.css">
     </head>
     <!-- body -->
     <body class="w3-light-grey">
@@ -25,8 +25,8 @@
         <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
             <span class="w3-bar-item w3-center"> FinanceList </span>
             <span class="w3-bar-item w3-right">
-                <a onclick="setLanguage('en');updateView();" href="#"><img border="0" alt="EN" src="img/us.ico" width=20px height=20px></a>
-                <a onclick="setLanguage('de');updateView();" href="#"><img border="0" alt="DE" src="img/de.ico" width=20px height=20px></a>
+                <a onclick="setLanguage('en');updateView();" href="#"><img border="0" alt="EN" src="../img/us.ico" width=20px height=20px></a>
+                <a onclick="setLanguage('de');updateView();" href="#"><img border="0" alt="DE" src="../img/de.ico" width=20px height=20px></a>
             </span>
         </div>
         <!-- sidebar -->
@@ -40,12 +40,12 @@
             <div class="w3-bar-block">
                 <span lang="en"><a href="#" class="w3-bar-item w3-button w3-padding w3-light-blue"><i class="fa fa-home w3-text-blue w3-large icon"></i> Overview </a></span>
                 <span lang="de"><a href="#" class="w3-bar-item w3-button w3-padding w3-light-blue"><i class="fa fa-home w3-text-blue w3-large icon"></i> &Uuml;berblick </a></span>
-                <span lang="en"><a onclick="window.location.href='sites/balances.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-euro-sign w3-text-green w3-large icon"></i> Balances </a></span>
-                <span lang="de"><a onclick="window.location.href='sites/balances.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-euro-sign w3-text-green w3-large icon"></i> Bilanzen </a></span>
-                <span lang="en"><a onclick="window.location.href='sites/settings.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-cog w3-large icon"></i> Settings </a></span>
-                <span lang="de"><a onclick="window.location.href='sites/settings.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-cog w3-large icon"></i> Einstellungen </a></span>
-                <span lang="en"><a onclick="window.location.href='sites/help.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="far fa-question-circle w3-text-yellow w3-large icon"></i> Help </a></span>
-                <span lang="de"><a onclick="window.location.href='sites/help.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="far fa-question-circle w3-text-yellow w3-large icon"></i> Hilfe </a></span>
+                <span lang="en"><a onclick="window.location.href='./balances.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-euro-sign w3-text-green w3-large icon"></i> Balances </a></span>
+                <span lang="de"><a onclick="window.location.href='./balances.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-euro-sign w3-text-green w3-large icon"></i> Bilanzen </a></span>
+                <span lang="en"><a onclick="window.location.href='./settings.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-cog w3-large icon"></i> Settings </a></span>
+                <span lang="de"><a onclick="window.location.href='./settings.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-cog w3-large icon"></i> Einstellungen </a></span>
+                <span lang="en"><a onclick="window.location.href='./help.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="far fa-question-circle w3-text-yellow w3-large icon"></i> Help </a></span>
+                <span lang="de"><a onclick="window.location.href='./help.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="far fa-question-circle w3-text-yellow w3-large icon"></i> Hilfe </a></span>
             </div>
         </nav>
         <!-- main content -->

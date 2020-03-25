@@ -58,7 +58,7 @@ function createWindow () {
     }
 
     // and load the index.html of the app.
-    mainWindow.loadURL('file://' + __dirname + '/index.html' );
+    mainWindow.loadURL('file://' + __dirname + '/templates/index.html' );
 
     // Don't show the window before content finished loading
     mainWindow.once( 'page-title-updated', function() {
