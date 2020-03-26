@@ -4,3 +4,4 @@ application
 out
 *.dmg
 log.txt
+.nyc_output
