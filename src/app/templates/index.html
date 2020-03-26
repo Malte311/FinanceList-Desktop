@@ -12,8 +12,6 @@
         <script language="javascript" src="../scripts/controller/controller.js"></script>
         <script language="javascript" src="../scripts/view/index.view.js"></script>
         <script language="javascript" src="../scripts/controller/index.controller.js"></script>
-        <script language="javascript" src="../scripts/updates.js"></script>
-        <script language="javascript" src="../scripts/update/JSONupdater.js"></script>
         <!-- stylesheets -->
         <link rel="stylesheet" type="text/css" href="../style/w3.min.css">
         <link rel="stylesheet" type="text/css" href="../style/fontawesome/css/fontawesome-all.min.css">
@@ -92,8 +90,10 @@
         <script>
             // This function checks, if some recurring transactions need to be executed
             // and executes them, if so. In addition to that, the user gets a notification in case
-            // there is a newer version of the application available.
-            updateApplication();
+			// there is a newer version of the application available.
+			let Updater = require('../scripts/updates/updater.js');
+			Updater.checkForUpdates();
+			Updater.executeRecurringTransactions();
             const $ = require( 'jquery' );
 			loadPage();
         </script>

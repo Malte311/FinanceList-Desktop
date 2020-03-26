@@ -1,10 +1,10 @@
 const assert = require('assert');
-const storage = require('../app/scripts/storage.js');
+const JsonStorage = require('../../app/scripts/storage/jsonStorage.js');
 
 describe('JsonStorage', function() {
-	let fs = require('fs');
-	let sep = require('path').sep;
-	let jsonStorage = new storage.JsonStorage();
+	let jsonStorage = new JsonStorage();
+	let fs = jsonStorage.fs;
+	let sep = jsonStorage.path.sep;
 	
 	describe('#createPath()', function() {
 		it('should create a single folder', function() {
@@ -30,9 +30,3 @@ describe('JsonStorage', function() {
 		});
 	});
 });
-
-// describe('Localstorage', function() {
-// 	describe('', function() {
-
-// 	});
-// });
