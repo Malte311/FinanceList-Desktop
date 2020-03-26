@@ -133,10 +133,10 @@ function displayRecurringTransactions() {
                        "<td>" + (recurringTransactions[i].category.length > 0 ?
                                  recurringTransactions[i].category :
                                  "&mdash;") + "</td>" +
-                       "<td>" + dateToString( recurringTransactions[i].nextDate ) + "</td>" +
+                       "<td>" + DateHandler.timestampToString( recurringTransactions[i].nextDate ) + "</td>" +
                        "<td>" + textElements.intervalOptionsTextElements[recurringTransactions[i].interval] + "</td>" +
                        "<td>" + (recurringTransactions[i].endDate > 0 ?
-                                 dateToString( recurringTransactions[i].endDate ) :
+                                 DateHandler.timestampToString( recurringTransactions[i].endDate ) :
                                  "&mdash;") + "</td>" +
                        "<td><span onclick=\"deleteRecurringTransaction('" + recurringTransactions[i].name + "'," + i + ")\"" +
                        "class=\"w3-button\"><i class=\"fas fa-times w3-text-red\"></i></span></td>" +
@@ -391,14 +391,16 @@ function displayTable( data ) {
     var tableHeadingsHTML = "";
     for ( var i = 0; i < tableHeadingsText.length; i++ ) {
         tableHeadingsHTML += "<th onclick='sortTable(" + i + ")'><b>" + tableHeadingsText[i] + "</b></th>";
-    }
+	}
+	
+	let DateHandler = require('../scripts/utils/dateHandler.js');
     // Get the content for the table.
     var tableContentHTML = "";
     for ( var j = 0; j < data.length; j++ ) {
         var amount = beautifyAmount( data[j].amount );
-        // Add the data to our table.
+		// Add the data to our table.
         tableContentHTML += "<tr class=\"w3-hover-light-blue\">" +
-                            "<td>" + dateToString( data[j].date ) + "</td>" +
+                            "<td>" + DateHandler.timestampToString( data[j].date ) + "</td>" +
                             "<td>" + data[j].name + "</td>" +
                             "<td>" + amount + getCurrencySign() + "</td>" +
                             "<td>" + data[j].category + "</td>" +

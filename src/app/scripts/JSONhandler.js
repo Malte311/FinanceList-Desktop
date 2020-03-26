@@ -16,7 +16,7 @@ const os = require( 'os' );
 // A default settings.json object.
 const defaultObj = {"windowSize":"1920x1080","fullscreen":false,"language":"en",
                     "path": storage.getDefaultDataPath() + path.sep + "data",
-                    "currency":"Euro","chartType":"pie","backup":false,"backupFail":false};
+                    "currency":"Euro","chartType":"pie"};
 // A default mainStorage.json object.
 const defaultStorageObj = {"budgets":[["checking account", 0.0]],"currentDate":getCurrentDate(),
                            "allTimeEarnings":[["checking account", 0.0]],
@@ -32,7 +32,6 @@ var currentFile = readPreference( "path" ) + path.sep + getCurrentFileName();
 module.exports.readPreference = ( name ) => readPreference( name );
 module.exports.storePreference = ( name, value ) => storePreference( name, value );
 module.exports.initStorage = () => initStorage();
-module.exports.createBackup = () => createBackup();
 
 /**
  * This function initializes the storage. This means, we create a mainStorage.json
@@ -352,8 +351,9 @@ function joinData( indices, data ) {
  * @param {JSON} data The data we want to write in form of a JSON object.
  */
 function storeData( data ) {
-    // Find out which file we want to use.
-    var dateInStringFormat = dateToString( data.date );
+	// Find out which file we want to use.
+	let DateHandler = require('./utils/dateHandler.js');
+    var dateInStringFormat = DateHandler.timestampToString( data.date );
     var dataPath = readPreference( "path" ) + path.sep
                                             + dateInStringFormat.split( "." )[1] + "."
                                             + dateInStringFormat.split( "." )[2] + ".json";
@@ -559,44 +559,6 @@ function getCurrentDate() {
 }
 
 /**
- * This function converts a timestamp (in seconds) into a date in string format.
- * @param {number} timestamp The timestamp (in seconds) we want to convert.
- */
-function dateToString( timestamp ) {
-    // Multiply by 1000 to get milliseconds.
-    var currentTime = new Date( timestamp * 1000 );
-    return (currentTime.getDate() < 10 ?
-                "0" + currentTime.getDate().toString() :
-                currentTime.getDate().toString()) + "." +
-           ((currentTime.getMonth() + 1) < 10 ?
-                "0" + (currentTime.getMonth() + 1).toString() :
-                (currentTime.getMonth() + 1).toString()) + "." +
-           currentTime.getFullYear().toString();
-}
-
-/**
- * Makes sure that a given timestamp is not already used. If it is, we add one second to it.
- * @param {number} date The date as a timestamp.
- * @return {number} A unique timestamp for the date.
- */
-function uniqueDate( date ) {
-    var dateInStringFormat = dateToString( date );
-    var correspondingFile  = readPreference( "path" ) + path.sep
-                           + dateInStringFormat.split( "." )[1] + "."
-                           + dateInStringFormat.split( "." )[2] + ".json";
-    var content = readJSONFile( correspondingFile );
-
-    // one for-loop is enough because the file is sorted by date. So if we add one, we can detect
-    // duplicates again.
-    for ( var i = 0; i < content.length; i++ ) {
-        if ( content[i].date === date ) {
-            date = date + 1;
-        }
-    }
-    return date;
-}
-
-/**
  * Returns texts in the correct language.
  * @param {String} filename The name of the file containing the text.
  * @return {JSON} The corresponding data in JSON format.
@@ -613,30 +575,4 @@ function readJSONFile( filename ) {
 function writePDF( pdfPath, data ) {
     pdfPath = pdfPath[0] + path.sep + (selectedMonth != null ? selectedMonth : selectedYear) + ".pdf";
     fs.writeFileSync( pdfPath, data );
-}
-
-/**
- * Creates a backup of the data.
- */
-function createBackup() {
-	var allFiles = fs.readdirSync(readPreference("path"));
-    // Iterate over all the files and create a copy of them.
-    for (var i = 0; i < allFiles.length; i++) {
-        if (allFiles[i].endsWith(".json")) {
-			try { // (Cross disk will cause an error)
-				var data = fs.readFileSync(readPreference("path") + path.sep + allFiles[i]);
-				// Only write if file is new or it was changed.
-				if (fs.existsSync(readPreference("backupPath") + path.sep + allFiles[i])) {
-					if (!Buffer.from(data).equals(fs.readFileSync(readPreference("backupPath") + path.sep + allFiles[i]))) {
-						fs.writeFileSync(readPreference("backupPath") + path.sep + allFiles[i], data);
-					}
-				} else {
-					fs.writeFileSync(readPreference("backupPath") + path.sep + allFiles[i], data);
-				}
-            } catch (err) {
-				storePreference("backupFail", true);
-                break;
-            }
-        }
-	}
 }

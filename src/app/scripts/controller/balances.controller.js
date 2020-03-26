@@ -5,6 +5,8 @@
  * @author Malte311
  */
 
+var DateHandler = require('../scripts/utils/dateHandler.js');
+
 /**
  * This function initializes the page when its loaded. This means it sets the
  * language and the content.
@@ -44,7 +46,8 @@ function addTransaction() {
     }
     // Set the complete content for the dialog.
     // First two lines are radio buttons to select between earning and spending.
-    var text = textElementsLocal[0] +
+	let DateHandler = require('../scripts/utils/dateHandler.js');
+	var text = textElementsLocal[0] +
                "<form class=\"w3-center\"><input id=\"earning\"" +
                     "onclick=\"updateTransactionDialog();\" type=\"radio\" name=\"type\">" +
                     textElementsLocal[1] +
@@ -71,7 +74,7 @@ function addTransaction() {
                     textElementsLocal[7] + ": " +
                     "<input id=\"datepicker1\" class=\"w3-round-large w3-light-gray\"" +
                     "type=\"button\" onclick=\"showDatepicker('1');\"" +
-                    "value=\"" + dateToString( getCurrentDate() ) + "\">" +
+                    "value=\"" + DateHandler.timestampToString( getCurrentDate() ) + "\">" +
                "</div>" +
                // Choose between manual and automated allocation. Hidden until "earning" is selected.
                "<div id=\"dynamicDiv1\" style=\"display:none;\"><hr>" +
@@ -144,7 +147,7 @@ function addTransaction() {
             }
 
             // Make sure that the date as a timestamp is unique
-            date = uniqueDate( date );
+            date = DateHandler.createUniqueTimestamp( date );
 
             // Find out which type (earning/spending) was selected and
             // execute the correct function.
@@ -233,7 +236,7 @@ function addRecurringTransaction( name, amount, budget, category, type, interval
         // Now, set update to false, because we did not update the new transaction yet.
         writeMainStorage( "update", false );
         // Update the new transaction.
-        executeRecurringTransactions();
+        require('../updates/updater.js').execRecurrTransact();
         // This function is called in addTransaction, so no need to update the view here,
         // since it is already done.
     }
@@ -659,14 +662,15 @@ function activateDateRangePicker( id ) {
     // Get all the text we need in the correct language.
     var textElementsLocal = textElements.rangeDatePickerPreset;
     var currentDate = new Date( getCurrentDate() * 1000 );
-    // Create a new date range picker.
+	let DateHandler = require('../scripts/utils/dateHandler.js');
+	// Create a new date range picker.
     $( id ).daterangepicker({
         // First day of the month? Only display this single day. Otherwise display the current month.
         initialText: currentDate.getDate() === 1 ?
-                     dateToString( getCurrentDate() ) :
-                     dateToString( new Date( currentDate.getFullYear(),
+                     DateHandler.timestampToString( getCurrentDate() ) :
+                     DateHandler.timestampToString( new Date( currentDate.getFullYear(),
                                              currentDate.getMonth(), 1 ).getTime() / 1000 ) +
-                                             " - " + dateToString( getCurrentDate() ),
+                                             " - " + DateHandler.timestampToString( getCurrentDate() ),
         dateFormat: "dd.mm.yy",
         applyButtonText: textElements.apply,
         clearButtonText: textElements.clear,
@@ -745,7 +749,7 @@ function activateDateRangePicker( id ) {
             },
             {text: textElementsLocal[8],
                 dateStart: function() {
-                    var date = dateToString(readJSONFile(
+                    var date = DateHandler.timestampToString(readJSONFile(
                         readPreference( "path" ) + path.sep + getJSONFiles()[0] + ".json")[0].date).split( "." );
                     return moment( date[2] + "-" + date[1] + "-" + date[0] )
                 },
@@ -1037,7 +1041,8 @@ function chooseYear() {
  */
 function deleteEntry( entry ) {
     createDialog( textElements.reallyDeleteEntryTitle, textElements.reallyDeleteEntry, function() {
-        var dateAsString = dateToString( entry );
+		let DateHandler = require('../scripts/utils/dateHandler.js');
+		var dateAsString = DateHandler.timestampToString( entry );
         var file = dateAsString.split(".")[1] + "." +
                    dateAsString.split(".")[2] + ".json";
 

@@ -112,27 +112,3 @@ function setChartType( name ) {
     // Update the view to display the new chart type.
     updateView();
 }
-
-/**
- * Acitivates or deactivates backups.
- */
-function setBackupMode() {
-	if ($("#backup").is(":checked")) {
-		storePreference("backup", true);
-		
-		var newPath = dialog.showOpenDialog({
-			properties: ['openDirectory']
-		});
-		if (newPath !== null && newPath !== undefined) {
-			storePreference("backupPath", newPath[0]);
-		} else {
-			storePreference("backup", false);
-			dialog.showErrorBox("Invalid input", "Please select a path!");
-			$( "#backup" )[0].checked = false;
-		}
-    } else {
-		storePreference("backup", false);
-	}
-
-	updateView();
-}

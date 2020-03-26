@@ -109,14 +109,16 @@ function displayRecentTransactions( type ) {
         var limit = (type === "earning" ? numberOfRecentEarnings : numberOfRecentSpendings);
         // We will append the HTML content to this string.
         var recentTransactionsTable = "<table class=\"w3-table-all w3-striped w3-white\">";
-        // Now, we just need to display the data. Remember that new data is at the end, so
+		
+		let DateHandler = require('../scripts/utils/dateHandler.js');
+		// Now, we just need to display the data. Remember that new data is at the end, so
         // we need to loop backwards.
         for ( var i = data.length - 1; i >= 0; i-- ) {
             var amount = beautifyAmount( data[i].amount );
             recentTransactionsTable += "<tr><td><i class=\"far fa-money-bill-alt w3-text-green w3-large\"></i>" +
                                        " " + data[i].name + " </td>" +
                                        "<td><i>" + amount + getCurrencySign() + "</i></td>" +
-                                       "<td><i>" + dateToString( data[i].date ) + "</i></td></tr>";
+                                       "<td><i>" + DateHandler.timestampToString( data[i].date ) + "</i></td></tr>";
             // Display only limit many items (defined in index.controller.js).
             if ( data.length - limit === i ) break;
         }

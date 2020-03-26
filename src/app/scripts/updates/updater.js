@@ -24,7 +24,7 @@ module.exports = class Updater {
 				let compareVersions = require('compare-versions');
 				let { remote } = require('electron');
 
-				if(compareVersions(remote.app.getVersion(), JSON.parse(pckgJson).version) < 0) {
+				if (compareVersions(remote.app.getVersion(), JSON.parse(pckgJson).version) < 0) {
 					showUpdateNotification();
 				}
 			}
@@ -37,7 +37,7 @@ module.exports = class Updater {
 	 * Shows a notification that a newer version of this application is available.
 	 */
 	static showUpdateNotification() {
-		let textdata = require( '../text/updates_' + getLanguage() + '.json.js' );
+		let textdata = require('../text/updates_' + getLanguage() + '.json.js');
 		
 		let { dialog } = require('electron').remote;
 		dialog.showMessageBox({
@@ -59,7 +59,7 @@ module.exports = class Updater {
 	/**
 	 * Executes all due recurring transactions.
 	 */
-	static executeRecurringTransactions() {
+	static execRecurrTransact() {
 		// Get recurring transactions to iterate over them.
 		var recurringTransactions = readMainStorage( 'recurring' );
 		// Iterate over all recurring transactions to check if we need to execute a transaction.

@@ -99,7 +99,7 @@
             <br>
             <hr style="border-color:black;">
             <!-- charttype settings -->
-            <div class="w3-row-padding" style="margin:0 -16px">
+            <div class="w3-row-padding" style="margin:0 -16px; margin-bottom:50px;">
                 <h5 lang="en"><i class="fas fa-chart-pie w3-text-red w3-large"></i> Chart type </h5>
                 <h5 lang="de"><i class="fas fa-chart-pie w3-text-red w3-large"></i> Diagrammart </h5>
                 <!-- dropdown menu to select the chart type -->
@@ -116,21 +116,6 @@
                         <a href="#" onclick="setChartType('doughnut');" class="w3-bar-item w3-button w3-bar-block w3-border" lang="de"> Ringdiagramm </a>
                     </div>
                 </div>
-			</div>
-			<br>
-			<hr style="border-color:black;">
-			<div class="w3-row-padding" style="margin:0 -16px; margin-bottom:50px;">
-				<h5 lang="en"><i class="fas fa-database w3-text-blue w3-large"></i> Backup </h5>
-				<h5 lang="de"><i class="fas fa-database w3-text-blue w3-large"></i> Backup </h5>
-				<input type="checkbox" onclick="setBackupMode()" id="backup">
-				<span lang="en"> Activate Backup </span>
-				<span lang="de"> Backup aktivieren </span>
-				<div class="tooltip">
-                    <i class="fas fa-info-circle"></i>
-                    <span class="tooltiptext" lang="de"> Erstellt bei jeder Änderung eine Kopie der Daten. </span>
-                    <span class="tooltiptext" lang="en"> Creates a copy of the data at every change. </span>
-                </div>
-				<div id="backupDropdownDiv"></div>
 			</div>
         </div>
         <!-- JavaScript initialization -->
