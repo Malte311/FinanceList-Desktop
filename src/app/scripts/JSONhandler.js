@@ -13,12 +13,14 @@ const storage = require( 'electron-json-storage' );
 // We use this module to get the correct path seperator (only needed to display it correctly).
 const path = require( 'path' );
 const os = require( 'os' );
+
+const DateHandler = require('./utils/dateHandler.js');
 // A default settings.json object.
 const defaultObj = {"windowSize":"1920x1080","fullscreen":false,"language":"en",
                     "path": storage.getDefaultDataPath() + path.sep + "data",
                     "currency":"Euro","chartType":"pie"};
 // A default mainStorage.json object.
-const defaultStorageObj = {"budgets":[["checking account", 0.0]],"currentDate":getCurrentDate(),
+const defaultStorageObj = {"budgets":[["checking account", 0.0]],"currentDate":DateHandler.getCurrentTimestamp(),
                            "allTimeEarnings":[["checking account", 0.0]],
                            "allTimeSpendings":[["checking account", 0.0]],"allocationOn":false,
                            "allocation":[["checking account", 100]],"recurring":[],"update":false,
@@ -61,7 +63,7 @@ function initStorage() {
             writeMainStorage( "budgets", defaultStorageObj.budgets );
         }
         // Set the current date to today.
-        writeMainStorage( "currentDate", getCurrentDate() );
+        writeMainStorage( "currentDate", DateHandler.getCurrentTimestamp() );
         // Set update to false, because the check for updates did not happen yet.
         writeMainStorage( "update", false );
     }
@@ -547,15 +549,6 @@ function moveFiles( from, to ) {
  */
 function updatePaths() {
     mainStoragePath = readPreference( "path" ) + path.sep + "mainStorage.json";
-}
-
-/**
- * This function returns a timestamp for the current date.
- * @return {number} A timestamp (in seconds) of the current date in seconds.
- */
-function getCurrentDate() {
-    // Divide milliseconds by 1000 to get seconds.
-    return Math.floor( Date.now() / 1000 );
 }
 
 /**

@@ -467,10 +467,12 @@ function updateTransactionDialog() {
  * @param {String} number The number of the datepicker we want to display.
  */
 function showDatepicker( number ) {
+	let DateHandler = require('../utils/dateHandler.js');
+
     $( "#datepicker" + number ).datepicker({
         dateFormat: "dd.mm.yy",
         // Min date: tomorrow
-        minDate: (number === "2" ? new Date( (getCurrentDate() + 86400) * 1000 ) : null),
+        minDate: (number === "2" ? new Date( (DateHandler.getCurrentTimestamp() + 86400) * 1000 ) : null),
         monthNames : textElements.monthNames,
         monthNamesShort : textElements.monthNamesShort,
         dayNames: textElements.dayNames,

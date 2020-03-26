@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html>
-    <!-- head -->
     <head>
-        <!-- general settings -->
         <title> FinanceList - A finance managing tool </title>
         <link rel="shortcut icon" href="../img/tab.ico">
         <meta charset="UTF-8">
-        <!-- scripts -->
+
         <script language="javascript" src="../scripts/view/view.js"></script>
-        <script language="javascript" src="../scripts/JSONhandler.js"></script>
         <script language="javascript" src="../scripts/controller/controller.js"></script>
         <script language="javascript" src="../scripts/view/index.view.js"></script>
         <script language="javascript" src="../scripts/controller/index.controller.js"></script>
-        <!-- stylesheets -->
+
         <link rel="stylesheet" type="text/css" href="../style/w3.min.css">
         <link rel="stylesheet" type="text/css" href="../style/fontawesome/css/fontawesome-all.min.css">
         <link rel="stylesheet" type="text/css" href="../style/style.css">
@@ -91,6 +88,7 @@
             // This function checks, if some recurring transactions need to be executed
             // and executes them, if so. In addition to that, the user gets a notification in case
 			// there is a newer version of the application available.
+			const JsonStorage = require('../scripts/storage/jsonStorage.js');
 			let Updater = require('../scripts/updates/updater.js');
 			Updater.checkForUpdates();
 			Updater.execRecurrTransact();

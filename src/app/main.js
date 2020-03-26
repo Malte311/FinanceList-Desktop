@@ -19,7 +19,7 @@ let mainWindow
 /**
  * Creates the application window.
  */
-function createWindow () {
+function createWindow() {
     // Read the stored data to select the window size and window mode.
     var screenWidth, screenHeight, fullscreen;
     var mainScreenWidth = electron.screen.getPrimaryDisplay().size.width;

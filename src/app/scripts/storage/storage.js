@@ -3,13 +3,15 @@
  */
 module.exports = class Storage {
 	constructor() {
-		this.defaultPreferences = {
+		// Default preferences object
+		this.defPref = {
 			'chartType': 'pie',
 			'currency': 'Euro',
 			'language': 'en'
 		};
 
-		this.defaultStorage = {
+		// Default storage object
+		this.defStor = {
 			'budgets': [['checking account', 0.0]],
 			'currentDate': require('../utils/dateHandler.js').getCurrentTimestamp(),
 			'allTimeEarnings': [['checking account', 0.0]],
@@ -17,7 +19,6 @@ module.exports = class Storage {
 			'allocationOn': false,
 			'allocation': [['checking account', 100]],
 			'recurring': [],
-			'update': false,
 			'availableNames': [],
 			'availableCategories': []
 		};

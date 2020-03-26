@@ -74,7 +74,7 @@ function addTransaction() {
                     textElementsLocal[7] + ": " +
                     "<input id=\"datepicker1\" class=\"w3-round-large w3-light-gray\"" +
                     "type=\"button\" onclick=\"showDatepicker('1');\"" +
-                    "value=\"" + DateHandler.timestampToString( getCurrentDate() ) + "\">" +
+                    "value=\"" + DateHandler.timestampToString( DateHandler.getCurrentTimestamp() ) + "\">" +
                "</div>" +
                // Choose between manual and automated allocation. Hidden until "earning" is selected.
                "<div id=\"dynamicDiv1\" style=\"display:none;\"><hr>" +
@@ -134,7 +134,7 @@ function addTransaction() {
             }
             // Otherwise use the current date (today).
             else {
-                date = getCurrentDate();
+                date = DateHandler.getCurrentTimestamp();
             }
             var selectedEndDate = $( "#datepicker2" ).datepicker( "getDate" );
             if ( selectedEndDate !== null && selectedEndDate !== undefined ) {
@@ -661,16 +661,16 @@ function setAllocationOn() {
 function activateDateRangePicker( id ) {
     // Get all the text we need in the correct language.
     var textElementsLocal = textElements.rangeDatePickerPreset;
-    var currentDate = new Date( getCurrentDate() * 1000 );
+    var currentDate = new Date( DateHandler.getCurrentTimestamp() * 1000 );
 	let DateHandler = require('../scripts/utils/dateHandler.js');
 	// Create a new date range picker.
     $( id ).daterangepicker({
         // First day of the month? Only display this single day. Otherwise display the current month.
         initialText: currentDate.getDate() === 1 ?
-                     DateHandler.timestampToString( getCurrentDate() ) :
+                     DateHandler.timestampToString( DateHandler.getCurrentTimestamp() ) :
                      DateHandler.timestampToString( new Date( currentDate.getFullYear(),
                                              currentDate.getMonth(), 1 ).getTime() / 1000 ) +
-                                             " - " + DateHandler.timestampToString( getCurrentDate() ),
+                                             " - " + DateHandler.timestampToString( DateHandler.getCurrentTimestamp() ),
         dateFormat: "dd.mm.yy",
         applyButtonText: textElements.apply,
         clearButtonText: textElements.clear,

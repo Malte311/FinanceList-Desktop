@@ -4,8 +4,8 @@
 	"description": "A finance managing tool",
 	"main": "./src/app/main.js",
 	"scripts": {
-	"start": "electron .",
-	"test": "mocha ./src/test/ --recursive",
+		"start": "electron .",
+		"test": "nyc mocha ./src/test/ --recursive",
 		"package-mac": "electron-packager ./src/app --ignore=node_modules/wine-darwin --platform=darwin --arch=x64 --asar --icon=./img/tab.icns --prune=true --out=./application/",
 		"create-dmg": "electron-installer-dmg ./application/FinanceList-Desktop-darwin-x64/FinanceList-Desktop.app FinanceList-Desktop-mac-x64",
 		"package-win": "electron-packager ./src/app --ignore=node_modules/wine-darwin --platform=win32 --arch=x64 --asar --icon=./img/tab.ico --prune=true --out=./application/",
@@ -29,7 +29,8 @@
 		"electron-packager": "^12.2.0",
 		"jsdoc": "^3.6.3",
 		"mocha": "^7.1.1",
-		"npm": "^6.14.2"
+		"npm": "^6.14.2",
+		"nyc": "^15.0.0"
 	},
 	"dependencies": {
 		"chart.js": "^2.9.3",

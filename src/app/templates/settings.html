@@ -7,7 +7,6 @@
         <link rel="shortcut icon" href="img/tab.ico">
         <meta charset="UTF-8">
         <!-- scripts -->
-        <script language="javascript" src="../scripts/JSONhandler.js"></script>
         <script language="javascript" src="../scripts/controller/controller.js"></script>
         <script language="javascript" src="../scripts/view/settings.view.js"></script>
         <script language="javascript" src="../scripts/controller/settings.controller.js"></script>
@@ -52,16 +51,6 @@
                 <!-- window size settings -->
                 <h5 lang="en"><i class="fas fa-desktop"></i> Window size </h5>
                 <h5 lang="de"><i class="fas fa-desktop"></i> Fenstergr&ouml;&szlig;e </h5>
-                <!-- dropdown menu to select the window size -->
-                <!-- <div class="w3-dropdown-hover">
-                    <button class="w3-button w3-white w3-round-xlarge" id="currentSize"></button>
-                    <div class="w3-dropdown-content w3-bar-block w3-border">
-                        <a href="#" onclick="setWindowSize('1024x768');" class="w3-bar-item w3-button w3-bar-block w3-border"> 1024x768 </a>
-                        <a href="#" onclick="setWindowSize('1366x768');" class="w3-bar-item w3-button w3-bar-block w3-border"> 1366x768 </a>
-                        <a href="#" onclick="setWindowSize('1440x900');" class="w3-bar-item w3-button w3-bar-block w3-border"> 1440x900 </a>
-                        <a href="#" onclick="setWindowSize('1920x1080');" class="w3-bar-item w3-button w3-bar-block w3-border"> 1920x1080 </a>
-                    </div>
-                </div> -->
                 <!-- checkbox to switch between fullscreen and window mode -->
                 <input type="checkbox" onclick="setWindowMode();" id="fullscreen">
                 <span lang="en"> Fullscreen </span>
@@ -120,6 +109,7 @@
         </div>
         <!-- JavaScript initialization -->
         <script>
+			const JsonStorage = require('../scripts/storage/jsonStorage.js');
             const $ = require( 'jquery' );
             loadPage();
         </script>
