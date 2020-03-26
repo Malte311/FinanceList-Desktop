@@ -1,3 +1,5 @@
+const fs = require('fs');
+const Path = require('./paths.js');
 const Storage = require('./storage.js');
 
 /**
@@ -7,36 +9,47 @@ module.exports = class JsonStorage extends Storage {
 	constructor() {
 		super();
 
-		// path.join(app.getPath('userData'), 'storage');
-
-		this.ejs = require('electron-json-storage');
-		this.fs = require('fs');
-		this.os = require('os');
-		this.path = require('path');
-
 		this.defPref = Object.assign(this.defPref, {
 			'fullscreen': false,
-			'path': this.ejs.getDefaultDataPath() + this.path.sep + 'data',
+			'path': Path.getSettingsPath() + Path.sep + 'data',
 			'windowSize': '1920x1080'
 		});
 	}
 
-	/**
-	 * Creates the given path if it does not exist yet.
-	 * 
-	 * @param {string} newPath The path which should be created.
-	 */
-	createPath(newPath) {		
-		let toBeCreated = (this.os.platform() === 'win32') ? '' : '/';
+	readPreference(pref) {
+		let storagePath = Path.getStoragePath();
+		if (!fs.existsSync(storagePath)) { // Create storage directory if it is missing.
+			Path.createPath(storagePath);
+		}
 
-		newPath.split(this.path.sep).forEach(folder => {
-			if (folder.length) {
-				toBeCreated += (folder + this.path.sep);
+		let settingsPath = Path.getSettingsFilePath();
+		if (fs.existsSync(settingsPath)) {
+			let settingsObj = JSON.parse(fs.readFileSync(settingsPath));
+
+			if (settingsObj[pref] === undefined) {
+				storePreference(pref, defPref[pref]);
 				
-				if (!this.fs.existsSync(toBeCreated)) {
-					this.fs.mkdirSync(toBeCreated);
-				}
+				return defPref[pref];
 			}
-		});	
+
+			return settingsObj[pref];
+		}
+		else { // Create settings.json if it is missing.
+			fs.appendFileSync(settingsPath, JSON.stringify(defPref, null, 4));
+			
+			return defPref[pref];
+		}
+	}
+
+	storePreference() {
+
+	}
+
+	readMainStorage() {
+
+	}
+
+	writeMainStorage() {
+
 	}
 }

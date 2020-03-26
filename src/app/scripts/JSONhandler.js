@@ -12,9 +12,10 @@ const fs = require( 'fs' );
 const storage = require( 'electron-json-storage' );
 // We use this module to get the correct path seperator (only needed to display it correctly).
 const path = require( 'path' );
-const os = require( 'os' );
 
 const DateHandler = require('./utils/dateHandler.js');
+const JsonStorage = require('./storage/jsonStorage.js');
+const Path = require('./storage/paths.js');
 // A default settings.json object.
 const defaultObj = {"windowSize":"1920x1080","fullscreen":false,"language":"en",
                     "path": storage.getDefaultDataPath() + path.sep + "data",
@@ -44,7 +45,7 @@ function initStorage() {
     // Create directories, if they doesn't exist yet.
     var path = readPreference( "path" );
     if ( !fs.existsSync( path ) ) {
-        createPath( path );
+        Path.createPath( path );
     }
 
     // Create the current file, if it is missing
@@ -74,27 +75,6 @@ function initStorage() {
 }
 
 /**
- * This function creates missing paths.
- */
-function createPath( newPath ) {
-    var start;
-    if ( os.platform() === "win32" ) {
-        start = "";
-    }
-    else {
-        start = "/";
-    }
-	newPath.split( path.sep ).forEach( function ( folder ) {
-		if ( folder.length > 0 ) {
-			start += folder + path.sep;
-			if ( !fs.existsSync( start ) ) {
-				fs.mkdirSync( start );
-			}
-		}
-	});
-}
-
-/**
  * This function reads a field in the settings.json file.
  * @param {String} name The name of the field we want to access.
  * @return {Object} The corresponding value of the field.
@@ -103,7 +83,7 @@ function readPreference( name ) {
     // Path missing? Create it.
     var path = storage.getDefaultDataPath();
     if ( !fs.existsSync( path ) ) {
-        createPath( path );
+        Path.createPath( path );
     }
     // Check if the file exists. If not, create it.
     if ( fs.existsSync( settingsPath ) ) {
@@ -131,7 +111,7 @@ function readPreference( name ) {
 function storePreference( name, value ) {
     // Path missing? Create it.
     var path = storage.getDefaultDataPath();
-    if ( !fs.existsSync( path ) ) createPath( path );
+    if ( !fs.existsSync( path ) ) Path.createPath( path );
     // Check if the file exists. If not, create it.
     if ( fs.existsSync( settingsPath ) ) {
         var settingsObj = JSON.parse( fs.readFileSync( settingsPath ) );
