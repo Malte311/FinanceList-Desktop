@@ -9,7 +9,7 @@ module.exports = class Path {
 	 * 
 	 * @return {string} The path to the user data directory.
 	 */
-	static get home() {
+	static home() {
 		return require('electron').app.getPath('userData');
 	}
 	
@@ -18,7 +18,7 @@ module.exports = class Path {
 	 * 
 	 * @return {string} The path separator for the currently used operating system.
 	 */
-	static get sep() {
+	static sep() {
 		return pathMod.sep;
 	}
 
@@ -28,7 +28,7 @@ module.exports = class Path {
 	 * @return {string} The path to the storage directory.
 	 */
 	static getStoragePath() {
-		return home + sep + 'storage';
+		return Path.home() + Path.sep() + 'storage';
 	}
 
 	/**
@@ -37,7 +37,7 @@ module.exports = class Path {
 	 * @return {string} The path to the settings.json file.
 	 */
 	static getSettingsFilePath() {
-		return getStoragePath() + sep + 'settings.json';
+		return Path.getStoragePath() + Path.sep() + 'settings.json';
 	}
 
 	/**
@@ -50,9 +50,9 @@ module.exports = class Path {
 		let os = require('os');
 		let toBeCreated = (os.platform() === 'win32') ? '' : '/';
 
-		newPath.split(Path.sep).forEach(folder => {
+		newPath.split(Path.sep()).forEach(folder => {
 			if (folder.length) {
-				toBeCreated += (folder + Path.sep);
+				toBeCreated += (folder + Path.sep());
 				
 				if (!fs.existsSync(toBeCreated)) {
 					fs.mkdirSync(toBeCreated);

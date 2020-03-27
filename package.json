@@ -36,7 +36,6 @@
 		"chart.js": "^2.9.3",
 		"compare-versions": "^3.6.0",
 		"electron-is-running-in-asar": "^1.0.0",
-		"electron-json-storage": "^4.1.8",
 		"jquery": "^3.4.1",
 		"request": "^2.88.2"
 	}

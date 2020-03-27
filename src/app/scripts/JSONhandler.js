@@ -59,7 +59,7 @@ function moveFiles( from, to ) {
         if ( allFiles[i].endsWith( ".json" ) ) {
             // Try to move the files (cross disk will cause an error)
             try {
-                fs.renameSync( from + path.sep + allFiles[i], to + path.sep + allFiles[i] );
+                fs.renameSync( from + Path.sep() + allFiles[i], to + Path.sep() + allFiles[i] );
             }
             // Display the error and stop trying to move files (since the destination
             // will be the same and therefore every file would produce an error).
@@ -79,6 +79,6 @@ function moveFiles( from, to ) {
  * @param {Object} data The data we want to print to PDF.
  */
 function writePDF( pdfPath, data ) {
-    pdfPath = pdfPath[0] + path.sep + (selectedMonth != null ? selectedMonth : selectedYear) + ".pdf";
+    pdfPath = pdfPath[0] + Path.sep() + (selectedMonth != null ? selectedMonth : selectedYear) + ".pdf";
     fs.writeFileSync( pdfPath, data );
 }

@@ -3,7 +3,7 @@ const Path = require('../../app/scripts/storage/paths.js');
 
 describe('JsonStorage', function() {
 	let fs = require('fs');
-	let sep = Path.sep;
+	let sep = Path.sep();
 	
 	describe('#createPath()', function() {
 		it('should create a single folder', function() {

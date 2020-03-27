@@ -1,5 +1,5 @@
 const electron = require('electron');
-const config = require(__dirname + '/scripts/config.js');
+const config = require(__dirname + '/scripts/electron/config.js');
 const JsonStorage = require(__dirname + '/scripts/storage/jsonStorage.js');
 
 let jsStorage = new JsonStorage();

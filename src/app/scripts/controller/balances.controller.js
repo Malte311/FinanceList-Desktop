@@ -451,7 +451,7 @@ function deleteBudget( name ) {
             }
             // No data left? Delete the file.
             else {
-                fs.unlinkSync( readPreference( "path" ) + path.sep + allFiles[i] + ".json" );
+                fs.unlinkSync( readPreference( "path" ) + Path.sep() + allFiles[i] + ".json" );
             }
         }
     });
@@ -750,7 +750,7 @@ function activateDateRangePicker( id ) {
             {text: textElementsLocal[8],
                 dateStart: function() {
                     var date = DateHandler.timestampToString(JSON.parse(fs.readFileSync(
-                        readPreference( "path" ) + path.sep + getJSONFiles()[0] + ".json")[0].date).split( "." );
+                        readPreference( "path" ) + Path.sep() + getJSONFiles()[0] + ".json")[0].date).split( "." );
                     return moment( date[2] + "-" + date[1] + "-" + date[0] )
                 },
                 dateEnd: function() {

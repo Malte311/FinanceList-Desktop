@@ -1,86 +1,64 @@
-/**
- * This file creates our application menu in the correct language.
- *
- * @module electronMenu
- * @author Malte311
- */
-
-// We use this to find out, which language is selected.
-const JSONhandler = require( './JSONhandler.js' );
-// Systemconfiguration file (e.g. for devMode).
-const config = require( './config.js' );
-
-// This array will contain the menu at the end (we will push all the information to it).
-var menuTemplate = [];
+const JsonStorage = require(__dirname + '/../storage/jsonStorage.js');
+const config = require(__dirname + '/config.js');
 
 // Set all labels in dependency of the currently selected language.
-var editLabels, windowLabels;
+let lang = (new JsonStorage()).readPreference('language');
+let textData = require(`${__dirname}/../../text/text_${lang}.json`);
 
-var currentLanguage = JSONhandler.readPreference( "language" );
-switch ( currentLanguage ) {
-    case "en":
-        editLabels = ["Edit", "Undo", "Redo", "Cut", "Copy", "Paste"];
-        windowLabels = ["Window", "Reload", "Minimize", "Close", "Exit"];
-        break;
-    case "de":
-        editLabels = ["Bearbeiten", "Rückgängig", "Wiederholen", "Ausschneiden", "Kopieren", "Einfügen"];
-        windowLabels = ["Fenster", "Neu laden", "Minimieren", "Schließen", "Beenden"];
-        break;
-}
+// This array will contain the menu at the end (we will push all the information to it).
+let menuTemplate = [];
 
-// Now, add everything to our template.
 menuTemplate.push({
-    label: editLabels[0],
+    label: textData['edit'],
     submenu: [
         {
-            label: editLabels[1],
+            label: textData['undo'],
             role: 'undo'
         },
         {
-            label: editLabels[2],
+            label: textData['redo'],
             role: 'redo'
         },
         { type: 'separator' },
         {
-            label: editLabels[3],
+            label: textData['cut'],
             role: 'cut'
         },
         {
-            label: editLabels[4],
+            label: textData['copy'],
             role: 'copy'
         },
         {
-            label: editLabels[5],
+            label: textData['paste'],
             role: 'paste'
         }
     ]
 });
 
 menuTemplate.push({
-    label: windowLabels[0],
+    label: textData['window'],
     submenu: [
         {
-            label: windowLabels[1],
+            label: textData['reload'],
             role: 'reload'
         },
         { type: 'separator' },
         {
-            label: windowLabels[2],
+            label: textData['minimize'],
             role: 'minimize'
         },
         {
-            label: windowLabels[3],
+            label: textData['close'],
             role: 'close'
         },
         {
-            label: windowLabels[4],
+            label: textData['exit'],
             role: 'quit'
         }
     ]
 });
 
-// devtools?
-if ( config.devMode ) {
+if (config.devMode) {
     menuTemplate.push({
         label: 'Developer',
         submenu: [
@@ -90,5 +68,4 @@ if ( config.devMode ) {
     });
 }
 
-// Export the module, so we can use it in our main.js file to create an application menu.
 module.exports = menuTemplate;

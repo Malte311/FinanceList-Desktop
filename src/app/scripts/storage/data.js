@@ -13,7 +13,7 @@ module.exports = class Data {
 	 */
 	static getData( file, quest ) {
 		// Get the data object we want to access.
-		var dataPath = readPreference( "path" ) + path.sep + file;
+		var dataPath = readPreference( "path" ) + Path.sep() + file;
 		// Before we continue, we make sure that the file exists.
 		if ( fs.existsSync( dataPath ) ) {
 			var dataStorageObj = JSON.parse( fs.readFileSync( dataPath ) );
@@ -161,7 +161,7 @@ module.exports = class Data {
 		// Find out which file we want to use.
 		let DateHandler = require('./utils/dateHandler.js');
 		var dateInStringFormat = DateHandler.timestampToString( data.date );
-		var dataPath = readPreference( "path" ) + path.sep
+		var dataPath = readPreference( "path" ) + Path.sep()
 												+ dateInStringFormat.split( "." )[1] + "."
 												+ dateInStringFormat.split( "." )[2] + ".json";
 		// File exists: Write the data in it.
@@ -188,7 +188,7 @@ module.exports = class Data {
 	 * @param {JSON} data The data we want to write in form of a JSON object.
 	 */
 	static replaceData( file, data ) {
-		var dataPath = readPreference( "path" ) + path.sep + file;
+		var dataPath = readPreference( "path" ) + Path.sep() + file;
 		// File exists: Overwrite the data in it.
 		if ( fs.existsSync( dataPath ) ) {
 			fs.writeFileSync( dataPath, JSON.stringify( data, null, 4 ) );
@@ -205,7 +205,7 @@ module.exports = class Data {
 	 * @param {String} data The id (timestamp) of the data we want to delete.
 	 */
 	static deleteData( file, data ) {
-		var dataPath = readPreference( "path" ) + path.sep + file;
+		var dataPath = readPreference( "path" ) + Path.sep() + file;
 		if ( fs.existsSync( dataPath ) ) {
 			var content = JSON.parse(fs.readFileSync( dataPath ));
 			var newContent = [];

@@ -7,7 +7,7 @@ const Path = require('./paths.js');
 module.exports = class Storage {
 	constructor() {
 		this.settingsPath = Path.getSettingsFilePath();
-		this.mainstoragePath = Path.getStoragePath() + Path.sep + 'data' + Path.sep + 'mainstorage.json';
+		this.mainstoragePath = Path.getStoragePath() + Path.sep() + 'data' + Path.sep() + 'mainstorage.json';
 
 		// Default preferences object
 		this.defPref = {

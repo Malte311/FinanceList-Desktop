@@ -12,11 +12,11 @@ module.exports = class JsonStorage extends Storage {
 
 		this.defPref = Object.assign(this.defPref, {
 			'fullscreen': false,
-			'path': Path.getSettingsPath() + Path.sep + 'data',
+			'path': Path.getStoragePath() + Path.sep() + 'data',
 			'windowSize': '1920x1080'
 		});
 
-		let currentFile = DateHandler.timestampToFilename((new Date()).getTime() / 1000);
+		let currentFile = DateHandler.timestampToFilename(DateHandler.getCurrentTimestamp());
 		if (!fs.existsSync(currentFile)) {
 			fs.appendFileSync(currentFile, JSON.stringify([], null, 4));
 		}
@@ -74,12 +74,12 @@ module.exports = class JsonStorage extends Storage {
 	 * @return {string} The corresponding value for the field.
 	 */
 	readMainStorage(field) {
-		let storagePath = readPreference('path');
+		let storagePath = this.readPreference('path');
 		if (!fs.existsSync(storagePath)) { // Create storage directory if it is missing.
 			Path.createPath(storagePath);
 		}
 
-		let mainStoragePath = storagePath + Path.sep + 'mainstorage.json';
+		let mainStoragePath = storagePath + Path.sep() + 'mainstorage.json';
 		if (!fs.existsSync(mainStoragePath)) { // Create mainstorage.json if it is missing.
 			fs.appendFileSync(mainStoragePath, JSON.stringify(this.defStor, null, 4));
 		}
@@ -94,12 +94,12 @@ module.exports = class JsonStorage extends Storage {
 	 * @param {any} value The new value for the specified field.
 	 */
 	writeMainStorage(field, value) {
-		let storagePath = readPreference('path');
+		let storagePath = this.readPreference('path');
 		if (!fs.existsSync(storagePath)) { // Create storage directory if it is missing.
 			Path.createPath(storagePath);
 		}
 
-		let mainStoragePath = storagePath + Path.sep + 'mainstorage.json';
+		let mainStoragePath = storagePath + Path.sep() + 'mainstorage.json';
 		if (!fs.existsSync(mainStoragePath)) { // Create mainstorage.json if it is missing.
 			fs.appendFileSync(mainStoragePath, JSON.stringify(this.defStor, null, 4));
 		}
@@ -109,7 +109,12 @@ module.exports = class JsonStorage extends Storage {
 		fs.writeFileSync(mainStoragePath, JSON.stringify(mainStorageObj, null, 4));
 	}
 
+	/**
+	 * Returns the name of the current file (with .json ending!).
+	 * 
+	 * @return {string} The name of the current file (with .json ending!).
+	 */
 	getCurrentFileName() {
-		return DateHandler.timestampToFilename(DateHandler.getCurrentTimestamp());
+		return DateHandler.timestampToFilename(DateHandler.getCurrentTimestamp()) + '.json';
 	}
 }
