@@ -1,123 +1,87 @@
-/**
- * This file is the entry point of our app.
- * It creates the window and loads the index.html file.
- *
- * @author Malte311
- */
+const electron = require('electron');
+const config = require(__dirname + '/scripts/config.js');
+const JsonStorage = require(__dirname + '/scripts/storage/jsonStorage.js');
 
-const electron = require( 'electron' );
-// Configuration file.
-const config = require( './scripts/config.js' );
-// Module to read the settings.json file (we need this to get the window size
-// and to initialize the storage, which means create missing paths and files).
-const JSONhandler = require( './scripts/JSONhandler.js' );
+let jsStorage = new JsonStorage();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow;
 
 /**
  * Creates the application window.
  */
 function createWindow() {
     // Read the stored data to select the window size and window mode.
-    var screenWidth, screenHeight, fullscreen;
-    var mainScreenWidth = electron.screen.getPrimaryDisplay().size.width;
-    var mainScreenHeight = electron.screen.getPrimaryDisplay().size.height;
-    try {
-        // Note: If there are no numbers found to be parsed, this fails and
-        // we will set default values. If the numbers are nonsense, the window
-        // will still appear (numbers too big won't matter and negative numbers
-        // won't matter as well). That's why we don't do further checking on the numbers.
-        screenWidth = parseInt( JSONhandler.readPreference( "windowSize" ).split( "x" )[0] );
-        screenHeight = parseInt( JSONhandler.readPreference( "windowSize" ).split( "x" )[1] );
-        fullscreen = JSONhandler.readPreference( "fullscreen" );
+    let screenWidth, screenHeight, fullscreen;
+    let mainScreenWidth = electron.screen.getPrimaryDisplay().size.width;
+    let mainScreenHeight = electron.screen.getPrimaryDisplay().size.height;
+	
+	try {
+        screenWidth = parseInt(jsStorage.readPreference('windowSize').split('x')[0]);
+        screenHeight = parseInt(jsStorage.readPreference('windowSize').split('x')[1]);
+        fullscreen = JSON.parse(jsStorage.readPreference('fullscreen'));
     }
-    // In case the file is corrupted, we set some default values (size of the main screen).
-    catch ( err ) {
+    catch (err) { // If the file is corrupted, we set default values (size of the main screen).
         screenWidth = mainScreenWidth;
         screenHeight = mainScreenHeight;
     }
-    // We want make sure, fullscreen is a boolean type value. Otherwise
-    // we might get into trouble when setting the "fullscreen" option of our mainWindow.
-    if ( fullscreen !== true && fullscreen !== false ) fullscreen = false;
-    // Create the browser window
+
     mainWindow = new electron.BrowserWindow({
         width: screenWidth,
         height: screenHeight,
         icon: __dirname + '/img/tab.ico',
         movable: true,
         center: true,
-        fullscreen: fullscreen,
+        fullscreen: typeof fullscreen === 'boolean' ? fullscreen : false,
         show: false
     });
 
-    // Maximize window if it is at least as big as the screen size
-    if ( screenWidth >= mainScreenWidth && screenHeight >= mainScreenHeight ) {
-        mainWindow.maximize();
+    if (screenWidth >= mainScreenWidth && screenHeight >= mainScreenHeight) {
+        mainWindow.maximize(); // Maximize window if it is at least as big as the screen size.
     }
 
-    // and load the index.html of the app.
-    mainWindow.loadURL('file://' + __dirname + '/templates/index.html' );
+    mainWindow.loadURL('file://' + __dirname + '/templates/index.html');
 
-    // Don't show the window before content finished loading
-    mainWindow.once( 'page-title-updated', function() {
+    mainWindow.once('page-title-updated', function() {
         mainWindow.show();
     });
 
-    // Emitted when the window is closed.
-    mainWindow.on( 'closed', function () {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
-        mainWindow = null
+    mainWindow.on('closed', function() {
+        mainWindow = null;
     });
 
-    mainWindow.on( 'close', function() {
+    mainWindow.on('close', function() {
         if (!mainWindow.isMaximized()) {
-            var size = mainWindow.getSize();
-            JSONhandler.storePreference( "windowSize", size[0] + "x" + size[1] );
+            let size = mainWindow.getSize();
+            jsStorage.storePreference('windowSize', `${size[0]}x${size[1]}`);
 		}
     });
 
-    mainWindow.on( 'maximize', function() {
-        JSONhandler.storePreference( "windowSize",
-                                     electron.screen.getPrimaryDisplay().size.width + "x" +
-                                     electron.screen.getPrimaryDisplay().size.height );
+    mainWindow.on('maximize', function() {
+        jsStorage.storePreference('windowSize', `${mainScreenWidth}x${mainScreenHeight}`);
     });
 
-    // load menu in the correct language. Unfortunately, the menu won't update
-    // immediately when the language is changed at runtime. It will be set once at
-    // the start of the application and does not change until a restart happens.
-    electron.Menu.setApplicationMenu(
-		electron.Menu.buildFromTemplate(
-			require('./scripts/electronMenu.js')
-		)
-	);
-    // Open the devtools?
-    if ( config.devMode ) mainWindow.webContents.openDevTools();
-    // Init the JSON storage (create missing paths and files to avoid errors).
-    JSONhandler.initStorage();
+	let electronMenu = require(__dirname + '/scripts/electron/electronMenu.js');
+    electron.Menu.setApplicationMenu(electron.Menu.buildFromTemplate(electronMenu));
+
+    if (config.devMode) mainWindow.webContents.openDevTools();
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-electron.app.on( 'ready', createWindow );
+electron.app.on('ready', createWindow);
 
-// Quit when all windows are closed.
-electron.app.on( 'window-all-closed', function () {
+electron.app.on('window-all-closed', function() {
     // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if ( process.platform !== 'darwin' ) {
-        electron.app.quit()
+    // to stay active until the user quits explicitly with Cmd + Q.
+    if (process.platform !== 'darwin') {
+        electron.app.quit();
     }
 });
 
-electron.app.on( 'activate', function () {
+electron.app.on('activate', function() {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if ( mainWindow === null ) {
-        createWindow()
+    if (mainWindow === null) {
+        createWindow();
     }
 });

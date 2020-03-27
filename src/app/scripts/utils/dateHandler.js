@@ -41,7 +41,7 @@ module.exports = class DateHandler {
 		// A single for-loop is sufficient because the file is sorted by date.
 		// So if we add one, we can detect new duplicates in the following iterations
 		// (and add one again until no duplicates are left).
-		let content = readJSONFile(relatedFile);
+		let content = JSON.parse(fs.readFileSync(relatedFile));
 		for (let i = 0; i < content.length; i++) {
 			if (content[i].date === ts) {
 				ts = ts + 1;

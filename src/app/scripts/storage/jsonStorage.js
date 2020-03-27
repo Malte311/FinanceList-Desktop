@@ -1,4 +1,5 @@
 const fs = require('fs');
+const DateHandler = require('../utils/dateHandler.js');
 const Path = require('./paths.js');
 const Storage = require('./storage.js');
 
@@ -14,6 +15,13 @@ module.exports = class JsonStorage extends Storage {
 			'path': Path.getSettingsPath() + Path.sep + 'data',
 			'windowSize': '1920x1080'
 		});
+
+		let currentFile = DateHandler.timestampToFilename((new Date()).getTime() / 1000);
+		if (!fs.existsSync(currentFile)) {
+			fs.appendFileSync(currentFile, JSON.stringify([], null, 4));
+		}
+
+		writeMainStorage('currentDate', DateHandler.getCurrentTimestamp());
 	}
 
 	/**
@@ -50,7 +58,7 @@ module.exports = class JsonStorage extends Storage {
 
 		let settingsPath = Path.getSettingsFilePath();
 		if (!fs.existsSync(settingsPath)) { // Create settings.json if it is missing.
-			fs.appendFileSync(settingsPath, JSON.stringify(defaultObj, null, 4));
+			fs.appendFileSync(settingsPath, JSON.stringify(this.defPref, null, 4));
 		}
 
 		let settingsObj = JSON.parse(fs.readFileSync(settingsPath));
@@ -59,11 +67,49 @@ module.exports = class JsonStorage extends Storage {
 		fs.writeFileSync(settingsPath, JSON.stringify(settingsObj, null, 4));
 	}
 
-	readMainStorage() {
+	/**
+	 * Reads a specified field in the mainStorage.json file.
+	 * 
+	 * @param {string} field The field we want to read.
+	 * @return {string} The corresponding value for the field.
+	 */
+	readMainStorage(field) {
+		let storagePath = readPreference('path');
+		if (!fs.existsSync(storagePath)) { // Create storage directory if it is missing.
+			Path.createPath(storagePath);
+		}
 
+		let mainStoragePath = storagePath + Path.sep + 'mainstorage.json';
+		if (!fs.existsSync(mainStoragePath)) { // Create mainstorage.json if it is missing.
+			fs.appendFileSync(mainStoragePath, JSON.stringify(this.defStor, null, 4));
+		}
+
+		return JSON.parse(fs.readFileSync(mainStoragePath))[field];
 	}
 
-	writeMainStorage() {
+	/**
+	 * Writes to mainStorage.json and sets a new value for the specified field.
+	 * 
+	 * @param {string} field The field which value we want to set.
+	 * @param {any} value The new value for the specified field.
+	 */
+	writeMainStorage(field, value) {
+		let storagePath = readPreference('path');
+		if (!fs.existsSync(storagePath)) { // Create storage directory if it is missing.
+			Path.createPath(storagePath);
+		}
 
+		let mainStoragePath = storagePath + Path.sep + 'mainstorage.json';
+		if (!fs.existsSync(mainStoragePath)) { // Create mainstorage.json if it is missing.
+			fs.appendFileSync(mainStoragePath, JSON.stringify(this.defStor, null, 4));
+		}
+
+		let mainStorageObj = JSON.parse(fs.readFileSync(mainStoragePath));
+		mainStorageObj[field] = value;
+		fs.writeFileSync(mainStoragePath, JSON.stringify(mainStorageObj, null, 4));
+	}
+
+	getCurrentFileName() {
+		return DateHandler.timestampToFilename(DateHandler.getCurrentTimestamp());
 	}
 }
