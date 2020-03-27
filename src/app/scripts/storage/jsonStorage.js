@@ -1,7 +1,7 @@
 const fs = require('fs');
-const DateHandler = require('../utils/dateHandler.js');
-const Path = require('./paths.js');
-const Storage = require('./storage.js');
+const DateHandler = require(__dirname + '/../utils/dateHandler.js');
+const Path = require(__dirname + '/paths.js');
+const Storage = require(__dirname + '/storage.js');
 
 /**
  * Class for loading and storing data on the user's computer.
@@ -120,6 +120,6 @@ module.exports = class JsonStorage extends Storage {
 	 * @return {string} The name of the current file (with .json ending!).
 	 */
 	getCurrentFileName() {
-		return DateHandler.timestampToFilename(DateHandler.getCurrentTimestamp()) + '.json';
+		return DateHandler.timestampToFilename(DateHandler.getCurrentTimestamp());
 	}
 }

@@ -48,8 +48,7 @@ module.exports = class Path {
 	 */
 	static createPath(newPath) {
 		let fs = require('fs');
-		let os = require('os');
-		let toBeCreated = (os.platform() === 'win32') ? '' : '/';
+		let toBeCreated = (require('os').platform() === 'win32') ? '' : '/';
 
 		newPath.split(Path.sep()).forEach(folder => {
 			if (folder.length) {
@@ -59,6 +58,6 @@ module.exports = class Path {
 					fs.mkdirSync(toBeCreated);
 				}
 			}
-		});	
+		});
 	}
 }

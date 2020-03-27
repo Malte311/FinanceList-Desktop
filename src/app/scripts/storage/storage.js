@@ -1,14 +1,10 @@
-const DateHandler = require('../utils/dateHandler.js');
-const Path = require('./paths.js');
+const DateHandler = require(__dirname + '/../utils/dateHandler.js');
 
 /**
  * Class for loading and storing data.
  */
 module.exports = class Storage {
 	constructor() {
-		this.settingsPath = Path.getSettingsFilePath();
-		this.mainstoragePath = Path.getStoragePath() + Path.sep() + 'data' + Path.sep() + 'mainstorage.json';
-
 		// Default preferences object
 		this.defPref = {
 			'chartType': 'pie',
@@ -30,19 +26,19 @@ module.exports = class Storage {
 		};
 	}
 
-	readPreference() {
+	readPreference(pref) {
 		throw new Error('This function must be overridden!');
 	}
 
-	storePreference() {
+	storePreference(name, value) {
 		throw new Error('This function must be overridden!');
 	}
 
-	readMainStorage() {
+	readMainStorage(field) {
 		throw new Error('This function must be overridden!');
 	}
 
-	writeMainStorage() {
+	writeMainStorage(field, value) {
 		throw new Error('This function must be overridden!');
 	}
 }

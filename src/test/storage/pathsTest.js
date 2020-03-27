@@ -1,9 +1,16 @@
 const assert = require('assert');
-const Path = require('../../app/scripts/storage/paths.js');
+const Path = require(__dirname + '/../../app/scripts/storage/paths.js');
 
-describe('JsonStorage', function() {
+describe('Path', function() {
 	let fs = require('fs');
 	let sep = Path.sep();
+
+	describe('#getSettingsFilePath()', function() {
+		it('settings file should be in the storage directory', function() {
+			let settingsFilePath = Path.getStoragePath() + Path.sep() + 'settings.json';
+			assert.equal(settingsFilePath, Path.getSettingsFilePath());
+		});
+	});
 	
 	describe('#createPath()', function() {
 		it('should create a single folder', function() {
