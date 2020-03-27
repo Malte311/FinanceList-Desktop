@@ -10,7 +10,8 @@ module.exports = class Path {
 	 * @return {string} The path to the user data directory.
 	 */
 	static home() {
-		return require('electron').app.getPath('userData');
+		let app = require('electron').app;
+		return (app !== undefined) ? app.getPath('userData') : require('os').homedir();
 	}
 	
 	/**

@@ -16,12 +16,17 @@ module.exports = class JsonStorage extends Storage {
 			'windowSize': '1920x1080'
 		});
 
-		let currentFile = DateHandler.timestampToFilename(DateHandler.getCurrentTimestamp());
-		if (!fs.existsSync(currentFile)) {
-			fs.appendFileSync(currentFile, JSON.stringify([], null, 4));
+		let currFileDir = this.readPreference('path') + Path.sep();
+		if (!fs.existsSync(currFileDir)) {
+			Path.createPath(currFileDir);
 		}
 
-		writeMainStorage('currentDate', DateHandler.getCurrentTimestamp());
+		let currFile = currFileDir + DateHandler.timestampToFilename(DateHandler.getCurrentTimestamp());
+		if (!fs.existsSync(currFile)) {
+			fs.appendFileSync(currFile, JSON.stringify([], null, 4));
+		}
+
+		this.writeMainStorage('currentDate', DateHandler.getCurrentTimestamp());
 	}
 
 	/**
