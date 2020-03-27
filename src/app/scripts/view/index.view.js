@@ -29,7 +29,7 @@ function displayBalances() {
         // Find out the sum of earnings and spendings in this month,
         // so we can calculate the surplus.
         var quest = { connector:'or', params:[['budget', currentBudgets[i][0]]] };
-        var dataObj = getData( getCurrentFileName(), quest );
+        var dataObj = getData( getCurrentFilename(), quest );
         // Add all earnings and spendings from this month.
         var totalEarningsThisMonth = 0, totalSpendingsThisMonth = 0;
         // Make sure, that data exists. Otherwise we will stay at a surplus of zero.

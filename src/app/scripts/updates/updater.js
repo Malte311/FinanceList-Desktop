@@ -33,7 +33,7 @@ module.exports = class Updater {
 	 * Shows a notification that a newer version of this application is available.
 	 */
 	static showUpdateNotification() {
-		let textdata = require('../text/updates_' + getLanguage() + '.json.js');
+		let textdata = require(__dirname + '/../text/updates_' + getLanguage() + '.json.js');
 		
 		let { dialog } = require('electron').remote;
 		dialog.showMessageBox({
@@ -56,7 +56,7 @@ module.exports = class Updater {
 	 * Executes all due recurring transactions.
 	 */
 	static execRecurrTransact() {
-		let DateHandler = require('../utils/dateHandler.js');
+		let DateHandler = require(__dirname + '/../utils/dateHandler.js');
 		// Get recurring transactions to iterate over them.
 		var recurringTransactions = readMainStorage( 'recurring' );
 		// Iterate over all recurring transactions to check if we need to execute a transaction.

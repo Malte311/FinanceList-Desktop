@@ -987,7 +987,7 @@ function chooseMonth() {
     var content = textElements.chooseMonthText;
     content += "<br><select class=\"w3-select\" id=\"monthSelect\">";
     var jsonFiles = getJSONFiles();
-    var currentFileName = getCurrentFileName();
+    var currentFileName = getCurrentFilename();
     currentFileName = currentFileName.substring( 0, currentFileName.lastIndexOf( "." ) );
 
     for ( var i = 0; i < jsonFiles.length; i++ ) {
@@ -1012,7 +1012,7 @@ function chooseMonth() {
 function chooseYear() {
 	var content = textElements.chooseYearText + "<br><select class=\"w3-select\" id=\"yearSelect\">";
     var jsonFiles = getJSONFiles();
-	var currentYear = getCurrentFileName();
+	var currentYear = getCurrentFilename();
 	currentYear = currentYear.substring( currentYear.indexOf( "." ) + 1, currentYear.lastIndexOf( "." ) );
 	var alreadySeen = [];
 

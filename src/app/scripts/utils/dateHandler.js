@@ -37,7 +37,7 @@ module.exports = class DateHandler {
 	 * @param {number} ts The original timestamp.
 	 * @return {number} A unique timestamp generated from the original timestamp.
 	 */
-	static createUniqueTimestamp(ts) {		
+	static createUniqueTimestamp(ts) {
 		let relatedFile = readPreference('path') + Path.sep() + DateHandler.timestampToFilename(ts);
 		
 		// A single for-loop is sufficient because the file is sorted by date.

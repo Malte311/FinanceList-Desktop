@@ -119,7 +119,7 @@ module.exports = class JsonStorage extends Storage {
 	 * 
 	 * @return {string} The name of the current file (with .json ending!).
 	 */
-	getCurrentFileName() {
+	getCurrentFilename() {
 		return DateHandler.timestampToFilename(DateHandler.getCurrentTimestamp());
 	}
 }

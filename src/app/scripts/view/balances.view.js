@@ -302,7 +302,7 @@ function displayContent( displayType, budget, type, startDate, endDate, amountFr
     // No date filter? Apply the standard range (current month).
     else {
         // Returns the current file (without .json ending).
-        files.push( getCurrentFileName().substring( 0, getCurrentFileName().lastIndexOf( "." ) ) );
+        files.push( getCurrentFilename().substring( 0, getCurrentFilename().lastIndexOf( "." ) ) );
     }
     // Get all the matching data from every available file.
     var data = [];

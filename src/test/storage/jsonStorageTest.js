@@ -34,14 +34,14 @@ describe('JsonStorage', function() {
 		});
 	});
 
-	describe('#getCurrentFileName()', function() {
+	describe('#getCurrentFilename()', function() {
 		it('should return the correct file name for today', function() {
 			let today = new Date();
 			let year = today.getFullYear();
 			let month = (today.getMonth() + 1).toString().padStart(2, '0'); // Zero indexed.
 			
 			let fNameToday = `${month}.${year}.json`;
-			assert.equal(jsonStorage.getCurrentFileName(), fNameToday);
+			assert.equal(jsonStorage.getCurrentFilename(), fNameToday);
 		});
 	});
 });
