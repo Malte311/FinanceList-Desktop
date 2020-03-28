@@ -7,12 +7,12 @@ const Updater = require(__dirname + '/updates/updater.js');
  */
 module.exports = class Startup {
 	constructor() {
-		this.jsStorage = new JsonStorage();
+		this.storage = new JsonStorage();
 
 		Updater.checkForUpdates();
 		Updater.execRecurrTransact();
 	
-		this.view = new IndexView();
+		this.view = new IndexView(this.storage);
 	}
 
 	/**

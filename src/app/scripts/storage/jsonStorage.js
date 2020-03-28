@@ -116,6 +116,15 @@ module.exports = class JsonStorage extends Storage {
 	}
 
 	/**
+	 * Returns the content of an arbitrary json file.
+	 * 
+	 * @param {string} file The full path to the json file which we want to read.
+	 */
+	readJsonFile(file) {
+		return existsSync(file) ? JSON.parse(readFileSync(file)) : {};
+	}
+
+	/**
 	 * Returns the name of the current file (with .json ending!).
 	 * 
 	 * @return {string} The name of the current file (with .json ending!).
@@ -125,22 +134,22 @@ module.exports = class JsonStorage extends Storage {
 	}
 
 	getData(file, quest) {
-		return new Data(this).getData(file, quest);
+		return (new Data(this)).getData(file, quest);
 	}
 
 	storeData(data) {
-		return new Data(this).storeData(data);
+		return (new Data(this)).storeData(data);
 	}
 
 	replaceData(file, data) {
-		return new Data(this).replaceData(file, data);
+		return (new Data(this)).replaceData(file, data);
 	}
 
 	deleteData(file, data) {
-		return new Data(this).deleteData(file, data);
+		return (new Data(this)).deleteData(file, data);
 	}
 
 	joinData(indices, data) {
-		return new Data(this).joinData(indices, data);
+		return (new Data(this)).joinData(indices, data);
 	}
 }

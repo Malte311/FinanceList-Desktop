@@ -10,6 +10,7 @@ module.exports = {
 	'paste': 'Paste',
 	'redo': 'Redo',
 	'reload': 'Reload',
+	'totalSum': 'Total sum',
 	'updateAvailable': 'Update available',
 	'updateMessage': 'There is a new version of FinanceList-Desktop available!',
 	'undo': 'Undo',
