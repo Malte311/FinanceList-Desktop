@@ -486,7 +486,7 @@ function showDatepicker( number ) {
  * This function updates the view when changes are made.
  */
 function updateView() {
-    textElements = require( "../text/balances_" + getLanguage() + ".json.js" );
+    textElements = require( "../text/balances_" + jsStorage.readPreference('language') + ".json.js" );
     // Display a list of currently available budgets.
     displayBudgets();
     // Display the budgets in detail.

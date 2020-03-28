@@ -3,7 +3,7 @@ const config = require(__dirname + '/config.js');
 
 // Set all labels in dependency of the currently selected language.
 let lang = (new JsonStorage()).readPreference('language');
-let textData = require(`${__dirname}/../../text/text_${lang}.json`);
+let textData = require(`${__dirname}/../../text/text_${lang}.js`);
 
 // This array will contain the menu at the end (we will push all the information to it).
 let menuTemplate = [];

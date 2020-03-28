@@ -65,4 +65,24 @@ module.exports = class Storage {
 	writeMainStorage(field, value) {
 		throw new Error('This function must be overridden!');
 	}
+
+	getData(file, quest) {
+		throw new Error('This function must be overridden!');
+	}
+
+	storeData(data) {
+		throw new Error('This function must be overridden!');
+	}
+
+	replaceData(file, data) {
+		throw new Error('This function must be overridden!');
+	}
+
+	deleteData(file, data) {
+		throw new Error('This function must be overridden!');
+	}
+
+	joinData(indices, data) {
+		throw new Error('This function must be overridden!');
+	}
 }

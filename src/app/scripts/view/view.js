@@ -1,27 +1,33 @@
-/**
- * This file provides some function for displaying elements.
- *
- * @module view
- * @author Malte311
- */
+const JsonStorage = require(__dirname + '/../storage/jsonStorage.js');
 
- /**
-  * This function adds a single zero ($2.5 => $2.50) for a more beautiful display style.
-  * @param {String} amount The amount to which we want to add a zero.
-  * @return {String} The amount with an additional zero, if neccessary.
-  */
-function beautifyAmount( amount ) {
-    var beautifiedAmount = amount.toString();
-    // Make sure that a decimal point exists
-    if ( amount.toString().indexOf( "." ) !== -1 ) {
-        // Less than two decimal places? Add a zero.
-        if ( amount.toString().split( "." )[1].length < 2 ) {
-            beautifiedAmount = amount.toString() + "0";
-        }
-    }
-    // No decimal point? => Add two zeros.
-    else {
-        beautifiedAmount = amount.toString() + ".00";
-    }
-    return beautifiedAmount;
+/**
+ * Class for displaying html templates and content.
+ */
+module.exports = class View {
+	constructor() {
+		this.storage = new JsonStorage();
+
+		let lang = this.storage.readPreference('language');
+		this.textData = require(__dirname + `/../../text/text_${lang}.js`);
+	}
+
+	/**
+	 * Updates the view.
+	 */
+	updateView() {
+		throw new Error('This function must be overridden!');
+	}
+
+	elt(type, props, ...children) {
+		let dom = document.createElement(type);
+		
+		if (props) Object.assign(dom, props);
+		
+		for (let child of children) {
+			if (typeof child != 'string') dom.appendChild(child);
+			else dom.appendChild(document.createTextNode(child));
+		}
+
+		return dom;
+	}
 }

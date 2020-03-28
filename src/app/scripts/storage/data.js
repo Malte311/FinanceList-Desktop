@@ -2,6 +2,10 @@
  * Class for handling all operations related to dealing with data.
  */
 module.exports = class Data {
+	constructor(storage) {
+		this.storage = storage;
+	}
+
 	/**
 	 * Reads user data (earnings/spendings) in a specified file.
 	 * 
@@ -13,7 +17,7 @@ module.exports = class Data {
 	 */
 	static getData( file, quest ) {
 		// Get the data object we want to access.
-		var dataPath = readPreference( "path" ) + Path.sep() + file;
+		var dataPath = this.storage.readPreference( "path" ) + Path.sep() + file;
 		// Before we continue, we make sure that the file exists.
 		if ( fs.existsSync( dataPath ) ) {
 			var dataStorageObj = JSON.parse( fs.readFileSync( dataPath ) );

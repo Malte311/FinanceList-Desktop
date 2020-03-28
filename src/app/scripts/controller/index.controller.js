@@ -11,17 +11,6 @@ const numberOfRecentSpendings = 5;
 const numberOfRecentEarnings = numberOfRecentSpendings;
 
 /**
- * This function initializes the page when its loaded. This means it sets the
- * language and the dynamic content.
- */
-function loadPage() {
-    // We will always set the language first.
-    setLanguage( readPreference( "language" ) );
-    // Display all the other content.
-	updateView();
-}
-
-/**
  * This function returns recent data
  * @param {String} type The type of transactions we want to get (earning/spending)
  * @return {JSON[]} An array containing the data.

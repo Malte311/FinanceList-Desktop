@@ -206,7 +206,7 @@ function displayChart( type ) {
  * This function updates the view anytime changes are made.
  */
 function updateView() {
-    textElements = require( "../text/index_" + getLanguage() + ".json.js" );
+    textElements = require( "../text/index_" + jsStorage.readPreference('language') + ".json.js" );
     // Display current balances.
     displayBalances();
     // Display a table of recent spendings.

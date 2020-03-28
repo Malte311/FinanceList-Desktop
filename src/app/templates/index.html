@@ -1,23 +1,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title> FinanceList - A finance managing tool </title>
+        <title>FinanceList &ndash; A finance managing tool</title>
         <link rel="shortcut icon" href="../img/tab.ico">
-        <meta charset="UTF-8">
-
-        <script language="javascript" src="../scripts/view/view.js"></script>
-        <script language="javascript" src="../scripts/controller/controller.js"></script>
-        <script language="javascript" src="../scripts/view/index.view.js"></script>
-        <script language="javascript" src="../scripts/controller/index.controller.js"></script>
+		<meta charset="UTF-8">
 
         <link rel="stylesheet" type="text/css" href="../style/w3.min.css">
         <link rel="stylesheet" type="text/css" href="../style/fontawesome/css/fontawesome-all.min.css">
         <link rel="stylesheet" type="text/css" href="../style/style.css">
     </head>
-    <!-- body -->
     <body class="w3-light-grey">
-        <!-- header -->
-        <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
+        <div class="w3-bar w3-top w3-indigo w3-large" style="z-index:4">
             <span class="w3-bar-item w3-center"> FinanceList </span>
             <span class="w3-bar-item w3-right">
                 <a onclick="setLanguage('en');updateView();" href="#"><img border="0" alt="EN" src="../img/us.ico" width=20px height=20px></a>
@@ -28,8 +21,8 @@
         <nav class="w3-sidebar w3-collapse w3-white w3-card w3-animate-left" style="z-index:3;width:200px;margin-top:0px;">
             <br>
             <div align="center" class="w3-container w3-row">
-                <span class="w3-xlarge" lang="en"> Overview </span>
-                <span class="w3-xlarge" lang="de"> Überblick </span>
+                <span class="w3-xlarge w3-text-green" lang="en"> Overview </span>
+                <span class="w3-xlarge w3-text-green" lang="de"> Überblick </span>
             </div>
             <hr style="border-color:black;">
             <div class="w3-bar-block">
@@ -83,17 +76,9 @@
             </div>
             <hr>
         </div>
-        <!-- JavaScript initialization -->
         <script>
-            // This function checks, if some recurring transactions need to be executed
-            // and executes them, if so. In addition to that, the user gets a notification in case
-			// there is a newer version of the application available.
-			const JsonStorage = require('../scripts/storage/jsonStorage.js');
-			let Updater = require('../scripts/updates/updater.js');
-			Updater.checkForUpdates();
-			Updater.execRecurrTransact();
-            const $ = require( 'jquery' );
-			loadPage();
+			let Startup = require(__dirname + '/../scripts/startup.js');
+			new Startup();
         </script>
     </body>
 </html>

@@ -56,7 +56,7 @@
         <script language="javascript" src="../lib/chartjs-plugin-labels.min.js"></script>
         <script>
 			const JsonStorage = require('../scripts/storage/jsonStorage.js');
-            var textElements = require( "../text/pdfview_" + getLanguage() + ".json.js" );
+            var textElements = require( "../text/pdfview_" + jsStorage.readPreference('language') + ".json.js" );
             setLanguage( readPreference( "language" ) );
             $( function() {
                 initPdfView();

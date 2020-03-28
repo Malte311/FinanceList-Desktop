@@ -12,7 +12,7 @@
 function displayChartType() {
     // Select the correct text in dependency of the language and the selected chart type.
     var currentChartType = readPreference( "chartType" );
-    switch ( getLanguage() ) {
+    switch ( jsStorage.readPreference('language') ) {
         case "en":
             // Capitalize the chart type and display it.
             $( "#currentChartType" ).text(

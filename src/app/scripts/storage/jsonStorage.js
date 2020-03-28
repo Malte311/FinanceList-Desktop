@@ -1,5 +1,6 @@
 const {appendFileSync, existsSync, readFileSync, writeFileSync} = require('fs');
 const {getCurrentTimestamp, timestampToFilename} = require(__dirname + '/../utils/dateHandler.js');
+const Data = require(__dirname + '/data.js');
 const Path = require(__dirname + '/paths.js');
 const Storage = require(__dirname + '/storage.js');
 
@@ -121,5 +122,25 @@ module.exports = class JsonStorage extends Storage {
 	 */
 	getCurrentFilename() {
 		return timestampToFilename(getCurrentTimestamp());
+	}
+
+	getData(file, quest) {
+		return new Data(this).getData(file, quest);
+	}
+
+	storeData(data) {
+		return new Data(this).storeData(data);
+	}
+
+	replaceData(file, data) {
+		return new Data(this).replaceData(file, data);
+	}
+
+	deleteData(file, data) {
+		return new Data(this).deleteData(file, data);
+	}
+
+	joinData(indices, data) {
+		return new Data(this).joinData(indices, data);
 	}
 }

@@ -48,24 +48,6 @@ function setLanguage( language ) {
 }
 
 /**
- * This function returns the currently selected language.
- * @return {String} The currently selected language.
- */
-function getLanguage() {
-    // Find out, which language is selected and return it.
-    var currentLanguage = readPreference( "language" );
-    switch ( currentLanguage ) {
-        case "en":
-            return "en";
-        case "de":
-            return "de";
-        // We want English to be our default language.
-        default:
-            return "en";
-    }
-}
-
-/**
  * This function returns the currency sign.
  * @return {String} An HTML representation of the currency sign.
  */
