@@ -79,7 +79,7 @@ function setPath() {
     // Make sure that a new path was selected and that the new path is a different one than the old one.
     if ( newPath !== null && newPath !== undefined && newPath[0] !== readPreference( "path" ) ) {
         // Move all files to the new location
-        moveFiles( readPreference( "path" ), newPath[0] );
+        Path.moveFiles( readPreference( "path" ), newPath[0] );
         // Save the new path in the configuration file.
         // (Since newPath is a one element array containing the path, we just take
         // the path instead of the whole array.)

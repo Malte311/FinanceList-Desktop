@@ -1,9 +1,11 @@
 module.exports = {
 	'close': 'Schließen',
 	'copy': 'Kopieren',
+	'cross-device-err': 'Ger\u00e4te\u00fcbergreifendes Verschieben ist nicht m\u00f6glich.',
 	'cut': 'Ausschneiden',
 	'download': 'Herunterladen',
 	'edit': 'Bearbeiten',
+	'error': 'Fehler',
 	'exit': 'Beenden',
 	'later': 'Sp\u00e4ter',
 	'minimize': 'Minimieren',

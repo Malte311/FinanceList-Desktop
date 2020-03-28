@@ -42,7 +42,7 @@ function addText() {
 function createCashflowChart() {
 	var data = [];
 	if (selectedYear != null) {
-		var jsonFiles = getJSONFiles();
+		var jsonFiles = getJsonFiles();
 		for (var i = 0; i < jsonFiles.length; i++) {
 			if (jsonFiles[i].substring(jsonFiles[i].indexOf(".") + 1) == selectedYear ) {
 				data = data.concat(
@@ -88,7 +88,7 @@ function createBudgetChart() {
 	var labels = [], totalEarnings = [], totalSpendings = [], data = [];
 	
 	if (selectedYear != null) {
-		var jsonFiles = getJSONFiles();
+		var jsonFiles = getJsonFiles();
 		for ( var i = 0; i < currentBudgets.length; i++ ) {
 			data = [];
 
@@ -151,7 +151,7 @@ function createSurplusChart() {
     var labels = [], totalSurplus = [], data = [];
 
 	if ( selectedYear != null ) {
-		var jsonFiles = getJSONFiles();
+		var jsonFiles = getJsonFiles();
 		for ( var i = 0; i < currentBudgets.length; i++ ) {
 			data = [];
 
@@ -293,4 +293,15 @@ function printToPDF() {
             }
         });
     }
+}
+
+/**
+ * Writes data to PDF files.
+ * @param {String} pdfPath Directory in which the PDF should be saved.
+ * @param {Object} data The data we want to print to PDF.
+ */
+function writePDF( pdfPath, data ) {
+	let fs = require( 'fs' );
+    pdfPath = pdfPath[0] + Path.sep() + (selectedMonth != null ? selectedMonth : selectedYear) + ".pdf";
+    fs.writeFileSync( pdfPath, data );
 }

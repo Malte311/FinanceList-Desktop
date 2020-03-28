@@ -288,7 +288,7 @@ function displayContent( displayType, budget, type, startDate, endDate, amountFr
                               "0" + (endDate.getMonth() + 1) :
                               (endDate.getMonth() + 1));
         // For comparing, we need to reverse file names.
-        var allFiles = getJSONFiles();
+        var allFiles = getJsonFiles();
         for ( var i = 0; i < allFiles.length; i++ ) {
             // Reverse file name.
             var tmp = allFiles[i].split( "." )[1] + "." + allFiles[i].split( "." )[0];

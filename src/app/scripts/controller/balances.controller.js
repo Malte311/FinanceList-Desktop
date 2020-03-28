@@ -430,7 +430,7 @@ function deleteBudget( name ) {
         // Close the dialog (since this function is only executed when the OK button is pressed)
         $( this ).dialog( "close" );
         // Now we can delete all data for this budget (in the background).
-        var allFiles = getJSONFiles();
+        var allFiles = getJsonFiles();
         for ( var i = 0; i < allFiles.length; i++ ) {
             // Filter the data. We will add all budgets, except the deleted one to the quest.
             var budgets = readMainStorage( "budgets" );
@@ -534,7 +534,7 @@ function renameBudget( name ) {
         // Close the dialog (since this function is only executed when the OK button is pressed)
         $( this ).dialog( "close" );
         // Now we can rename all data for this budget (in the background).
-        var allFiles = getJSONFiles();
+        var allFiles = getJsonFiles();
         for ( var i = 0; i < allFiles.length; i++ ) {
             // Filter the data. First, we get ALL data (earning OR spending will deliver everything).
             var quest = { connector : "or", params : [["type", "earning"],["type", "spending"]] };
@@ -750,7 +750,7 @@ function activateDateRangePicker( id ) {
             {text: textElementsLocal[8],
                 dateStart: function() {
                     var date = DateHandler.timestampToString(JSON.parse(fs.readFileSync(
-                        readPreference( "path" ) + Path.sep() + getJSONFiles()[0] + ".json")[0].date).split( "." );
+                        readPreference( "path" ) + Path.sep() + getJsonFiles()[0] + ".json")[0].date).split( "." );
                     return moment( date[2] + "-" + date[1] + "-" + date[0] )
                 },
                 dateEnd: function() {
@@ -986,7 +986,7 @@ function compare( s1, s2, n ) {
 function chooseMonth() {
     var content = textElements.chooseMonthText;
     content += "<br><select class=\"w3-select\" id=\"monthSelect\">";
-    var jsonFiles = getJSONFiles();
+    var jsonFiles = getJsonFiles();
     var currentFileName = getCurrentFilename();
     currentFileName = currentFileName.substring( 0, currentFileName.lastIndexOf( "." ) );
 
@@ -1011,7 +1011,7 @@ function chooseMonth() {
  */
 function chooseYear() {
 	var content = textElements.chooseYearText + "<br><select class=\"w3-select\" id=\"yearSelect\">";
-    var jsonFiles = getJSONFiles();
+    var jsonFiles = getJsonFiles();
 	var currentYear = getCurrentFilename();
 	currentYear = currentYear.substring( currentYear.indexOf( "." ) + 1, currentYear.lastIndexOf( "." ) );
 	var alreadySeen = [];

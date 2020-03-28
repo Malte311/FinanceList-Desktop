@@ -1,9 +1,11 @@
 module.exports = {
 	'close': 'Close',
 	'copy': 'Copy',
+	'cross-device-err': 'Cross-device link not permitted.',
 	'cut': 'Cut',
 	'download': 'Download',
 	'edit': 'Edit',
+	'error': 'Error',
 	'exit': 'Exit',
 	'later': 'Later',
 	'minimize': 'Minimize',

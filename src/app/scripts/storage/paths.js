@@ -4,6 +4,10 @@ const {sep} = require('path');
  * Class for handling all things related to paths.
  */
 module.exports = class Path {
+	constructor(storage) {
+		this.storage = storage;
+	}
+
 	/**
 	 * Returns the path to the user data directory.
 	 * 
@@ -48,17 +52,57 @@ module.exports = class Path {
 	 * @param {string} newPath The path which should be created.
 	 */
 	static createPath(newPath) {
-		let fs = require('fs');
+		let {existsSync, mkdirSync} = require('fs');
 		let toBeCreated = (require('os').platform() === 'win32') ? '' : '/';
 
 		newPath.split(Path.sep()).forEach(folder => {
 			if (folder.length) {
 				toBeCreated += (folder + Path.sep());
 				
-				if (!fs.existsSync(toBeCreated)) {
-					fs.mkdirSync(toBeCreated);
+				if (!existsSync(toBeCreated)) {
+					mkdirSync(toBeCreated);
 				}
 			}
 		});
+	}
+
+	/**
+	 * Moves all json files from a source directory to a target directory.
+	 * 
+	 * @param {string} from The source directory.
+	 * @param {string} to The target directory.
+	 */
+	moveJsonFiles(from, to) {
+		let {readdirSync, renameSync} = require('fs');
+		let allFiles = readdirSync(from);
+
+		for (let i = 0; i < allFiles.length; i++) {
+			if (allFiles[i].endsWith('.json')) {
+				try {
+					renameSync(from + Path.sep() + allFiles[i], to + Path.sep() + allFiles[i]);
+				}
+				catch (err) { // Cross-device linking will cause an error.
+					let {dialog} = require('electron').remote;
+
+					let lang = this.storage.readPreference('language');
+					let textData = require(__dirname + `/../../text/text_${lang}.json`);
+					
+					dialog.showErrorBox(textData['error'], textData['cross-device-err']);
+					break;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Returns all json files in a given directory.
+	 * 
+	 * @param {string} dir The directory which contents we want to read.
+	 * @return {array} An array containing the names of all json files in the given directory.
+	 */
+	static listJsonFiles(dir) {
+		let {readdirSync} = require('fs');
+		
+		return readdirSync(dir).filter(file => file.endsWith('.json'));
 	}
 }

@@ -1,4 +1,6 @@
 const $ = require('jquery');
+const Data = require(__dirname + '/../data/data.js');
+const DataHandler = require(__dirname + '/../data/dataHandler.js');
 const View = require(__dirname + '/view.js');
 
 /**
@@ -26,12 +28,16 @@ module.exports = class IndexView extends View {
 	 */
 	displayBalances() {
 		$('#currentBalances').html('');
-		// Get all budgets to iterate over them.
-		var currentBudgets = this.storage.readMainStorage( 'budgets' );
-		var totalSum = 0;
-		// Display the monthly surplus for every budget.
-		for ( var i = 0; i < currentBudgets.length; i++ ) {
+
+		let currentBudgets = this.storage.readMainStorage('budgets');
+		
+		let totalSum = 0;
+		for (let i = 0; i < currentBudgets.length; i++) {
 			// Set the name of the budget as a heading.
+
+			// this.elt('h5', null, this.elt('i', {class: 'fas fa-angle-double-right w3-text-deep-purple'}), currentBudgets[i][0])
+			// $( '#currentBalances' ).append(this.elt('h5', null, this.elt('i', {class: 'fas fa-angle-double-right w3-text-deep-purple'})), currentBudgets[i][0]);
+
 			$( '#currentBalances' ).append(
 				'<h5><i class=\'fas fa-angle-double-right w3-text-deep-purple\'></i>' + ' ' +
 					currentBudgets[i][0] +
@@ -39,14 +45,21 @@ module.exports = class IndexView extends View {
 			);
 			// Find out the sum of earnings and spendings in this month,
 			// so we can calculate the surplus.
-			var quest = { connector:'or', params:[['budget', currentBudgets[i][0]]] };
-			var dataObj = this.storage.getData( this.storage.getCurrentFilename(), quest );
+			let quest = { connector: 'or', params: [['budget', currentBudgets[i][0]]] };
+			let dataObj = this.storage.getData( this.storage.getCurrentFilename(), quest );
+
+			let dH = new DataHandler(new Data(this.storage));
+			let earnings = dH.getMonthlyEntries(currentBudgets[i][0], 'earning')
+				.reduce((prev, curr) => prev.amount + curr.amount, 0);
+			
+			console.log(earnings);
+
 			// Add all earnings and spendings from this month.
-			var totalEarningsThisMonth = 0, totalSpendingsThisMonth = 0;
+			let totalEarningsThisMonth = 0, totalSpendingsThisMonth = 0;
 			// Make sure, that data exists. Otherwise we will stay at a surplus of zero.
 			if ( dataObj !== undefined ) {
 				// Now, add up all the amounts for earnings and spendings each.
-				for ( var j = 0; j < dataObj.length; j++ ) {
+				for ( let j = 0; j < dataObj.length; j++ ) {
 					// Earning? Increase totalEarningsThisMonth.
 					if ( dataObj[j].type === 'earning' ) {
 						totalEarningsThisMonth =
@@ -61,8 +74,8 @@ module.exports = class IndexView extends View {
 			}
 			// Now, find out if the difference between earnings and spendings is
 			// either positive, negative or neutral (zero).
-			var percentage = 100;
-			var color;
+			let percentage = 100;
+			let color;
 			// Positive balance for this month:
 			if ( totalEarningsThisMonth - totalSpendingsThisMonth > 0 ) {
 				// Calculate the ratio of how much money is left from this months
@@ -82,7 +95,7 @@ module.exports = class IndexView extends View {
 			}
 			// We want to display $2.50 instead of $2.50000000002 (this may happen since we use floating point numbers),
 			// so we round the balance.
-			var balance = Math.round( (totalEarningsThisMonth - totalSpendingsThisMonth) * 1e2 ) / 1e2;
+			let balance = Math.round( (totalEarningsThisMonth - totalSpendingsThisMonth) * 1e2 ) / 1e2;
 			totalSum += balance;
 			balance = this.beautifyAmount( balance );
 

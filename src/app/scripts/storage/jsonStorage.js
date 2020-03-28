@@ -1,6 +1,6 @@
 const {appendFileSync, existsSync, readFileSync, writeFileSync} = require('fs');
 const {getCurrentTimestamp, timestampToFilename} = require(__dirname + '/../utils/dateHandler.js');
-const Data = require(__dirname + '/data.js');
+const Data = require(__dirname + '/../data/data.js');
 const Path = require(__dirname + '/paths.js');
 const Storage = require(__dirname + '/storage.js');
 
@@ -119,9 +119,32 @@ module.exports = class JsonStorage extends Storage {
 	 * Returns the content of an arbitrary json file.
 	 * 
 	 * @param {string} file The full path to the json file which we want to read.
+	 * @return {object} The contents of the file (as a json object). If the file does not
+	 * exist, an empty json object will be returned.
 	 */
 	readJsonFile(file) {
 		return existsSync(file) ? JSON.parse(readFileSync(file)) : {};
+	}
+
+	/**
+	 * Returns all json files which have data in it, sorted by their name (date).
+	 * 
+	 * @return {array} Array of the file names of all json files with data in it (with .json ending!).
+	 */
+	getJsonFiles() {
+		return Path.listJsonFiles(this.readPreference('path'))
+			.filter(e => e !== 'mainstorage.json')
+			.sort((a, b) => {
+				let aSplit = a.split('.');
+				let bSplit = b.split('.');
+
+				if (aSplit[1] < bSplit[1]) return -1; // Sort by year first.
+				if (aSplit[1] > bSplit[1]) return  1;
+				if (aSplit[0] < bSplit[0]) return -1; // Then by month.
+				if (aSplit[0] > bSplit[0]) return  1;
+				
+				return 0;
+			});
 	}
 
 	/**

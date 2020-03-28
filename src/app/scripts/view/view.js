@@ -50,6 +50,14 @@ module.exports = class View {
 		}
 	}
 
+	/**
+	 * Creates a new dom element.
+	 * 
+	 * @param {string} type The type of the new element (e.g. h1, p, div).
+	 * @param {object} props Properties of the new element (e.g. {class: 'someClass'}).
+	 * @param {...any} children Children of the new element (either more dom elements or
+	 * the text of the new element).
+	 */
 	elt(type, props, ...children) {
 		let dom = document.createElement(type);
 		

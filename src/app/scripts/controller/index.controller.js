@@ -18,8 +18,8 @@ const numberOfRecentEarnings = numberOfRecentSpendings;
 function getRecentTransactions( type ) {
     // Get the correct limit, in case the limits are different.
     var limit = (type === "earning" ? numberOfRecentEarnings : numberOfRecentSpendings);
-    // Get all .json files which contain data (mainStorage is excluded in getJSONFiles).
-    var JSONFiles = getJSONFiles();
+    // Get all .json files which contain data (mainStorage is excluded in getJsonFiles).
+    var JSONFiles = getJsonFiles();
     var newJSONFiles = [];
     // Before searching, we need to sort the files so we can start searching in the newest file.
     for ( var i = 0; i < JSONFiles.length; i++ ) {
