@@ -1,4 +1,4 @@
-const DateHandler = require(__dirname + '/../utils/dateHandler.js');
+const {getCurrentTimestamp} = require(__dirname + '/../utils/dateHandler.js');
 
 /**
  * Class for loading and storing data.
@@ -15,7 +15,7 @@ module.exports = class Storage {
 		// Default storage object
 		this.defStor = {
 			'budgets': [['checking account', 0.0]],
-			'currentDate': DateHandler.getCurrentTimestamp(),
+			'currentDate': getCurrentTimestamp(),
 			'allTimeEarnings': [['checking account', 0.0]],
 			'allTimeSpendings': [['checking account', 0.0]],
 			'allocationOn': false,
@@ -26,18 +26,42 @@ module.exports = class Storage {
 		};
 	}
 
+	/**
+	 * Reads a field in the settings.
+	 * 
+	 * @param {string} pref The name of the field we want to access.
+	 * @return {string} The corresponding value of the field.
+	 */
 	readPreference(pref) {
 		throw new Error('This function must be overridden!');
 	}
 
+	/**
+	 * Saves a value in the settings.
+	 * 
+	 * @param {string} name The name of the field we want to access.
+	 * @param {any} value The value we want to set for the corresponding field.
+	 */
 	storePreference(name, value) {
 		throw new Error('This function must be overridden!');
 	}
 
+	/**
+	 * Reads a specified field in the mainStorage.
+	 * 
+	 * @param {string} field The field we want to read.
+	 * @return {string} The corresponding value for the field.
+	 */
 	readMainStorage(field) {
 		throw new Error('This function must be overridden!');
 	}
 
+	/**
+	 * Writes to the mainstorage and sets a new value for the specified field.
+	 * 
+	 * @param {string} field The field which value we want to set.
+	 * @param {any} value The new value for the specified field.
+	 */
 	writeMainStorage(field, value) {
 		throw new Error('This function must be overridden!');
 	}

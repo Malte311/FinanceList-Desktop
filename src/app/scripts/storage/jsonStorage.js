@@ -1,5 +1,5 @@
-const fs = require('fs');
-const DateHandler = require(__dirname + '/../utils/dateHandler.js');
+const {appendFileSync, existsSync, readFileSync, writeFileSync} = require('fs');
+const {getCurrentTimestamp, timestampToFilename} = require(__dirname + '/../utils/dateHandler.js');
 const Path = require(__dirname + '/paths.js');
 const Storage = require(__dirname + '/storage.js');
 
@@ -17,16 +17,16 @@ module.exports = class JsonStorage extends Storage {
 		});
 
 		let currFileDir = this.readPreference('path') + Path.sep();
-		if (!fs.existsSync(currFileDir)) {
+		if (!existsSync(currFileDir)) {
 			Path.createPath(currFileDir);
 		}
 
-		let currFile = currFileDir + DateHandler.timestampToFilename(DateHandler.getCurrentTimestamp());
-		if (!fs.existsSync(currFile)) {
-			fs.appendFileSync(currFile, JSON.stringify([], null, 4));
+		let currFile = currFileDir + timestampToFilename(getCurrentTimestamp());
+		if (!existsSync(currFile)) {
+			appendFileSync(currFile, JSON.stringify([], null, 4));
 		}
 
-		this.writeMainStorage('currentDate', DateHandler.getCurrentTimestamp());
+		this.writeMainStorage('currentDate', getCurrentTimestamp());
 	}
 
 	/**
@@ -37,16 +37,16 @@ module.exports = class JsonStorage extends Storage {
 	 */
 	readPreference(pref) {
 		let storagePath = Path.getStoragePath();
-		if (!fs.existsSync(storagePath)) { // Create storage directory if it is missing.
+		if (!existsSync(storagePath)) { // Create storage directory if it is missing.
 			Path.createPath(storagePath);
 		}
 
 		let settingsPath = Path.getSettingsFilePath();
-		if (!fs.existsSync(settingsPath)) { // Create settings.json if it is missing.
-			fs.appendFileSync(settingsPath, JSON.stringify(this.defPref, null, 4));
+		if (!existsSync(settingsPath)) { // Create settings.json if it is missing.
+			appendFileSync(settingsPath, JSON.stringify(this.defPref, null, 4));
 		}
 		
-		return JSON.parse(fs.readFileSync(settingsPath))[pref];
+		return JSON.parse(readFileSync(settingsPath))[pref];
 	}
 
 	/**
@@ -57,19 +57,19 @@ module.exports = class JsonStorage extends Storage {
 	 */
 	storePreference(name, value) {
 		let storagePath = Path.getStoragePath();
-		if (!fs.existsSync(storagePath)) { // Create storage directory if it is missing.
+		if (!existsSync(storagePath)) { // Create storage directory if it is missing.
 			Path.createPath(storagePath);
 		}
 
 		let settingsPath = Path.getSettingsFilePath();
-		if (!fs.existsSync(settingsPath)) { // Create settings.json if it is missing.
-			fs.appendFileSync(settingsPath, JSON.stringify(this.defPref, null, 4));
+		if (!existsSync(settingsPath)) { // Create settings.json if it is missing.
+			appendFileSync(settingsPath, JSON.stringify(this.defPref, null, 4));
 		}
 
-		let settingsObj = JSON.parse(fs.readFileSync(settingsPath));
+		let settingsObj = JSON.parse(readFileSync(settingsPath));
 		settingsObj[name] = value;
 		
-		fs.writeFileSync(settingsPath, JSON.stringify(settingsObj, null, 4));
+		writeFileSync(settingsPath, JSON.stringify(settingsObj, null, 4));
 	}
 
 	/**
@@ -80,16 +80,16 @@ module.exports = class JsonStorage extends Storage {
 	 */
 	readMainStorage(field) {
 		let storagePath = this.readPreference('path');
-		if (!fs.existsSync(storagePath)) { // Create storage directory if it is missing.
+		if (!existsSync(storagePath)) { // Create storage directory if it is missing.
 			Path.createPath(storagePath);
 		}
 
 		let mainStoragePath = storagePath + Path.sep() + 'mainstorage.json';
-		if (!fs.existsSync(mainStoragePath)) { // Create mainstorage.json if it is missing.
-			fs.appendFileSync(mainStoragePath, JSON.stringify(this.defStor, null, 4));
+		if (!existsSync(mainStoragePath)) { // Create mainstorage.json if it is missing.
+			appendFileSync(mainStoragePath, JSON.stringify(this.defStor, null, 4));
 		}
 
-		return JSON.parse(fs.readFileSync(mainStoragePath))[field];
+		return JSON.parse(readFileSync(mainStoragePath))[field];
 	}
 
 	/**
@@ -100,18 +100,18 @@ module.exports = class JsonStorage extends Storage {
 	 */
 	writeMainStorage(field, value) {
 		let storagePath = this.readPreference('path');
-		if (!fs.existsSync(storagePath)) { // Create storage directory if it is missing.
+		if (!existsSync(storagePath)) { // Create storage directory if it is missing.
 			Path.createPath(storagePath);
 		}
 
 		let mainStoragePath = storagePath + Path.sep() + 'mainstorage.json';
-		if (!fs.existsSync(mainStoragePath)) { // Create mainstorage.json if it is missing.
-			fs.appendFileSync(mainStoragePath, JSON.stringify(this.defStor, null, 4));
+		if (!existsSync(mainStoragePath)) { // Create mainstorage.json if it is missing.
+			appendFileSync(mainStoragePath, JSON.stringify(this.defStor, null, 4));
 		}
 
-		let mainStorageObj = JSON.parse(fs.readFileSync(mainStoragePath));
+		let mainStorageObj = JSON.parse(readFileSync(mainStoragePath));
 		mainStorageObj[field] = value;
-		fs.writeFileSync(mainStoragePath, JSON.stringify(mainStorageObj, null, 4));
+		writeFileSync(mainStoragePath, JSON.stringify(mainStorageObj, null, 4));
 	}
 
 	/**
@@ -120,6 +120,6 @@ module.exports = class JsonStorage extends Storage {
 	 * @return {string} The name of the current file (with .json ending!).
 	 */
 	getCurrentFilename() {
-		return DateHandler.timestampToFilename(DateHandler.getCurrentTimestamp());
+		return timestampToFilename(getCurrentTimestamp());
 	}
 }

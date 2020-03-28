@@ -35,7 +35,7 @@ module.exports = class Updater {
 	static showUpdateNotification() {
 		let textdata = require(__dirname + '/../text/updates_' + getLanguage() + '.json.js');
 		
-		let { dialog } = require('electron').remote;
+		let {dialog} = require('electron').remote;
 		dialog.showMessageBox({
 			type: 'info',
 			title: textdata['updateAvailable'],

@@ -1,4 +1,4 @@
-const pathMod = require('path');
+const {sep} = require('path');
 
 /**
  * Class for handling all things related to paths.
@@ -20,7 +20,7 @@ module.exports = class Path {
 	 * @return {string} The path separator for the currently used operating system.
 	 */
 	static sep() {
-		return pathMod.sep;
+		return sep;
 	}
 
 	/**

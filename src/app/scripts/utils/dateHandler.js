@@ -1,4 +1,4 @@
-const Path = require(__dirname + '/../storage/paths.js');
+const {sep} = require(__dirname + '/../storage/paths.js');
 
 /**
  * Class for dealing with times and dates.
@@ -38,7 +38,7 @@ module.exports = class DateHandler {
 	 * @return {number} A unique timestamp generated from the original timestamp.
 	 */
 	static createUniqueTimestamp(ts) {
-		let relatedFile = readPreference('path') + Path.sep() + DateHandler.timestampToFilename(ts);
+		let relatedFile = readPreference('path') + sep() + DateHandler.timestampToFilename(ts);
 		
 		// A single for-loop is sufficient because the file is sorted by date.
 		// So if we add one, we can detect new duplicates in the following iterations

@@ -1,6 +1,4 @@
-const isRunningInAsar = require('electron-is-running-in-asar');
-
 module.exports = {
-	devMode: !isRunningInAsar(),
+	devMode: process.mainModule.filename.indexOf('app.asar') !== -1,
 	log: false
 }
