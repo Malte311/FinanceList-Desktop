@@ -5,8 +5,6 @@
  * @author Malte311
  */
 
-// Module to create charts.
-const Chart = require( 'chart.js' );
 // Needed for further modules.
 const { remote } = require( 'electron' );
 // Module for dialogues (needed when setting the path or to display error messages).
@@ -14,13 +12,10 @@ const { dialog } = require( 'electron' ).remote;
 // Neccessary to set the window size.
 const win = remote.getCurrentWindow();
 // This saves available colors for charts.
-const colors = ['rgba(255, 99, 132, 1)', 'rgba(0, 162, 235, 1)', 'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)',
-                'rgba(255, 100, 170, 1)', 'rgba(255, 255, 102, 1)', 'rgba(80, 189, 255, 1)'];
-const colorSeparator = 'rgba(150, 255, 120, 1)';
+
 const maxStrLen = 100;
 const maxSWLen = 30;
-var borderWidth = 0;
+
 
 /**
  * This function sets the language.
@@ -45,77 +40,6 @@ function setLanguage( language ) {
     }
     // Save the new language.
     storePreference( "language", language );
-}
-
-/**
- * This function returns the currency sign.
- * @return {String} An HTML representation of the currency sign.
- */
-function getCurrencySign() {
-    // Find out, which currency is selected and choose the appropriate sign.
-    var currentCurrency = readPreference( "currency" );
-    switch ( currentCurrency ) {
-        case "Euro":
-            return "\u20AC";
-        case "Dollar":
-            return "\u0024";
-        case "Pound":
-            return "\u00A3";
-        default:
-            return "\u20AC";
-    }
-}
-
-/**
- * Creates a chart to visualize the input data.
- * @param {Object} canvas The canvas which contains the chart.
- * @param {String[]} categories The labels for the data.
- * @param {float[]} dataset The data that will be visualized.
- * @param {String[]} bgcolors Backgroundcolors in the diagram.
- * @param {String[]} bdcolors Bordercolors in the diagram.
- * @param {String} charttype The type of the chart.
- */
-function createChart( canvas, categories, dataset, bgcolors, bdcolors, charttype ) {
-    // Make sure, that enough colors are available.
-    while ( dataset.length > bgcolors.length ) {
-        // Add the same colors again and again until we have enough colors.
-        bgcolors = bgcolors.concat( colors );
-    }
-    // Make sure, that two adjacent parts do not have the same color.
-    if ( bgcolors[dataset.length - 1] == bgcolors[0] ) {
-        bgcolors[dataset.length - 1] = colorSeparator;
-    }
-    // Get the same colors for the background.
-    bdcolors = bgcolors;
-
-    // Create a new chart.
-    new Chart( canvas, {
-        type: charttype,
-        data: {
-            labels: categories,
-            datasets: [{
-                data: dataset,
-                backgroundColor: bgcolors,
-                borderColor: bdcolors,
-                borderWidth: borderWidth
-            }]
-        },
-        options: {
-            tooltips: {
-                callbacks: {
-                    label: function( tooltipItem, chartData ) {
-                        return chartData.labels[tooltipItem.index] + ': ' +
-                               chartData.datasets[0].data[tooltipItem.index] + getCurrencySign();
-                    }
-                }
-            },
-            legend: {
-                    display: false
-            },
-            // Don't show axes.
-            display: false
-        }
-    });
 }
 
 /**

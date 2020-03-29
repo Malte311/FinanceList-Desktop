@@ -8,58 +8,6 @@
 var textElements;
 
 /**
- * This function displays the recent spendings and earnings, if they exist.
- * @param {String} type The type of transactions we want to display (earning/spending)
- */
-function displayRecentTransactions( type ) {
-    // Get recent data.
-    var data = getRecentTransactions( type );
-    // Make sure that some data exists.
-    if ( data.length > 0 ) {
-        // Get the correct limit, in case the limits are different.
-        var limit = (type === "earning" ? numberOfRecentEarnings : numberOfRecentSpendings);
-        // We will append the HTML content to this string.
-        var recentTransactionsTable = "<table class=\"w3-table-all w3-striped w3-white\">";
-		
-		let DateHandler = require('../scripts/utils/dateHandler.js');
-		// Now, we just need to display the data. Remember that new data is at the end, so
-        // we need to loop backwards.
-        for ( var i = data.length - 1; i >= 0; i-- ) {
-            var amount = data[i].amount.toFixed(2);
-            recentTransactionsTable += "<tr><td><i class=\"far fa-money-bill-alt w3-text-green w3-large\"></i>" +
-                                       " " + data[i].name + " </td>" +
-                                       "<td><i>" + amount + getCurrencySign() + "</i></td>" +
-                                       "<td><i>" + DateHandler.timestampToString( data[i].date ) + "</i></td></tr>";
-            // Display only limit many items (defined in index.controller.js).
-            if ( data.length - limit === i ) break;
-        }
-        // Display the table with recent transactions.
-        $( "#" + type + "Recent" ).html(
-            "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " +
-            (type == "spending" ?
-            textElements.recentSpendings :
-            textElements.recentEarnings) +
-            " </h3>" +
-            recentTransactionsTable + "</table>"
-        );
-    }
-    // Display a message that no data exists yet.
-    else {
-        $( "#" + type + "Recent" ).html(
-            "<h3><i class=\"fa fa-arrow-right w3-text-green w3-large\"></i> " +
-            (type == "spending" ?
-            textElements.recentSpendings :
-            textElements.recentEarnings) +
-            " </h3><i>" +
-            (type == "spending" ?
-            textElements.noRecentSpendings :
-            textElements.noRecentEarnings) +
-            "</i>"
-        );
-    }
-}
-
-/**
  * This function displays a chart which visualizes all time transactions.
  * @param {String} type The type of transactions we want to visualize (earning/spending)
  */
