@@ -36,10 +36,18 @@ module.exports = class Template {
 		}, text));
 	}
 
-	table(props) {
+	/**
+	 * Returns a table of given rows.
+	 * 
+	 * @param {array} rows An array of strings representing the rows of the table.
+	 * @return {object} The table in form of a dom element.
+	 */
+	table(rows) {
 		return this.view.elt('table', {
-			
-		})
+			class: 'table table-striped'
+		}, ...rows.map(row =>
+			this.view.elt('tr', {}, ...row.map(elem =>
+				this.view.elt('td', {}, elem)))));
 	}
 
 	/**
@@ -91,6 +99,8 @@ module.exports = class Template {
 				return 'fa fa-arrow-right';
 			case 'creditcard':
 				return 'fas fa-credit-card';
+			case 'moneybill':
+				return 'far fa-money-bill-alt';
 			default:
 				return '';
 		}

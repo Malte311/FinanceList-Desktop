@@ -70,19 +70,12 @@ module.exports = class IndexView extends View {
 		let data = this.dataHandle.getRecentTrans(limit, type);
 		if (data.length) {
 			let {timestampToString} = require(__dirname + '/../utils/dateHandler.js');
-			let recentTransactionsTable = "<table class=\"w3-table-all w3-striped w3-white\">";
-
-			for (let i = data.length - 1; i >= 0; i--) { // New data is at the end.
-				let amount = data[i].amount.toFixed(2);
-				recentTransactionsTable += "<tr><td><i class=\"far fa-money-bill-alt w3-text-green w3-large\"></i>" +
-										   " " + data[i].name + " </td>" +
-										   "<td><i>" + this.printNum(amount) + "</i></td>" +
-										   "<td><i>" + timestampToString( data[i].date ) + "</i></td></tr>";
-				// Display only limit many items (defined in index.controller.js).
-				if ( data.length - limit === i ) break;
-			}
-			// Display the table with recent transactions.
-			$( id ).append(recentTransactionsTable + "</table>");
+			
+			$(id).append(this.template.table(data.reverse().map(d => [
+				this.template.toHtmlStr(this.template.icon('moneybill', 'green')) + d.name,
+				this.printNum(d.amount),
+				timestampToString(d.date)
+			]).slice(0, limit))); // Displays the table.
 		}
 		else {
 			// Display a message that no earnings/spendings exist.
