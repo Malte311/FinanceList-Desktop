@@ -61,7 +61,7 @@ function displayBudgets() {
     var overallBalance = 0;
     // Iterate over all budgets to display them.
     for ( var i = 0; i < currentBudgets.length; i++ ) {
-        var balance = beautifyAmount( currentBudgets[i][1] );
+        var balance = currentBudgets[i][1].toFixed(2);
         overallBalance += currentBudgets[i][1];
         // Display all budgets. The first one is a standard budget and can therefore not
         // be deleted. Note that currentBudgets is an array of arrays
@@ -88,7 +88,7 @@ function displayBudgets() {
     $( "#currentBudgets" ).html( content );
 
     // Display the overall balance
-    overallBalance = beautifyAmount( Math.round( overallBalance * 1e2 ) / 1e2 );
+    overallBalance = (Math.round( overallBalance * 1e2 ) / 1e2).toFixed(2);
     $( "#overallBalance" ).html(
         "<br>" + textElements.overallBalance + ": " + overallBalance + getCurrencySign()
     );
@@ -117,7 +117,7 @@ function displayRecurringTransactions() {
                       "</tr>";
         // Iterate over all recurring transactions to display them.
         for ( var i = 0; i < recurringTransactions.length; i++ ) {
-            var amount = beautifyAmount( recurringTransactions[i].amount );
+            var amount = recurringTransactions[i].amount.toFixed(2);
             // Set the type in dependecy of the current language.
             var type = ( recurringTransactions[i].type === "earning" ?
                          textElements.recurringTransactionsContent[0] :
@@ -354,7 +354,7 @@ function displayContent( displayType, budget, type, startDate, endDate, amountFr
         else if ( displayType === "table" ) {
             displayTable( data );
         }
-        totalSum = beautifyAmount( Math.round( totalSum * 1e2 ) / 1e2 );
+        totalSum = totalSum.toFixed(2);
         $( '#mainContent' ).append(
             "<br>" +
             "<center>" +
@@ -376,7 +376,7 @@ function displayGraph( data ) {
     // Get the dataset (amounts) and labels (names).
     for ( var i = 0; i < data.length; i++ ) {
         // Add the amount and name for our graph.
-        var amount = beautifyAmount( data[i].amount );
+        var amount = data[i].amount.toFixed(2);
         dataset.push( amount );
         labels.push( data[i].name );
     }
@@ -397,7 +397,7 @@ function displayTable( data ) {
     // Get the content for the table.
     var tableContentHTML = "";
     for ( var j = 0; j < data.length; j++ ) {
-        var amount = beautifyAmount( data[j].amount );
+        var amount = data[j].amount.toFixed(2);
 		// Add the data to our table.
         tableContentHTML += "<tr class=\"w3-hover-light-blue\">" +
                             "<td>" + DateHandler.timestampToString( data[j].date ) + "</td>" +

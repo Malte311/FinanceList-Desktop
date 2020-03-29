@@ -73,7 +73,7 @@ function displayBalances() {
         // so we round the balance.
         var balance = Math.round( (totalEarningsThisMonth - totalSpendingsThisMonth) * 1e2 ) / 1e2;
         totalSum += balance;
-        balance = beautifyAmount( balance );
+        balance = balance.toFixed(2);
 
         // Now we are ready to display a progress bar which contains the difference.
         $( "#currentBalances" ).append(
@@ -84,7 +84,7 @@ function displayBalances() {
 
         // After doing this for all budgets, we display the total sum for the current month.
         if ( i == currentBudgets.length - 1 ) {
-            totalSum = beautifyAmount( Math.round( totalSum * 1e2 ) / 1e2 );
+            totalSum = totalSum.toFixed(2);
             $( "#currentBalances" ).append(
                 "<br>" +
                 "<center>" +
@@ -114,7 +114,7 @@ function displayRecentTransactions( type ) {
 		// Now, we just need to display the data. Remember that new data is at the end, so
         // we need to loop backwards.
         for ( var i = data.length - 1; i >= 0; i-- ) {
-            var amount = beautifyAmount( data[i].amount );
+            var amount = data[i].amount.toFixed(2);
             recentTransactionsTable += "<tr><td><i class=\"far fa-money-bill-alt w3-text-green w3-large\"></i>" +
                                        " " + data[i].name + " </td>" +
                                        "<td><i>" + amount + getCurrencySign() + "</i></td>" +
@@ -172,13 +172,13 @@ function displayChart( type ) {
         // Get the name of every budget.
         labels.push( allTimeTransactions[i][0] );
         // Get the balance of every budget
-        dataset.push( beautifyAmount( allTimeTransactions[i][1] ) );
+        dataset.push(allTimeTransactions[i][1].toFixed(2));
         // Add the amount to sum up all transactions.
         checksum = (Math.round( (checksum + allTimeTransactions[i][1]) * 1e2 ) / 1e2);
     }
     // Now check if there exists at least one earning/spending.
     if ( checksum > 0 ) {
-        checksum = beautifyAmount( checksum );
+        checksum = checksum.toFixed(2);
         // Create the chart. The colors are declared as a constant in controller.js.
         createChart( transactionChart, labels, dataset, colors, colors,
                      readPreference( "chartType" ) );

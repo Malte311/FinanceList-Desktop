@@ -63,8 +63,8 @@ function createCashflowChart() {
 
     var datasets = [{
         data: [
-            beautifyAmount( totalAmounts[1] ),
-            beautifyAmount( totalAmounts[0] )
+            totalAmounts[1].toFixed(2),
+            totalAmounts[0].toFixed(2)
         ],
         backgroundColor: ['rgba(255, 99, 132, 1)', 'rgba(150, 255, 120, 1)'],
         borderColor: ['rgba(255, 99, 132, 1)', 'rgba(150, 255, 120, 1)'],
@@ -167,7 +167,7 @@ function createSurplusChart() {
 			labels.push( currentBudgets[i][0] );
 			var totalAmounts = getTotalAmount( data );
 			var result = Math.round( (parseFloat(totalAmounts[0]) - parseFloat(totalAmounts[1])) * 1e2 ) / 1e2;
-			totalSurplus.push( beautifyAmount(result) );
+			totalSurplus.push( result.toFixed(2) );
 		}
 	}
 	else {
@@ -178,7 +178,7 @@ function createSurplusChart() {
 			labels.push( currentBudgets[i][0] );
 			var totalAmounts = getTotalAmount( data );
 			var result = Math.round( (parseFloat(totalAmounts[0]) - parseFloat(totalAmounts[1])) * 1e2 ) / 1e2;
-			totalSurplus.push( beautifyAmount(result) );
+			totalSurplus.push( result.toFixed(2) );
 		}
 	}
 
@@ -269,8 +269,8 @@ function getTotalAmount( data ) {
             spendings = Math.round( (spendings + data[i].amount) * 1e2 ) / 1e2;
         }
     }
-    earnings = beautifyAmount( earnings );
-    spendings = beautifyAmount( spendings );
+    earnings = earnings.toFixed(2);
+    spendings = spendings.toFixed(2);
 
     return [earnings, spendings];
 }

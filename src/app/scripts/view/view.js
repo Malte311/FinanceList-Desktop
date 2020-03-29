@@ -1,3 +1,7 @@
+const Data = require(__dirname + '/../data/data.js');
+const DataHandler = require(__dirname + '/../data/dataHandler.js');
+const Template = require(__dirname + '/templates/template.js');
+
 /**
  * Class for displaying html templates and content.
  */
@@ -5,8 +9,12 @@ module.exports = class View {
 	constructor(storage) {
 		this.storage = storage;
 
+		this.dataHandle = new DataHandler(new Data(this.storage));
+
 		this.lang = this.storage.readPreference('language');
 		this.textData = require(__dirname + `/../../text/text_${this.lang}.js`);
+
+		this.template = new Template(this);
 	}
 
 	/**
@@ -26,22 +34,6 @@ module.exports = class View {
 		this.textData = require(__dirname + `/../../text/text_${this.lang}.js`);
 		this.storage.storePreference('language', lang);
 		this.updateView();
-	}
-
-	/**
-	 * Adds a single zero (2.5 becomes 2.50) for a more beautiful display style
-	 * (only if necessary).
-	 * 
-	 * @param {string} amount The amount to which we want to add a zero.
-	 * @return {string} The amount with an additional zero, if neccessary.
-	 */
-	beautifyAmount(amount) {
-		if (amount.toString().indexOf('.') !== -1) {
-			return amount.toString().split('.')[1].length < 2 ? `${amount}0` : amount.toString();
-		}
-		else {
-			return `${amount}.00`;
-		}
 	}
 
 	/**
