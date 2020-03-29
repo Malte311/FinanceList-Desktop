@@ -39,7 +39,7 @@ module.exports = class IndexView extends View {
 			);
 
 			let percentage = 100;
-			let color = 'secondary';
+			let color = 'gray';
 			// Positive balance for this month:
 			if ( earnings - spendings > 0 ) {
 				// Calculate the ratio of how much money is left from this months
@@ -47,22 +47,19 @@ module.exports = class IndexView extends View {
 				if ( earnings > 0 ) {
 					percentage = ((earnings - spendings) / earnings) * 100;
 				}
-				color = 'success';
+				color = 'green';
 			}
 			// Balance negative: Red color, percentage still at 100 (so the complete bar is red).
 			else if ( earnings - spendings < 0 ) {
-				color = 'danger';
+				color = 'red';
 			}
 
-			// We want to display $2.50 instead of $2.50000000002 (this may happen since we use floating point numbers),
-			// so we round the balance.
-			let balance = Math.round( (earnings - spendings) * 1e2 ) / 1e2;
+
+			let balance = earnings - spendings;
 			totalSum += balance;
 			balance = balance.toFixed(2);
 
-			// Now we are ready to display a progress bar which contains the difference.
-			console.log(this.template.progress(percentage, balance + this.getCurrencySign()))
-			$(id).append(this.template.progress(percentage, balance + this.getCurrencySign()));
+			$(id).append(this.template.progress(percentage, color, balance + this.getCurrencySign()));
 		}
 
 		totalSum = totalSum.toFixed(2);

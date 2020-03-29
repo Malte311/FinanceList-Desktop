@@ -58,14 +58,16 @@ module.exports = class View {
 	 * Creates a new dom element.
 	 * 
 	 * @param {string} type The type of the new element (e.g. h1, p, div).
-	 * @param {object} props Properties of the new element (e.g. {class: 'someClass'}).
+	 * @param {object} attrs Attributes of the new element (e.g. {class: 'someClass'}).
 	 * @param {...any} children Children of the new element (either more dom elements or
 	 * the text of the new element).
 	 */
-	elt(type, props, ...children) {
+	elt(type, attrs, ...children) {
 		let dom = document.createElement(type);
 		
-		if (props) Object.assign(dom, props);
+		for (let attr of Object.keys(attrs)) {
+			dom.setAttribute(attr, attrs[attr]);
+		}
 		
 		for (let child of children) {
 			if (typeof child != 'string') dom.appendChild(child);
