@@ -7,6 +7,18 @@ module.exports = class Template {
 	}
 
 	/**
+	 * Returns a fontawesome icon.
+	 * 
+	 * @param {string} icon The name of the icon.
+	 * @param {string} [color = 'black'] The color of the icon.
+	 */
+	icon(icon, color = 'black') {
+		return this.view.elt('i', {
+			class: `${this.mapIcon(icon)} text-${this.mapColor(color)}`
+		});
+	}
+
+	/**
 	 * Returns a progress bar.
 	 * 
 	 * @param {number} percentage Number between 0 and 100 which indicates the progress.
@@ -44,6 +56,8 @@ module.exports = class Template {
 	 */
 	mapColor(color) {
 		switch (color) {
+			case 'black':
+				return 'dark';
 			case 'blue':
 				return 'primary';
 			case 'gray':
@@ -56,6 +70,21 @@ module.exports = class Template {
 				return 'warning';
 			default:
 				return 'primary';
+		}
+	}
+
+	/**
+	 * Maps icon names (e.g. rightarrow) to fontawesome icon names.
+	 * 
+	 * @param {string} icon The icon name we want to map.
+	 * @return {string} The mapped icon name. 
+	 */
+	mapIcon(icon) {
+		switch (icon) {
+			case 'creditcard':
+				return 'fas fa-credit-card';
+			default:
+				return '';
 		}
 	}
 }

@@ -32,44 +32,21 @@ module.exports = class IndexView extends View {
 			let earnings = this.dataHandle.getMonthlySum(budgetName, 'earning');
 			let spendings = this.dataHandle.getMonthlySum(budgetName, 'spending');
 
-			$(id).append(
-				'<h5><i class=\'fas fa-angle-double-right w3-text-deep-purple\'></i>' + ' ' +
-				budgetName +
-				' </h5>'
-			);
-
-			let percentage = 100;
-			let color = 'gray';
-			// Positive balance for this month:
-			if ( earnings - spendings > 0 ) {
-				// Calculate the ratio of how much money is left from this months
-				// earnings and use the color green.
-				if ( earnings > 0 ) {
-					percentage = ((earnings - spendings) / earnings) * 100;
-				}
-				color = 'green';
-			}
-			// Balance negative: Red color, percentage still at 100 (so the complete bar is red).
-			else if ( earnings - spendings < 0 ) {
-				color = 'red';
-			}
-
+			$(id).append(this.elt('h4', {}, this.template.icon(
+				'creditcard', 'blue'
+			), ` ${budgetName}`)); // Space in front of ${budgetName} is intended.
 
 			let balance = earnings - spendings;
-			totalSum += balance;
-			balance = balance.toFixed(2);
+			let percentage = earnings > 0 ? ((earnings - spendings) / earnings) * 100 : 100;
+			let color = balance > 0 ? 'green' : (balance < 0 ? 'red' : 'gray');
 
-			$(id).append(this.template.progress(percentage, color, balance + this.getCurrencySign()));
+			$(id).append(this.template.progress(percentage, color, this.printNum(balance)));
+			
+			totalSum += parseFloat(balance);
 		}
 
-		totalSum = totalSum.toFixed(2);
-		$(id).append(
-			'<br>' +
-			'<center>' +
-				this.textData['totalSum'] + ': ' +
-				totalSum + this.getCurrencySign() +
-			'</center>'
-		);
+		let totalSumLabel = `${this.textData['totalSum']}: ${this.printNum(totalSum)}`;
+		$(id).append(this.elt('center', {}, totalSumLabel));
 	}
 }
 

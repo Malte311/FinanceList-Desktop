@@ -55,6 +55,17 @@ module.exports = class View {
 	}
 
 	/**
+	 * Returns the string representation of a number for displaying it.
+	 * (The display version has two decimal places and a currency sign)
+	 * 
+	 * @param {number} num The number which should be displayed.
+	 * @return {string} The display representation of that number.
+	 */
+	printNum(num) {
+		return parseFloat(num).toFixed(2) + this.getCurrencySign();
+	}
+
+	/**
 	 * Creates a new dom element.
 	 * 
 	 * @param {string} type The type of the new element (e.g. h1, p, div).
