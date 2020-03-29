@@ -5,18 +5,25 @@
         <link rel="shortcut icon" href="../img/tab.ico">
 		<meta charset="UTF-8">
 
-        <link rel="stylesheet" type="text/css" href="../style/w3.min.css">
+		<link rel="stylesheet" type="text/css" href="../style/w3.min.css">
+		<link rel="stylesheet" type="text/css" href="../style/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="../style/fontawesome/css/fontawesome-all.min.css">
         <link rel="stylesheet" type="text/css" href="../style/style.css">
     </head>
-    <body class="w3-light-grey">
-        <div class="w3-bar w3-top w3-indigo w3-large" style="z-index:4">
-            <span class="w3-bar-item w3-center"> FinanceList </span>
-            <span class="w3-bar-item w3-right">
-                <a onclick="setLanguage('en');updateView();" href="#"><img border="0" alt="EN" src="../img/us.ico" width=20px height=20px></a>
-                <a onclick="setLanguage('de');updateView();" href="#"><img border="0" alt="DE" src="../img/de.ico" width=20px height=20px></a>
+    <body class="bg-light">
+		<nav class="navbar navbar-dark bg-dark justify-content-between">
+			<span class="navbar-brand text-light">
+				FinanceList-Desktop
+			</span>
+			<span>
+				<a onclick="s.view.updateLang('en')" href="#">
+					<img alt="EN" src="../img/us.ico" width="24px" height="24px">
+				</a>
+				<a onclick="s.view.updateLang('de')" href="#">
+					<img alt="DE" src="../img/de.ico" width="24px" height="24px">
+				</a>
             </span>
-        </div>
+		</nav>
         <!-- sidebar -->
         <nav class="w3-sidebar w3-collapse w3-white w3-card w3-animate-left" style="z-index:3;width:200px;margin-top:0px;">
             <br>
@@ -36,8 +43,8 @@
                 <span lang="de"><a onclick="window.location.href='./help.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="far fa-question-circle w3-text-yellow w3-large icon"></i> Hilfe </a></span>
             </div>
         </nav>
-        <!-- main content -->
-        <div class="w3-main" style="margin-left:250px;margin-top:45px;margin-bottom:50px;">
+		<!-- main content -->
+		<div class="w3-main" style="margin-left:250px;margin-top:45px;margin-bottom:50px;">
             <div class="w3-panel">
                 <!-- budget overview, added via JavaScript -->
                 <div class="w3-row-padding w3-twothird" style="margin:0 -16px">
@@ -75,10 +82,13 @@
                 </div>
             </div>
             <hr>
-        </div>
-        <script>
-			let Startup = require(__dirname + '/../scripts/startup.js');
-			new Startup();
-        </script>
-    </body>
+		</div>
+	</body>
+	<script>
+		const $ = jQuery = require('jquery'); // Global jQuery & jQueryUI.
+		require('jquery-ui-dist/jquery-ui');
+
+		let Startup = require(__dirname + '/../scripts/startup.js');
+		let s = new Startup();
+	</script>
 </html>

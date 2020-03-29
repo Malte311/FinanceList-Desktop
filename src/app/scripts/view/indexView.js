@@ -1,4 +1,3 @@
-const $ = require('jquery');
 const Data = require(__dirname + '/../data/data.js');
 const DataHandler = require(__dirname + '/../data/dataHandler.js');
 const View = require(__dirname + '/view.js');
@@ -17,9 +16,6 @@ module.exports = class IndexView extends View {
 	 * Updates the view.
 	 */
 	updateView() {
-		let lang = this.storage.readPreference('language');
-		this.textData = require(__dirname + `/../../text/text_${lang}.js`);
-
 		this.displayBalances();
 	}
 
@@ -83,15 +79,15 @@ module.exports = class IndexView extends View {
 				if ( totalEarningsThisMonth > 0 && totalSpendingsThisMonth !== 0 ) {
 					percentage = ((totalEarningsThisMonth - totalSpendingsThisMonth) / totalEarningsThisMonth) * 100;
 				}
-				color = 'green';
+				color = 'success';
 			}
 			// Balance negative: Red color, percentage still at 100 (so the complete bar is red).
 			else if ( totalEarningsThisMonth - totalSpendingsThisMonth < 0 ) {
-				color = 'red';
+				color = 'danger';
 			}
 			// Balance is exactly zero for this month: Gray color and percentage still at 100:
 			else {
-				color = 'gray';
+				color = 'info';
 			}
 			// We want to display $2.50 instead of $2.50000000002 (this may happen since we use floating point numbers),
 			// so we round the balance.
@@ -101,7 +97,7 @@ module.exports = class IndexView extends View {
 
 			// Now we are ready to display a progress bar which contains the difference.
 			$( '#currentBalances' ).append(
-				'<p></p><div class=\'w3-grey\'><div class=\'w3-container w3-center w3-padding w3-' +
+				'<div class=\'progress\'><div class=\'progress-bar progress-bar-striped bg-' +
 				color + '\' style=\'width:' + percentage + '%;\'>' + balance + this.getCurrencySign() +
 				'</div></div>'
 			);

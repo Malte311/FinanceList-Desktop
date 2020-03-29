@@ -1,5 +1,7 @@
 module.exports = {
+	'cancel': 'Abbrechen',
 	'close': 'Schließen',
+	'confirm': 'Best\u00e4tigen',
 	'copy': 'Kopieren',
 	'cross-device-err': 'Ger\u00e4te\u00fcbergreifendes Verschieben ist nicht m\u00f6glich.',
 	'cut': 'Ausschneiden',
@@ -12,6 +14,8 @@ module.exports = {
 	'paste': 'Einfügen',
 	'redo': 'Wiederholen',
 	'reload': 'Neu laden',
+	'selUserText': 'Bitte w\u00e4hlen Sie einen Kontonamen aus. Es sind nur Buchstaben erlaubt.',
+	'selUserTitle': 'Kontonamen ausw\u00e4hlen',
 	'totalSum': 'Gesamtsumme',
 	'updateAvailable': 'Update verf\u00fcgbar',
 	'updateMessage': 'Es ist eine neue Version von FinanceList-Desktop verf\u00fcgbar!',

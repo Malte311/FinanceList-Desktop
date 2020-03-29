@@ -1,3 +1,4 @@
+const Dialog = require(__dirname + '/utils/dialog.js');
 const IndexView = require(__dirname + '/view/indexView.js');
 const JsonStorage = require(__dirname + '/storage/jsonStorage.js');
 const Updater = require(__dirname + '/updates/updater.js');
@@ -13,6 +14,13 @@ module.exports = class Startup {
 		Updater.execRecurrTransact();
 	
 		this.view = new IndexView(this.storage);
+
+		let txt = this.view.textData;
+		if (!this.storage.readPreference('user')) { // Set a username, if no user exists.
+			(new Dialog(this.view)).inputDialog(txt['selUserTtitle'], txt['selUserText'], () => {
+				console.log($('#dialogInput').text())
+			});
+		}
 	}
 
 	/**

@@ -9,7 +9,8 @@ module.exports = class Storage {
 		this.defPref = {
 			'chartType': 'pie',
 			'currency': 'Euro',
-			'language': 'en'
+			'language': 'en',
+			'user': null
 		};
 
 		// Default storage object

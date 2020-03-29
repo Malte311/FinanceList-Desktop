@@ -5,8 +5,8 @@ module.exports = class View {
 	constructor(storage) {
 		this.storage = storage;
 
-		let lang = this.storage.readPreference('language');
-		this.textData = require(__dirname + `/../../text/text_${lang}.js`);
+		this.lang = this.storage.readPreference('language');
+		this.textData = require(__dirname + `/../../text/text_${this.lang}.js`);
 	}
 
 	/**
@@ -14,6 +14,18 @@ module.exports = class View {
 	 */
 	updateView() {
 		throw new Error('This function must be overridden!');
+	}
+
+	/**
+	 * Updates the currently selected language.
+	 * 
+	 * @param {string} lang The new language.
+	 */
+	updateLang(lang) {
+		this.lang = lang;
+		this.textData = require(__dirname + `/../../text/text_${this.lang}.js`);
+		this.storage.storePreference('language', lang);
+		this.updateView();
 	}
 
 	/**
