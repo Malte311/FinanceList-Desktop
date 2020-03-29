@@ -36,6 +36,12 @@ module.exports = class Template {
 		}, text));
 	}
 
+	table(props) {
+		return this.view.elt('table', {
+			
+		})
+	}
+
 	/**
 	 * Returns the html representation of a dom element in string format.
 	 * 
@@ -81,6 +87,8 @@ module.exports = class Template {
 	 */
 	mapIcon(icon) {
 		switch (icon) {
+			case 'arrowright':
+				return 'fa fa-arrow-right';
 			case 'creditcard':
 				return 'fas fa-credit-card';
 			default:

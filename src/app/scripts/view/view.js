@@ -42,7 +42,7 @@ module.exports = class View {
 	 * @return {string} An html representation of the currency sign.
 	 */
 	getCurrencySign() {
-		switch ( this.storage.readPreference('currency')) {
+		switch (this.storage.readPreference('currency')) {
 			case 'Euro':
 				return '\u20AC';
 			case 'Dollar':
@@ -63,6 +63,15 @@ module.exports = class View {
 	 */
 	printNum(num) {
 		return parseFloat(num).toFixed(2) + this.getCurrencySign();
+	}
+
+	/**
+	 * Capitalizes the first letter of a word.
+	 * 
+	 * @param {string} str The word which should be capizalized.
+	 */
+	capFirstLetter(str) {
+		return str.charAt(0).toUpperCase() + str.slice(1);
 	}
 
 	/**
