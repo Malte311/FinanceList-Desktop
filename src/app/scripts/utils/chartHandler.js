@@ -25,7 +25,7 @@ module.exports = class ChartHandler {
 	/**
 	 * Creates a chart in a given canvas to visualize the input data.
 	 * 
-	 * @param {object} canvas The canvas which contains the chart in form of a dom element.
+	 * @param {string} canvas The id of the canvas element which contains the chart.
 	 * @param {array} labels The labels for the data in form of a string array.
 	 * @param {array} dataset The data that will be visualized in form of a number array.
 	 */
@@ -39,7 +39,7 @@ module.exports = class ChartHandler {
 			this.colors[dataset.length - 1] = this.colorSeparator;
 		}
 
-		new Chart(canvas, {
+		new Chart($(canvas), {
 			type: this.view.storage.readPreference('chartType'),
 			data: {
 				labels: labels,

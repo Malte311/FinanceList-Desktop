@@ -93,48 +93,18 @@ module.exports = class IndexView extends View {
 	 * @param {string} type The type of transactions we want to visualize (earning or spending).
 	 */
 	displayAllTimeChart(id, type) {
-		// Reset the canvas in case no data existed before (then the HTML content was overwritten).
-		$( id ).html(
-			"<canvas id=\"" + type + "\" width=\"8000\" height=\"2500\"></canvas>" );
-		// Get a reference to the canvas in which the chart should be.
-		var transactionChart = $( "#" + type )[0];
-		// Get all budgets.
-		var allTimeTransactions = (type === "earning" ?
-			this.storage.readMainStorage( "allTimeEarnings" ) :
-			this.storage.readMainStorage( "allTimeSpendings" ));
-		// Declare some variables to store the values in them.
-		var labels = [], dataset = [];
-		// We will declare a variable to make sure there is at least one earning/spending.
-		// In addition to that, this will contain the sum of all spendings/earnings.
-		var checksum = 0;
-		// Iterate over them to get the all time spendings.
-		for ( var i = 0; i < allTimeTransactions.length; i++ ) {
-			// Get the name of every budget.
-			labels.push( allTimeTransactions[i][0] );
-			// Get the balance of every budget
-			dataset.push(allTimeTransactions[i][1].toFixed(2));
-			// Add the amount to sum up all transactions.
-			checksum = (Math.round( (checksum + allTimeTransactions[i][1]) * 1e2 ) / 1e2);
-		}
+		$(id).html(this.elt('canvas', {
+			id: type
+		}));
+		
+		let data = this.storage.readMainStorage(`allTime${this.capFirstLetter(type)}s`);
+		if (data.length) {
+			let amounts = data.map(t => t[1]); // Index 0: label, index 1: amount.
+			(new ChartHandler(this)).createChart(`#${type}`, data.map(t => t[0]), amounts);
 
-		let transactions = allTimeTransactions;
-		(new ChartHandler(this)).createChart(
-			transactionChart,
-			transactions.map(t => t[0]),
-			transactions.map(t => this.printNum(t[1]))
-		);
-
-		if (dataset.length) {
-			checksum = checksum.toFixed(2);
-			// Create the chart. The colors are declared as a constant in controller.js.
-			//(new ChartHandler(this)).createChart( transactionChart, labels, dataset );
-			// Display the sum of all time earnings/spendings.
-			$( id ).append(
-				"<br><center>" +
-				(type == "spending" ?
-				this.textData['allTimeSpending'] :
-				this.textData['allTimeEarning']) + ": " +
-				checksum + this.getCurrencySign() + "</center>"
+			let totalSum = this.printNum(amounts.reduce((prev, curr) => prev + curr, 0));
+			$(id).append(this.elt('center', {},
+				`${this.textData['allTime' + this.capFirstLetter(type)]}: ${totalSum}`)
 			);
 		}
 		else {
