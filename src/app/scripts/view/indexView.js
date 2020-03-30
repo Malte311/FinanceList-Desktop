@@ -7,8 +7,6 @@ const View = require(__dirname + '/view.js');
 module.exports = class IndexView extends View {
 	constructor(storage) {
 		super(storage);
-
-		this.updateView();
 	}
 
 	/**

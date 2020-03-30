@@ -16,8 +16,14 @@ module.exports = class SettingsView extends View {
 		this.updatePreferences();
 	}
 
+	/**
+	 * Displays the currently selected values for the preferences.
+	 */
 	updatePreferences() {
-
+		$('#checkboxFullscreen')[0].checked = this.storage.readPreference('fullscreen');
+		$('#btnCurrentPath').text(this.storage.readPreference('path'));
+		$('#btnCurrentCurrency').text(this.capFirstLetter(this.storage.readPreference('currency')));
+		$('#btnCurrentChartType').text(this.textData[this.storage.readPreference('chartType')]);
 	}
 
 	/**
@@ -35,6 +41,28 @@ module.exports = class SettingsView extends View {
 			
 			this.updatePreferences();
 		}
+	}
+
+	/**
+	 * Updates the currently selected currency.
+	 * 
+	 * @param {string} currency The new currency.
+	 */
+	updateCurrency(currency) {
+		this.storage.storePreference('currency', currency);
+
+		this.updatePreferences();
+	}
+
+	/**
+	 * Updates the currently selected chart type.
+	 * 
+	 * @param {string} chartType The new chart type.
+	 */
+	updateChartType(chartType) {
+		this.storage.storePreference('chartType', chartType);
+
+		this.updatePreferences();
 	}
 
 	/**

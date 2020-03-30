@@ -17,6 +17,8 @@ module.exports = class View {
 		$(`[lang=${this.lang}]`).show();
 
 		this.template = new Template(this);
+
+		this.updateView();
 	}
 
 	/**
@@ -43,24 +45,6 @@ module.exports = class View {
 	}
 
 	/**
-	 * Returns the currency sign for the currently selected currency.
-	 * 
-	 * @return {string} An html representation of the currency sign.
-	 */
-	getCurrencySign() {
-		switch (this.storage.readPreference('currency')) {
-			case 'Euro':
-				return '\u20AC';
-			case 'Dollar':
-				return '\u0024';
-			case 'Pound':
-				return '\u00A3';
-			default:
-				return '\u20AC';
-		}
-	}
-
-	/**
 	 * Returns the string representation of a number for displaying it.
 	 * (The display version has two decimal places and a currency sign)
 	 * 
@@ -68,7 +52,7 @@ module.exports = class View {
 	 * @return {string} The display representation of that number.
 	 */
 	printNum(num) {
-		return parseFloat(num).toFixed(2) + this.getCurrencySign();
+		return parseFloat(num).toFixed(2) + this.textData[this.storage.readPreference('currency')];
 	}
 
 	/**

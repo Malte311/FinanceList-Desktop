@@ -89,7 +89,7 @@
 				<h3 lang="de"><i class="fas fa-desktop"></i> Fenstergr&ouml;&szlig;e</h3>
 				<h3 lang="en"><i class="fas fa-desktop"></i> Window size</h3>
 				<div>
-					<input type="checkbox" onclick="s.view.toggleWindowMode(this.checked);">
+					<input type="checkbox" id="checkboxFullscreen" onclick="s.view.toggleWindowMode(this.checked);">
 					<span lang="en">Activate fullscreen</span>
 					<span lang="de">Vollbildmodus aktivieren</span>
 				</div>
@@ -98,7 +98,7 @@
 				<h3 lang="de"><i class="fas fa-folder text-warning"></i> Dateipfad</h3>
 				<h3 lang="en"><i class="fas fa-folder text-warning"></i> File path</h3>
 				<div>
-					<button onclick="setPath();" id="currentPath"></button>
+					<button onclick="s.view.updateFilepath();" id="btnCurrentPath"></button>
 				</div>
 				<hr style="border-color:black;">
 
@@ -106,18 +106,17 @@
 				<h3 lang="en"><i class="far fa-money-bill-alt text-success"></i> Currency</h3>
 				<div>
 					<div class="btn-group">
-						<button type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Test
+						<button type="button" id="btnCurrentCurrency" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						</button>
 						<div class="dropdown-menu">
-							<a class="dropdown-item" href="#" onclick="setCurrency('Euro');">
+							<a class="dropdown-item" href="#" onclick="s.view.updateCurrency('euro');">
 								<i class="fas fa-euro-sign"></i> Euro
 							</a>
-							<a class="dropdown-item" href="#" onclick="setCurrency('Dollar');">
+							<a class="dropdown-item" href="#" onclick="s.view.updateCurrency('dollar');">
 								<i class="fas fa-dollar-sign"></i> Dollar
 							</a>
-							<a class="dropdown-item" href="#" onclick="setCurrency('Pound');">
-								<i class="fas fa-pound-sign"></i> Pound
+							<a class="dropdown-item" href="#" onclick="s.view.updateCurrency('pound');">
+								<i class="fas fa-pound-sign"></i> Pfund
 							</a>
 						</div>
 					</div>
@@ -128,32 +127,31 @@
 				<h3 lang="en"><i class="fas fa-chart-pie text-danger"></i> Chart type</h3>
 				<div>
 					<div class="btn-group">
-						<button type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Test
+						<button type="button" id="btnCurrentChartType" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						</button>
 						<div class="dropdown-menu">
-							<a lang="de" class="dropdown-item" href="#" onclick="setChartType('pie');">
+							<a lang="de" class="dropdown-item" href="#" onclick="s.view.updateChartType('pie');">
 								Kreisdiagramm
 							</a>
-							<a lang="en" class="dropdown-item" href="#" onclick="setChartType('pie');">
+							<a lang="en" class="dropdown-item" href="#" onclick="s.view.updateChartType('pie');">
 								Pie chart
 							</a>
-							<a lang="de" class="dropdown-item" href="#" onclick="setChartType('line');">
+							<a lang="de" class="dropdown-item" href="#" onclick="s.view.updateChartType('line');">
 								Liniendiagramm
 							</a>
-							<a lang="en" class="dropdown-item" href="#" onclick="setChartType('line');">
+							<a lang="en" class="dropdown-item" href="#" onclick="s.view.updateChartType('line');">
 								Line chart
 							</a>
-							<a lang="de" class="dropdown-item" href="#" onclick="setChartType('bar');">
+							<a lang="de" class="dropdown-item" href="#" onclick="s.view.updateChartType('bar');">
 								Balkendiagramm
 							</a>
-							<a lang="en" class="dropdown-item" href="#" onclick="setChartType('bar');">
+							<a lang="en" class="dropdown-item" href="#" onclick="s.view.updateChartType('bar');">
 								Bar chart
 							</a>
-							<a lang="de" class="dropdown-item" href="#" onclick="setChartType('doughnut');">
+							<a lang="de" class="dropdown-item" href="#" onclick="s.view.updateChartType('doughnut');">
 								Ringdiagramm
 							</a>
-							<a lang="en" class="dropdown-item" href="#" onclick="setChartType('doughnut');">
+							<a lang="en" class="dropdown-item" href="#" onclick="s.view.updateChartType('doughnut');">
 								Doughnut chart
 							</a>
 						</div>

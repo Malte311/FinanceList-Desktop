@@ -54,7 +54,7 @@ module.exports = class ChartHandler {
 				tooltips: {
 					callbacks: {
 						label: (ttI, cD) => {
-							let cS = this.view.getCurrencySign();
+							let cS = this.view.textData[this.view.storage.readPreference('currency')];
 							return `${cD.labels[ttI.index]}: ${cD.datasets[0].data[ttI.index]}${cS}`;
 						}
 					}
