@@ -13,6 +13,8 @@ module.exports = class View {
 
 		this.lang = this.storage.readPreference('language');
 		this.textData = require(__dirname + `/../../text/text_${this.lang}.js`);
+		
+		$(`[lang=${this.lang}]`).show();
 
 		this.template = new Template(this);
 	}
@@ -25,29 +27,18 @@ module.exports = class View {
 	}
 
 	/**
-	 * Updates the static html elements (tab names and tab listener).
-	 */
-	updateHtml() {
-		let tabs = ['overview', 'balances', 'settings', 'help'];
-		tabs.forEach(tab => { // Set tab names.
-			$(`#${tab}TabText`).text(this.textData[tab]);
-		});
-
-		$('#myTab a').on('click', function(e) { // Enable changing between tabs.
-			e.preventDefault();
-			$(this).tab('show');
-		});
-	}
-
-	/**
 	 * Updates the currently selected language.
 	 * 
 	 * @param {string} lang The new language.
 	 */
 	updateLang(lang) {
+		$(`[lang=${this.lang}]`).hide();
+		$(`[lang=${lang}]`).show();
+		
 		this.lang = lang;
 		this.textData = require(__dirname + `/../../text/text_${this.lang}.js`);
 		this.storage.storePreference('language', lang);
+
 		this.updateView();
 	}
 

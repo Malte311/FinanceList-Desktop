@@ -14,9 +14,7 @@ module.exports = class IndexView extends View {
 	/**
 	 * Updates the view.
 	 */
-	updateView() {
-		this.updateHtml();
-		
+	updateView() {		
 		this.displayBalances('#currentBalances');
 		this.displayRecentTransactions('#recentSpendings', 'spending');
 		this.displayAllTimeChart('#allTimeSpendings', 'spending');
@@ -30,9 +28,7 @@ module.exports = class IndexView extends View {
 	 * @param {string} id The id of the dom element in which the content should appear.
 	 */
 	displayBalances(id) {
-		$(id).html(this.elt('h3', {}, this.template.icon(
-			'arrowright', 'green'
-		), ` ${this.textData['monthlySurplus']}`));
+		$(id).html('');
 
 		let totalSum = 0;
 		for (let budget of this.storage.readMainStorage('budgets')) {
@@ -68,9 +64,7 @@ module.exports = class IndexView extends View {
 	displayRecentTransactions(id, type) {
 		let limit = 10; // Maximum number of entries to be displayed.
 
-		$(id).html(this.elt('h3', {}, this.template.icon(
-			'arrowright', 'green'
-		), ` ${this.textData['recent' + this.capFirstLetter(type)]}`));
+		$(id).html('');
 
 		let data = this.dataHandle.getRecentTrans(limit, type);
 		if (data.length) {

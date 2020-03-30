@@ -1,10 +1,7 @@
-/* Hide all elements with language attributes by default. Then
- * set the elements with the correct language visible (in JavaScript).
- */
 [lang=de] {
-	display: none;
+    display: none;
 }
 
 [lang=en] {
-	display: none;
+    display: none;
 }

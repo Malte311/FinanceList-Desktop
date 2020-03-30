@@ -18,6 +18,11 @@ module.exports = class Startup {
 			});
 		}
 
+		$('#myTab a').on('click', function(e) { // Enable changing between tabs.
+			e.preventDefault();
+			$(this).tab('show');
+		});
+
 		Updater.checkForUpdates();
 		Updater.execRecurrTransact();
 	}
