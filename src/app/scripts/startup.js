@@ -8,16 +8,7 @@ const Updater = require(__dirname + '/updates/updater.js');
  */
 module.exports = class Startup {
 	constructor() {
-		$('#myTab a').on('click', function(e) {
-			e.preventDefault();
-			$(this).tab('show');
-		});
-		
 		this.storage = new JsonStorage();
-
-		Updater.checkForUpdates();
-		Updater.execRecurrTransact();
-	
 		this.view = new IndexView(this.storage);
 
 		let txt = this.view.textData;
@@ -26,6 +17,9 @@ module.exports = class Startup {
 				console.log($('#dialogInput').text())
 			});
 		}
+
+		Updater.checkForUpdates();
+		Updater.execRecurrTransact();
 	}
 
 	/**

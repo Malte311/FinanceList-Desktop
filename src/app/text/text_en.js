@@ -1,6 +1,7 @@
 module.exports = {
 	'allTimeEarning': 'All time earnings',
 	'allTimeSpending': 'All time spendings',
+	'balances': 'Balances',
 	'cancel': 'Cancel',
 	'close': 'Close',
 	'confirm': 'Confirm',
@@ -11,6 +12,7 @@ module.exports = {
 	'edit': 'Edit',
 	'error': 'Error',
 	'exit': 'Exit',
+	'help': 'Help',
 	'later': 'Later',
 	'minimize': 'Minimize',
 	'monthlySurplus': 'Monthly surplus',
@@ -24,6 +26,7 @@ module.exports = {
 	'reload': 'Reload',
 	'selUserText': 'Please type in an account name. Only letters are allowed.',
 	'selUserTitle': 'Select a account name',
+	'settings': 'Settings',
 	'totalSum': 'Total sum',
 	'updateAvailable': 'Update available',
 	'updateMessage': 'There is a new version of FinanceList-Desktop available!',

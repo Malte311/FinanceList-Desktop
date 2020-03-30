@@ -25,6 +25,21 @@ module.exports = class View {
 	}
 
 	/**
+	 * Updates the static html elements (tab names and tab listener).
+	 */
+	updateHtml() {
+		let tabs = ['overview', 'balances', 'settings', 'help'];
+		tabs.forEach(tab => { // Set tab names.
+			$(`#${tab}TabText`).text(this.textData[tab]);
+		});
+
+		$('#myTab a').on('click', function(e) { // Enable changing between tabs.
+			e.preventDefault();
+			$(this).tab('show');
+		});
+	}
+
+	/**
 	 * Updates the currently selected language.
 	 * 
 	 * @param {string} lang The new language.

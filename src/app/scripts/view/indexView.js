@@ -15,6 +15,8 @@ module.exports = class IndexView extends View {
 	 * Updates the view.
 	 */
 	updateView() {
+		this.updateHtml();
+		
 		this.displayBalances('#currentBalances');
 		this.displayRecentTransactions('#recentSpendings', 'spending');
 		this.displayAllTimeChart('#allTimeSpendings', 'spending');
