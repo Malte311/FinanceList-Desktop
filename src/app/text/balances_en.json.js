@@ -2,7 +2,6 @@ module.exports =
 {
     "confirm": "Confirm",
     "cancel": "Cancel",
-    "currentBudgetsHeadings": ["Budget", "Balance", "Rename/Delete", "Allocation ratio"],
     "recurringTransactionsHeadings": ["Name", "Amount", "Type", "Budget", "Category", "Next execution", "Interval", "End date", "Delete", "Edit"],
     "recurringTransactionsContent": ["earning", "spending", "days", "No recurring transactions available."],
     "addTransaction": "Add transaction",
@@ -29,7 +28,6 @@ module.exports =
     "noTransactions": "No transactions found!",
     "transferDialogTextElements": ["Here you can transfer money between your budgets.", "From", "To", "Amount"],
     "transfer": "Transfer money",
-    "overallBalance": "Overall balance",
     "totalSum": "Total sum",
     "monthNames": [ "January","February","March","April","May","June", "July","August","September","October","November","December" ],
     "monthNamesShort": [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ],

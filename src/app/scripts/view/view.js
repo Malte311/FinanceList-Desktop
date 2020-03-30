@@ -16,6 +16,7 @@ module.exports = class View {
 		
 		$(`[lang=${this.lang}]`).show();
 
+		this.mappings = require(__dirname + '/../../text/mappings.js');
 		this.template = new Template(this);
 
 		this.updateView();
@@ -52,7 +53,7 @@ module.exports = class View {
 	 * @return {string} The display representation of that number.
 	 */
 	printNum(num) {
-		return parseFloat(num).toFixed(2) + this.textData[this.storage.readPreference('currency')];
+		return parseFloat(num).toFixed(2) + this.mappings[this.storage.readPreference('currency')];
 	}
 
 	/**

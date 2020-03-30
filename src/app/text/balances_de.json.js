@@ -29,7 +29,6 @@ module.exports =
     "noTransactions": "Es wurden keine Transaktionen gefunden!",
     "transferDialogTextElements": ["Hier k&ouml;nnen Sie Geld zwischen Ihren Konten &uuml;bertragen.", "Von", "Nach", "Betrag"],
     "transfer": "Geld \u00fcbertragen",
-    "overallBalance": "Gesamtbilanz",
     "totalSum": "Gesamtsumme",
     "monthNames": [ "Januar","Februar","März","April","Mai","Juni", "Juli","August","September","Oktober","November","Dezember" ],
     "monthNamesShort": [ "Jan","Feb","Mär","Apr","Mai","Jun", "Jul","Aug","Sep","Okt","Nov","Dez" ],

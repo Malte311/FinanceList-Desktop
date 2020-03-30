@@ -23,7 +23,7 @@ module.exports = class SettingsView extends View {
 		$('#checkboxFullscreen')[0].checked = this.storage.readPreference('fullscreen');
 		$('#btnCurrentPath').text(this.storage.readPreference('path'));
 		$('#btnCurrentCurrency').text(this.capFirstLetter(this.storage.readPreference('currency')));
-		$('#btnCurrentChartType').text(this.textData[this.storage.readPreference('chartType')]);
+		$('#btnCurrentChartType').text(this.mappings[this.storage.readPreference('chartType')]);
 	}
 
 	/**

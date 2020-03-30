@@ -14,7 +14,7 @@ module.exports = class Template {
 	 */
 	icon(icon, color = 'black') {
 		return this.view.elt('i', {
-			class: `${this.view.textData[icon]} text-${this.view.textData[color]}`
+			class: `${this.view.mappings[icon]} text-${this.view.mappings[color]}`
 		});
 	}
 
@@ -30,7 +30,7 @@ module.exports = class Template {
 		return this.view.elt('div', {
 			class: 'progress'
 		}, this.view.elt('div', {
-			class: `progress-bar progress-bar-striped bg-${this.view.textData[color]}`,
+			class: `progress-bar progress-bar-striped bg-${this.view.mappings[color]}`,
 			role: 'progressbar',
 			style: `width: ${Math.round(percentage)}%`
 		}, text));
