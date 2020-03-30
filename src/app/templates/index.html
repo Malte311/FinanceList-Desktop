@@ -86,7 +86,36 @@
 			<div class="tab-pane fade" id="balances" role="tabpanel" aria-labelledby="balances-tab">
 				<h3 lang="de"><i class="fas fa-credit-card text-primary"></i> Konten&uuml;bersicht</h3>
 				<h3 lang="en"><i class="fas fa-credit-card text-primary"></i> Budget overview</h3>
-                <div id="currentBudgets"></div>
+				<div id="currentBudgets"></div>
+				<div>
+					<button lang="de" onclick="addBudget();">Konto hinzuf&uuml;gen</button>
+					<button lang="en" onclick="addBudget();">Add budget</button>
+					<button lang="de" onclick="addTransaction();">Eintrag hinzuf&uuml;gen</button>
+					<button lang="en" onclick="addTransaction();">Add transaction</button>
+					<button lang="de" onclick="setAllocation();">Automatische Aufteilung</button>
+                    <button lang="en" onclick="setAllocation();">Automated allocation</button>
+                    <button onclick="executeTransfer();">Transfer</button>
+				</div>
+				<hr style="border-color:black;">
+
+				<h3 lang="de"><i class="fas fa-search-plus text-info"></i> Detail&uuml;bersicht</h3>
+				<h3 lang="en"><i class="fas fa-search-plus text-info"></i> Detailed overview</h3>
+                <div id="mainContentControls"></div>
+				<div id="mainContent"></div>
+				<hr style="border-color:black;">
+
+				<h3 lang="de"><i class="fas fa-redo text-warning"></i> Wiederkehrende Transaktionen</h3>
+				<h3 lang="en"><i class="fas fa-redo text-warning"></i> Recurring transactions</h3>
+				<div id="recurringTransactions"></div>
+				<hr style="border-color:black;">
+
+				<h3><i class="fas fa-download text-danger"></i> PDF Download</h3>
+				<div>
+					<button lang="de" onclick="chooseMonth();" href="#">Monatsbericht als PDF speichern</button>
+					<button lang="en" onclick="chooseMonth();" href="#">Download monthly overview as PDF</button>
+					<button lang="de" onclick="chooseYear();" href="#">Jahresbericht als PDF speichern</button>
+					<button lang="en" onclick="chooseYear();" href="#">Download yearly overview as PDF</button>
+				</div>
 			</div>
 
 			<div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">

@@ -42,4 +42,6 @@ module.exports = {
 	'undo': 'Undo',
 	'window': 'Window',
 	'windowSize': 'Window size',
+	'zoomIn': 'Zoom in',
+	'zoomOut': 'Zoom out'
 }

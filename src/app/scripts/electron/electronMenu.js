@@ -42,7 +42,16 @@ menuTemplate.push({
             label: textData['reload'],
             role: 'reload'
         },
-        { type: 'separator' },
+		{ type: 'separator' },
+		{
+			label: textData['zoomIn'],
+			role: 'zoomin',
+			accelerator: 'CommandOrControl+='
+		},
+		{
+			label: textData['zoomOut'],
+			role: 'zoomout'
+		},
         {
             label: textData['minimize'],
             role: 'minimize'

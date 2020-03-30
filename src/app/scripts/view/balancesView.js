@@ -48,36 +48,8 @@ module.exports = class BalancesView extends View {
 			rows.forEach(row => row.push(this.storage.readMainStorage('allocation').map(a => a[1] + '&percnt;')));
 		}
 
-
 		console.log(rows)
 		$(id).html(this.template.table(rows));
-
-		// // Iterate over all budgets to display them.
-		// for ( let i = 0; i < currentBudgets.length; i++ ) {
-		// 	let balance = currentBudgets[i][1].toFixed(2);
-		// 	// Display all budgets. The first one is a standard budget and can therefore not
-		// 	// be deleted. Note that currentBudgets is an array of arrays
-		// 	// (name of the budget and its current balance).
-		// 	content += "<tr class=\"w3-hover-light-blue\"><td>" + currentBudgets[i][0] + "</td>" +
-		// 			"<td>" + balance /*+ getCurrencySign()*/ + "</td>" +
-		// 			"<td>" + "<span onclick=\"renameBudget('" + currentBudgets[i][0] + "');\"" +
-		// 			"class=\"w3-button\"><i class=\"fas fa-edit\"></i></span>";
-		// 	// Every other budget (not default) can be deleted.
-		// 	if ( i !== 0 ) {
-		// 		content += "<span onclick=\"deleteBudget('" + currentBudgets[i][0] + "');\"" +
-		// 				"class=\"w3-button\"><i class=\"fas fa-times w3-text-red\"></i></span></li>";
-		// 	}
-		// 	content += "</td>";
-		// 	// Allocation enabled? Display the ratios.
-		// 	// Note: Allocation has the same order as budgets, so we can use the same index.
-		// 	if ( this.storage.readMainStorage( "allocationOn" ) ) {
-		// 		content += "<td>" + this.storage.readMainStorage( "allocation" )[i][1] + "&percnt;</td>";
-		// 	}
-		// 	content += "</tr>";
-		// }
-		// content += "</table><br>";
-		
-		// $(id).html( content );
 
 		let overallBalance = budgets.map(b => b[1]).reduce((prev, curr) => prev + curr, 0);
 		let overallLabel = `${this.textData['overallBalance']}: ${this.printNum(overallBalance)}`;

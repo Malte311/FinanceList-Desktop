@@ -41,5 +41,7 @@ module.exports = {
 	'updateMessage': 'Es ist eine neue Version von FinanceList-Desktop verf\u00fcgbar!',
 	'undo': 'Rückgängig',
 	'window': 'Fenster',
-	'windowSize': 'Fenstergr\u00f6\u00dfe'
+	'windowSize': 'Fenstergr\u00f6\u00dfe',
+	'zoomIn': 'Vergr\u00f6\u00dfern',
+	'zoomOut': 'Verkleinern'
 }
