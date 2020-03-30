@@ -54,8 +54,8 @@ module.exports = class ChartHandler {
 				tooltips: {
 					callbacks: {
 						label: (ttI, cD) => {
-							let cS = this.view.mappings[this.view.storage.readPreference('currency')];
-							return `${cD.labels[ttI.index]}: ${cD.datasets[0].data[ttI.index]}${cS}`;
+							let sum = this.view.printNum(cD.datasets[0].data[ttI.index]);
+							return `${cD.labels[ttI.index]}: ${sum}`;
 						}
 					}
 				},
