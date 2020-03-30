@@ -37,30 +37,19 @@ module.exports = class SettingsView extends View {
 		let newPath = dialog.showOpenDialog({properties: ['openDirectory']});
 		if (newPath && newPath[0] !== oldPath) {
 			Path.moveFiles(oldPath, newPath[0]);
-			this.storage.storePreference('path', newPath[0]);
-			
-			this.updatePreferences();
+
+			this.updatePreference('path', newPath[0]);
 		}
 	}
 
 	/**
-	 * Updates the currently selected currency.
+	 * Updates the a given preference (and displays the new value).
 	 * 
-	 * @param {string} currency The new currency.
+	 * @param {string} name The name of the preference which should be updated.
+	 * @param {string} value The new value for that preference.
 	 */
-	updateCurrency(currency) {
-		this.storage.storePreference('currency', currency);
-
-		this.updatePreferences();
-	}
-
-	/**
-	 * Updates the currently selected chart type.
-	 * 
-	 * @param {string} chartType The new chart type.
-	 */
-	updateChartType(chartType) {
-		this.storage.storePreference('chartType', chartType);
+	updatePreference(name, value) {
+		this.storage.storePreference(name, value);
 
 		this.updatePreferences();
 	}

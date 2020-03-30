@@ -14,7 +14,7 @@ module.exports = class Template {
 	 */
 	icon(icon, color = 'black') {
 		return this.view.elt('i', {
-			class: `${this.mapIcon(icon)} text-${this.mapColor(color)}`
+			class: `${this.view.textData[icon]} text-${this.view.textData[color]}`
 		});
 	}
 
@@ -30,7 +30,7 @@ module.exports = class Template {
 		return this.view.elt('div', {
 			class: 'progress'
 		}, this.view.elt('div', {
-			class: `progress-bar progress-bar-striped bg-${this.mapColor(color)}`,
+			class: `progress-bar progress-bar-striped bg-${this.view.textData[color]}`,
 			role: 'progressbar',
 			style: `width: ${Math.round(percentage)}%`
 		}, text));
@@ -60,49 +60,5 @@ module.exports = class Template {
 		let tmp = document.createElement('div');
 		tmp.appendChild(dom);
 		return tmp.innerHTML;
-	}
-
-	/**
-	 * Maps colornames (e.g. blue, green, red) to bootstrap colors.
-	 * 
-	 * @param {string} color The color we want to map.
-	 * @return {string} The mapped color. 
-	 */
-	mapColor(color) {
-		switch (color) {
-			case 'black':
-				return 'dark';
-			case 'blue':
-				return 'primary';
-			case 'gray':
-				return 'secondary';
-			case 'green':
-				return 'success';
-			case 'red':
-				return 'danger';
-			case 'yellow':
-				return 'warning';
-			default:
-				return 'primary';
-		}
-	}
-
-	/**
-	 * Maps icon names (e.g. rightarrow) to fontawesome icon names.
-	 * 
-	 * @param {string} icon The icon name we want to map.
-	 * @return {string} The mapped icon name. 
-	 */
-	mapIcon(icon) {
-		switch (icon) {
-			case 'arrowright':
-				return 'fa fa-arrow-right';
-			case 'creditcard':
-				return 'fas fa-credit-card';
-			case 'moneybill':
-				return 'far fa-money-bill-alt';
-			default:
-				return '';
-		}
 	}
 }
