@@ -87,7 +87,7 @@ module.exports = class Path {
 					let lang = this.storage.readPreference('language');
 					let textData = require(__dirname + `/../../text/text_${lang}.json`);
 					
-					dialog.showErrorBox(textData['error'], textData['cross-device-err']);
+					dialog.showErrorBox(textData['error'], textData['moveFileErr']);
 					break;
 				}
 			}
