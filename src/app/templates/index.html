@@ -1,92 +1,89 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>FinanceList &ndash; A finance managing tool</title>
-        <link rel="shortcut icon" href="../img/tab.ico">
+	<head>
+		<title>FinanceList &ndash; A finance managing tool</title>
+		<link rel="shortcut icon" href="../img/tab.ico">
 		<meta charset="UTF-8">
 
-		<link rel="stylesheet" type="text/css" href="../style/w3.min.css">
 		<link rel="stylesheet" type="text/css" href="../style/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="../style/fontawesome/css/fontawesome-all.min.css">
-        <link rel="stylesheet" type="text/css" href="../style/style.css">
-    </head>
-    <body class="bg-light">
+		<link rel="stylesheet" type="text/css" href="../style/fontawesome/css/fontawesome-all.min.css">
+		<link rel="stylesheet" type="text/css" href="../style/style.css">
+	</head>
+	<body class="bg-light">
 		<nav class="navbar navbar-dark bg-dark justify-content-between">
 			<span class="navbar-brand text-light">
+				<img alt="Logo" src="../img/tab.ico" width="30px" height="30px" class="d-inline-block align-top">
 				FinanceList-Desktop
 			</span>
 			<span>
 				<a onclick="s.view.updateLang('en')" href="#">
-					<img alt="EN" src="../img/us.ico" width="24px" height="24px">
+					<img alt="EN" src="../img/us.ico" width="30px" height="30px">
 				</a>
 				<a onclick="s.view.updateLang('de')" href="#">
-					<img alt="DE" src="../img/de.ico" width="24px" height="24px">
+					<img alt="DE" src="../img/de.ico" width="30px" height="30px">
 				</a>
-            </span>
+			</span>
 		</nav>
-        <!-- sidebar -->
-        <nav class="w3-sidebar w3-collapse w3-white w3-card w3-animate-left" style="z-index:3;width:200px;margin-top:0px;">
-            <br>
-            <div align="center" class="w3-container w3-row">
-                <span class="w3-xlarge w3-text-green" lang="en"> Overview </span>
-                <span class="w3-xlarge w3-text-green" lang="de"> Überblick </span>
-            </div>
-            <hr style="border-color:black;">
-            <div class="w3-bar-block">
-                <span lang="en"><a href="#" class="w3-bar-item w3-button w3-padding w3-light-blue"><i class="fa fa-home w3-text-blue w3-large icon"></i> Overview </a></span>
-                <span lang="de"><a href="#" class="w3-bar-item w3-button w3-padding w3-light-blue"><i class="fa fa-home w3-text-blue w3-large icon"></i> &Uuml;berblick </a></span>
-                <span lang="en"><a onclick="window.location.href='./balances.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-euro-sign w3-text-green w3-large icon"></i> Balances </a></span>
-                <span lang="de"><a onclick="window.location.href='./balances.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-euro-sign w3-text-green w3-large icon"></i> Bilanzen </a></span>
-                <span lang="en"><a onclick="window.location.href='./settings.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-cog w3-large icon"></i> Settings </a></span>
-                <span lang="de"><a onclick="window.location.href='./settings.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="fas fa-cog w3-large icon"></i> Einstellungen </a></span>
-                <span lang="en"><a onclick="window.location.href='./help.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="far fa-question-circle w3-text-yellow w3-large icon"></i> Help </a></span>
-                <span lang="de"><a onclick="window.location.href='./help.html';" href="#" class="w3-bar-item w3-button w3-padding"><i class="far fa-question-circle w3-text-yellow w3-large icon"></i> Hilfe </a></span>
-            </div>
-        </nav>
-		<!-- main content -->
-		<div class="w3-main" style="margin-left:250px;margin-top:45px;margin-bottom:50px;">
-            <div class="w3-panel">
-                <!-- budget overview, added via JavaScript -->
-                <div class="w3-row-padding w3-twothird" style="margin:0 -16px">
-                    <h3 lang="en"><i class="fa fa-arrow-right w3-text-green w3-large"></i> Monthly surplus </h3>
-                    <h3 lang="de"><i class="fa fa-arrow-right w3-text-green w3-large"></i> Monatlicher Überschuss </h3>
-                    <div id="currentBalances"></div>
-                </div>
-            </div>
-            <!-- recent spendings overview, added via JavaScript -->
-            <hr style="border-color:black;">
-            <div class="w3-panel">
-                <div class="w3-row-padding w3-twothird" style="margin:0 -16px" id="recentSpendings"></div>
-            </div>
-            <hr style="border-color:black;">
-            <!-- canvas for the spendings chart -->
-            <div class="w3-panel">
-                <div class="w3-row-padding" style="margin:0 -16px">
-                    <h3 lang="en"><i class="fa fa-arrow-right w3-text-green w3-large"></i> All time spendings </h3>
-                    <h3 lang="de"><i class="fa fa-arrow-right w3-text-green w3-large"></i> Gesamtausgaben </h3>
-                    <div id="allTimeSpendings"><canvas id="spending" width="8000" height="2500"></canvas></div>
-                </div>
-            </div>
-            <!-- recent earnings overview, added via JavaScript -->
-            <hr style="border-color:black;">
-            <div class="w3-panel">
-                <div class="w3-row-padding w3-twothird" style="margin:0 -16px" id="recentEarnings"></div>
-            </div>
-            <hr style="border-color:black;">
-            <!-- canvas for the earnings chart -->
-            <div class="w3-panel">
-                <div class="w3-row-padding" style="margin:0 -16px">
-                    <h3 lang="en"><i class="fa fa-arrow-right w3-text-green w3-large"></i> All time earnings </h3>
-                    <h3 lang="de"><i class="fa fa-arrow-right w3-text-green w3-large"></i> Gesamteinnahmen </h3>
-                    <div id="allTimeEarnings"><canvas id="earning" width="8000" height="2500"></canvas></div>
-                </div>
-            </div>
-            <hr>
+
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link active" id="overview-tab" data-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">
+					<i class="fa fa-home text-primary"></i>
+					<span>Overview</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="balances-tab" data-toggle="tab" href="#balances" role="tab" aria-controls="balances" aria-selected="false">
+					<i class="fas fa-euro-sign text-success"></i>
+					<span>Balances</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">
+					<i class="fas fa-cog text-danger"></i>
+					<span>Settings</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="help-tab" data-toggle="tab" href="#help" role="tab" aria-controls="help" aria-selected="false">
+					<i class="far fa-question-circle text-warning"></i>
+					<span>Help</span>
+				</a>
+			</li>
+		</ul>
+
+		<div class="tab-content" id="myTabContent">
+			<div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+				<div id="currentBalances"></div>
+				<hr style="border-color:black;">
+				
+				<div id="recentSpendings"></div>
+				<hr style="border-color:black;">
+				
+				<div id="allTimeSpendings"></div>
+				<hr style="border-color:black;">
+
+				<div id="recentEarnings"></div>
+				<hr style="border-color:black;">
+
+				<div id="allTimeEarnings"></div>
+			</div>
+			<div class="tab-pane fade" id="balances" role="tabpanel" aria-labelledby="balances-tab">
+
+			</div>
+			<div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+
+			</div>
+			<div class="tab-pane fade" id="help" role="tabpanel" aria-labelledby="help-tab">
+
+			</div>
 		</div>
 	</body>
 	<script>
 		const $ = jQuery = require('jquery'); // Global jQuery & jQueryUI.
 		require('jquery-ui-dist/jquery-ui');
+		require('popper.js'); // Global Bootstrap things.
+		require('bootstrap');
 
 		let Startup = require(__dirname + '/../scripts/startup.js');
 		let s = new Startup();

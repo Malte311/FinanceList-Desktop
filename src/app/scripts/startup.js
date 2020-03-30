@@ -8,6 +8,11 @@ const Updater = require(__dirname + '/updates/updater.js');
  */
 module.exports = class Startup {
 	constructor() {
+		$('#myTab a').on('click', function(e) {
+			e.preventDefault();
+			$(this).tab('show');
+		});
+		
 		this.storage = new JsonStorage();
 
 		Updater.checkForUpdates();

@@ -2,17 +2,9 @@
  * set the elements with the correct language visible (in JavaScript).
  */
 [lang=de] {
-    display: none;
+	display: none;
 }
 
 [lang=en] {
-    display: none;
-}
-
-.icon {
-    width: 20px;
-}
-
-.overviewItem {
-	
+	display: none;
 }

@@ -16,6 +16,7 @@ module.exports = {
 	'monthlySurplus': 'Monatlicher \u00dcberschuss',
 	'noEarning': 'Es gibt bisher keine Einnahmen!',
 	'noSpending': 'Es gibt bisher keine Ausgaben!',
+	'overview': '\u00dcberblick',
 	'paste': 'Einfügen',
 	'recentEarning': 'K\u00fcrzliche Einnahmen',
 	'recentSpending': 'K\u00fcrzliche Ausgaben',

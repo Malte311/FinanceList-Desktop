@@ -16,6 +16,7 @@ module.exports = {
 	'monthlySurplus': 'Monthly surplus',
 	'noEarning': 'There are no earnings yet!',
 	'noSpending': 'There are no spendings yet!',
+	'overview': 'Overview',
 	'paste': 'Paste',
 	'recentEarning': 'Recent earnings',
 	'recentSpending': 'Recent spendings',
