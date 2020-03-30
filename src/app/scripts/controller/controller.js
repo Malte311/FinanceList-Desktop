@@ -16,32 +16,6 @@ const win = remote.getCurrentWindow();
 const maxStrLen = 100;
 const maxSWLen = 30;
 
-
-/**
- * This function sets the language.
- * @param {String} language The new language.
- */
-function setLanguage( language ) {
-    // Display the new language.
-    switch ( language ) {
-        case "en":
-            $( "[lang=de]" ).hide();
-            $( "[lang=en]" ).show();
-            break;
-        case "de":
-            $( "[lang=en]" ).hide();
-            $( "[lang=de]" ).show();
-            break;
-        // Default: English
-        default:
-            $( "[lang=de]" ).hide();
-            $( "[lang=en]" ).show();
-            break;
-    }
-    // Save the new language.
-    storePreference( "language", language );
-}
-
 /**
  * This function saves new spending entries in .json files.
  * @param {String} spending The name of the spending.

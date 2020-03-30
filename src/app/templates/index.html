@@ -89,24 +89,16 @@
 				<h3 lang="de"><i class="fas fa-desktop"></i> Fenstergr&ouml;&szlig;e</h3>
 				<h3 lang="en"><i class="fas fa-desktop"></i> Window size</h3>
 				<div>
-					<input type="checkbox" onclick="setWindowMode();" id="fullscreen">
+					<input type="checkbox" onclick="s.view.toggleWindowMode(this.checked);">
 					<span lang="en">Activate fullscreen</span>
 					<span lang="de">Vollbildmodus aktivieren</span>
 				</div>
 				<hr style="border-color:black;">
 
-				<h3 lang="de">
-					<i class="fas fa-folder text-warning"></i>
-					Dateipfad
-					<i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Der Pfad, unter dem die Einnahmen und Ausgaben gespeichert werden."></i>
-				</h3>
-				<h3 lang="en">
-					<i class="fas fa-folder text-warning"></i>
-					File path
-					<i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="The file path where your data is saved."></i>
-				</h3>
+				<h3 lang="de"><i class="fas fa-folder text-warning"></i> Dateipfad</h3>
+				<h3 lang="en"><i class="fas fa-folder text-warning"></i> File path</h3>
 				<div>
-					<button onclick="setPath();" id="currentPath" ></button>
+					<button onclick="setPath();" id="currentPath"></button>
 				</div>
 				<hr style="border-color:black;">
 

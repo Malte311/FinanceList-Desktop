@@ -1,7 +1,11 @@
 const Dialog = require(__dirname + '/utils/dialog.js');
-const IndexView = require(__dirname + '/view/indexView.js');
 const JsonStorage = require(__dirname + '/storage/jsonStorage.js');
 const Updater = require(__dirname + '/updates/updater.js');
+
+const BalancesView = require(__dirname + '/view/balancesView.js');
+const HelpView = require(__dirname + '/view/helpView.js');
+const IndexView = require(__dirname + '/view/indexView.js');
+const SettingsView = require(__dirname + '/view/settingsView.js');
 
 /**
  * Class for initializing the application.
@@ -18,21 +22,28 @@ module.exports = class Startup {
 			});
 		}
 
+		let startUp = this; // this binding is overriden inside of the next block.
 		$('#myTab a').on('click', function(e) { // Enable changing between tabs.
 			e.preventDefault();
 			$(this).tab('show');
+			
+			switch ($(this).attr('aria-controls')) {
+				case 'balances':
+					startUp.view = new BalancesView(startUp.storage);
+					break;
+				case 'help':
+					startUp.view = new HelpView(startUp.storage);
+					break;
+				case 'overview':
+					startUp.view = new IndexView(startUp.storage);
+					break;
+				case 'settings':
+					startUp.view = new SettingsView(startUp.storage);
+					break;
+			}
 		});
 
 		Updater.checkForUpdates();
 		Updater.execRecurrTransact();
-	}
-
-	/**
-	 * Updates the currently selected view.
-	 * 
-	 * @param {object} view The new view object.
-	 */
-	setView(view) {
-		this.view = view;
 	}
 }

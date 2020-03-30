@@ -49,47 +49,6 @@ function setWindowSize( size ) {
 }
 
 /**
- * This function sets the window mode. Available is fullscreen/no fullscreen.
- */
-function setWindowMode() {
-    // If the checkbox is checked now, it was previously unchecked. This means
-    // we will switch to fullscreen.
-    if ( $( "#fullscreen" ).is( ":checked" ) ) {
-        win.setFullScreen( true );
-        storePreference( "fullscreen", true );
-    }
-    // Otherwise we switch back to window mode.
-    else {
-        win.setFullScreen( false );
-        win.center();
-        storePreference( "fullscreen", false );
-    }
-    // No updateView() required here, since the checkbox change its state automatically.
-}
-
-/**
- * This function sets the path to the directory which should contain the user data.
- * The path will be saved in the configuration file to remember it.
- */
-function setPath() {
-    // Get the new path from user input.
-    var newPath = dialog.showOpenDialog({
-        properties: ['openDirectory']
-    });
-    // Make sure that a new path was selected and that the new path is a different one than the old one.
-    if ( newPath !== null && newPath !== undefined && newPath[0] !== readPreference( "path" ) ) {
-        // Move all files to the new location
-        Path.moveFiles( readPreference( "path" ), newPath[0] );
-        // Save the new path in the configuration file.
-        // (Since newPath is a one element array containing the path, we just take
-        // the path instead of the whole array.)
-        storePreference( "path", newPath[0] );
-        // Update the view to display the newly selected path.
-        updateView();
-    }
-}
-
-/**
  * This function sets the currency.
  * @param {String} value The name of the currency.
  */
