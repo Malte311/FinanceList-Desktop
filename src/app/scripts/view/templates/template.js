@@ -51,6 +51,17 @@ module.exports = class Template {
 	}
 
 	/**
+	 * Returns the content of a html template file.
+	 * 
+	 * @param {string} filename The name of the html template file.
+	 * @return {string} The contents of the html template file.
+	 */
+	fromTemplate(filename) {
+		let {readFileSync} = require('fs');
+		return readFileSync(`${__dirname}/../../../templates/${filename}`, {encoding: 'utf-8'});
+	}
+
+	/**
 	 * Returns the html representation of a dom element in string format.
 	 * 
 	 * @param {object} dom The dom element.

@@ -4,8 +4,6 @@ module.exports =
     "cancel": "Cancel",
     "recurringTransactionsHeadings": ["Name", "Amount", "Type", "Budget", "Category", "Next execution", "Interval", "End date", "Delete", "Edit"],
     "recurringTransactionsContent": ["earning", "spending", "days", "No recurring transactions available."],
-    "addTransaction": "Add transaction",
-    "transactionDialogTextElements": ["Here you can add new earnings or new spendings.", "Earning", "Spending", "Name", "Amount", "Category", "(optionally)", "Date", "Choose budget", "Allocate automatically", "Budget", "Automate", "End date", "never"],
     "intervalOptionsTextElements": ["weekly", "every 4 weeks", "monthly", "bimonthly", "quarterly", "biannual", "annual"],
     "deleteBudget": "Delete budget",
     "reallyDelete": "Are you sure you want to delete this budget? <br> All the data will be lost.",
