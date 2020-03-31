@@ -8,8 +8,6 @@ module.exports =
     "addTransaction": "Eintrag hinzuf\u00fcgen",
     "transactionDialogTextElements": ["Hier k&ouml;nnen Sie neue Einnahmen oder Ausgaben hinzuf&uuml;gen.", "Einnahme", "Ausgabe", "Name", "Betrag", "Kategorie", "(optional)", "Datum", "Konto w&auml;hlen", "Automatisch verteilen", "Konto", "Automatisieren", "Enddatum", "nie"],
     "intervalOptionsTextElements": ["w&ouml;chentlich", "alle 4 Wochen", "monatlich", "zweimonatlich", "viertelj&auml;hrlich", "halbj&auml;hrlich", "j&auml;hrlich"],
-    "addBudget": "Konto hinzuf\u00fcgen",
-    "budgetName": "Geben Sie einen Namen f&uuml;r das neue Konto ein.",
     "deleteBudget": "Konto l\u00f6schen",
     "reallyDelete": "Wollen Sie dieses Konto wirklich l&ouml;schen? <br> Dann gehen alle gespeicherten Daten verloren.",
     "renameBudget": "Konto umbenennen",

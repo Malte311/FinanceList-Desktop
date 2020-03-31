@@ -67,6 +67,19 @@ module.exports = class Storage {
 		throw new Error('This function must be overridden!');
 	}
 
+	/**
+	 * Updates an array in the mainstorage: Reads the mainstorage field first, then
+	 * pushes the new value to the array and writes the array back to the storage.
+	 * 
+	 * @param {string} field The name of a field (which contains an array!).
+	 * @param {any} toAppend The element which should be appended to the array.
+	 */
+	addToMainStorageArr(field, toAppend) {
+		let array = this.readMainStorage(field);
+		array.push(toAppend);
+		this.writeMainStorage(field, array);
+	}
+
 	getData(file, quest) {
 		throw new Error('This function must be overridden!');
 	}

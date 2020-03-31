@@ -1,4 +1,5 @@
 module.exports = {
+	'addBudget': 'Add budget',
 	'allocationRatio': 'Allocation ratio',
 	'allTimeEarning': 'All time earnings',
 	'allTimeSpending': 'All time spendings',
@@ -6,6 +7,7 @@ module.exports = {
 	'balances': 'Balances',
 	'bar': 'Bar chart',
 	'budget': 'Budget',
+	'budgetName': 'Please type in the name of the new budget. The name must not be empty, it must not be longer than 30 characters and it must not exist yet.',
 	'cancel': 'Cancel',
 	'close': 'Close',
 	'confirm': 'Confirm',

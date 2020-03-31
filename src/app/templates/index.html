@@ -84,12 +84,33 @@
 			</div>
 
 			<div class="tab-pane fade" id="balances" role="tabpanel" aria-labelledby="balances-tab">
+				<div class="modal fade" id="divModal" tabindex="-1" role="dialog" aria-labelledby="divModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="divModalLabel"></h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<center><div class="modal-err"></div></center>
+							<div class="modal-body">
+								
+							</div>
+							<div class="modal-footer">
+								<button type="button" id="modalCanc" class="btn btn-outline-danger" data-dismiss="modal"></button>
+								<button type="button" id="modalConf" class="btn btn-outline-success"></button>
+							</div>
+						</div>
+					</div>
+				</div>
+
 				<h3 lang="de"><i class="fas fa-credit-card text-primary"></i> Konten&uuml;bersicht</h3>
 				<h3 lang="en"><i class="fas fa-credit-card text-primary"></i> Budget overview</h3>
 				<div id="currentBudgets"></div>
 				<div>
-					<button lang="de" onclick="addBudget();">Konto hinzuf&uuml;gen</button>
-					<button lang="en" onclick="addBudget();">Add budget</button>
+					<button lang="de" type="button" id="btnAddBudget" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Konto hinzuf&uuml;gen</button>
+					<button lang="en" type="button" id="btnAddBudget" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Add budget</button>
 					<button lang="de" onclick="addTransaction();">Eintrag hinzuf&uuml;gen</button>
 					<button lang="en" onclick="addTransaction();">Add transaction</button>
 					<button lang="de" onclick="setAllocation();">Automatische Aufteilung</button>

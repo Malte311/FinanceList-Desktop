@@ -1,4 +1,4 @@
-const Dialog = require(__dirname + '/utils/dialog.js');
+const DialogHandler = require(__dirname + '/utils/dialogHandler.js');
 const JsonStorage = require(__dirname + '/storage/jsonStorage.js');
 const Updater = require(__dirname + '/updates/updater.js');
 
@@ -15,11 +15,13 @@ module.exports = class Startup {
 		this.storage = new JsonStorage();
 		this.view = new IndexView(this.storage);
 
+		this.dialogHandler = new DialogHandler(this.view);
+
 		let txt = this.view.textData;
 		if (!this.storage.readPreference('user')) { // Set a username, if no user exists.
-			(new Dialog(this.view)).inputDialog(txt['selUserTtitle'], txt['selUserText'], () => {
-				console.log($('#dialogInput').text())
-			});
+			// (new Dialog(this.view)).inputDialog(txt['selUserTtitle'], txt['selUserText'], () => {
+			// 	console.log($('#dialogInput').text())
+			// });
 		}
 
 		let startUp = this; // this binding is overriden inside of the next block.

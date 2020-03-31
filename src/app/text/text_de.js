@@ -1,4 +1,5 @@
 module.exports = {
+	'addBudget': 'Konto hinzuf\u00fcgen',
 	'allocationRatio': 'Anteil bei Aufteilung',
 	'allTimeSpending': 'Gesamtausgaben',
 	'allTimeEarning': 'Gesamteinnahmen',
@@ -6,6 +7,7 @@ module.exports = {
 	'balances': 'Bilanzen',
 	'bar': 'Balkendiagramm',
 	'budget': 'Konto',
+	'budgetName': 'Bitte geben Sie einen Namen f\u00fcr das neue Konto ein. Der Name darf nicht leer sein, maximal 30 Zeichen lang sein und darf noch nicht vergeben sein.',
 	'cancel': 'Abbrechen',
 	'close': 'Schließen',
 	'confirm': 'Best\u00e4tigen',

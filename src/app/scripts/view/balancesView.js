@@ -37,18 +37,18 @@ module.exports = class BalancesView extends View {
 			b[0], // Index 0: name of the budget.
 			this.printNum(b[1]), // Index 1: balance of the budget.
 			this.elt('span', {
-				onclick: () => {this.renameBudget(b[0]);}
-			}, this.template.icon('edit', 'blue')),
-			index == 0 ? '' : this.elt('span', {
-				onclick: () => {this.deleteBudget(b[0]);}
-			}, this.elt('i', {class: 'fas fa-times text-danger'}))
-		]);
+				onclick: () => this.renameBudget(b[0])
+			}, this.template.icon('edit', 'blue'), index == 0 ? '' : this.elt('span', {
+				onclick: () => this.deleteBudget(b[0])
+			}, this.template.icon('delete', 'red')))]);
 
 		if (this.storage.readMainStorage('allocationOn')) {
-			rows.forEach(row => row.push(this.storage.readMainStorage('allocation').map(a => a[1] + '&percnt;')));
+			let allocation = this.storage.readMainStorage('allocation');
+			rows.forEach((row, index) => row.push(allocation[index][1] + '\u0025')); // \u0025 = %
 		}
 
-		console.log(rows)
+		rows.unshift(headings);
+
 		$(id).html(this.template.table(rows));
 
 		let overallBalance = budgets.map(b => b[1]).reduce((prev, curr) => prev + curr, 0);

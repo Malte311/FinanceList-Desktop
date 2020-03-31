@@ -7,8 +7,6 @@ module.exports =
     "addTransaction": "Add transaction",
     "transactionDialogTextElements": ["Here you can add new earnings or new spendings.", "Earning", "Spending", "Name", "Amount", "Category", "(optionally)", "Date", "Choose budget", "Allocate automatically", "Budget", "Automate", "End date", "never"],
     "intervalOptionsTextElements": ["weekly", "every 4 weeks", "monthly", "bimonthly", "quarterly", "biannual", "annual"],
-    "addBudget": "Add budget",
-    "budgetName": "Type in the name of the new budget.",
     "deleteBudget": "Delete budget",
     "reallyDelete": "Are you sure you want to delete this budget? <br> All the data will be lost.",
     "renameBudget": "Rename budget",
