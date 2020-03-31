@@ -36,15 +36,13 @@ module.exports = class DialogHandler {
 		modal.find('.modal-footer #modalConf').on('click', () => {
 			let newBudget = $('#dialogInput').val().trim();
 
-			this.view.storage.addToMainStorageArr('test', 'test');
-
 			if (!this.inputHandler.isValidBudgetName(newBudget)) return;
 
-			this.view.storage.addToMainStorageArr('budgets', [newBudget, 0.0]);
-			this.view.storage.addToMainStorageArr('allTimeEarnings', [newBudget, 0.0]);
-			this.view.storage.addToMainStorageArr('allTimeSpendings', [newBudget, 0.0]);
-			this.view.storage.addToMainStorageArr('allocation', [newBudget, 0]);
+			['budgets', 'allTimeEarnings', 'allTimeSpendings', 'allocation'].forEach(field => {
+				this.view.storage.addToMainStorageArr(field, [newBudget, 0]);
+			});
 
+			modal.modal('hide');
 			this.view.updateView();
 		});
 	}

@@ -43,6 +43,8 @@ module.exports = class Startup {
 					startUp.view = new SettingsView(startUp.storage);
 					break;
 			}
+
+			startUp.dialogHandler.view = startUp.view;
 		});
 
 		Updater.checkForUpdates();
