@@ -52,9 +52,118 @@ module.exports = class DialogHandler {
 		});
 	}
 
+	/**
+	 * Displays a dialog to rename a budget and handles the interaction of this dialog.
+	 * 
+	 * @param {String} name The name of the budget we want to change.
+	 */
+	renameBudget(name) {
+		let budgets = this.view.storage.readMainStorage('budgets');
+
+		return;
+
+		// Add an input field.
+		createDialog( textElements.renameBudget,
+					textElements.newBudgetName + "<br><input type=\"text\" id=\"dialogInput\">", function() {
+			// Get all currently available budgets.
+			var currentBudgets = readMainStorage( "budgets" );
+			// Rename the budget in all time earnings/spendings as well.
+			var allTimeEarnings = readMainStorage( "allTimeEarnings" );
+			var allTimeSpendings = readMainStorage( "allTimeSpendings" );
+			// For allocation as well.
+			var allocation = readMainStorage( "allocation" );
+			// We add all budgets to this (and the renamed one with its new name)
+			var updatedBudgets = [],
+				updatedAllTimeEarnings = [],
+				updatedAllTimeSpendings = [],
+				newAllocation = [];
+			var newName = $( "#dialogInput" ).val().trim();
+			// Iterate over them to find the one we want to rename.
+			// Remember that all the fields are all in the same order, so we can use the same index.
+			for ( var i = 0; i < currentBudgets.length; i++ ) {
+				// Found it? Rename it.
+				if ( currentBudgets[i][0] === name ) {
+					updatedBudgets.push( [newName, currentBudgets[i][1]] );
+				}
+				// Not the budget we are looking for? Push the budget unmodified.
+				else {
+					updatedBudgets.push( currentBudgets[i] );
+				}
+				// Do the same for allTimeEarnings and allTimeSpendings.
+				if ( allTimeEarnings[i][0] === name ) {
+					updatedAllTimeEarnings.push( [newName, allTimeEarnings[i][1]] );
+				}
+				else {
+					updatedAllTimeEarnings.push( allTimeEarnings[i] );
+				}
+
+				if ( allTimeSpendings[i][0] === name ) {
+					updatedAllTimeSpendings.push( [newName, allTimeSpendings[i][1]] );
+				}
+				else {
+					updatedAllTimeSpendings.push( allTimeSpendings[i] );
+				}
+				// And for allocation as well.
+				if ( allocation[i][0] === name ) {
+					newAllocation.push( [newName, allocation[i][1]] );
+				}
+				else {
+					newAllocation.push( allocation[i] );
+				}
+			}
+			// Rename recurring transactions using this budget.
+			var recurringTransactions = readMainStorage( "recurring" );
+			// Search for transactions involving this budget.
+			for ( var i = 0; i < recurringTransactions.length; i++ ) {
+				// Found the budget? Rename it.
+				if ( recurringTransactions[i].budget === name ) {
+					recurringTransactions[i].budget = newName;
+				}
+			}
+			// Save the updated budgets in the mainStorage.json file.
+			writeMainStorage( "budgets", updatedBudgets );
+			// Again, we do this as well for allTimeEarnings and allTimeSpendings.
+			writeMainStorage( "allTimeEarnings", updatedAllTimeEarnings );
+			writeMainStorage( "allTimeSpendings", updatedAllTimeSpendings );
+			// Also, rename recurring transactions.
+			writeMainStorage( "recurring", recurringTransactions );
+			// Same for allocation.
+			writeMainStorage( "allocation", newAllocation );
+			// Update the view: Display the new name.
+			updateView();
+
+			
+			// Now we can rename all data for this budget (in the background).
+			var allFiles = getJsonFiles();
+			for ( var i = 0; i < allFiles.length; i++ ) {
+				// Filter the data. First, we get ALL data (earning OR spending will deliver everything).
+				var quest = { connector : "or", params : [["type", "earning"],["type", "spending"]] };
+				// Now, get the data.
+				var data = getData( allFiles[i] + ".json", quest );
+				// Iterate over all the data and find the data which has to be renamed.
+				for ( var j = 0; j < data.length; j++ ) {
+					// Found the correct budget? Rename it.
+					if ( data[j].budget === name ) {
+						data[j].budget = newName;
+					}
+				}
+				// Now replace the old data with the new data.
+				replaceData( allFiles[i] + ".json", data );
+			}
+		});
+	}
+
 	addTransaction(modal) {
 		modal.find('.modal-title').html(this.view.textData['addTransaction']);
 		modal.find('.modal-body').html(this.view.template.fromTemplate('addTransactDialog.html'));
+		
+		modal.find('.modal-body #dateInput').datepicker({
+			autoclose: true,
+			format: 'dd.mm.yyyy',
+			language: 'de', // this.view.storage.readPreference('language')
+			setDate: '31.03.2020', // DateHandler.timestampToString(DateHandler.getCurrentTimestamp())
+			todayHighlight: true
+		});
 		
 		modal.find('.modal-footer #modalConf').on('click', () => {
 			// let budgets = this.view.storage.readMainStorage('budgets');
@@ -65,7 +174,7 @@ module.exports = class DialogHandler {
 
 		return;
 
-		// "transactionDialogTextElements": ["Hier k&ouml;nnen Sie neue Einnahmen oder Ausgaben hinzuf&uuml;gen.", "Einnahme", "Ausgabe", "Name", "Betrag", "Kategorie", "(optional)", "Datum", "Konto w&auml;hlen", "Automatisch verteilen", "Konto", "Automatisieren", "Enddatum", "nie"],
+		// "transactionDialogTextElements": ["Konto", "Automatisieren", "Enddatum", "nie"],
 
 		var currentBudgets = readMainStorage('budgets');
 		var options = "";
@@ -91,27 +200,6 @@ module.exports = class DialogHandler {
 		// First two lines are radio buttons to select between earning and spending.
 		let DateHandler = require('../scripts/utils/dateHandler.js');
 		var text = 
-				// Input for name and amount.
-				"<div>" +
-						"<div>" +
-							"<b>" + textElementsLocal[3] +
-							"</b><br><input type=\"text\" id=\"nameInput\">" +
-						"</div>" +
-						"<div>" +
-							"<b>" + textElementsLocal[4] +
-							"</b><br><input style=\"width=50px;\" type=\"text\" id=\"sumInput\">" +
-						"</div>" +
-				"</div><br>" +
-				// Input for category.
-				"<div>" +
-						"<b>" + textElementsLocal[5] + "</b>" + " " + textElementsLocal[6] +
-						"<br><input type=\"text\" id=\"categoryInput\">" + "  " +
-						// Input for the date.
-						textElementsLocal[7] + ": " +
-						"<input id=\"datepicker1\" class=\"w3-round-large w3-light-gray\"" +
-						"type=\"button\" onclick=\"showDatepicker('1');\"" +
-						"value=\"" + DateHandler.timestampToString( DateHandler.getCurrentTimestamp() ) + "\">" +
-				"</div>" +
 				// Choose between manual and automated allocation. Hidden until "earning" is selected.
 				"<div id=\"dynamicDiv1\" style=\"display:none;\"><hr>" +
 						"<form class=\"w3-center\"><input id=\"manual\"" +

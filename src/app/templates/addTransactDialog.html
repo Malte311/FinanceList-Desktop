@@ -8,17 +8,17 @@
 
 <form>
 	<span lang="de">
-		<input id="earning" type="radio" name="type"> Einnahme
+		<input id="earning" type="radio" name="type" onclick="$('#dynamicDiv1').show()"> Einnahme
 	</span>
 	<span lang="en">
-		<input id="earning" type="radio" name="type"> Earning
+		<input id="earning" type="radio" name="type" onclick="$('#dynamicDiv1').show()"> Earning
 	</span>
 
 	<span lang="de">
-		<input id="spending" type="radio" name="type"> Ausgabe
+		<input id="spending" type="radio" name="type" onclick="$('#dynamicDiv1').hide()" checked> Ausgabe
 	</span>
 	<span lang="en">
-		<input id="spending" type="radio" name="type"> Spending
+		<input id="spending" type="radio" name="type" onclick="$('#dynamicDiv1').hide()" checked> Spending
 	</span>
 </form>
 <hr>
@@ -29,14 +29,35 @@
 	<br>
 	<input type="text" id="nameInput">
 </div>
-
-<!-- "<div>" +
-	"<div>" +
-		"<b>" + textElementsLocal[3] +
-		"</b><br><input type=\"text\" id=\"nameInput\">" +
-	"</div>" +
-	"<div>" +
-		"<b>" + textElementsLocal[4] +
-		"</b><br><input style=\"width=50px;\" type=\"text\" id=\"sumInput\">" +
-	"</div>" +
-"</div><br> -->
+<div>
+	<b lang="de">Betrag</b>
+	<b lang="en">Amount</b>
+	<br>
+	<input type="text" id="sumInput" style="width: 50px;">
+</div>
+<div>
+	<b lang="de">Kategorie</b> <span lang="de">(optional)</span>
+	<b lang="en">Category</b> <span lang="en">(optional)</span>
+	<br>
+	<input type="text" id="categoryInput">
+	<span lang="de">Datum:</span>
+	<span lang="en">Date:</span>
+	<input type="button" id="dateInput">
+</div>
+<div id="dynamicDiv1" style="display: none;">
+	<hr>
+	<form>
+		<span lang="de">
+			<input type="radio" id="manual" name="allocation"> Konto w&auml;hlen
+		</span>
+		<span lang="en">
+			<input type="radio" id="manual" name="allocation"> Choose budget
+		</span>
+		<span lang="de">
+			<input type="radio" id="autoAllocation" name="allocation" checked> Automatisch verteilen
+		</span>
+		<span lang="en">
+			<input type="radio" id="autoAllocation" name="allocation" checked> Allocate automatically
+		</span>
+	</form>
+</div>

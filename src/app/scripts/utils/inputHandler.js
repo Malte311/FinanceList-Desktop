@@ -7,7 +7,7 @@ module.exports = class InputHandler {
 
 		// These should not be changed because these values are used in text messages.
 		this.maxStrLen = 100;
-		this.maxSWLen = 30; // Maximum length for a single word.
+		this.maxSwLen = 30; // Maximum length for a single word.
 	}
 
 	/**
@@ -18,7 +18,7 @@ module.exports = class InputHandler {
 	 */
 	isValidBudgetName(name) {
 		let budgets = this.storage.readMainStorage('budgets');
-		return name && name !== '' && name.length <= this.maxSWLen && !budgets.map(b => b[0]).includes(name);
+		return name && name !== '' && name.length <= this.maxSwLen && !budgets.map(b => b[0]).includes(name);
 	}
 
 	/**
@@ -29,7 +29,7 @@ module.exports = class InputHandler {
 	 */
 	isValidEntryName(name) {
 		return name && name !== '' && name.length <= this.maxStrLen &&
-			name.split(' ').every(w => w.length <= this.maxSWLen);
+			name.split(' ').every(w => w.length <= this.maxSwLen);
 	}
 
 	isValidAmount(amount) {}

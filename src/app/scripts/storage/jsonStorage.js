@@ -156,6 +156,16 @@ module.exports = class JsonStorage extends Storage {
 		return timestampToFilename(getCurrentTimestamp());
 	}
 
+	/**
+	 * Checks whether a given path exists.
+	 * 
+	 * @param {string} path The path to be checked.
+	 * @return {bool} True if the path exists, else false.
+	 */
+	exists(path) {
+		return existsSync(path);
+	}
+
 	getData(file, quest) {
 		return (new Data(this)).getData(file, quest);
 	}
