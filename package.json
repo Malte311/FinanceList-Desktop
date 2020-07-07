@@ -23,7 +23,7 @@
   "author": "Malte311",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^1.8.8",
+    "electron": "^9.1.0",
     "electron-installer-dmg": "^0.2.1",
     "electron-packager": "^12.2.0",
     "jsdoc": "^3.6.3",
