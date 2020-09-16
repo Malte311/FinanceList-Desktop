@@ -1,6 +1,8 @@
 # FinanceList-Desktop
 
-![Build Status](https://travis-ci.com/Malte311/FinanceList-Desktop.svg?token=peoMTzKpBjcCaX8BZgzt&branch=master)
+![Build Status](https://travis-ci.com/Malte311/FinanceList-Desktop.svg?branch=master)
+[![GitHub license](https://img.shields.io/github/license/Malte311/FinanceList-Desktop)](https://github.com/Malte311/FinanceList-Desktop/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/v/release/Malte311/FinanceList-Desktop)](https://github.com/Malte311/FinanceList-Desktop/releases)
 
 FinanceList is a simple finance managing tool. For more information on how to use this tool, take a look at the [wiki](https://github.com/Malte311/FinanceList-Desktop/wiki).
 ***
