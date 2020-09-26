@@ -34,7 +34,10 @@ function createWindow() {
         movable: true,
         center: true,
         fullscreen: typeof fullscreen === 'boolean' ? fullscreen : false,
-        show: false
+		show: false,
+		webPreferences: {
+			nodeIntegration: true
+        }
     });
 
     if (screenWidth >= mainScreenWidth && screenHeight >= mainScreenHeight) {

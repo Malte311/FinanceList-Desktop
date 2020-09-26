@@ -1,5 +1,5 @@
-const Data = require(__dirname + '/../data/data.js');
-const DataHandler = require(__dirname + '/../data/dataHandler.js');
+const Data = require(__dirname + '/../handle/data.js');
+const DataHandler = require(__dirname + '/../handle/dataHandler.js');
 const Template = require(__dirname + '/templates/template.js');
 
 /**

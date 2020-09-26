@@ -1,4 +1,4 @@
-const Data = require(__dirname + '/../data/data.js');
+const Data = require(__dirname + '/../handle/data.js');
 const Storage = require(__dirname + '/storage.js');
 
 /**
@@ -7,6 +7,9 @@ const Storage = require(__dirname + '/storage.js');
 module.exports = class LocalStorage extends Storage {
 	constructor() {
 		super();
+
+		this.data = new Data(this);
+
 		/* TODO */
 	}
 
@@ -27,22 +30,22 @@ module.exports = class LocalStorage extends Storage {
 	}
 
 	getData(file, quest) {
-		return (new Data(this)).getData(file, quest);
+		return this.data.getData(file, quest);
 	}
 
 	storeData(data) {
-		return (new Data(this)).storeData(data);
+		return this.data.storeData(data);
 	}
 
 	replaceData(file, data) {
-		return (new Data(this)).replaceData(file, data);
+		return this.data.replaceData(file, data);
 	}
 
 	deleteData(file, data) {
-		return (new Data(this)).deleteData(file, data);
+		return this.data.deleteData(file, data);
 	}
 
 	joinData(indices, data) {
-		return (new Data(this)).joinData(indices, data);
+		return this.data.joinData(indices, data);
 	}
 }
