@@ -44,8 +44,4 @@ module.exports = class LocalStorage extends Storage {
 	deleteData(file, data) {
 		return this.data.deleteData(file, data);
 	}
-
-	joinData(indices, data) {
-		return this.data.joinData(indices, data);
-	}
 }

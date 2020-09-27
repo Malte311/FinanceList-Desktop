@@ -95,8 +95,4 @@ module.exports = class Storage {
 	deleteData(file, data) {
 		throw new Error('This function must be overridden!');
 	}
-
-	joinData(indices, data) {
-		throw new Error('This function must be overridden!');
-	}
 }

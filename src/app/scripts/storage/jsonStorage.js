@@ -159,6 +159,15 @@ module.exports = class JsonStorage extends Storage {
 	}
 
 	/**
+	 * Returns the path to the folder containing the data.
+	 * 
+	 * @return {string} The path to the folder containing the data.
+	 */
+	getDataPath() {
+		return this.readPreference('path') + Path.sep();
+	}
+
+	/**
 	 * Checks whether a given path exists.
 	 * 
 	 * @param {string} path The path to be checked.
@@ -182,9 +191,5 @@ module.exports = class JsonStorage extends Storage {
 
 	deleteData(file, data) {
 		return this.data.deleteData(file, data);
-	}
-
-	joinData(indices, data) {
-		return this.data.joinData(indices, data);
 	}
 }
