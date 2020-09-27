@@ -187,13 +187,13 @@ module.exports = class JsonStorage extends Storage {
 	 * @return {array} All the data which match the quest, in form of an array containing objects.
 	 */
 	getData(file, quest) {
-		let dataPath = readFileSync(this.getDataPath() + file);
+		let dataPath = this.getDataPath() + file;
 
 		if (!this.exists(dataPath)) {
 			return [];
 		}
 
-		return this.data.getData(JSON.parse(dataPath), quest);
+		return this.data.getData(JSON.parse(readFileSync(dataPath)), quest);
 	}
 
 	storeData(data) {
