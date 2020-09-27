@@ -196,12 +196,37 @@ module.exports = class JsonStorage extends Storage {
 		return this.data.getData(JSON.parse(readFileSync(dataPath)), quest);
 	}
 
+	/**
+	 * Stores data in the appropriate data file. The file is determined by the date of the data.
+	 * 
+	 * @param {object} data The data we want to store.
+	 */
 	storeData(data) {
-		this.data.storeData(data);
+		let dataPath = this.getDataPath() + timestampToFilename(data.date);
+
+		if (existsSync(dataPath)) {
+			let content = JSON.parse(readFileSync(dataPath));
+			content.push(data);
+			writeFileSync(dataPath, JSON.stringify(this.data.sortData(content), null, 4));
+		} else {
+			appendFileSync(dataPath, '[' + JSON.stringify(data, null, 4) + ']');
+		}
 	}
 
+	/**
+	 * Replaces a specific file with new data.
+	 * 
+	 * @param {string} file The file to override.
+	 * @param {object} data The data to write.
+	 */
 	replaceData(file, data) {
-		this.data.replaceData(file, data);
+		let filePath = this.getDataPath() + file;
+		
+		if (existsSync(filePath)) {
+			writeFileSync(filePath, JSON.stringify(data, null, 4));
+		} else {
+			appendFileSync(filePath, JSON.stringify(data, null, 4));
+		}
 	}
 
 	deleteData(file, data) {

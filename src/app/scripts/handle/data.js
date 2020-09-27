@@ -6,39 +6,6 @@ module.exports = class Data {
 		this.storage = storage;
 	}
 
-	getData(fileContents, quest) {
-		let filterFunction = quest.connector === 'or' ? this.getDataOr : this.getDataAnd;
-		return this.mergeData(filterFunction(fileContents, quest));
-	}
-
-	getDataOr(fileContents, quest) {
-		return fileContents.filter(dat => {
-			return quest.params.some(qu => {
-				if (qu[0] === 'name' || qu[0] === 'category') {
-					return dat[qu[0]].toLowerCase().includes(qu[1].toLowerCase());
-				} else if (qu[0] === 'budget') {					
-					return dat[qu[0]].split(',').some(budget => budget.trim() === qu[1]);
-				} else {
-					return dat[qu[0]] === qu[1];
-				}
-			});
-		});
-	}
-
-	getDataAnd(fileContents, quest) {
-		return fileContents.filter(dat => {
-			return quest.params.every(qu => {
-				if (qu[0] === 'name' || qu[0] === 'category') {
-					return dat[qu[0]].toLowerCase().includes(qu[1].toLowerCase());
-				} else if (qu[0] === 'budget') {					
-					return dat[qu[0]].split(',').some(budget => budget.trim() === qu[1]);
-				} else {
-					return dat[qu[0]] === qu[1];
-				}
-			});
-		});
-	}
-
 	/**
 	 * Returns data from an array, filtered by a given quest.
 	 * 
@@ -48,114 +15,37 @@ module.exports = class Data {
 	 * quest = { connector: 'or', params: [['type', 'earning'], ['budget', 'checking account']] }
 	 * @return {array} All the data which match the quest, in form of an array containing objects.
 	 */
-	// getData(fileContents, quest) {
-	// 	let data = fileContents.filter(dat => {
-	// 		let ret = null;
-	// 		quest.params.some(qu => {
-	// 			// We do not need an exact match, e.g. when searching for 'ticket', we want to
-	// 			// find entries called 'bus ticket'.
-	// 			if (qu[0] === 'name' || qu[0] === 'category') {
-	// 				// At least one param matched: Return true (ret = true) because connector is 'or'.
-	// 				if (quest.connector === 'or' && dat[qu[0]].toLowerCase().includes(qu[1].toLowerCase())) {
-	// 					ret = true;
-	// 					return true;
-	// 				}
-
-	// 				// One param does not match: 'and' connector cannot be satisfied (ret = false).
-	// 				if (quest.connector === 'and' && !dat[qu[0]].toLowerCase().includes(qu[1].toLowerCase())) {
-	// 					ret = false;
-	// 					return true;
-	// 				}
-	// 			}
-	// 			// Exact match is necessary for all other fields
-	// 			else {
-	// 				// At least one param matched? Return true (ret=true) because connector is "or".
-	// 				if ( quest.connector === "or" ) {
-	// 					if (qu[0] === "budget") { // Handle multiple budgets like "b1, b2, b3"
-	// 						let budgets = dat[qu[0]].split(",");
-	// 						ret = budgets.some((value, index, array) => {
-	// 							return value.trim() === qu[1];
-	// 						});
-							
-	// 						if (ret) return true;
-	// 					} else {
-	// 						if ( dat[qu[0]] === qu[1] ) {
-	// 							ret = true;
-	// 							return true;
-	// 						}
-	// 					}
-	// 				}
-	// 				// One param does not match => "and" connector can not be satisfied (ret=false).
-	// 				else {
-	// 					if (qu[0] === "budget") { // Handle multiple budgets like "b1, b2, b3"
-	// 						let budgets = dat[qu[0]].split(",");
-	// 						ret = !budgets.every((value, index, array) => {
-	// 							return value.trim() !== qu[1];
-	// 						});
-
-	// 						if (!ret) return true;
-	// 					} else {
-	// 						if ( dat[qu[0]] !== qu[1] ) {
-	// 							ret = false;
-	// 							return true;
-	// 						}
-	// 					}
-	// 				}
-	// 			}
-	// 		});
-
-	// 		// We only get to this point when (1) connector = "or" and no match was found,
-	// 		// (2) connector = "and" and no mismatch was found.
-	// 		return ret !== null ? ret : !(quest.connector === 'or');
-	// 	});
-
-	// 	return this.mergeData(data);
-	// }
-
-	// /**
-	//  * This function is for writing user data in .json files (user data means
-	//  * either spendings or earnings; the files are named by date).
-	//  * @param {JSON} data The data we want to write in form of a JSON object.
-	//  */
-	// storeData(data) {
-	// 	// Find out which file we want to use.
-	// 	var dateInStringFormat = dateToString( data.date );
-	// 	var dataPath = this.storage.readPreference( "path" ) + path.sep
-	// 											+ dateInStringFormat.split( "." )[1] + "."
-	// 											+ dateInStringFormat.split( "." )[2] + ".json";
-	// 	// File exists: Write the data in it.
-	// 	if ( fs.existsSync( dataPath ) ) {
-	// 		// Get existing data, add the new data and then write it.
-	// 		// Note that content is an array, because the file contains an array
-	// 		// of JSON objects.
-	// 		var content = JSON.parse( fs.readFileSync( dataPath ) );
-	// 		content.push( data );
-	// 		// Sort the data (oldest data first).
-	// 		content = sortData( content );
-	// 		fs.writeFileSync( dataPath, JSON.stringify( content, null, 4 ) );
-	// 	}
-	// 	// File does not exist: Create it and write the data in it.
-	// 	else {
-	// 		// The content is an array containing JSON objects.
-	// 		fs.appendFileSync( dataPath, "[" + JSON.stringify( data, null, 4 ) + "]" );
-	// 	}
-	// }
+	getData(fileContents, quest) {
+		let filterFn = quest.connector === 'and' ? ((a, b) => a && b) : ((a, b) => a || b);
+		
+		return this.mergeData(this.getDataReduce(fileContents, quest, filterFn));
+	}
 
 	/**
-	 * This function is for overwriting data in a specified file.
-	 * @param {String} file The file we want to override.
-	 * @param {JSON} data The data we want to write in form of a JSON object.
+	 * Does the actual filtering for the getData function.
+	 * 
+	 * @param {array} fileContents The content to be filtered.
+	 * @param {object} quest Specifies how to filter the data.
+	 * @param {function} connectFn Specifies the connector in the reduce function call. There are
+	 * two cases:
+	 * 1. connector: 'or' => connectFn = (a, b) => a || b
+	 * 2. connector: 'and' => connectFn = (a, b) => a && b
+	 * @return {array} All data which match the quest.
 	 */
-	replaceData(file, data) {
-		var dataPath = this.storage.readPreference( "path" ) + path.sep + file;
-		// File exists: Overwrite the data in it.
-		if ( fs.existsSync( dataPath ) ) {
-			fs.writeFileSync( dataPath, JSON.stringify( data, null, 4 ) );
-		}
-		// File does not exist: Create it and write the data in it.
-		else {
-			fs.appendFileSync( dataPath, JSON.stringify( data, null, 4 ) );
-		}
+	getDataReduce(fileContents, quest, connectFn) {
+		return fileContents.filter(dat => {
+			return quest.params.reduce((prev, curr) => {
+				if (curr[0] === 'name' || curr[0] === 'category') {
+					var ret = dat[curr[0]].toLowerCase().includes(curr[1].toLowerCase());
+				} else if (curr[0] === 'budget') {					
+					var ret = dat[curr[0]].split(',').some(budget => budget.trim() === curr[1]);
+				} else {
+					var ret = dat[curr[0]] === curr[1];
+				}
+
+				return connectFn(prev, ret);
+			}, quest.connector === 'and');
+		});
 	}
 
 	/**
@@ -268,5 +158,38 @@ module.exports = class Data {
 		}
 	
 		return data;
+	}
+
+	/**
+	 * This function sorts data by date (oldest first) and then by name.
+	 * @param {JSON[]} data The data we want to sort.
+	 * @return {JSON[]} The sorted data.
+	 */
+	sortData( data ) {
+		return data.sort( function( obj1, obj2 ) {
+			return this.sortFunction( obj1, obj2 );
+		});
+	}
+
+	/**
+	 * Sorts objects by date and then by name.
+	 * @param {JSON} a The first object to compare.
+	 * @param {JSON} b The second object to compare.
+	 * @return {number} -1 in case the first object is older; 1 in case the second
+	 * object is older; with same dates: -1 if first object is alphabetically smaller,
+	 * 1 if second object is alphabetically smaller, 0 else
+	 */
+	sortFunction( a, b ) {
+		var o1 = a["date"];
+		var o2 = b["date"];
+
+		var p1 = a["name"].toLowerCase();
+		var p2 = b["name"].toLowerCase();
+
+		if (o1 < o2) return -1;
+		if (o1 > o2) return 1;
+		if (p1 < p2) return -1;
+		if (p1 > p2) return 1;
+		return 0;
 	}
 }

@@ -34,14 +34,14 @@ module.exports = class LocalStorage extends Storage {
 	}
 
 	storeData(data) {
-		return this.data.storeData(data);
+		/* TODO */
 	}
 
 	replaceData(file, data) {
-		return this.data.replaceData(file, data);
+		/* TODO */
 	}
 
 	deleteData(file, data) {
-		return this.data.deleteData(file, data);
+		/* TODO */
 	}
 }
