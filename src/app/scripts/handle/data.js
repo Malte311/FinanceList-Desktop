@@ -48,57 +48,12 @@ module.exports = class Data {
 		});
 	}
 
-	/**
-	 * Deletes a given entry in a given file.
-	 * @param {String} file The file which contains the data.
-	 * @param {String} data The id (timestamp) of the data we want to delete.
-	 */
-	deleteData(file, data) {
-		var dataPath = this.storage.readPreference( "path" ) + path.sep + file;
-		if ( fs.existsSync( dataPath ) ) {
-			var content = this.storage.readJsonFile( dataPath );
-			var newContent = [];
-			for ( var i = 0; i < content.length; i++ ) {
-				if ( parseInt( data ) != content[i].date ) {
-					newContent.push( content[i] );
-				}
-				else {
-					var budgets = readMainStorage( "budgets" );
-					for ( var j = 0; j < budgets.length; j++ ) {
-						if ( budgets[j][0] == content[i].budget ) {
-							if ( content[i].type == "earning" ) {
-								budgets[j][1] = Math.round( (budgets[j][1] - content[i].amount) * 1e2 ) / 1e2;
-							}
-							else if ( content[i].type == "spending" ) {
-								budgets[j][1] = Math.round( (budgets[j][1] + content[i].amount) * 1e2 ) / 1e2;
-							}
-						}
-					}
-					writeMainStorage( "budgets", budgets );
-
-					var allTimeTransactions = content[i].type == "earning" ?
-											readMainStorage( "allTimeEarnings" ) :
-											readMainStorage( "allTimeSpendings" );
-					for ( var j = 0; j < allTimeTransactions.length; j++ ) {
-						if ( allTimeTransactions[j][0] == content[i].budget ) {
-							allTimeTransactions[j][1] = Math.round( (allTimeTransactions[j][1] - content[i].amount) * 1e2 ) / 1e2;
-						}
-					}
-					writeMainStorage( content[i].type == "earning" ?
-									"allTimeEarnings" :
-									"allTimeSpendings", allTimeTransactions );
-				}
-			}
-			fs.writeFileSync( dataPath, JSON.stringify( newContent, null, 4 ) );
-		}
-	}
-
 	mergeData(data) {
 		// Display partitioned entries as one entry. Only neccessary for earnings, since
 		// spendings can not be partitioned.
-		var toJoin = [];
-		var allJoins = [];
-		for ( var i = 0; i < data.length - 1; i++ ) {
+		let toJoin = [];
+		let allJoins = [];
+		for ( let i = 0; i < data.length - 1; i++ ) {
 			// The timestamp acts as an identifier since it is unique
 			// (data is sorted by time)
 			if ( data[i].date === data[i + 1].date
@@ -135,8 +90,8 @@ module.exports = class Data {
 	 */
 	joinData(indices, data) {
 		// Remove duplicates
-		for ( var i = 0; i < indices.length; i++ ) {
-			var elem = indices[i];
+		for ( let i = 0; i < indices.length; i++ ) {
+			let elem = indices[i];
 			elem = elem.filter( function(item, pos) {
 				return elem.indexOf(item) == pos;
 			});
@@ -145,9 +100,9 @@ module.exports = class Data {
 	
 		// Join every array of indices. We go backward, because the indices would change otherwise
 		// after a join.
-		for ( var i = indices.length - 1; i >= 0; i-- ) {
-			var newEntry = data[indices[i][0]];
-			for ( var j = 0; j < indices[i].length; j++ ) {
+		for ( let i = indices.length - 1; i >= 0; i-- ) {
+			let newEntry = data[indices[i][0]];
+			for ( let j = 0; j < indices[i].length; j++ ) {
 				if ( !newEntry.budget.toLowerCase().includes(data[indices[i][j]].budget.toLowerCase()) ) {
 					newEntry.budget += ", " + data[indices[i][j]].budget;
 					newEntry.amount = Math.round( (newEntry.amount + data[indices[i][j]].amount) * 1e2 ) / 1e2;
@@ -161,35 +116,12 @@ module.exports = class Data {
 	}
 
 	/**
-	 * This function sorts data by date (oldest first) and then by name.
-	 * @param {JSON[]} data The data we want to sort.
-	 * @return {JSON[]} The sorted data.
+	 * Sorts data by date (oldest first). Note that each entry has a unique date.
+	 * 
+	 * @param {array} data The data we want to sort (in form of an array of objects).
+	 * @return {array} The sorted data.
 	 */
-	sortData( data ) {
-		return data.sort( function( obj1, obj2 ) {
-			return this.sortFunction( obj1, obj2 );
-		});
-	}
-
-	/**
-	 * Sorts objects by date and then by name.
-	 * @param {JSON} a The first object to compare.
-	 * @param {JSON} b The second object to compare.
-	 * @return {number} -1 in case the first object is older; 1 in case the second
-	 * object is older; with same dates: -1 if first object is alphabetically smaller,
-	 * 1 if second object is alphabetically smaller, 0 else
-	 */
-	sortFunction( a, b ) {
-		var o1 = a["date"];
-		var o2 = b["date"];
-
-		var p1 = a["name"].toLowerCase();
-		var p2 = b["name"].toLowerCase();
-
-		if (o1 < o2) return -1;
-		if (o1 > o2) return 1;
-		if (p1 < p2) return -1;
-		if (p1 > p2) return 1;
-		return 0;
+	sortData(data) {
+		return data.sort((a, b) => a['date'] < b['date'] ? -1 : 1);
 	}
 }

@@ -229,7 +229,64 @@ module.exports = class JsonStorage extends Storage {
 		}
 	}
 
-	deleteData(file, data) {
-		this.data.deleteData(file, data);
+	/**
+	 * Deletes a given entry in a given file.
+	 * 
+	 * @param {string} file The file which contains the data.
+	 * @param {string} id The id (timestamp) of the data we want to delete.
+	 */
+	deleteData(file, id) {
+		let dataPath = this.getDataPath() + file;
+
+		if (!existsSync(dataPath)) {
+			return;
+		}
+
+		let newContent = [];
+
+		this.storage.readJsonFile(dataPath).forEach(obj => {
+			if (parseInt(id) !== obj.date) {
+				newContent.push(obj);
+			} else {
+				this.removeStats(obj);
+			}
+		});
+
+		writeFileSync(dataPath, JSON.stringify(newContent, null, 4));
+	}
+
+	/**
+	 * After deleting an object, this function removes the object's influence on the statistics.
+	 * 
+	 * @param {object} obj The object which got deleted.
+	 */
+	removeStats(obj) {
+		let budgets = this.readMainStorage('budgets');
+
+		budgets.forEach((budget, index) => {
+			if (budget[0] === obj.budget) {
+				let factor = obj.type === 'earning' ? 1 : -1;
+				budgets[index][1] = Math.round((budget[1] - (obj.amount * factor)) * 100) / 100;
+			}
+		});
+
+		this.writeMainStorage('budgets', budgets);
+
+		let allTime = this.readMainStorage(obj.type === 'earning' ? 'allTimeEarnings' : 'allTimeSpendings');
+
+		return;
+
+		let allTimeTransactions = obj.type == "earning" ?
+								readMainStorage( "allTimeEarnings" ) :
+								readMainStorage( "allTimeSpendings" );
+		for ( let j = 0; j < allTimeTransactions.length; j++ ) {
+			if ( allTimeTransactions[j][0] == obj.budget ) {
+				allTimeTransactions[j][1] = Math.round( (allTimeTransactions[j][1] - obj.amount) * 1e2 ) / 1e2;
+			}
+		}
+		writeMainStorage( obj.type == "earning" ?
+								"allTimeEarnings" :
+								"allTimeSpendings", allTimeTransactions );
+
 	}
 }
