@@ -48,71 +48,61 @@ module.exports = class Data {
 		});
 	}
 
+	/**
+	 * Displays partitioned entries as one entry. This is only necessary for earnings, since
+	 * spendings cannot be partitioned.
+	 * 
+	 * @param {array} data An array containing data which might need to be merged.
+	 */
 	mergeData(data) {
-		// Display partitioned entries as one entry. Only neccessary for earnings, since
-		// spendings can not be partitioned.
-		let toJoin = [];
-		let allJoins = [];
-		for ( let i = 0; i < data.length - 1; i++ ) {
-			// The timestamp acts as an identifier since it is unique
-			// (data is sorted by time)
-			if ( data[i].date === data[i + 1].date
-					&& data[i].type === "earning" && data[i + 1].type === "earning" ) {
-				// Remember indices of equal IDs
-				toJoin.push( i );
-				toJoin.push( i + 1 );
+		let newData = [];
+		const range = (from, to) => [...Array(to - from).keys()].map(e => e + from);
+
+		for (let i = 0; i < data.length - 1; i++) {
+			let startIndex = i;
+			
+			// The timestamp acts as an identifier since it is unique (data is sorted by time).
+			while (i < data.length - 1 && data[i].date === data[i + 1].date) {
+				i++;
 			}
-			// Join entries
-			else if ( toJoin.length > 1 ) {
-				allJoins.push( toJoin );
-				// Reset entries to join
-				toJoin = [];
+
+			newData.push(this.joinData(range(startIndex, i), data));
+
+			if (i === data.length - 2) {
+				newData.push(this.joinData([i], data));
 			}
 		}
-		if ( toJoin.length > 1 ) {
-			allJoins.push( toJoin );
-			toJoin = [];
-		}
 
-		if ( allJoins.length > 0 ) {
-			data = this.joinData( allJoins, data );
-		}
-
-		return data;
+		return newData;
 	}
 
 	/**
 	 * Joins entries to one entry (just for a nicer display style, the storage remains unchanged).
-	 * @param {number[][]} indices The indices we want to join. Every array specifies indicies which
-	 * we want to join. We might have more than 1 of these arrays, so this parameter is an array of arrays.
-	 * @param {Object[]} data Contains the entries.
-	 * @return {Object[]} The data with joined entries.
+	 * 
+	 * @param {array} indices The indices we want to join.
+	 * @param {object} data Data object which contains the entries.
+	 * @return {object} The data with joined entries.
 	 */
 	joinData(indices, data) {
-		// Remove duplicates
-		for ( let i = 0; i < indices.length; i++ ) {
-			let elem = indices[i];
-			elem = elem.filter( function(item, pos) {
-				return elem.indexOf(item) == pos;
-			});
-			indices[i] = elem;
-		}
+		// TODO, keep in mind that indices might change when updating data
+		
+		// indices.forEach(index => {
+		// 	data.amount = Math.round((data.amount + data[index].amount) * 100) / 100;
+		// });
+
+		// for ( let i = indices.length - 1; i >= 0; i-- ) {
+		// 	let newEntry = data[indices[i][0]];
+		// 	for ( let j = 0; j < indices[i].length; j++ ) {
+		// 		if ( !newEntry.budget.toLowerCase().includes(data[indices[i][j]].budget.toLowerCase()) ) {
+		// 			newEntry.budget += ", " + data[indices[i][j]].budget;
+		// 			newEntry.amount = Math.round( (newEntry.amount + data[indices[i][j]].amount) * 1e2 ) / 1e2;
+		// 		}
+		// 	}
+		// 	data[indices[i][0]] = newEntry;
+		// 	data.splice( indices[i][0] + 1, indices[i].length - 1 );
+		// }
 	
-		// Join every array of indices. We go backward, because the indices would change otherwise
-		// after a join.
-		for ( let i = indices.length - 1; i >= 0; i-- ) {
-			let newEntry = data[indices[i][0]];
-			for ( let j = 0; j < indices[i].length; j++ ) {
-				if ( !newEntry.budget.toLowerCase().includes(data[indices[i][j]].budget.toLowerCase()) ) {
-					newEntry.budget += ", " + data[indices[i][j]].budget;
-					newEntry.amount = Math.round( (newEntry.amount + data[indices[i][j]].amount) * 1e2 ) / 1e2;
-				}
-			}
-			data[indices[i][0]] = newEntry;
-			data.splice( indices[i][0] + 1, indices[i].length - 1 );
-		}
-	
-		return data;
+		// return data;
 	}
 
 	/**

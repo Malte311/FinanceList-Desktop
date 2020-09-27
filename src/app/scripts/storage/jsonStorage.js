@@ -274,19 +274,12 @@ module.exports = class JsonStorage extends Storage {
 
 		let allTime = this.readMainStorage(obj.type === 'earning' ? 'allTimeEarnings' : 'allTimeSpendings');
 
-		return;
-
-		let allTimeTransactions = obj.type == "earning" ?
-								readMainStorage( "allTimeEarnings" ) :
-								readMainStorage( "allTimeSpendings" );
-		for ( let j = 0; j < allTimeTransactions.length; j++ ) {
-			if ( allTimeTransactions[j][0] == obj.budget ) {
-				allTimeTransactions[j][1] = Math.round( (allTimeTransactions[j][1] - obj.amount) * 1e2 ) / 1e2;
+		allTime.forEach((trans, index) => {
+			if (trans[0] === obj.budget) {
+				allTime[index][1] = Math.round((trans[1] - obj.amount) * 100) / 100;
 			}
-		}
-		writeMainStorage( obj.type == "earning" ?
-								"allTimeEarnings" :
-								"allTimeSpendings", allTimeTransactions );
+		});
 
+		this.writeMainStorage(obj.type === 'earning' ? 'allTimeEarnings' : 'allTimeSpendings', allTime);
 	}
 }

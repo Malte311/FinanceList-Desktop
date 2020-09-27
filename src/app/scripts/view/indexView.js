@@ -2,7 +2,7 @@ const ChartHandler = require(__dirname + '/../utils/chartHandler.js');
 const View = require(__dirname + '/view.js');
 
 /**
- * Class for controling the startpage of the application.
+ * Class for controlling the startpage of the application.
  */
 module.exports = class IndexView extends View {
 	constructor(storage) {
