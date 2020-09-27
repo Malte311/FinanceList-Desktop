@@ -177,19 +177,34 @@ module.exports = class JsonStorage extends Storage {
 		return existsSync(path);
 	}
 
+	/**
+	 * Filters data from a given file according to a given quest.
+	 * 
+	 * @param {string} file The file containing the data to be filtered.
+	 * @param {object} quest The quest for filtering the data. quest contains a connector
+	 * (or/and) and an array of parameters to filter objects. Example:
+	 * quest = { connector: 'or', params: [['type', 'earning'], ['budget', 'checking account']] }
+	 * @return {array} All the data which match the quest, in form of an array containing objects.
+	 */
 	getData(file, quest) {
-		return this.data.getData(file, quest);
+		let dataPath = readFileSync(this.getDataPath() + file);
+
+		if (!this.exists(dataPath)) {
+			return [];
+		}
+
+		return this.data.getData(JSON.parse(dataPath), quest);
 	}
 
 	storeData(data) {
-		return this.data.storeData(data);
+		this.data.storeData(data);
 	}
 
 	replaceData(file, data) {
-		return this.data.replaceData(file, data);
+		this.data.replaceData(file, data);
 	}
 
 	deleteData(file, data) {
-		return this.data.deleteData(file, data);
+		this.data.deleteData(file, data);
 	}
 }

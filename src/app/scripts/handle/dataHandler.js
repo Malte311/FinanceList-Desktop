@@ -16,13 +16,36 @@ module.exports = class DataHandler {
 	 * @return {number} The sum of transactions for the given type and the given budget.
 	 */
 	getMonthlySum(budgetName, type, file = this.data.storage.getCurrentFilename()) {
-		return this.data.getData(file, {
+		return this.data.storage.getData(file, {
 			connector: 'and',
 			params: [['type', type], ['budget', budgetName]]
 		}).reduce((prev, curr) => prev + curr.amount, 0);
 	}
 
+	/**
+	 * Returns recent transactions of a given type.
+	 * 
+	 * @param {number} limit The limit of recent transactions to fetch.
+	 * @param {string} type The type of transactions to look for (earning or spending).
+	 */
 	getRecentTrans(limit, type) {
-		return [];
+		let data = [];
+
+		let files = this.data.storage.getJsonFiles().sort((a, b) => {
+			return (a.split('.').reverse().join('.') < b.split('.').reverse().join('.')) ? -1 : 1;
+		});
+
+		for (let file of files) {
+			data = this.data.storage.getData(file, {
+				connector: 'or',
+				params: [['type', type]]
+			}).concat(data);
+
+			if (data.length >= limit) {
+				break;
+			}
+		}
+		
+		return data.length > limit ? data.slice(0, limit) : data;
 	}
 }

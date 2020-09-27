@@ -41,7 +41,7 @@ describe('JsonStorage', function() {
 			let month = (today.getMonth() + 1).toString().padStart(2, '0'); // Zero indexed.
 			
 			let fNameToday = `${month}.${year}.json`;
-			assert.equal(jsonStorage.getCurrentFilename(), fNameToday);
+			assert.strictEqual(jsonStorage.getCurrentFilename(), fNameToday);
 		});
 	});
 });

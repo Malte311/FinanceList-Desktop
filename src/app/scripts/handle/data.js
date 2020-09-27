@@ -1,5 +1,3 @@
-const fs = require('fs');
-
 /**
  * Handles all operations on the data.
  */
@@ -9,30 +7,23 @@ module.exports = class Data {
 	}
 
 	/**
-	 * Returns data from a file, filtered by a given quest.
+	 * Returns data from an array, filtered by a given quest.
 	 * 
-	 * @param {string} file The file we want to access (with .json extension).
+	 * @param {array} fileContents The contents of the array to be filtered.
 	 * @param {object} quest Contains a connector (or/and) and an array of parameters to
 	 * filter objects. Example:
 	 * quest = { connector: 'or', params: [['type', 'earning'], ['budget', 'checking account']] }
 	 * @return {array} All the data which match the quest, in form of an array containing objects.
 	 */
-	getData(file, quest) {
-		let dataPath = this.storage.getDataPath() + file;
-
-		if (!this.storage.exists(dataPath)) {
-			return [];
-		}
-
-		let data = JSON.parse(fs.readFileSync(dataPath)).filter(dat => {
-
+	getData(fileContents, quest) {
+		let data = fileContents.filter(dat => {
 			let ret = null;
-			quest.params.some( (qu) => {
+			quest.params.some(qu => {
 				// We do not need an exact match, e.g. when searching for "ticket", we want to
 				// find entries called "bus ticket"
-				if ( qu[0] === "name" || qu[0] === "category" ) {
+				if ( qu[0] === 'name' || qu[0] === 'category' ) {
 					// At least one param matched? Return true (ret=true) because connector is "or".
-					if ( quest.connector === "or" ) {
+					if ( quest.connector === 'or' ) {
 						if ( dat[qu[0]].toLowerCase().includes(qu[1].toLowerCase()) ) {
 							ret = true;
 							return true;
@@ -46,7 +37,7 @@ module.exports = class Data {
 						}
 					}
 				}
-				// Exact match is neccessary for all other fields
+				// Exact match is necessary for all other fields
 				else {
 					// At least one param matched? Return true (ret=true) because connector is "or".
 					if ( quest.connector === "or" ) {
@@ -86,41 +77,10 @@ module.exports = class Data {
 			if ( ret !== null ) return ret;
 			// We only get to this point when (1) connector = "or" and no match was found,
 			// (2) connector = "and" and no mismatch was found.
-			return ( quest.connector === "or" ) ? false : true;
+			return !(quest.connector === 'or');
 		});
 
-		
-
-		// Display partitioned entries as one entry. Only neccessary for earnings, since
-		// spendings can not be partitioned.
-		var toJoin = [];
-		var allJoins = [];
-		for ( var i = 0; i < data.length - 1; i++ ) {
-			// The timestamp acts as an identifier since it is unique
-			// (data is sorted by time)
-			if ( data[i].date === data[i + 1].date
-					&& data[i].type === "earning" && data[i + 1].type === "earning" ) {
-				// Remember indices of equal IDs
-				toJoin.push( i );
-				toJoin.push( i + 1 );
-			}
-			// Join entries
-			else if ( toJoin.length > 1 ) {
-				allJoins.push( toJoin );
-				// Reset entries to join
-				toJoin = [];
-			}
-		}
-		if ( toJoin.length > 1 ) {
-			allJoins.push( toJoin );
-			toJoin = [];
-		}
-
-		if ( allJoins.length > 0 ) {
-			data = joinData( allJoins, data );
-		}
-
-		return data;
+		return this.mergeData(data);
 	}
 
 	/**
@@ -212,6 +172,39 @@ module.exports = class Data {
 			}
 			fs.writeFileSync( dataPath, JSON.stringify( newContent, null, 4 ) );
 		}
+	}
+
+	mergeData(data) {
+		// Display partitioned entries as one entry. Only neccessary for earnings, since
+		// spendings can not be partitioned.
+		var toJoin = [];
+		var allJoins = [];
+		for ( var i = 0; i < data.length - 1; i++ ) {
+			// The timestamp acts as an identifier since it is unique
+			// (data is sorted by time)
+			if ( data[i].date === data[i + 1].date
+					&& data[i].type === "earning" && data[i + 1].type === "earning" ) {
+				// Remember indices of equal IDs
+				toJoin.push( i );
+				toJoin.push( i + 1 );
+			}
+			// Join entries
+			else if ( toJoin.length > 1 ) {
+				allJoins.push( toJoin );
+				// Reset entries to join
+				toJoin = [];
+			}
+		}
+		if ( toJoin.length > 1 ) {
+			allJoins.push( toJoin );
+			toJoin = [];
+		}
+
+		if ( allJoins.length > 0 ) {
+			data = this.joinData( allJoins, data );
+		}
+
+		return data;
 	}
 
 	/**

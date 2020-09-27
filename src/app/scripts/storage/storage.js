@@ -8,7 +8,7 @@ module.exports = class Storage {
 		// Default preferences object
 		this.defPref = {
 			'chartType': 'pie',
-			'currency': 'Euro',
+			'currency': 'euro',
 			'language': 'en',
 			'user': null
 		};
