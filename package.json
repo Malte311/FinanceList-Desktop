@@ -4,7 +4,7 @@
 	"description": "A finance managing tool",
 	"main": "./src/app/main.js",
 	"scripts": {
-		"start": "electron .",
+		"start": "electron . --dev",
 		"test": "nyc mocha ./src/test/ --recursive",
 		"package-mac": "electron-packager ./src/app --ignore=node_modules/wine-darwin --platform=darwin --arch=x64 --asar --icon=./src/app/img/tab.icns --prune=true --out=./application/",
 		"create-dmg": "electron-installer-dmg ./application/FinanceList-Desktop-darwin-x64/FinanceList-Desktop.app FinanceList-Desktop-mac-x64",

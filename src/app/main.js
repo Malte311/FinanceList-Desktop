@@ -30,12 +30,13 @@ function createWindow() {
     mainWindow = new electron.BrowserWindow({
         width: screenWidth,
         height: screenHeight,
-        icon: __dirname + '/img/tab.ico',
+        icon: electron.nativeImage.createFromPath(__dirname + '/img/tab.ico'),
         movable: true,
         center: true,
         fullscreen: typeof fullscreen === 'boolean' ? fullscreen : false,
 		show: false,
 		webPreferences: {
+			enableRemoteModule: true,
 			nodeIntegration: true
         }
     });
