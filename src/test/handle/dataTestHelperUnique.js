@@ -2,16 +2,8 @@ module.exports = [
 	{
 		"date": 1598995600,
 		"name": "eBay Sale",
-		"amount": 10.5,
-		"budget": "checking account",
-		"type": "earning",
-		"category": "Sales"
-	},
-	{
-		"date": 1598995600,
-		"name": "eBay Sale",
-		"amount": 10.6,
-		"budget": "saving account",
+		"amount": 21.1,
+		"budget": "checking account, saving account",
 		"type": "earning",
 		"category": "Sales"
 	},
@@ -34,16 +26,8 @@ module.exports = [
 	{
 		"date": 1599170400,
 		"name": "Salary",
-		"amount": 500,
-		"budget": "saving account",
-		"type": "earning",
-		"category": "Income"
-	},
-	{
-		"date": 1599170400,
-		"name": "Salary",
-		"amount": 1500,
-		"budget": "checking account",
+		"amount": 2000,
+		"budget": "checking account, saving account",
 		"type": "earning",
 		"category": "Income"
 	},
@@ -90,16 +74,8 @@ module.exports = [
 	{
 		"date": 1600500309,
 		"name": "eBay Sale",
-		"amount": 40,
-		"budget": "checking account",
-		"type": "earning",
-		"category": "Sales"
-	},
-	{
-		"date": 1600500309,
-		"name": "eBay Sale",
-		"amount": 40,
-		"budget": "saving account",
+		"amount": 80,
+		"budget": "checking account, saving account",
 		"type": "earning",
 		"category": "Sales"
 	}

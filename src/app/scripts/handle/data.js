@@ -52,13 +52,13 @@ module.exports = class Data {
 	 * Displays partitioned entries as one entry. This is only necessary for earnings, since
 	 * spendings cannot be partitioned.
 	 * 
-	 * @param {array} data An array containing data which might need to be merged.
+	 * @param {array} data An array containing the merged data.
 	 */
 	mergeData(data) {
 		let newData = [];
 		const range = (from, to) => [...Array(to - from + 1).keys()].map(e => e + from);
 
-		for (let i = 0; i < data.length - 1; i++) {
+		for (var i = 0; i < data.length - 1; i++) {
 			let startIndex = i;
 			
 			// The timestamp acts as an identifier since it is unique (data is sorted by time).
@@ -67,6 +67,10 @@ module.exports = class Data {
 			}
 
 			newData.push(this.joinData(range(startIndex, i), data));
+		}
+
+		if (i === data.length - 1) {
+			newData.push(this.joinData([i], data));
 		}
 
 		return newData;
@@ -84,7 +88,7 @@ module.exports = class Data {
 			return {};
 		}
 
-		let newDataEntry = data[indices[0]];
+		let newDataEntry = Object.assign({}, data[indices[0]]);
 		for (let i = 1; i < indices.length; i++) {
 			newDataEntry.budget += `, ${data[indices[i]].budget}`;
 			newDataEntry.amount = Math.round((newDataEntry.amount + data[indices[i]].amount) * 100) / 100;
