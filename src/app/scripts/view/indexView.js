@@ -68,11 +68,11 @@ module.exports = class IndexView extends View {
 		if (data.length) {
 			let {timestampToString} = require(__dirname + '/../utils/dateHandler.js');
 			
-			$(id).append(this.template.table(data.reverse().map(d => [
+			$(id).append(this.template.table(data.map(d => [
 				this.template.toHtmlStr(this.template.icon('moneybill', 'green')) + d.name,
 				this.printNum(d.amount),
 				timestampToString(d.date)
-			]).slice(0, limit))); // Displays the table.
+			]))); // Displays the table.
 		}
 		else {
 			// Display a message that no earnings/spendings exist.

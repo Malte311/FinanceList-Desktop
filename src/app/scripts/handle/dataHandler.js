@@ -32,7 +32,7 @@ module.exports = class DataHandler {
 		let data = [];
 
 		let files = this.data.storage.getJsonFiles().sort((a, b) => {
-			return (a.split('.').reverse().join('.') < b.split('.').reverse().join('.')) ? -1 : 1;
+			return (a.split('.').reverse().join('.') > b.split('.').reverse().join('.')) ? -1 : 1;
 		});
 
 		for (let file of files) {
@@ -45,6 +45,8 @@ module.exports = class DataHandler {
 				break;
 			}
 		}
+
+		data.sort((a, b) => a['date'] > b['date'] ? -1 : 1);
 		
 		return data.length > limit ? data.slice(0, limit) : data;
 	}

@@ -56,7 +56,7 @@ module.exports = class Data {
 	 */
 	mergeData(data) {
 		let newData = [];
-		const range = (from, to) => [...Array(to - from).keys()].map(e => e + from);
+		const range = (from, to) => [...Array(to - from + 1).keys()].map(e => e + from);
 
 		for (let i = 0; i < data.length - 1; i++) {
 			let startIndex = i;
@@ -67,10 +67,6 @@ module.exports = class Data {
 			}
 
 			newData.push(this.joinData(range(startIndex, i), data));
-
-			if (i === data.length - 2) {
-				newData.push(this.joinData([i], data));
-			}
 		}
 
 		return newData;
@@ -79,30 +75,24 @@ module.exports = class Data {
 	/**
 	 * Joins entries to one entry (just for a nicer display style, the storage remains unchanged).
 	 * 
-	 * @param {array} indices The indices we want to join.
+	 * @param {array} indices The indices we want to join (this array must not be empty).
 	 * @param {object} data Data object which contains the entries.
 	 * @return {object} The data with joined entries.
 	 */
 	joinData(indices, data) {
-		// TODO, keep in mind that indices might change when updating data
-		
-		// indices.forEach(index => {
-		// 	data.amount = Math.round((data.amount + data[index].amount) * 100) / 100;
-		// });
+		if (indices.length < 1) {
+			return {};
+		}
 
-		// for ( let i = indices.length - 1; i >= 0; i-- ) {
-		// 	let newEntry = data[indices[i][0]];
-		// 	for ( let j = 0; j < indices[i].length; j++ ) {
-		// 		if ( !newEntry.budget.toLowerCase().includes(data[indices[i][j]].budget.toLowerCase()) ) {
-		// 			newEntry.budget += ", " + data[indices[i][j]].budget;
-		// 			newEntry.amount = Math.round( (newEntry.amount + data[indices[i][j]].amount) * 1e2 ) / 1e2;
-		// 		}
-		// 	}
-		// 	data[indices[i][0]] = newEntry;
-		// 	data.splice( indices[i][0] + 1, indices[i].length - 1 );
-		// }
-	
-		// return data;
+		let newDataEntry = data[indices[0]];
+		for (let i = 1; i < indices.length; i++) {
+			newDataEntry.budget += `, ${data[indices[i]].budget}`;
+			newDataEntry.amount = Math.round((newDataEntry.amount + data[indices[i]].amount) * 100) / 100;
+		}
+
+		newDataEntry.budget = newDataEntry.budget.split(', ').sort().join(', ');
+
+		return newDataEntry;
 	}
 
 	/**
