@@ -27,6 +27,7 @@ module.exports = class DataHandler {
 	 * 
 	 * @param {number} limit The limit of recent transactions to fetch.
 	 * @param {string} type The type of transactions to look for (earning or spending).
+	 * @return {array} The most recent transactions of a given type.
 	 */
 	getRecentTrans(limit, type) {
 		let data = [];

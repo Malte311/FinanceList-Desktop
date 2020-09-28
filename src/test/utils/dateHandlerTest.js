@@ -1,7 +1,42 @@
 const assert = require('assert');
 const DateHandler = require(__dirname + '/../../app/scripts/utils/dateHandler.js');
+const JsonStorage = require(__dirname + '/../../app/scripts/storage/jsonStorage.js');
+
+const fs = require('fs');
 
 describe('DateHandler', function() {
+	let jsonStorage = new JsonStorage();
+
+	var ts = 1600500309;
+	var path;
+
+	before(function() {
+		path = jsonStorage.readPreference('path');
+
+		fs.appendFileSync(
+			__dirname + '/' + DateHandler.timestampToFilename(ts),
+			JSON.stringify(require(__dirname + '/dateHandlerTestHelper.js'), null, 4),
+			{encoding: 'utf-8'}
+		);
+	});
+
+	after(function() {
+		jsonStorage.storePreference('path', path);
+
+		fs.unlinkSync(__dirname + '/' + DateHandler.timestampToFilename(ts));
+	});
+
+	describe('#getCurrentTimestamp()', function() {
+		it('returns the correct date', function() {
+			let today = Date.now() / 1000;
+
+			assert.strictEqual(
+				DateHandler.timestampToString(DateHandler.getCurrentTimestamp()),
+				DateHandler.timestampToString(today)
+			);
+		});
+	});
+
 	describe('#timeStampToString()', function() {
 		it('returns the correct string for single digit month and double digit day', function() {
 			let result = DateHandler.timestampToString(new Date('2020-02-29').getTime() / 1000);
@@ -21,6 +56,14 @@ describe('DateHandler', function() {
 		it('returns the correct string for both double digit day and month', function() {
 			let result = DateHandler.timestampToString(new Date('2222-11-11').getTime() / 1000);
 			assert.strictEqual(result, '11.11.2222');
+		});
+	});
+
+	describe('#createUniqueTimestamp()', function() {
+		it('should create unique timestamps', function() {
+			jsonStorage.storePreference('path', __dirname);
+
+			//assert.strictEqual(DateHandler.createUniqueTimestamp(ts), 1600500311);
 		});
 	});
 
