@@ -112,7 +112,7 @@ function addTransaction() {
         var category = $( "#categoryInput" ).val().trim();
         // Make sure that the input is ok.
         sum = sum.replace( ",", "." );
-        var inputOk = checkAmountInput( sum, false );
+        var inputOk = inputHandler.isValidAmount( sum, false );
         if ( name.length > maxStrLen || category.length > maxStrLen ) inputOk = false;
         name.split(" ").forEach( e => {
             if ( e.length > maxSWLen ) inputOk = false;
@@ -282,7 +282,7 @@ function editRecurringTransaction( name, index ) {
             var amountInput = $( "#recAmountInput" ).val().trim();
             var intervalSelect = $( "#recIntSelect" )[0].selectedIndex;
 
-            if ( checkAmountInput( amountInput, false ) ) {
+            if ( inputHandler.isValidAmount( amountInput, false ) ) {
                 // Something changed?
                 if ( amountInput != transaction.amount || intervalSelect != transaction.interval ) {
                     transaction.amount = parseFloat( amountInput );
@@ -854,7 +854,7 @@ function executeTransfer() {
         var budgetTo = $( "#budgetTo option:selected" ).text();
         var amountInput = $( "#transferAmount" ).val().trim();
         // Input valid?
-        if ( checkAmountInput( amountInput, false ) ) {
+        if ( inputHandler.isValidAmount( amountInput, false ) ) {
             // Add the transfer.
             addTransfer( budgetFrom, budgetTo, parseFloat( amountInput ) );
             // Close the dialog and update the view.

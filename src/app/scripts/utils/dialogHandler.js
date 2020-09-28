@@ -235,7 +235,7 @@ module.exports = class DialogHandler {
 			var sum = $( "#sumInput" ).val().replace(',', '.').trim();
 			var category = $( "#categoryInput" ).val().trim();
 			
-			var inputOk = checkAmountInput( sum, false );
+			var inputOk = inputHandler.isValidAmount( sum, false );
 			if ( name.length > maxStrLen || category.length > maxStrLen ) inputOk = false;
 			name.split(" ").forEach( e => {
 				if ( e.length > maxSWLen ) inputOk = false;

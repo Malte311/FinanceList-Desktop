@@ -164,7 +164,7 @@ function displayContent( displayType, budget, type, startDate, endDate, amountFr
                          name, category ) {
     // Before doing anything, we check if the input is valid.
     // Input invalid?
-    if ( !(checkAmountInput( amountFrom, true ) && checkAmountInput( amountTo, true )) ) {
+    if ( !(inputHandler.isValidAmount( amountFrom, true ) && inputHandler.isValidAmount( amountTo, true )) ) {
         // Display an error message and stop executing this function.
         $( "#mainContent" ).html( "<center><i>" + textElements.invalidInput + "</i></center>" );
         return;
