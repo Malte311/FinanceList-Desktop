@@ -1,6 +1,7 @@
 const DialogHandler = require(__dirname + '/utils/dialogHandler.js');
 const JsonStorage = require(__dirname + '/storage/jsonStorage.js');
 const Updater = require(__dirname + '/updates/updater.js');
+const RecurrTrans = require(__dirname + '/updates/recurrTrans.js');
 
 const BalancesView = require(__dirname + '/view/balancesView.js');
 const HelpView = require(__dirname + '/view/helpView.js');
@@ -48,6 +49,6 @@ module.exports = class Startup {
 		});
 
 		Updater.checkForUpdates();
-		Updater.execRecurrTransact();
+		(new RecurrTrans(this.storage)).execRecurrTransact();
 	}
 }

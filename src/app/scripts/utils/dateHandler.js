@@ -77,4 +77,94 @@ module.exports = class DateHandler {
 	static timestampToFilename(ts) {
 		return DateHandler.strDateToFilename(DateHandler.timestampToString(ts));
 	}
+
+	/**
+	 * Increments a given date by a given interval.
+	 * 
+	 * @param {number} oldDate The date to increment as a timestamp in seconds.
+	 * @param {number} interval The interval, in form of one of the following:
+	 * 0 => one week (7 days),
+	 * 1 => four weeks (28 days),
+	 * 2 => one month,
+	 * 3 => two months,
+	 * 4 => three months (quarterly),
+	 * 5 => six months (biannual),
+	 * 6 => one year (annual)
+	 */
+	static stepInterval(oldDate, interval) {
+		// Alternative: Use timestampToStr and manipulate the digits in it
+
+		if (interval === 0 || interval === 1) {
+			return stepIntervalDays(oldDate, interval);
+		}
+
+		let oldDateCopy = oldDate;
+
+		// Create a new date object (Remember to multiply by 1000 to get milliseconds).
+		var tmp = new Date( oldDate * 1000 );
+		// Keep a reference on the old month (to check for overflows).
+		var oldMonth = tmp.getMonth();
+		// Monthly?
+		if ( interval === 2 ) {
+			// Increment the month by 1 (monthly interval).
+			tmp.setMonth( tmp.getMonth() + 1 );
+		}
+		// Bimonthly?
+		else if ( interval === 3 ) {
+			// Increment the month by 2 (bimonthly interval).
+			tmp.setMonth( tmp.getMonth() + 2 );
+		}
+		// Quarterly
+		else if ( interval === 4 ) {
+			// Increment the month by 3 (quarterly interval).
+			tmp.setMonth( tmp.getMonth() + 3 );
+		}
+		// Biannual?
+		else if ( interval === 5 ) {
+			// Increment the month by 6 (biannual interval).
+			tmp.setMonth( tmp.getMonth() + 6 );
+		}
+		// Annual?
+		else if ( interval === 6 ) {
+			// Increment the month by 12 (annual interval).
+			tmp.setMonth( tmp.getMonth() + 12 );
+		}
+		// Make sure that we keep the correct day, in case no overflow happened.
+		if ( oldMonth + 1 === tmp.getMonth() ) {
+			tmp.setDate( new Date( startDate * 1000 ).getDate() );
+		}
+		// Check, if an overflow emerges.
+		if ( (oldMonth + 1) % 12 !== tmp.getMonth() % 12 ) {
+			// Setting the day to zero will give us the last day of the previous month.
+			var newDate = new Date( tmp.getFullYear(), tmp.getMonth(), 0 );
+			// Remember to divide by 1000 because we want to get seconds.
+			return Math.floor( newDate.getTime() / 1000 );
+		}
+		// No overflow?
+		else {
+			// Remember to divide by 1000 because we want to get seconds.
+			return Math.floor( tmp.getTime() / 1000 );
+		}
+		
+	}
+
+	/**
+	 * Increments a given date according to a given interval.
+	 * 
+	 * @param {number} oldDate The date to increment as a timestamp in seconds.
+	 * @param {number} interval The interval: Can be either 0 for one week or 1 for four weeks.
+	 * @return {number} The new data as a timestamp in seconds.
+	 */
+	static stepIntervalDays(oldDate, interval) {
+		if (interval !== 0 && interval !== 1) {
+			throw new Error(`Invalid interval! Given ${interval} but expected 0 or 1.`);
+		}
+
+		let weekInSeconds = 7 * 24 * 60 * 60;
+		let fourWeeksInSeconds = 4 * weekInSeconds;
+		
+		return oldDate + (interval === 0 ? weekInSeconds : fourWeeksInSeconds);
+	}
+
+	static stepIntervalMonths() {}
 }

@@ -286,8 +286,18 @@ module.exports = class DialogHandler {
 				if ( $( "#checkboxInput" )[0].checked ) {
 					// Add a new recurring transaction.
 					var type = $( "#earning" )[0].checked ? "earning" : "spending";
-					addRecurringTransaction( name, parseFloat( sum ), budget, category, type,
-						$("#intervalSelect")[0].selectedIndex, date, endDate );
+					let allocationOn = $('#earning')[0].checked && $('#autoAllocation')[0].checked && this.storage.readMainStorage('allocationOn');
+					addRecurringTransaction({
+						name: name,
+						amount: parseFloat( sum ),
+						budget: budget,
+						category: category,
+						type: type,
+						interval: $("#intervalSelect")[0].selectedIndex,
+						date: date,
+						endDate: endDate,
+						allocationOn: allocationOn
+					});
 				}
 				// Close the dialog and update the view.
 				$( this ).dialog( "close" );

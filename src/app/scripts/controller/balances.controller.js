@@ -162,9 +162,19 @@ function addTransaction() {
             // Automation activated?
             if ( $( "#checkboxInput" )[0].checked ) {
                 // Add a new recurring transaction.
-                var type = $( "#earning" )[0].checked ? "earning" : "spending";
-                addRecurringTransaction( name, parseFloat( sum ), budget, category, type,
-                    $("#intervalSelect")[0].selectedIndex, date, endDate );
+				var type = $( "#earning" )[0].checked ? "earning" : "spending";
+				let allocationOn = $('#earning')[0].checked && $('#autoAllocation')[0].checked && this.storage.readMainStorage('allocationOn');
+                addRecurringTransaction({
+					name: name,
+					amount: parseFloat( sum ),
+					budget: budget,
+					category: category,
+					type: type,
+					interval: $("#intervalSelect")[0].selectedIndex,
+					date: date,
+					endDate: endDate,
+					allocationOn: allocationOn
+				});
             }
             // Close the dialog and update the view.
             $( this ).dialog( "close" );
@@ -202,104 +212,6 @@ function addTransaction() {
     $( "#categoryInput" ).autocomplete({
       source: readMainStorage( "availableCategories" )
     });
-}
-
-/**
- * This function creates a recurring transaction.
- * @param {String} name The name of the transaction.
- * @param {double} amount The amount of the transaction.
- * @param {String} budget The budget for the transaction.
- * @param {String} category The category of the transaction.
- * @param {String} type The type of the transaction.
- * @param {number} interval The interval of the transaction (in seconds).
- * @param {number} date The date of the transaction (in seconds).
- * @param {number} endDate The date on which the transactions ends (-1 if it never ends).
- */
-function addRecurringTransaction( name, amount, budget, category, type, interval, date, endDate ) {
-    // Determine, if this transaction involves the automatic allocation.
-    var allocationOn = $( "#earning" )[0].checked &&
-                       $( "#autoAllocation" )[0].checked &&
-                       readMainStorage( "allocationOn" );
-    // Determine the correct date.
-    var newDate = getNewDate( date, date, interval );
-    // Just continue, if the transaction recurrs at least once.
-    // (either no end date or end date is not reached yet)
-    if ( endDate < 0 || (endDate > 0 && newDate <= endDate) ) {
-        // Create a new object and store it (in the mainStorage.json file).
-        var dataObj = {"startDate": date, "nextDate": newDate, "endDate": endDate, "name": name,
-                       "amount": amount, "budget": budget, "type": type, "category": category,
-                       "interval": interval, "allocationOn": allocationOn};
-        // Now, get the existing data and add this data to it.
-        var currentRecurringTransactions = readMainStorage( "recurring" );
-        currentRecurringTransactions.push( dataObj );
-        writeMainStorage( "recurring", currentRecurringTransactions );
-        // Now, set update to false, because we did not update the new transaction yet.
-        writeMainStorage( "update", false );
-        // Update the new transaction.
-        require('../updates/updater.js').execRecurrTransact();
-        // This function is called in addTransaction, so no need to update the view here,
-        // since it is already done.
-    }
-}
-
-/**
- * This function edits a recurring transaction with a given name.
- * @param {String} name The name of the recurring transaction we want to edit.
- * @param {number} index The index of the transaction (the name is not unique).
- */
-function editRecurringTransaction( name, index ) {
-    var textElementsLocal = textElements.editRecurringTransaction;
-    var currentRecurringTransactions = readMainStorage( "recurring" );
-    var transaction = null;
-
-    // Search the transaction we want to edit.
-    for ( var i = 0; i < currentRecurringTransactions.length; i++ ) {
-        if ( currentRecurringTransactions[i].name === name && i == index ) {
-            transaction = currentRecurringTransactions[i];
-            break;
-        }
-    }
-
-    if ( transaction != null ) {
-        var content = textElementsLocal[1] + "<br>" +
-                      "<input type=\"text\" id=\"recAmountInput\" value='" +
-                      transaction.amount + "'>" + getCurrencySign() + "<br><hr>" +
-                      textElementsLocal[2] + "<br>" +
-                      "<select class=\"w3-select\" id=\"recIntSelect\">" + "<br>";
-
-        var intervals = textElements.intervalOptionsTextElements;
-        for ( var i = 0; i < intervals.length; i++ ) {
-            if ( transaction.interval == i ) {
-                content += "<option selected=\"selected\">" + intervals[i] + "</option>";
-            }
-            else {
-                content += "<option>" + intervals[i] + "</option>";
-            }
-        }
-        content += "</select>";
-
-        createDialog( textElementsLocal[0], content, function() {
-            var amountInput = $( "#recAmountInput" ).val().trim();
-            var intervalSelect = $( "#recIntSelect" )[0].selectedIndex;
-
-            if ( inputHandler.isValidAmount( amountInput, false ) ) {
-                // Something changed?
-                if ( amountInput != transaction.amount || intervalSelect != transaction.interval ) {
-                    transaction.amount = parseFloat( amountInput );
-                    transaction.interval = intervalSelect;
-                    currentRecurringTransactions[index] = transaction;
-
-                    // Write back to mainStorage.json.
-                    writeMainStorage( "recurring", currentRecurringTransactions );
-                    updateView();
-                }
-                $( this ).dialog( "close" );
-            }
-            else {
-                dialog.showErrorBox( "Error", "Invalid input" );
-            }
-        });
-    }
 }
 
 /**

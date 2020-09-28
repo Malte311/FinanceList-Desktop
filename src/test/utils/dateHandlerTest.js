@@ -88,4 +88,22 @@ describe('DateHandler', function() {
 			assert.strictEqual(DateHandler.timestampToFilename(ts3), '12.2015.json');
 		});
 	});
+
+	describe('#stepInterval()', function() {
+		it('', function() {
+			throw new Error();
+		});
+	});
+
+	describe('#stepIntervalDays()', function() {
+		it('', function() {
+			throw new Error();
+		});
+	});
+
+	describe('#stepIntervalMonths()', function() {
+		it('', function() {
+			throw new Error();
+		});
+	});
 });
