@@ -18,7 +18,9 @@ module.exports = class InputHandler {
 	 */
 	isValidBudgetName(name) {
 		let budgets = this.storage.readMainStorage('budgets');
-		return name && name !== '' && name.length <= this.maxSwLen && !budgets.map(b => b[0]).includes(name);
+		let validChars = !/[^a-zA-Z0-9 ]/.test(name);
+		return !!name && validChars && name.trim() !== '' && name.length <= this.maxSwLen
+			&& !budgets.map(b => b[0]).includes(name);
 	}
 
 	/**

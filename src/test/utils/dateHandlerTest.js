@@ -2,18 +2,18 @@ const assert = require('assert');
 const DateHandler = require(__dirname + '/../../app/scripts/utils/dateHandler.js');
 const JsonStorage = require(__dirname + '/../../app/scripts/storage/jsonStorage.js');
 
-const fs = require('fs');
+const {appendFileSync, unlinkSync} = require('fs');
 
 describe('DateHandler', function() {
 	let jsonStorage = new JsonStorage();
 
-	var ts = 1600500309;
-	var path;
+	let ts = 1600500309;
+	let path;
 
 	before(function() {
 		path = jsonStorage.readPreference('path');
 
-		fs.appendFileSync(
+		appendFileSync(
 			__dirname + '/' + DateHandler.timestampToFilename(ts),
 			JSON.stringify(require(__dirname + '/dateHandlerTestHelper.js'), null, 4),
 			{encoding: 'utf-8'}
@@ -23,7 +23,7 @@ describe('DateHandler', function() {
 	after(function() {
 		jsonStorage.storePreference('path', path);
 
-		fs.unlinkSync(__dirname + '/' + DateHandler.timestampToFilename(ts));
+		unlinkSync(__dirname + '/' + DateHandler.timestampToFilename(ts));
 	});
 
 	describe('#getCurrentTimestamp()', function() {
@@ -63,7 +63,7 @@ describe('DateHandler', function() {
 		it('should create unique timestamps', function() {
 			jsonStorage.storePreference('path', __dirname);
 
-			//assert.strictEqual(DateHandler.createUniqueTimestamp(ts), 1600500311);
+			assert.strictEqual(DateHandler.createUniqueTimestamp(ts, jsonStorage), 1600500311);
 		});
 	});
 

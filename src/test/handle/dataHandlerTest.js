@@ -3,18 +3,18 @@ const Data = require(__dirname + '/../../app/scripts/handle/data.js');
 const DataHandler = require(__dirname + '/../../app/scripts/handle/dataHandler.js');
 const JsonStorage = require(__dirname + '/../../app/scripts/storage/jsonStorage.js');
 
-const fs = require('fs');
+const {appendFileSync, unlinkSync} = require('fs');
 
 describe('DataHandler', function() {
 	let jsonStorage = new JsonStorage();
 	let dataHandler = new DataHandler(new Data(jsonStorage));
 
-	var path;
+	let path;
 
 	before(function() {
 		path = jsonStorage.readPreference('path');
 
-		fs.appendFileSync(
+		appendFileSync(
 			__dirname + '/test.json',
 			JSON.stringify(require(__dirname + '/dataTestHelper.js'), null, 4),
 			{encoding: 'utf-8'}
@@ -24,7 +24,7 @@ describe('DataHandler', function() {
 	after(function() {
 		jsonStorage.storePreference('path', path);
 
-		fs.unlinkSync(__dirname + '/test.json');
+		unlinkSync(__dirname + '/test.json');
 	});
 
 	describe('#getMonthlySum()', function() {

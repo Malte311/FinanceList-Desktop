@@ -1,5 +1,3 @@
-const {sep} = require(__dirname + '/../storage/paths.js');
-
 /**
  * Class for dealing with times and dates.
  */
@@ -35,15 +33,18 @@ module.exports = class DateHandler {
 	 * If it is already in use, we add iteratively one second to it until it is unique.
 	 * 
 	 * @param {number} ts The original timestamp.
+	 * @param {Storage} storage A storage object for accessing the data.
 	 * @return {number} A unique timestamp generated from the original timestamp.
 	 */
-	static createUniqueTimestamp(ts) {
-		let relatedFile = readPreference('path') + sep() + DateHandler.timestampToFilename(ts);
-		
+	static createUniqueTimestamp(ts, storage) {		
+		let content = storage.getData(DateHandler.timestampToFilename(ts), {
+			connector: 'or',
+			params: [['type', 'earning'], ['type', 'spending']]
+		});
+
 		// A single for-loop is sufficient because the file is sorted by date.
 		// So if we add one, we can detect new duplicates in the following iterations
 		// (and add one again until no duplicates are left).
-		let content = JSON.parse(fs.readFileSync(relatedFile));
 		for (let i = 0; i < content.length; i++) {
 			if (content[i].date === ts) {
 				ts = ts + 1;
