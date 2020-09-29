@@ -2,7 +2,7 @@ const assert = require('assert');
 const Transact = require(__dirname + '/../../app/scripts/handle/transact.js');
 const JsonStorage = require(__dirname + '/../../app/scripts/storage/jsonStorage.js');
 
-const {unlinkSync} = require('fs');
+const {unlinkSync, existsSync} = require('fs');
 
 describe('Transact', function() {
 	let jsonStorage = new JsonStorage();
@@ -29,7 +29,9 @@ describe('Transact', function() {
 	});
 
 	afterEach(function() {
-		unlinkSync(__dirname + '/09.2020.json');
+		if (existsSync(__dirname + '/09.2020.json')) {
+			unlinkSync(__dirname + '/09.2020.json');
+		}
 	});
 
 	describe('#addEarning()', function() {
@@ -61,15 +63,44 @@ describe('Transact', function() {
 
 			let fileContents = jsonStorage.readJsonFile(__dirname + '/09.2020.json');
 
-			// assert.strictEqual(recurring.length, 1);
-			// assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], 0);
-			// assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 0);
-			// assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 0);
-			// assert.deepStrictEqual(recurring[0], testObj);
+			assert.deepStrictEqual(fileContents, [testObj]);
+			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], -50);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 0);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 50);
 		});
 
 		it('should add multiple entries correctly', function() {
-			
+			let testObj1 = {
+				date: 1599642796, // 09.09.2020
+				name: 'Apple Music',
+				amount: 50,
+				budget: 'checking account',
+				type: 'spending',
+				category: 'Subscriptions'
+			};
+
+			let testObj2 = {
+				date: 1599642799, // 09.09.2020
+				name: 'Hair salon',
+				amount: 18,
+				budget: 'checking account',
+				type: 'spending',
+				category: 'Personal care'
+			};
+
+			transact.addSpending(testObj1);
+
+			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [testObj1]);
+			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], -50);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 0);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 50);
+
+			transact.addSpending(testObj2);
+
+			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [testObj1, testObj2]);
+			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], -68);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 0);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 68);
 		});
 
 		it('should work correctly together with addEarning()', function() {
