@@ -209,7 +209,7 @@ module.exports = class JsonStorage extends Storage {
 			content.push(data);
 			writeFileSync(dataPath, JSON.stringify(this.data.sortData(content), null, 4));
 		} else {
-			appendFileSync(dataPath, '[' + JSON.stringify(data, null, 4) + ']');
+			appendFileSync(dataPath, JSON.stringify([data], null, 4));
 		}
 	}
 

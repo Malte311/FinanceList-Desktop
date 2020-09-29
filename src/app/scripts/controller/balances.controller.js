@@ -156,7 +156,8 @@ function addTransaction() {
                     $( "#autoAllocation" )[0].checked && readMainStorage( "allocationOn" ) );
             }
             else if ( $( "#spending" )[0].checked ) {
-                addSpending( name, parseFloat( sum ), budget, category, date );
+                addSpending({"date": date, "name": name, "amount": parseFloat( sum ), "budget": budget,
+				"type": "spending", "category": category} );
             }
 
             // Automation activated?

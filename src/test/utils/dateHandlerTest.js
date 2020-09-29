@@ -161,6 +161,10 @@ describe('DateHandler', function() {
 			assert.strictEqual(DateHandler.timestampToString(
 				DateHandler.stepIntervalMonths(ts3, DateHandler.stepIntervalMonths(ts3, ts3, 2), 2)
 			), '31.05.2020');
+
+			assert.strictEqual(DateHandler.timestampToString(
+				DateHandler.stepIntervalMonths(ts3, DateHandler.stepIntervalMonths(ts3, ts3, 6), 6)
+			), '31.03.2022');
 		});
 	});
 });

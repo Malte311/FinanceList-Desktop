@@ -1,4 +1,5 @@
 const {getCurrentTimestamp, stepInterval} = require(__dirname + '/../utils/dateHandler.js');
+const {addEarning, addSpending} = require(__dirname + '/../handle/transact.js');
 
 module.exports = class RecurrTrans {
 	constructor(storage) {
@@ -77,14 +78,10 @@ module.exports = class RecurrTrans {
 	 * @param {object} transObj The transaction object to add.
 	 */
 	addRecurringTransaction(transObj) {
-		let newDate = stepInterval(transObj.date, transObj.date, transObj.interval);
+		transObj.nextDate = transObj.startDate;
 
-		if (transObj.endDate < 0 || (transObj.endDate > 0 && newDate <= transObj.endDate)) {
-			transObj.nextDate = newDate;
-			this.storage.addToMainStorageArr('recurring', transObj);
-			
-			this.execRecurrTransact();
-		}
+		this.storage.addToMainStorageArr('recurring', transObj);
+		this.execRecurrTransact();
 	}
 
 	/**
