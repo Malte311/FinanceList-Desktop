@@ -1,3 +1,6 @@
+/**
+ * Handles (non recurring) transactions.
+ */
 module.exports = class Transact {
 	constructor(storage) {
 		this.storage = storage;

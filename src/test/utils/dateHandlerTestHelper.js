@@ -19,4 +19,11 @@ module.exports = [{
 	"budget": "checking account",
 	"type": "earning",
 	"category": "Sales"
+}, {
+	"date": 1600500312,
+	"name": "eBay Sale",
+	"amount": 11,
+	"budget": "checking account",
+	"type": "earning",
+	"category": "Sales"
 }];

@@ -170,6 +170,6 @@ module.exports = class DateHandler {
 			strDateArr[0] = (new Date(strDateArr[2], strDateArr[1], 0)).getDate().toString().padStart(2, '0');
 		}
 
-		return (new Date(strDateArr.reverse().join('-'))).getTime() / 1000;
+		return Math.floor((new Date(strDateArr.reverse().join('-'))).getTime() / 1000);
 	}
 }
