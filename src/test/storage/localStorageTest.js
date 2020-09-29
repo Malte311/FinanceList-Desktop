@@ -33,4 +33,24 @@ describe('LocalStorage', function() {
 			}, Error);
 		});
 	});
+
+	describe('#addToMainStorageArr()', function() {
+		/* TODO (defined in the Storage class) */
+	});
+
+	describe('#getData()', function() {
+		/* TODO */
+	});
+
+	describe('#storeData()', function() {
+		/* TODO */
+	});
+
+	describe('#replaceData()', function() {
+		/* TODO */
+	});
+
+	describe('#deleteData()', function() {
+		/* TODO */
+	});
 });

@@ -34,6 +34,14 @@ describe('JsonStorage', function() {
 		});
 	});
 
+	describe('#readJsonFile()', function() {
+		/* TODO */
+	});
+
+	describe('#getJsonFiles()', function() {
+		/* TODO */
+	});
+
 	describe('#getCurrentFilename()', function() {
 		it('should return the correct file name for today', function() {
 			let today = new Date();
@@ -43,5 +51,33 @@ describe('JsonStorage', function() {
 			let fNameToday = `${month}.${year}.json`;
 			assert.strictEqual(jsonStorage.getCurrentFilename(), fNameToday);
 		});
+	});
+
+	describe('#getDataPath()', function() {
+		/* TODO */
+	});
+
+	describe('#exists()', function() {
+		/* TODO */
+	});
+
+	describe('#getData()', function() {
+		/* TODO */
+	});
+
+	describe('#storeData()', function() {
+		/* TODO */
+	});
+
+	describe('#replaceData()', function() {
+		/* TODO */
+	});
+
+	describe('#deleteData()', function() {
+		/* TODO */
+	});
+
+	describe('#removeStats()', function() {
+		/* TODO */
 	});
 });

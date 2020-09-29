@@ -438,7 +438,9 @@
 		require('popper.js'); // Global Bootstrap things.
 		require('bootstrap');
 
-		let Startup = require(__dirname + '/../scripts/startup.js');
-		let s = new Startup();
+		$(function() {
+			let Startup = require(__dirname + '/../scripts/startup.js');
+			let s = new Startup();
+		});
 	</script>
 </html>

@@ -28,12 +28,13 @@ module.exports = class RecurrTrans {
 					
 					this.storage.writeMainStorage('recurring', recurrTrans);
 				} else {
-					this.deleteRecurringTransaction(t.name); // End date reached
+					this.deleteRecurringTransaction(t.startDate); // End date reached
+					break;
 				}
 			}
 
 			if (t.endDate > 0 && t.nextDate > t.endDate) {
-				this.deleteRecurringTransaction(t.name);
+				this.deleteRecurringTransaction(t.startDate);
 			}
 		}
 	}

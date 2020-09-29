@@ -41,7 +41,7 @@ describe('RecurrTrans', function() {
 			let testObj = {
 				startDate: Math.round(Date.now() / 1000) - (13 * 24 * 60 * 60), // 13 days in seconds
 				nextDate: Math.round(Date.now() / 1000) - (13 * 24 * 60 * 60),
-				endDate: Math.round(Date.now() / 1000),
+				endDate: Math.round(Date.now() / 1000) - (8 * 24 * 60 * 60), // 8 days in seconds
 				name: 'Salary',
 				amount: 1500,
 				budget: 'checking account',
@@ -66,16 +66,10 @@ describe('RecurrTrans', function() {
 				budget: 'checking account',
 				type: 'earning',
 				category: 'Income'
-			}, {
-				name: 'Salary',
-				amount: 1500,
-				budget: 'checking account',
-				type: 'earning',
-				category: 'Income'
 			}]);
 
-			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], 3000);
-			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 3000);
+			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], 1500);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 1500);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 0);
 		});
 

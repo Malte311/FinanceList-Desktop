@@ -27,4 +27,34 @@ describe('Storage', function() {
 			assert.throws(storage.writeMainStorage, Error);
 		});
 	});
+
+	describe('#addToMainStorageArr()', function() {
+		it('should throw an error because it calls intern functions which should be overridden', function() {
+			assert.throws(storage.addToMainStorageArr, Error);
+		});
+	});
+
+	describe('#getData()', function() {
+		it('should throw an error because it should be overridden', function() {
+			assert.throws(storage.getData, Error);
+		});
+	});
+
+	describe('#storeData()', function() {
+		it('should throw an error because it should be overridden', function() {
+			assert.throws(storage.storeData, Error);
+		});
+	});
+
+	describe('#replaceData()', function() {
+		it('should throw an error because it should be overridden', function() {
+			assert.throws(storage.replaceData, Error);
+		});
+	});
+
+	describe('#deleteData()', function() {
+		it('should throw an error because it should be overridden', function() {
+			assert.throws(storage.deleteData, Error);
+		});
+	});
 });

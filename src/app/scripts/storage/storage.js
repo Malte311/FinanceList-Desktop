@@ -80,18 +80,44 @@ module.exports = class Storage {
 		this.writeMainStorage(field, array);
 	}
 
+	/**
+	 * Filters data from a given file according to a given quest.
+	 * 
+	 * @param {string} file The file containing the data to be filtered.
+	 * @param {object} quest The quest for filtering the data. quest contains a connector
+	 * (or/and) and an array of parameters to filter objects. Example:
+	 * quest = { connector: 'or', params: [['type', 'earning'], ['budget', 'checking account']] }
+	 * @return {array} All the data which match the quest, in form of an array containing objects.
+	 */
 	getData(file, quest) {
 		throw new Error('This function must be overridden!');
 	}
 
+	/**
+	 * Stores data in the appropriate data file. The file is determined by the date of the data.
+	 * 
+	 * @param {object} data The data we want to store.
+	 */
 	storeData(data) {
 		throw new Error('This function must be overridden!');
 	}
 
+	/**
+	 * Replaces a specific file with new data.
+	 * 
+	 * @param {string} file The file to override.
+	 * @param {object} data The data to write.
+	 */
 	replaceData(file, data) {
 		throw new Error('This function must be overridden!');
 	}
 
+	/**
+	 * Deletes a given entry in a given file.
+	 * 
+	 * @param {string} file The file which contains the data.
+	 * @param {string} id The id (timestamp) of the data we want to delete.
+	 */
 	deleteData(file, data) {
 		throw new Error('This function must be overridden!');
 	}
