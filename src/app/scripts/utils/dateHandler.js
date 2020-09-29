@@ -81,6 +81,8 @@ module.exports = class DateHandler {
 	/**
 	 * Increments a given date by a given interval.
 	 * 
+	 * @param {number} startDate The original date where the transaction started.
+	 * Necessary to keep the original day.
 	 * @param {number} oldDate The date to increment as a timestamp in seconds.
 	 * @param {number} interval The interval, in form of one of the following:
 	 * 0 => one week (7 days),
@@ -91,61 +93,14 @@ module.exports = class DateHandler {
 	 * 5 => six months (biannual),
 	 * 6 => one year (annual)
 	 */
-	static stepInterval(oldDate, interval) {
-		// Alternative: Use timestampToStr and manipulate the digits in it
-
+	static stepInterval(startDate, oldDate, interval) {
 		if (interval === 0 || interval === 1) {
-			return stepIntervalDays(oldDate, interval);
+			return DateHandler.stepIntervalDays(oldDate, interval);
+		} else if (interval >= 2 && interval <= 6) {
+			return DateHandler.stepIntervalMonths(startDate, oldDate, interval);
+		} else {
+			throw new Error(`Invalid interval! Given ${interval} but must be between 0 and 6.`);
 		}
-
-		let oldDateCopy = oldDate;
-
-		// Create a new date object (Remember to multiply by 1000 to get milliseconds).
-		var tmp = new Date( oldDate * 1000 );
-		// Keep a reference on the old month (to check for overflows).
-		var oldMonth = tmp.getMonth();
-		// Monthly?
-		if ( interval === 2 ) {
-			// Increment the month by 1 (monthly interval).
-			tmp.setMonth( tmp.getMonth() + 1 );
-		}
-		// Bimonthly?
-		else if ( interval === 3 ) {
-			// Increment the month by 2 (bimonthly interval).
-			tmp.setMonth( tmp.getMonth() + 2 );
-		}
-		// Quarterly
-		else if ( interval === 4 ) {
-			// Increment the month by 3 (quarterly interval).
-			tmp.setMonth( tmp.getMonth() + 3 );
-		}
-		// Biannual?
-		else if ( interval === 5 ) {
-			// Increment the month by 6 (biannual interval).
-			tmp.setMonth( tmp.getMonth() + 6 );
-		}
-		// Annual?
-		else if ( interval === 6 ) {
-			// Increment the month by 12 (annual interval).
-			tmp.setMonth( tmp.getMonth() + 12 );
-		}
-		// Make sure that we keep the correct day, in case no overflow happened.
-		if ( oldMonth + 1 === tmp.getMonth() ) {
-			tmp.setDate( new Date( startDate * 1000 ).getDate() );
-		}
-		// Check, if an overflow emerges.
-		if ( (oldMonth + 1) % 12 !== tmp.getMonth() % 12 ) {
-			// Setting the day to zero will give us the last day of the previous month.
-			var newDate = new Date( tmp.getFullYear(), tmp.getMonth(), 0 );
-			// Remember to divide by 1000 because we want to get seconds.
-			return Math.floor( newDate.getTime() / 1000 );
-		}
-		// No overflow?
-		else {
-			// Remember to divide by 1000 because we want to get seconds.
-			return Math.floor( tmp.getTime() / 1000 );
-		}
-		
 	}
 
 	/**
@@ -166,5 +121,55 @@ module.exports = class DateHandler {
 		return oldDate + (interval === 0 ? weekInSeconds : fourWeeksInSeconds);
 	}
 
-	static stepIntervalMonths() {}
+	/**
+	 * Increments a given date according to a given interval.
+	 * 
+	 * @param {number} startDate The original date where the transaction started.
+	 * Necessary to keep the original day.
+	 * @param {number} oldDate The date to increment as a timestamp in seconds.
+	 * @param {number} interval The interval: Can be either 2 for one month, 3 for two months,
+	 * 4 for three moths, 5 for six months or 6 for one year.
+	 * @return {number} The new data as a timestamp in seconds.
+	 */
+	static stepIntervalMonths(startDate, oldDate, interval) {
+		if (interval < 2 || interval > 6) {
+			throw new Error(`Invalid interval! Given ${interval} but must be between 2 and 6.`);
+		}
+
+		let strDateArr = DateHandler.timestampToString(oldDate).split('.'); // ['dd', 'mm', 'yyyy']
+		// Keep the original day (e.g. from 31.03 to 30.04 to 31.05).
+		strDateArr[0] = (new Date(startDate * 1000)).getDate().toString().padStart(2, '0');
+
+		switch (interval) {
+			case 2: // Increase by one month
+				strDateArr[1] = (parseInt(strDateArr[1]) + 1).toString().padStart(2, '0');
+				break;
+			case 3: // Increase by two months
+				strDateArr[1] = (parseInt(strDateArr[1]) + 2).toString().padStart(2, '0');
+				break;
+			case 4: // Increase by three months
+				strDateArr[1] = (parseInt(strDateArr[1]) + 3).toString().padStart(2, '0');
+				break;
+			case 5: // Increase by six months
+				strDateArr[1] = (parseInt(strDateArr[1]) + 6).toString().padStart(2, '0');
+				break;
+			case 6: // Increase by one year
+				strDateArr[2] = (parseInt(strDateArr[2]) + 1).toString().padStart(2, '0');
+				break;
+		}
+
+		// Enter a new year if month overflowed
+		let month = parseInt(strDateArr[1]);
+		if (month > 12) {
+			strDateArr[1] = (month % 12).toString().padStart(2, '0');
+			strDateArr[2] = (parseInt(strDateArr[2]) + parseInt(month / 12)).toString().padStart(2, '0');
+		}
+
+		// Set day to the last day of the month if it overflows (e.g. from 31.03 to 31.04).
+		if (parseInt(strDateArr[0]) > (new Date(strDateArr[2], strDateArr[1], 0)).getDate()) {
+			strDateArr[0] = (new Date(strDateArr[2], strDateArr[1], 0)).getDate().toString().padStart(2, '0');
+		}
+
+		return (new Date(strDateArr.reverse().join('-'))).getTime() / 1000;
+	}
 }
