@@ -26,8 +26,8 @@ module.exports = class Transact {
 	addEarningSingle(earningObj) {
 		this.storage.storeData(earningObj);
 
-		this.updateMainStorageArr('budgets', spendingObj.budget, spendingObj.amount);
-		this.updateMainStorageArr('allTimeSpendings', spendingObj.budget, spendingObj.amount);	
+		this.updateMainStorageArr('budgets', earningObj.budget, earningObj.amount);
+		this.updateMainStorageArr('allTimeEarnings', earningObj.budget, earningObj.amount);	
 	}
 
 	/**
@@ -43,6 +43,7 @@ module.exports = class Transact {
 			if (budget[1] > 0) { // Only handle entries with percentage > 0.
 				let objCopy = Object.assign({}, earningObj);
 				objCopy.amount = Math.round((objCopy.amount * budget[1] / 100) * 100) / 100;
+				objCopy.budget = budget[0];
 				totalAmount += objCopy.amount;
 
 				if (index === allocation.length - 1) { // Correct deviations in the last iteration.
