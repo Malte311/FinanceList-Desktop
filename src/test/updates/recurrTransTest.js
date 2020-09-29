@@ -3,7 +3,6 @@ const JsonStorage = require(__dirname + '/../../app/scripts/storage/jsonStorage.
 const RecurrTrans = require(__dirname + '/../../app/scripts/updates/recurrTrans.js');
 
 const {existsSync, unlinkSync} = require('fs');
-const { start } = require('repl');
 
 describe('RecurrTrans', function() {
 	let jsonStorage = new JsonStorage();
@@ -19,6 +18,10 @@ describe('RecurrTrans', function() {
 
 	beforeEach(function() {
 		jsonStorage.writeMainStorage('recurring', []);
+		jsonStorage.writeMainStorage('budgets', [['checking account', 0]]);
+		jsonStorage.writeMainStorage('allTimeEarnings', [['checking account', 0]]);
+		jsonStorage.writeMainStorage('allTimeSpendings', [['checking account', 0]]);
+		jsonStorage.writeMainStorage('allocation', [['checking account', 100]]);
 	});
 
 	after(function() {
@@ -35,11 +38,92 @@ describe('RecurrTrans', function() {
 
 	describe('#execRecurrTransact()', function() {
 		it('should execute a transaction multiple times correctly', function() {
-			
+			let testObj = {
+				startDate: Math.round(Date.now() / 1000) - (13 * 24 * 60 * 60), // 13 days in seconds
+				nextDate: Math.round(Date.now() / 1000) - (13 * 24 * 60 * 60),
+				endDate: Math.round(Date.now() / 1000),
+				name: 'Salary',
+				amount: 1500,
+				budget: 'checking account',
+				type: 'earning',
+				category: 'Income',
+				interval: 0, // every 7 days
+				allocationOn: true
+			};
+
+			jsonStorage.writeMainStorage('recurring', [testObj]);
+
+			recurrTrans.execRecurrTransact();
+
+			assert.deepStrictEqual(jsonStorage.readMainStorage('recurring'), []);
+
+			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json').map(obj => {
+				delete obj.date;
+				return obj;
+			}), [{
+				name: 'Salary',
+				amount: 1500,
+				budget: 'checking account',
+				type: 'earning',
+				category: 'Income'
+			}, {
+				name: 'Salary',
+				amount: 1500,
+				budget: 'checking account',
+				type: 'earning',
+				category: 'Income'
+			}]);
+
+			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], 3000);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 3000);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 0);
 		});
 
 		it('should execute a transaction with allocation enabled correctly', function() {
-			
+			jsonStorage.writeMainStorage('budgets', [['checking account', 0], ['saving account', 0]]);
+			jsonStorage.writeMainStorage('allTimeEarnings', [['checking account', 0], ['saving account', 0]]);
+			jsonStorage.writeMainStorage('allTimeSpendings', [['checking account', 0], ['saving account', 0]]);
+			jsonStorage.writeMainStorage('allocation', [['checking account', 30], ['saving account', 70]]);
+			jsonStorage.writeMainStorage('recurring', [{
+				startDate: Math.round(Date.now() / 1000) - (5 * 24 * 60 * 60), // 5 days in seconds
+				nextDate: Math.round(Date.now() / 1000) - (5 * 24 * 60 * 60),
+				endDate: Math.round(Date.now() / 1000),
+				name: 'Salary',
+				amount: 1500,
+				budget: 'checking account',
+				type: 'earning',
+				category: 'Income',
+				interval: 0, // every 7 days
+				allocationOn: true
+			}]);
+
+			recurrTrans.execRecurrTransact();
+
+			assert.deepStrictEqual(jsonStorage.readMainStorage('recurring'), []);
+
+			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json').map(obj => {
+				delete obj.date;
+				return obj;
+			}), [{
+				name: 'Salary',
+				amount: 450,
+				budget: 'checking account',
+				type: 'earning',
+				category: 'Income'
+			}, {
+				name: 'Salary',
+				amount: 1050,
+				budget: 'saving account',
+				type: 'earning',
+				category: 'Income'
+			}]);
+
+			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], 450);
+			assert.strictEqual(jsonStorage.readMainStorage('budgets')[1][1], 1050);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 450);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[1][1], 1050);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 0);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[1][1], 0);
 		});
 	});
 
@@ -97,7 +181,10 @@ describe('RecurrTrans', function() {
 	describe('#editRecurringTransaction()', function() {
 		it('should edit the correct property and set it to the correct value', function() {
 			let startDate = Math.round((Date.now() / 1000) + 600); // 10 min from now
-			let testArr = require(__dirname + '/recurrTransTestHelper.js');
+			let testArr = require(__dirname + '/recurrTransTestHelper.js').map((trans, index) => {
+				trans.startDate = startDate + index;
+				return trans;
+			});
 
 			testArr.forEach((trans, index) => {
 				trans.startDate = startDate + index;
@@ -105,17 +192,23 @@ describe('RecurrTrans', function() {
 			});
 
 			assert.strictEqual(jsonStorage.readMainStorage('recurring').length, 3);
-			assert.deepStrictEqual(jsonStorage.readMainStorage('recurring'), testArr.map((trans, index) => {
-				trans.startDate = startDate + index;
-				return trans;
-			}));
+			assert.deepStrictEqual(jsonStorage.readMainStorage('recurring'), testArr);
 
 			recurrTrans.editRecurringTransaction(startDate + 2, {
 				name: 'New name',
 				category: 'New category'
 			});
 
-			
+			testArr[2] = Object.assign(testArr[2], {name: 'New name', category: 'New category'});
+			assert.deepStrictEqual(jsonStorage.readMainStorage('recurring'), testArr);
+
+			recurrTrans.editRecurringTransaction(startDate + 1, {
+				budget: 'new budget',
+				amount: 300.33
+			});
+
+			testArr[1] = Object.assign(testArr[1], {budget: 'new budget', amount: 300.33});
+			assert.deepStrictEqual(jsonStorage.readMainStorage('recurring'), testArr);
 		});
 	});
 
