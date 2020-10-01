@@ -1,13 +1,9 @@
-const {sep} = require('path');
+const {join, sep} = require('path');
 
 /**
  * Class for handling all things related to paths.
  */
 module.exports = class Path {
-	constructor(storage) {
-		this.storage = storage;
-	}
-
 	/**
 	 * Returns the path to the user data directory. If the script is executed in the 'npm test'
 	 * environment (i.e., the --tmpdir argument is provided), the path to the tmp directory is
@@ -16,9 +12,21 @@ module.exports = class Path {
 	 * @return {string} The path to the user data directory.
 	 */
 	static home() {
-		let {app} = require('electron');
-		let altdir = process.argv[4] === '--tmpdir' ? '/tmp/financelist' : require('os').homedir();
-		return (app !== undefined) ? app.getPath('userData') : altdir;
+		// Use tmp directory for testcases
+		if (process.argv[4] === '--tmpdir') {
+			return '/tmp/financelist';
+		}
+
+		switch (process.platform) {
+			case 'darwin':
+				return join(process.env.HOME, 'Library', 'Application Support', 'FinanceList-Desktop');
+			case 'linux':
+				return join(process.env.HOME, '.local', 'share', 'FinanceList-Desktop');
+			case 'win32':
+				return join(process.env.APPDATA || require('os').homedir(), 'FinanceList-Desktop');
+			default:
+				return join(require('os').homedir(), 'FinanceList-Desktop');
+		}
 	}
 	
 	/**
@@ -73,8 +81,10 @@ module.exports = class Path {
 	 * 
 	 * @param {string} from The source directory.
 	 * @param {string} to The target directory.
+	 * @param {function} callback Callback function which takes one boolean parameter
+	 * that indicates whether the operation succeeded or not (true = success).
 	 */
-	moveJsonFiles(from, to) {
+	moveJsonFiles(from, to, callback) {
 		let {readdirSync, renameSync} = require('fs');
 		let allFiles = readdirSync(from);
 
@@ -82,18 +92,14 @@ module.exports = class Path {
 			if (allFiles[i].endsWith('.json')) {
 				try {
 					renameSync(from + Path.sep() + allFiles[i], to + Path.sep() + allFiles[i]);
-				}
-				catch (err) { // Cross-device linking will cause an error.
-					let {dialog} = require('electron').remote;
-
-					let lang = this.storage.readPreference('language');
-					let textData = require(__dirname + `/../../text/text_${lang}.json`);
-					
-					dialog.showErrorBox(textData['error'], textData['moveFileErr']);
+				} catch (err) { // Cross-device linking will cause an error.
+					callback(false);
 					break;
 				}
 			}
 		}
+
+		callback(true);
 	}
 
 	/**

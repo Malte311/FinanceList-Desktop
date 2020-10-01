@@ -1,11 +1,34 @@
 const assert = require('assert');
 const Path = require(__dirname + '/../../app/scripts/storage/paths.js');
-const JsonStorage = require(__dirname + '/../../app/scripts/storage/jsonStorage.js');
 
-const {appendFileSync, existsSync, rmdirSync, unlinkSync} = require('fs');
+const {appendFileSync, existsSync, mkdirSync, rmdirSync, unlinkSync} = require('fs');
 
 describe('Path', function() {
 	let sep = Path.sep();
+
+	before(function() {		
+		if (!existsSync('/tmp/financelist/')) {
+			mkdirSync('/tmp/financelist/');
+		}
+	});
+
+	after(function() {		
+		if (existsSync('/tmp/financelist/')) {
+			rmdirSync('/tmp/financelist/', {recursive: true});
+		}
+	});
+
+	describe('#home()', function() {
+		it('should use the tmp directory', function() {
+			assert.strictEqual(Path.home(), '/tmp/financelist');
+		});
+	});
+
+	describe('#getStoragePath()', function() {
+		it('should return the storage subfolder of Path.home()', function() {
+			assert.strictEqual(Path.getStoragePath(), Path.home() + Path.sep() + 'storage');
+		});
+	});
 
 	describe('#getSettingsFilePath()', function() {
 		it('settings file should be in the storage directory', function() {
@@ -40,9 +63,23 @@ describe('Path', function() {
 
 	describe('#moveJsonFiles()', function() {
 		it('should move all json files to the given location', function() {
-			let path = new Path(new JsonStorage());
+			let path = new Path();
 
-			// ==>
+			appendFileSync('/tmp/financelist/testA.json', JSON.stringify([]), {encoding: 'utf-8'});
+			appendFileSync('/tmp/financelist/testB.json', JSON.stringify([]), {encoding: 'utf-8'});
+			appendFileSync('/tmp/financelist/testC.json', JSON.stringify([]), {encoding: 'utf-8'});
+
+			mkdirSync('/tmp/financelist/movetest');
+
+			path.moveJsonFiles('/tmp/financelist', '/tmp/financelist/movetest', success => {});
+			assert.deepStrictEqual(Path.listJsonFiles('/tmp/financelist/movetest'), ['testA.json', 'testB.json', 'testC.json']);
+			assert.deepStrictEqual(Path.listJsonFiles('/tmp/financelist'), []);
+
+			path.moveJsonFiles('/tmp/financelist/movetest', '/tmp/financelist', success => {}); // Move back
+			assert.deepStrictEqual(Path.listJsonFiles('/tmp/financelist'), ['testA.json', 'testB.json', 'testC.json']);
+			assert.deepStrictEqual(Path.listJsonFiles('/tmp/financelist/movetest'), []);
+
+			rmdirSync('/tmp/financelist/movetest', {recursive: true});
 		});
 	});
 
