@@ -2,6 +2,8 @@
 
 ![Build Status](https://travis-ci.com/Malte311/FinanceList-Desktop.svg?token=peoMTzKpBjcCaX8BZgzt&branch=master)
 
+> :warning: :warning: :warning: Currently, there is some refactoring going on on the [refactor branch](https://github.com/Malte311/FinanceList-Desktop/tree/refactor). :warning: :warning: :warning:
+
 FinanceList is a simple finance managing tool. For more information on how to use this tool, take a look at the [wiki](https://github.com/Malte311/FinanceList-Desktop/wiki).
 ***
 ## Features
