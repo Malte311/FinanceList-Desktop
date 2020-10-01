@@ -84,7 +84,7 @@ module.exports = class Path {
 	 * @param {function} callback Callback function which takes one boolean parameter
 	 * that indicates whether the operation succeeded or not (true = success).
 	 */
-	moveJsonFiles(from, to, callback) {
+	static moveJsonFiles(from, to, callback) {
 		let {readdirSync, renameSync} = require('fs');
 		let allFiles = readdirSync(from);
 

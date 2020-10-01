@@ -63,19 +63,17 @@ describe('Path', function() {
 
 	describe('#moveJsonFiles()', function() {
 		it('should move all json files to the given location', function() {
-			let path = new Path();
-
 			appendFileSync('/tmp/financelist/testA.json', JSON.stringify([]), {encoding: 'utf-8'});
 			appendFileSync('/tmp/financelist/testB.json', JSON.stringify([]), {encoding: 'utf-8'});
 			appendFileSync('/tmp/financelist/testC.json', JSON.stringify([]), {encoding: 'utf-8'});
 
 			mkdirSync('/tmp/financelist/movetest');
 
-			path.moveJsonFiles('/tmp/financelist', '/tmp/financelist/movetest', success => {});
+			Path.moveJsonFiles('/tmp/financelist', '/tmp/financelist/movetest', success => {});
 			assert.deepStrictEqual(Path.listJsonFiles('/tmp/financelist/movetest'), ['testA.json', 'testB.json', 'testC.json']);
 			assert.deepStrictEqual(Path.listJsonFiles('/tmp/financelist'), []);
 
-			path.moveJsonFiles('/tmp/financelist/movetest', '/tmp/financelist', success => {}); // Move back
+			Path.moveJsonFiles('/tmp/financelist/movetest', '/tmp/financelist', success => {}); // Move back
 			assert.deepStrictEqual(Path.listJsonFiles('/tmp/financelist'), ['testA.json', 'testB.json', 'testC.json']);
 			assert.deepStrictEqual(Path.listJsonFiles('/tmp/financelist/movetest'), []);
 

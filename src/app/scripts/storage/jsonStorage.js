@@ -135,7 +135,7 @@ module.exports = class JsonStorage extends Storage {
 	 */
 	getJsonFiles() {
 		return Path.listJsonFiles(this.readPreference('path'))
-			.filter(e => e !== 'mainStorage.json')
+			.filter(e => e !== 'mainstorage.json')
 			.sort((a, b) => {
 				let aSplit = a.split('.');
 				let bSplit = b.split('.');
