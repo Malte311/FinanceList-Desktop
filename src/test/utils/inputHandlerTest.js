@@ -10,7 +10,7 @@ describe('InputHandler', function() {
 
 	before(function() {
 		path = jsonStorage.readPreference('path');
-		jsonStorage.storePreference('path', '/tmp/financelist/');
+		jsonStorage.storePreference('path', '/tmp/financelist');
 
 		if (!existsSync('/tmp/financelist/')) {
 			mkdirSync('/tmp/financelist/');

@@ -1,7 +1,7 @@
 const assert = require('assert');
 const JsonStorage = require(__dirname + '/../../app/scripts/storage/jsonStorage.js');
 
-const {appendFileSync, existsSync, mkdirSync, rmdirSync, unlinkSync} = require('fs');
+const {appendFileSync, existsSync, mkdirSync, rmdirSync, unlinkSync, readFileSync} = require('fs');
 
 describe('JsonStorage', function() {
 	let jsonStorage = new JsonStorage();
@@ -10,7 +10,7 @@ describe('JsonStorage', function() {
 	before(function() {
 		path = jsonStorage.readPreference('path');
 
-		jsonStorage.storePreference('path', '/tmp/financelist/');
+		jsonStorage.storePreference('path', '/tmp/financelist');
 		
 		if (!existsSync('/tmp/financelist/')) {
 			mkdirSync('/tmp/financelist/');
@@ -258,7 +258,7 @@ describe('JsonStorage', function() {
 				"category": "Tickets"
 			};
 
-			jsonStorage.replaceData('09.2020', testObj);
+			jsonStorage.replaceData('09.2020.json', testObj);
 
 			assert.deepStrictEqual(jsonStorage.getData('09.2020.json', {
 				connector: 'and',
@@ -278,7 +278,7 @@ describe('JsonStorage', function() {
 				"category": "Tickets"
 			};
 
-			jsonStorage.replaceData('09.2020', testObj);
+			jsonStorage.replaceData('09.2020.json', testObj);
 
 			assert.deepStrictEqual(jsonStorage.getData('09.2020.json', {
 				connector: 'and',
@@ -287,7 +287,7 @@ describe('JsonStorage', function() {
 
 			let testObj2 = Object.assign({}, testObj);
 			testObj2.date = 1598997601;
-			jsonStorage.replaceData('09.2020', testObj2);
+			jsonStorage.replaceData('09.2020.json', testObj2);
 
 			assert.deepStrictEqual(jsonStorage.getData('09.2020.json', {
 				connector: 'and',

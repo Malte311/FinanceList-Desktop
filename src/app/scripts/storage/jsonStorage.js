@@ -223,9 +223,9 @@ module.exports = class JsonStorage extends Storage {
 		let filePath = this.getDataPath() + file;
 		
 		if (existsSync(filePath)) {
-			writeFileSync(filePath, JSON.stringify(data, null, 4));
+			writeFileSync(filePath, JSON.stringify([data], null, 4));
 		} else {
-			appendFileSync(filePath, JSON.stringify(data, null, 4));
+			appendFileSync(filePath, JSON.stringify([data], null, 4));
 		}
 	}
 

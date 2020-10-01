@@ -39,7 +39,7 @@ describe('DataHandler', function() {
 
 	describe('#getMonthlySum()', function() {
 		it('should compute the correct sum', function() {
-			jsonStorage.storePreference('path', '/tmp/financelist/');
+			jsonStorage.storePreference('path', '/tmp/financelist');
 
 			assert.strictEqual(dataHandler.getMonthlySum('checking account', 'earning', '/test.json'), 1550.5);
 			assert.strictEqual(dataHandler.getMonthlySum('saving account', 'earning', '/test.json'), 550.6);
@@ -50,7 +50,7 @@ describe('DataHandler', function() {
 
 	describe('#getRecentTrans()', function() {
 		it('should filter the most recent transactions', function() {
-			jsonStorage.storePreference('path', '/tmp/financelist/');
+			jsonStorage.storePreference('path', '/tmp/financelist');
 
 			assert.deepStrictEqual(dataHandler.getRecentTrans(3, 'earning'), [{
 				"date": 1600500309,
