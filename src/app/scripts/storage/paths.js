@@ -14,9 +14,9 @@ module.exports = class Path {
 	 * @return {string} The path to the user data directory.
 	 */
 	static home() {
-		let {remote} = require('electron');
-		let app = (remote !== undefined) ? remote.app : undefined;
-		return (app !== undefined) ? app.getPath('userData') : require('os').tmpdir();
+		let {app} = require('electron');
+		let altdir = process.argv[4] === '--tmpdir' ? '/tmp/financelist' : require('os').homedir();
+		return (app !== undefined) ? app.getPath('userData') : altdir;
 	}
 	
 	/**

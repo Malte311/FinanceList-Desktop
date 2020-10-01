@@ -32,7 +32,7 @@ module.exports = class DataHandler {
 	getRecentTrans(limit, type) {
 		let data = [];
 
-		let files = this.data.storage.getJsonFiles().sort((a, b) => {
+		let files = this.data.storage.getJsonFiles().filter(f => f !== 'mainstorage.json').sort((a, b) => {
 			return (a.split('.').reverse().join('.') > b.split('.').reverse().join('.')) ? -1 : 1;
 		});
 

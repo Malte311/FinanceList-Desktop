@@ -5,7 +5,7 @@
 	"main": "./src/app/main.js",
 	"scripts": {
 		"start": "electron . --dev",
-		"test": "nyc mocha ./src/test/ --recursive",
+		"test": "nyc mocha ./src/test/ --recursive --tmpdir",
 		"package-mac": "electron-packager ./src/app --ignore=node_modules/wine-darwin --platform=darwin --arch=x64 --asar --icon=./src/app/img/tab.icns --prune=true --out=./application/",
 		"create-dmg": "electron-installer-dmg ./application/FinanceList-Desktop-darwin-x64/FinanceList-Desktop.app FinanceList-Desktop-mac-x64",
 		"package-win": "electron-packager ./src/app --ignore=node_modules/wine-darwin --platform=win32 --arch=x64 --asar --icon=./src/app/img/tab.ico --prune=true --out=./application/",

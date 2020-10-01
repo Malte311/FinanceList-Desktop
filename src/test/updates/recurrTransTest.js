@@ -37,7 +37,7 @@ describe('RecurrTrans', function() {
 		}
 		
 		if (existsSync('/tmp/financelist/')) {
-			rmdirSync('/tmp/financelist/');
+			rmdirSync('/tmp/financelist/', {recursive: true});
 		}
 	});
 

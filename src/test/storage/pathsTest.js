@@ -22,7 +22,7 @@ describe('Path', function() {
 			Path.createPath(path);
 			assert.strictEqual(existsSync(path), true, 'path should exist after creating it');
 			
-			rmdirSync(path);
+			rmdirSync(path, {recursive: true});
 			assert.strictEqual(existsSync(path), false, 'path should be cleaned up after the test');
 		});
 		
