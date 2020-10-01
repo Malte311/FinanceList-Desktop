@@ -2,7 +2,7 @@ const assert = require('assert');
 const Transact = require(__dirname + '/../../app/scripts/handle/transact.js');
 const JsonStorage = require(__dirname + '/../../app/scripts/storage/jsonStorage.js');
 
-const {unlinkSync, existsSync} = require('fs');
+const {unlinkSync, existsSync, mkdirSync, rmdirSync} = require('fs');
 
 describe('Transact', function() {
 	let jsonStorage = new JsonStorage();
@@ -13,7 +13,11 @@ describe('Transact', function() {
 	before(function() {
 		path = jsonStorage.readPreference('path');
 
-		jsonStorage.storePreference('path', __dirname);
+		jsonStorage.storePreference('path', '/tmp/financelist/');
+
+		if (!existsSync('/tmp/financelist/')) {
+			mkdirSync('/tmp/financelist/');
+		}
 	});
 
 	beforeEach(function() {
@@ -26,12 +30,18 @@ describe('Transact', function() {
 	after(function() {
 		jsonStorage.storePreference('path', path);
 
-		unlinkSync(__dirname + '/mainstorage.json');
+		if (existsSync('/tmp/financelist/mainstorage.json')) {
+			unlinkSync('/tmp/financelist/mainstorage.json');
+		}
+
+		if (existsSync('/tmp/financelist/')) {
+			rmdirSync('/tmp/financelist/');
+		}
 	});
 
 	afterEach(function() {
-		if (existsSync(__dirname + '/09.2020.json')) {
-			unlinkSync(__dirname + '/09.2020.json');
+		if (existsSync('/tmp/financelist/09.2020.json')) {
+			unlinkSync('/tmp/financelist/09.2020.json');
 		}
 	});
 
@@ -48,7 +58,7 @@ describe('Transact', function() {
 
 			transact.addEarning(testObj, false);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [testObj]);
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj]);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], 500.55);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 500.55);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 0);
@@ -75,14 +85,14 @@ describe('Transact', function() {
 
 			transact.addEarning(testObj1, false);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [testObj1]);
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1]);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], 500.55);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 500.55);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 0);
 
 			transact.addEarning(testObj2, true);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [testObj1, testObj2]);
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1, testObj2]);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], 1001.1);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 1001.1);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 0);
@@ -109,14 +119,14 @@ describe('Transact', function() {
 
 			transact.addEarning(testObj1, true);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [testObj1]);
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1]);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], 1500);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 1500);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 0);
 
 			transact.addSpending(testObj2);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [testObj1, testObj2]);
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1, testObj2]);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], 1449.5);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 1500);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 50.5);
@@ -149,7 +159,7 @@ describe('Transact', function() {
 
 			transact.addEarningSingle(testObj1);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [testObj1]);
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1]);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], 999.99);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[1][1], 0);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 999.99);
@@ -159,7 +169,7 @@ describe('Transact', function() {
 
 			transact.addEarningSingle(testObj2);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [testObj1, testObj2]);
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1, testObj2]);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], 999.99);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[1][1], 999.99);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 999.99);
@@ -196,7 +206,7 @@ describe('Transact', function() {
 
 			transact.addEarningSplit(testObj1);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [{
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [{
 				date: 1599642796, // 09.09.2020
 				name: 'Salary',
 				amount: 30,
@@ -221,7 +231,7 @@ describe('Transact', function() {
 
 			transact.addEarningSplit(testObj2);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [{
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [{
 				date: 1599642796, // 09.09.2020
 				name: 'Salary',
 				amount: 30,
@@ -275,7 +285,7 @@ describe('Transact', function() {
 
 			transact.addEarningSplit(testObj);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [{
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [{
 				date: 1599642796, // 09.09.2020
 				name: 'Refund',
 				amount: 3,
@@ -312,7 +322,7 @@ describe('Transact', function() {
 
 			transact.addSpending(testObj);
 
-			let fileContents = jsonStorage.readJsonFile(__dirname + '/09.2020.json');
+			let fileContents = jsonStorage.readJsonFile('/tmp/financelist/09.2020.json');
 
 			assert.deepStrictEqual(fileContents, [testObj]);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], -50);
@@ -341,14 +351,14 @@ describe('Transact', function() {
 
 			transact.addSpending(testObj1);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [testObj1]);
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1]);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], -50);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 0);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 50);
 
 			transact.addSpending(testObj2);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [testObj1, testObj2]);
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1, testObj2]);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], -68);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 0);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 68);
@@ -375,14 +385,14 @@ describe('Transact', function() {
 
 			transact.addSpending(testObj1);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [testObj1]);
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1]);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], -50.5);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 0);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 50.5);
 
 			transact.addEarning(testObj2, false);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [testObj1, testObj2]);
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1, testObj2]);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], 1449.5);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 1500);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 50.5);
@@ -413,7 +423,7 @@ describe('Transact', function() {
 
 			transact.addSpending(testObj1);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [testObj1]);
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1]);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], -50);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[1][1], 0);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 0);
@@ -423,7 +433,7 @@ describe('Transact', function() {
 
 			transact.addSpending(testObj2);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json'), [testObj1, testObj2]);
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1, testObj2]);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], -50);
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[1][1], -18);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 0);

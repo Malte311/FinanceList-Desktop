@@ -2,7 +2,7 @@ const assert = require('assert');
 const DateHandler = require(__dirname + '/../../app/scripts/utils/dateHandler.js');
 const JsonStorage = require(__dirname + '/../../app/scripts/storage/jsonStorage.js');
 
-const {appendFileSync, unlinkSync} = require('fs');
+const {appendFileSync, unlinkSync, mkdirSync, rmdirSync, existsSync} = require('fs');
 
 describe('DateHandler', function() {
 	let jsonStorage = new JsonStorage();
@@ -13,8 +13,12 @@ describe('DateHandler', function() {
 	before(function() {
 		path = jsonStorage.readPreference('path');
 
+		if (!existsSync('/tmp/financelist/')) {
+			mkdirSync('/tmp/financelist/');
+		}
+		
 		appendFileSync(
-			__dirname + '/' + DateHandler.timestampToFilename(ts),
+			`/tmp/financelist/${DateHandler.timestampToFilename(ts)}`,
 			JSON.stringify(require(__dirname + '/dateHandlerTestHelper.js'), null, 4),
 			{encoding: 'utf-8'}
 		);
@@ -23,7 +27,13 @@ describe('DateHandler', function() {
 	after(function() {
 		jsonStorage.storePreference('path', path);
 
-		unlinkSync(__dirname + '/' + DateHandler.timestampToFilename(ts));
+		if (existsSync(`/tmp/financelist/${DateHandler.timestampToFilename(ts)}`)) {
+			unlinkSync(`/tmp/financelist/${DateHandler.timestampToFilename(ts)}`);
+		}
+		
+		if (existsSync('/tmp/financelist/')) {
+			rmdirSync('/tmp/financelist/');
+		}
 	});
 
 	describe('#getCurrentTimestamp()', function() {
@@ -61,7 +71,7 @@ describe('DateHandler', function() {
 
 	describe('#createUniqueTimestamp()', function() {
 		it('should create unique timestamps', function() {
-			jsonStorage.storePreference('path', __dirname);
+			jsonStorage.storePreference('path', '/tmp/financelist');
 
 			assert.strictEqual(DateHandler.createUniqueTimestamp(ts, jsonStorage), 1600500311);
 		});

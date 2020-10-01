@@ -16,7 +16,7 @@ module.exports = class Path {
 	static home() {
 		let {remote} = require('electron');
 		let app = (remote !== undefined) ? remote.app : undefined;
-		return (app !== undefined) ? app.getPath('userData') : require('os').homedir();
+		return (app !== undefined) ? app.getPath('userData') : require('os').tmpdir();
 	}
 	
 	/**

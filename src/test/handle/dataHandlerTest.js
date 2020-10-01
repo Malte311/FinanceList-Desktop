@@ -3,7 +3,7 @@ const Data = require(__dirname + '/../../app/scripts/handle/data.js');
 const DataHandler = require(__dirname + '/../../app/scripts/handle/dataHandler.js');
 const JsonStorage = require(__dirname + '/../../app/scripts/storage/jsonStorage.js');
 
-const {appendFileSync, unlinkSync} = require('fs');
+const {appendFileSync, existsSync, mkdirSync, rmdirSync, unlinkSync} = require('fs');
 
 describe('DataHandler', function() {
 	let jsonStorage = new JsonStorage();
@@ -14,8 +14,12 @@ describe('DataHandler', function() {
 	before(function() {
 		path = jsonStorage.readPreference('path');
 
+		if (!existsSync('/tmp/financelist/')) {
+			mkdirSync('/tmp/financelist/');
+		}
+
 		appendFileSync(
-			__dirname + '/test.json',
+			'/tmp/financelist/test.json',
 			JSON.stringify(require(__dirname + '/dataTestHelper.js'), null, 4),
 			{encoding: 'utf-8'}
 		);
@@ -24,12 +28,18 @@ describe('DataHandler', function() {
 	after(function() {
 		jsonStorage.storePreference('path', path);
 
-		unlinkSync(__dirname + '/test.json');
+		if (existsSync('/tmp/financelist/test.json')) {
+			unlinkSync('/tmp/financelist/test.json');
+		}
+
+		if (existsSync('/tmp/financelist/')) {
+			rmdirSync('/tmp/financelist/');
+		}
 	});
 
 	describe('#getMonthlySum()', function() {
 		it('should compute the correct sum', function() {
-			jsonStorage.storePreference('path', __dirname);
+			jsonStorage.storePreference('path', '/tmp/financelist/');
 
 			assert.strictEqual(dataHandler.getMonthlySum('checking account', 'earning', '/test.json'), 1550.5);
 			assert.strictEqual(dataHandler.getMonthlySum('saving account', 'earning', '/test.json'), 550.6);
@@ -40,7 +50,7 @@ describe('DataHandler', function() {
 
 	describe('#getRecentTrans()', function() {
 		it('should filter the most recent transactions', function() {
-			jsonStorage.storePreference('path', __dirname);
+			jsonStorage.storePreference('path', '/tmp/financelist/');
 
 			assert.deepStrictEqual(dataHandler.getRecentTrans(3, 'earning'), [{
 				"date": 1600500309,

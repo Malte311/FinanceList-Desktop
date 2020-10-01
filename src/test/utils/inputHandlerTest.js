@@ -2,7 +2,7 @@ const assert = require('assert');
 const JsonStorage = require(__dirname + '/../../app/scripts/storage/jsonStorage.js');
 const InputHandler = require(__dirname + '/../../app/scripts/utils/inputHandler.js');
 
-const {unlinkSync} = require('fs');
+const {unlinkSync, mkdirSync, rmdirSync, existsSync} = require('fs');
 
 describe('InputHandler', function() {
 	let jsonStorage = new JsonStorage();
@@ -10,13 +10,23 @@ describe('InputHandler', function() {
 
 	before(function() {
 		path = jsonStorage.readPreference('path');
-		jsonStorage.storePreference('path', __dirname);
+		jsonStorage.storePreference('path', '/tmp/financelist/');
+
+		if (!existsSync('/tmp/financelist/')) {
+			mkdirSync('/tmp/financelist/');
+		}
 	});
 
 	after(function() {
 		jsonStorage.storePreference('path', path);
 
-		unlinkSync(__dirname + '/mainstorage.json');
+		if (existsSync('/tmp/financelist/mainstorage.json')) {
+			unlinkSync('/tmp/financelist/mainstorage.json');
+		}
+
+		if (existsSync('/tmp/financelist/')) {
+			rmdirSync('/tmp/financelist/');
+		}
 	});
 
 	describe('#isValidBudgetName()', function() {

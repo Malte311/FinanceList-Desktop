@@ -3,7 +3,7 @@ const JsonStorage = require(__dirname + '/../../app/scripts/storage/jsonStorage.
 const RecurrTrans = require(__dirname + '/../../app/scripts/updates/recurrTrans.js');
 const {listJsonFiles} = require(__dirname + '/../../app/scripts/storage/paths.js');
 
-const {unlinkSync} = require('fs');
+const {existsSync, unlinkSync, mkdirSync, rmdirSync} = require('fs');
 
 describe('RecurrTrans', function() {
 	let jsonStorage = new JsonStorage();
@@ -14,7 +14,11 @@ describe('RecurrTrans', function() {
 	before(function() {
 		path = jsonStorage.readPreference('path');
 
-		jsonStorage.storePreference('path', __dirname);
+		jsonStorage.storePreference('path', '/tmp/financelist/');
+		
+		if (!existsSync('/tmp/financelist/')) {
+			mkdirSync('/tmp/financelist/');
+		}
 	});
 
 	beforeEach(function() {
@@ -28,12 +32,18 @@ describe('RecurrTrans', function() {
 	after(function() {
 		jsonStorage.storePreference('path', path);
 
-		unlinkSync(__dirname + '/mainstorage.json');
+		if (existsSync('/tmp/financelist/mainstorage.json')) {
+			unlinkSync('/tmp/financelist/mainstorage.json');
+		}
+		
+		if (existsSync('/tmp/financelist/')) {
+			rmdirSync('/tmp/financelist/');
+		}
 	});
 
 	afterEach(function() {
-		listJsonFiles(__dirname).filter(f => f !== 'mainstorage.json').forEach(file => {
-			unlinkSync(__dirname + `/${file}`);
+		listJsonFiles('/tmp/financelist').filter(f => f !== 'mainstorage.json').forEach(file => {
+			unlinkSync(`/tmp/financelist/${file}`);
 		})
 	});
 
@@ -58,8 +68,8 @@ describe('RecurrTrans', function() {
 
 			assert.deepStrictEqual(jsonStorage.readMainStorage('recurring'), []);
 
-			let data = listJsonFiles(__dirname).filter(f => f !== 'mainstorage.json')
-				.reduce((prev, curr) => prev.concat(jsonStorage.readJsonFile(__dirname + `/${curr}`)), []);
+			let data = listJsonFiles('/tmp/financelist').filter(f => f !== 'mainstorage.json')
+				.reduce((prev, curr) => prev.concat(jsonStorage.readJsonFile(`/tmp/financelist/${curr}`)), []);
 
 			assert.deepStrictEqual(data.map(obj => {
 				delete obj.date;
@@ -99,8 +109,8 @@ describe('RecurrTrans', function() {
 
 			assert.deepStrictEqual(jsonStorage.readMainStorage('recurring'), []);
 
-			let data = listJsonFiles(__dirname).filter(f => f !== 'mainstorage.json')
-				.reduce((prev, curr) => prev.concat(jsonStorage.readJsonFile(__dirname + `/${curr}`)), []);
+			let data = listJsonFiles('/tmp/financelist').filter(f => f !== 'mainstorage.json')
+				.reduce((prev, curr) => prev.concat(jsonStorage.readJsonFile(`/tmp/financelist/${curr}`)), []);
 			
 			assert.deepStrictEqual(data.map(obj => {
 				delete obj.date;
