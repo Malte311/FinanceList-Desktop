@@ -20,7 +20,6 @@ module.exports = class SettingsView extends View {
 	 * Displays the currently selected values for the preferences.
 	 */
 	updatePreferences() {
-		$('#checkboxFullscreen')[0].checked = this.storage.readPreference('fullscreen');
 		$('#btnCurrentPath').text(this.storage.readPreference('path'));
 		$('#btnCurrentCurrency').text(this.capFirstLetter(this.storage.readPreference('currency')));
 		$('#btnCurrentChartType').text(this.textData[this.storage.readPreference('chartType')]);
@@ -52,15 +51,5 @@ module.exports = class SettingsView extends View {
 		this.storage.storePreference(name, value);
 
 		this.updatePreferences();
-	}
-
-	/**
-	 * Switches between fullscreen and window mode.
-	 * 
-	 * @param {bool} fullscreen Indicates whether the app should be in fullscreen mode.
-	 */
-	toggleWindowMode(fullscreen) {
-		require('electron').remote.getCurrentWindow().setFullScreen(fullscreen);
-		this.storage.storePreference('fullscreen', fullscreen);
 	}
 }

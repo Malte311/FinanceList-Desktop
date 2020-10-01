@@ -9,7 +9,9 @@ module.exports = class Path {
 	}
 
 	/**
-	 * Returns the path to the user data directory.
+	 * Returns the path to the user data directory. If the script is executed in the 'npm test'
+	 * environment (i.e., the --tmpdir argument is provided), the path to the tmp directory is
+	 * being returned.
 	 * 
 	 * @return {string} The path to the user data directory.
 	 */

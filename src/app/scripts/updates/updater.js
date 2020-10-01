@@ -53,7 +53,8 @@ module.exports = class Updater {
 			cancelId: 1
 		}).then(result => {
 			if (result.response === 0) {
-				remote.shell.openExternal(LATEST_RELEASE);
+				let {shell} = require('electron');
+				shell.openExternal(LATEST_RELEASE);
 			}
 		});
 	}
