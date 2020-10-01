@@ -121,11 +121,11 @@ module.exports = class JsonStorage extends Storage {
 	 * Returns the content of an arbitrary json file.
 	 * 
 	 * @param {string} file The full path to the json file which we want to read.
-	 * @return {object} The contents of the file (as a json object). If the file does not
-	 * exist, an empty json object will be returned.
+	 * @return {array} The contents of the file (as an array of objects). If the file does not
+	 * exist, an empty array will be returned.
 	 */
 	readJsonFile(file) {
-		return existsSync(file) ? JSON.parse(readFileSync(file)) : {};
+		return existsSync(file) ? JSON.parse(readFileSync(file)) : [];
 	}
 
 	/**

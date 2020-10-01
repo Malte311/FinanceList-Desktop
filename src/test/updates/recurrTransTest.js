@@ -1,8 +1,9 @@
 const assert = require('assert');
 const JsonStorage = require(__dirname + '/../../app/scripts/storage/jsonStorage.js');
 const RecurrTrans = require(__dirname + '/../../app/scripts/updates/recurrTrans.js');
+const {listJsonFiles} = require(__dirname + '/../../app/scripts/storage/paths.js');
 
-const {existsSync, unlinkSync} = require('fs');
+const {unlinkSync} = require('fs');
 
 describe('RecurrTrans', function() {
 	let jsonStorage = new JsonStorage();
@@ -31,9 +32,9 @@ describe('RecurrTrans', function() {
 	});
 
 	afterEach(function() {
-		if (existsSync(__dirname + '/09.2020.json')) {
-			unlinkSync(__dirname + '/09.2020.json');
-		}
+		listJsonFiles(__dirname).filter(f => f !== 'mainstorage.json').forEach(file => {
+			unlinkSync(__dirname + `/${file}`);
+		})
 	});
 
 	describe('#execRecurrTransact()', function() {
@@ -57,7 +58,10 @@ describe('RecurrTrans', function() {
 
 			assert.deepStrictEqual(jsonStorage.readMainStorage('recurring'), []);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json').map(obj => {
+			let data = listJsonFiles(__dirname).filter(f => f !== 'mainstorage.json')
+				.reduce((prev, curr) => prev.concat(jsonStorage.readJsonFile(__dirname + `/${curr}`)), []);
+
+			assert.deepStrictEqual(data.map(obj => {
 				delete obj.date;
 				return obj;
 			}), [{
@@ -95,7 +99,10 @@ describe('RecurrTrans', function() {
 
 			assert.deepStrictEqual(jsonStorage.readMainStorage('recurring'), []);
 
-			assert.deepStrictEqual(jsonStorage.readJsonFile(__dirname + '/09.2020.json').map(obj => {
+			let data = listJsonFiles(__dirname).filter(f => f !== 'mainstorage.json')
+				.reduce((prev, curr) => prev.concat(jsonStorage.readJsonFile(__dirname + `/${curr}`)), []);
+			
+			assert.deepStrictEqual(data.map(obj => {
 				delete obj.date;
 				return obj;
 			}), [{
