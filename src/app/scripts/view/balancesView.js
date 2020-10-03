@@ -1,3 +1,5 @@
+const DialogHandler = require("../utils/dialogHandler");
+
 const View = require(__dirname + '/view.js');
 
 /**
@@ -37,7 +39,7 @@ module.exports = class BalancesView extends View {
 			b[0], // Index 0: name of the budget.
 			this.printNum(b[1]), // Index 1: balance of the budget.
 			this.elt('span', {
-				onclick: () => this.renameBudget(b[0])
+				onclick: () => (new DialogHandler(this)).renameBudget(b[0])
 			}, this.template.icon('edit', 'blue'), index == 0 ? '' : this.elt('span', {
 				onclick: () => this.deleteBudget(b[0])
 			}, this.template.icon('delete', 'red')))]);
