@@ -41,7 +41,7 @@ module.exports = class BalancesView extends View {
 			this.elt('span', {
 				onclick: () => (new DialogHandler(this)).renameBudget(b[0])
 			}, this.template.icon('edit', 'blue'), index == 0 ? '' : this.elt('span', {
-				onclick: () => this.deleteBudget(b[0])
+				onclick: () => (new DialogHandler(this)).deleteBudget(b[0])
 			}, this.template.icon('delete', 'red')))]);
 
 		if (this.storage.readMainStorage('allocationOn')) {
@@ -56,13 +56,5 @@ module.exports = class BalancesView extends View {
 		let overallBalance = budgets.map(b => b[1]).reduce((prev, curr) => prev + curr, 0);
 		let overallLabel = `${this.textData['overallBalance']}: ${this.printNum(overallBalance)}`;
 		$(id).append(this.elt('center', {}, overallLabel));
-	}
-
-	renameBudget(budget) {
-		console.log(budget);
-	}
-
-	deleteBudget(budget) {
-		console.log(budget);
 	}
 }

@@ -38,6 +38,7 @@ module.exports = {
 	'recentSpending': 'Recent spendings',
 	'redo': 'Redo',
 	'reload': 'Reload',
+	'renameBudget': 'Rename budget',
 	'renamedelete': 'Rename/Delete',
 	'selUserText': 'Please type in an account name. Only letters are allowed.',
 	'selUserTitle': 'Select a account name',

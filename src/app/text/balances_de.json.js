@@ -8,7 +8,6 @@ module.exports =
     "intervalOptionsTextElements": ["w&ouml;chentlich", "alle 4 Wochen", "monatlich", "zweimonatlich", "viertelj&auml;hrlich", "halbj&auml;hrlich", "j&auml;hrlich"],
     "deleteBudget": "Konto l\u00f6schen",
     "reallyDelete": "Wollen Sie dieses Konto wirklich l&ouml;schen? <br> Dann gehen alle gespeicherten Daten verloren.",
-    "renameBudget": "Konto umbenennen",
     "newBudgetName": "Geben Sie einen neuen Namen f&uuml;r dieses Konto ein.",
     "autoAllocation": "Automatische Aufteilung",
     "allocationDialogTextElements": ["Hier k&ouml;nnen Sie ausw&auml;hlen, wie Ihre Einnahmen verteilt werden sollen.", "Automatische Verteilung aktivieren", "Verteilt alle Einnahmen automatisch auf mehrere Konten.", "Konto", "Anteil"],

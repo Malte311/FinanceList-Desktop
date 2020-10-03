@@ -7,7 +7,6 @@ module.exports =
     "intervalOptionsTextElements": ["weekly", "every 4 weeks", "monthly", "bimonthly", "quarterly", "biannual", "annual"],
     "deleteBudget": "Delete budget",
     "reallyDelete": "Are you sure you want to delete this budget? <br> All the data will be lost.",
-    "renameBudget": "Rename budget",
     "newBudgetName": "Type in a new name for this budget.",
     "autoAllocation": "Automated allocation",
     "allocationDialogTextElements": ["Here you can select how your earnings should be distributed.", "Activate automated allocation", "Distribute all earnings automatically to your budgets.", "Budget", "Percentage"],

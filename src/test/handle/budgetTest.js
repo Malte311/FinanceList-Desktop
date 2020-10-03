@@ -50,7 +50,63 @@ describe('Budget', function() {
 	});
 
 	describe('#renameBudget()', function() {
-		it('should rename the correct budget', function() {
+		it('should rename the budget name correctly', function() {
+			budget.renameBudget('checking account', 'saving account');
+
+			assert.deepStrictEqual(jsonStorage.readMainStorage('budgets'), [['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeEarnings'), [['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeSpendings'), [['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allocation'), [['saving account', 100]]);
+
+			budget.addBudget('checking account');
+
+			assert.deepStrictEqual(jsonStorage.readMainStorage('budgets'), [['saving account', 0], ['checking account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeEarnings'), [['saving account', 0], ['checking account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeSpendings'), [['saving account', 0], ['checking account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allocation'), [['saving account', 100], ['checking account', 0]]);
+		});
+
+		it('should rename the data entries correctly', function() {
+			let testObj1 = {
+				date: 1599642796, // 09.09.2020
+				name: 'Salary',
+				amount: 500.55,
+				budget: 'checking account',
+				type: 'earning',
+				category: 'Income'
+			};
+
+			let testObj2 = {
+				date: 1599642799, // 09.09.2020
+				name: 'Salary',
+				amount: 500.55,
+				budget: 'saving account',
+				type: 'earning',
+				category: 'Income'
+			};
+
+			budget.addBudget('saving account');
+			jsonStorage.storeData(testObj1);
+			jsonStorage.storeData(testObj2);
+			
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1, testObj2]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('budgets'), [['checking account', 500.55], ['saving account', 500.55]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeEarnings'), [['checking account', 500.55], ['saving account', 500.55]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeSpendings'), [['checking account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allocation'), [['checking account', 100], ['saving account', 0]]);
+
+			budget.rename('checking account', 'new account');
+
+			testObj1.budget = 'new account';
+			
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1, testObj2]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('budgets'), [['new account', 500.55], ['saving account', 500.55]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeEarnings'), [['new account', 500.55], ['saving account', 500.55]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeSpendings'), [['new account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allocation'), [['new account', 100], ['saving account', 0]]);
+		});
+
+		it('should rename recurring entries correctly', function() {
 			
 		});
 	});

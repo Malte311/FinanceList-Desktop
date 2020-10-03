@@ -38,6 +38,7 @@ module.exports = {
 	'recentSpending': 'K\u00fcrzliche Ausgaben',
 	'redo': 'Wiederholen',
 	'reload': 'Neu laden',
+	'renameBudget': 'Konto umbenennen',
 	'renamedelete': 'Umbenennen/L\u00f6schen',
 	'selUserText': 'Bitte w\u00e4hlen Sie einen Kontonamen aus. Es sind nur Buchstaben erlaubt.',
 	'selUserTitle': 'Kontonamen ausw\u00e4hlen',
