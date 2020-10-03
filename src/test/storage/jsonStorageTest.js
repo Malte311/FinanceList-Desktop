@@ -1,7 +1,7 @@
 const assert = require('assert');
 const JsonStorage = require(__dirname + '/../../app/scripts/storage/jsonStorage.js');
 
-const {appendFileSync, existsSync, mkdirSync, rmdirSync, unlinkSync, readFileSync} = require('fs');
+const {appendFileSync, existsSync, mkdirSync, rmdirSync, unlinkSync} = require('fs');
 
 describe('JsonStorage', function() {
 	let jsonStorage = new JsonStorage();
@@ -299,14 +299,126 @@ describe('JsonStorage', function() {
 	});
 
 	describe('#deleteData()', function() {
-		it('', function() {
-			
+		it('should delete existing data', function() {
+			let testObj = {
+				"date": 1598997600, // 09.2020
+				"name": "Bus ticket",
+				"amount": 2.5,
+				"budget": "checking account",
+				"type": "spending",
+				"category": "Tickets"
+			};
+
+			jsonStorage.storeData(testObj);
+
+			assert.deepStrictEqual(jsonStorage.getData('09.2020.json', {
+				connector: 'and',
+				params: [['type', 'spending']]
+			}), [testObj]);
+
+			jsonStorage.deleteData('09.2020.json', 1598997600);
+
+			assert.deepStrictEqual(jsonStorage.getData('09.2020.json', {
+				connector: 'and',
+				params: [['type', 'spending']]
+			}), []);
+
+			unlinkSync('/tmp/financelist/09.2020.json');
+		});
+
+		it('should do nothing for a non-existing id', function() {
+			let testObj = {
+				"date": 1598997600, // 09.2020
+				"name": "Bus ticket",
+				"amount": 2.5,
+				"budget": "checking account",
+				"type": "spending",
+				"category": "Tickets"
+			};
+
+			jsonStorage.storeData(testObj);
+
+			assert.deepStrictEqual(jsonStorage.getData('09.2020.json', {
+				connector: 'and',
+				params: [['type', 'spending']]
+			}), [testObj]);
+
+			jsonStorage.deleteData('09.2020.json', 1598997601);
+			jsonStorage.deleteData('09.2020.json', 1598997699);
+
+			assert.deepStrictEqual(jsonStorage.getData('09.2020.json', {
+				connector: 'and',
+				params: [['type', 'spending']]
+			}), [testObj]);
+
+			unlinkSync('/tmp/financelist/09.2020.json');
+		});
+
+		it('should do nothing for a non-existing file', function() {
+			assert.strictEqual(existsSync('/tmp/financelist/09.1999.json'), false);
+			jsonStorage.deleteData('09.1999.json', 1598997600);
+			assert.strictEqual(existsSync('/tmp/financelist/09.1999.json'), false);
 		});
 	});
 
 	describe('#removeStats()', function() {
-		it('', function() {
-			
+		it('should work for spendings and earnings correctly', function() {
+			let testArr = [{
+				"date": 1598995600,
+				"name": "eBay Sale",
+				"amount": 21.1,
+				"budget": "checking account",
+				"type": "earning",
+				"category": "Sales"
+			}, {
+				"date": 1598997600,
+				"name": "Bus ticket",
+				"amount": 2.5,
+				"budget": "checking account",
+				"type": "spending",
+				"category": "Tickets"
+			}];
+
+			jsonStorage.writeMainStorage('budgets', [['checking account', 100], ['saving account', 0]]);
+			jsonStorage.writeMainStorage('allTimeEarnings', [['checking account', 250], ['saving account', 0]]);
+			jsonStorage.writeMainStorage('allTimeSpendings', [['checking account', 150], ['saving account', 0]]);
+
+			jsonStorage.removeStats(testArr[0]);
+
+			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], Math.round((100 - 21.1) * 100) / 100);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], Math.round((250 - 21.1) * 100) / 100);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 150);
+
+			jsonStorage.removeStats(testArr[1]);
+
+			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], Math.round((100 - 21.1 + 2.5) * 100) / 100);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], Math.round((250 - 21.1) * 100) / 100);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], Math.round((150 - 2.5) * 100) / 100);
+
+			assert.strictEqual(jsonStorage.readMainStorage('budgets')[1][1], 0);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[1][1], 0);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[1][1], 0);
+		});
+
+		it('should handle negative values correctly', function() {
+			let testObj = {
+				"date": 1598995600,
+				"name": "eBay Sale",
+				"amount": 21.1,
+				"budget": "checking account",
+				"type": "earning",
+				"category": "Sales"
+			};
+
+			jsonStorage.writeMainStorage('budgets', [['checking account', 10]]);
+			jsonStorage.writeMainStorage('allTimeEarnings', [['checking account', 41.1]]);
+			jsonStorage.writeMainStorage('allTimeSpendings', [['checking account', 31.1]]);
+
+			jsonStorage.removeStats(testObj);
+
+			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], Math.round((10 - 21.1) * 100) / 100);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], Math.round((41.1 - 21.1) * 100) / 100);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 31.1);
 		});
 	});
 });

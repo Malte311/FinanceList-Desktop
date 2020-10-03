@@ -244,7 +244,7 @@ module.exports = class JsonStorage extends Storage {
 
 		let newContent = [];
 
-		this.storage.readJsonFile(dataPath).forEach(obj => {
+		this.readJsonFile(dataPath).forEach(obj => {
 			if (parseInt(id) !== obj.date) {
 				newContent.push(obj);
 			} else {
