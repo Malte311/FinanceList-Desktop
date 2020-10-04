@@ -4,6 +4,8 @@
 [![GitHub license](https://img.shields.io/github/license/Malte311/FinanceList-Desktop)](https://github.com/Malte311/FinanceList-Desktop/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/v/release/Malte311/FinanceList-Desktop)](https://github.com/Malte311/FinanceList-Desktop/releases)
 
+> :warning: :warning: :warning: Currently, there is some refactoring going on on the [refactor branch](https://github.com/Malte311/FinanceList-Desktop/tree/refactor). :warning: :warning: :warning:
+
 FinanceList is a simple finance managing tool. For more information on how to use this tool, take a look at the [wiki](https://github.com/Malte311/FinanceList-Desktop/wiki).
 ***
 ## Features
