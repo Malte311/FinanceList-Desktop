@@ -121,4 +121,70 @@ module.exports = class Storage {
 	deleteData(file, data) {
 		throw new Error('This function must be overridden!');
 	}
+
+	/**
+	 * Returns the content of an arbitrary json file.
+	 * 
+	 * @param {string} file The full path to the json file which we want to read.
+	 * @return {array} The contents of the file (as an array of objects). If the file does not
+	 * exist, an empty array will be returned.
+	 */
+	readJsonFile(file) {
+		throw new Error('This function must be overridden!');
+	}
+
+	/**
+	 * Returns all json files which have data in it, sorted by their name (date).
+	 * 
+	 * @return {array} Array of the file names of all json files with data in it (with .json ending!).
+	 */
+	getJsonFiles() {
+		throw new Error('This function must be overridden!');
+	}
+
+	/**
+	 * Returns the name of the current file (with .json ending!).
+	 * 
+	 * @return {string} The name of the current file (with .json ending!).
+	 */
+	getCurrentFilename() {
+		throw new Error('This function must be overridden!');
+	}
+
+	/**
+	 * Returns the path to the folder containing the data.
+	 * 
+	 * @return {string} The path to the folder containing the data.
+	 */
+	getDataPath() {
+		throw new Error('This function must be overridden!');
+	}
+
+	/**
+	 * Checks whether a given path exists.
+	 * 
+	 * @param {string} path The path to be checked.
+	 * @return {bool} True if the path exists, else false.
+	 */
+	exists(path) {
+		throw new Error('This function must be overridden!');
+	}
+
+	/**
+	 * After deleting an object, this function removes the object's influence on the statistics.
+	 * 
+	 * @param {object} obj The object which got deleted.
+	 */
+	removeStats(obj) {
+		throw new Error('This function must be overridden!');
+	}
+
+		/**
+	 * Removes a given file.
+	 * 
+	 * @param {string} file The name of the file to remove.
+	 */
+	removeFile(file) {
+		throw new Error('This function must be overridden!');
+	}
 }

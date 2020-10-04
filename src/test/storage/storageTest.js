@@ -57,4 +57,46 @@ describe('Storage', function() {
 			assert.throws(storage.deleteData, Error);
 		});
 	});
+
+	describe('#readJsonFile()', function() {
+		it('should throw an error because it should be overridden', function() {
+			assert.throws(storage.readJsonFile, Error);
+		});
+	});
+
+	describe('#getJsonFiles()', function() {
+		it('should throw an error because it should be overridden', function() {
+			assert.throws(storage.getJsonFiles, Error);
+		});
+	});
+
+	describe('#getCurrentFilename()', function() {
+		it('should throw an error because it should be overridden', function() {
+			assert.throws(storage.getCurrentFilename, Error);
+		});
+	});
+
+	describe('#getDataPath()', function() {
+		it('should throw an error because it should be overridden', function() {
+			assert.throws(storage.getDataPath, Error);
+		});
+	});
+
+	describe('#exists()', function() {
+		it('should throw an error because it should be overridden', function() {
+			assert.throws(storage.exists, Error);
+		});
+	});
+
+	describe('#removeStats()', function() {
+		it('should throw an error because it should be overridden', function() {
+			assert.throws(storage.removeStats, Error);
+		});
+	});
+
+	describe('#removeFile()', function() {
+		it('should throw an error because it should be overridden', function() {
+			assert.throws(storage.removeFile, Error);
+		});
+	});
 });

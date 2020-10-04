@@ -53,4 +53,32 @@ describe('LocalStorage', function() {
 	describe('#deleteData()', function() {
 		/* TODO */
 	});
+
+	describe('#readJsonFile()', function() {
+		/* TODO */
+	});
+
+	describe('#getJsonFiles()', function() {
+		/* TODO */
+	});
+
+	describe('#getCurrentFilename()', function() {
+		/* TODO */
+	});
+
+	describe('#getDataPath()', function() {
+		/* TODO */
+	});
+
+	describe('#exists()', function() {
+		/* TODO */
+	});
+
+	describe('#removeStats()', function() {
+		/* TODO */
+	});
+
+	describe('#removeFile()', function() {
+		/* TODO */
+	});
 });

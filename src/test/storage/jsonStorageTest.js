@@ -421,4 +421,19 @@ describe('JsonStorage', function() {
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 31.1);
 		});
 	});
+
+	describe('#removeFile()', function() {
+		it('should do nothing if the file does not exist', function() {
+			assert.strictEqual(existsSync('/tmp/financelist/lalala.json'), false);
+			jsonStorage.removeFile('lalala.json');
+			assert.strictEqual(existsSync('/tmp/financelist/lalala.json'), false);
+		});
+
+		it('should remove the correct file', function() {
+			appendFileSync('/tmp/financelist/lalala.json', JSON.stringify([]), {encoding: 'utf-8'});
+			assert.strictEqual(existsSync('/tmp/financelist/lalala.json'), true);
+			jsonStorage.removeFile('lalala.json');
+			assert.strictEqual(existsSync('/tmp/financelist/lalala.json'), false);
+		});
+	});
 });
