@@ -258,7 +258,7 @@ describe('JsonStorage', function() {
 				"category": "Tickets"
 			};
 
-			jsonStorage.replaceData('09.2020.json', testObj);
+			jsonStorage.replaceData('09.2020.json', [testObj]);
 
 			assert.deepStrictEqual(jsonStorage.getData('09.2020.json', {
 				connector: 'and',
@@ -278,7 +278,7 @@ describe('JsonStorage', function() {
 				"category": "Tickets"
 			};
 
-			jsonStorage.replaceData('09.2020.json', testObj);
+			jsonStorage.replaceData('09.2020.json', [testObj]);
 
 			assert.deepStrictEqual(jsonStorage.getData('09.2020.json', {
 				connector: 'and',
@@ -287,7 +287,7 @@ describe('JsonStorage', function() {
 
 			let testObj2 = Object.assign({}, testObj);
 			testObj2.date = 1598997601;
-			jsonStorage.replaceData('09.2020.json', testObj2);
+			jsonStorage.replaceData('09.2020.json', [testObj2]);
 
 			assert.deepStrictEqual(jsonStorage.getData('09.2020.json', {
 				connector: 'and',

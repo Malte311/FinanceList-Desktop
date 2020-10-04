@@ -14,6 +14,7 @@ module.exports = {
 	'confirm': 'Best\u00e4tigen',
 	'copy': 'Kopieren',
 	'cut': 'Ausschneiden',
+	'deleteBudget': 'Konto l\u00f6schen',
 	'doughnut': 'Ringdiagramm',
 	'download': 'Herunterladen',
 	'earning': 'Einnahme',	

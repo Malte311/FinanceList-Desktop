@@ -14,6 +14,7 @@ module.exports = {
 	'confirm': 'Confirm',
 	'copy': 'Copy',
 	'cut': 'Cut',
+	'deleteBudget': 'Delete budget',
 	'doughnut': 'Doughnut chart',
 	'download': 'Download',
 	'earning': 'Earning',

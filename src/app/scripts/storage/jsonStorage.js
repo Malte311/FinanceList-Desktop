@@ -1,4 +1,4 @@
-const {appendFileSync, existsSync, readFileSync, writeFileSync} = require('fs');
+const {appendFileSync, existsSync, readFileSync, writeFileSync, unlinkSync} = require('fs');
 const {getCurrentTimestamp, timestampToFilename} = require(__dirname + '/../utils/dateHandler.js');
 const Data = require(__dirname + '/../handle/data.js');
 const Path = require(__dirname + '/paths.js');
@@ -217,15 +217,15 @@ module.exports = class JsonStorage extends Storage {
 	 * Replaces a specific file with new data.
 	 * 
 	 * @param {string} file The file to override.
-	 * @param {object} data The data to write.
+	 * @param {array} data The data to write (in form of an array containing objects).
 	 */
 	replaceData(file, data) {
 		let filePath = this.getDataPath() + file;
 		
 		if (existsSync(filePath)) {
-			writeFileSync(filePath, JSON.stringify([data], null, 4));
+			writeFileSync(filePath, JSON.stringify(data, null, 4));
 		} else {
-			appendFileSync(filePath, JSON.stringify([data], null, 4));
+			appendFileSync(filePath, JSON.stringify(data, null, 4));
 		}
 	}
 
@@ -281,5 +281,18 @@ module.exports = class JsonStorage extends Storage {
 		});
 
 		this.writeMainStorage(obj.type === 'earning' ? 'allTimeEarnings' : 'allTimeSpendings', allTime);
+	}
+
+	/**
+	 * Removes a given file.
+	 * 
+	 * @param {string} file The name of the file to remove.
+	 */
+	removeFile(file) {
+		let dataPath = this.getDataPath() + file;
+
+		if (existsSync(dataPath)) {
+			unlinkSync(dataPath);
+		}
 	}
 }

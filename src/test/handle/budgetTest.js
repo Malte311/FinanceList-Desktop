@@ -1,5 +1,6 @@
 const assert = require('assert');
 const Budget = require(__dirname + '/../../app/scripts/handle/budget.js');
+const Transact = require(__dirname + '/../../app/scripts/handle/transact.js');
 const JsonStorage = require(__dirname + '/../../app/scripts/storage/jsonStorage.js');
 
 const {existsSync, mkdirSync, rmdirSync, unlinkSync} = require('fs');
@@ -85,9 +86,11 @@ describe('Budget', function() {
 				category: 'Income'
 			};
 
+			let transact = new Transact(jsonStorage);
+
 			budget.addBudget('saving account');
-			jsonStorage.storeData(testObj1);
-			jsonStorage.storeData(testObj2);
+			transact.addEarningSingle(testObj1);
+			transact.addEarningSingle(testObj2);
 			
 			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1, testObj2]);
 			assert.deepStrictEqual(jsonStorage.readMainStorage('budgets'), [['checking account', 500.55], ['saving account', 500.55]]);
@@ -95,10 +98,10 @@ describe('Budget', function() {
 			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeSpendings'), [['checking account', 0], ['saving account', 0]]);
 			assert.deepStrictEqual(jsonStorage.readMainStorage('allocation'), [['checking account', 100], ['saving account', 0]]);
 
-			budget.rename('checking account', 'new account');
+			budget.renameBudget('checking account', 'new account');
 
 			testObj1.budget = 'new account';
-			
+
 			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1, testObj2]);
 			assert.deepStrictEqual(jsonStorage.readMainStorage('budgets'), [['new account', 500.55], ['saving account', 500.55]]);
 			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeEarnings'), [['new account', 500.55], ['saving account', 500.55]]);
@@ -107,7 +110,44 @@ describe('Budget', function() {
 		});
 
 		it('should rename recurring entries correctly', function() {
+			budget.addBudget('saving account');
 			
+			assert.deepStrictEqual(jsonStorage.readMainStorage('budgets'), [['checking account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeEarnings'), [['checking account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeSpendings'), [['checking account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allocation'), [['checking account', 100], ['saving account', 0]]);
+
+			let testArr = [{
+				startDate: 1599642799,
+				nextDate: 1599642799,
+				endDate: 1599642710,
+				name: 'Salary',
+				amount: 1500,
+				budget: 'checking account',
+				type: 'earning',
+				category: 'Income',
+				interval: 0,
+				allocationOn: false
+			}, {
+				startDate: 1599642799,
+				nextDate: 1599642799,
+				endDate: 1599642710,
+				name: 'Salary',
+				amount: 1500,
+				budget: 'saving account',
+				type: 'earning',
+				category: 'Income',
+				interval: 2,
+				allocationOn: false
+			}];
+
+			jsonStorage.writeMainStorage('recurring', testArr);
+
+			budget.renameBudget('saving account', 'new account');
+
+			testArr[1].budget = 'new account';
+
+			assert.deepStrictEqual(jsonStorage.readMainStorage('recurring'), testArr);
 		});
 	});
 
@@ -116,8 +156,20 @@ describe('Budget', function() {
 			
 		});
 
-		it('should delete the correct budget', function() {
+		it('should update the mainstorage correctly', function() {
 			
+		});
+
+		it('should update recurring transactions correctly', function() {
+			
+		});
+
+		it('should update data entries correctly', function() {
+			
+		});
+
+		it('should update allocation correctly', function() {
+			// Allocation must always sum up to 100 percent
 		});
 	});
 });

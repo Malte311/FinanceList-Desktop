@@ -58,7 +58,7 @@ module.exports = class DialogHandler {
 	/**
 	 * Displays a dialog to rename a budget and handles the interaction of this dialog.
 	 * 
-	 * @param {String} name The name of the budget we want to change.
+	 * @param {string} name The name of the budget we want to change.
 	 */
 	renameBudget(name) {
 		let modal = $('#divModal');
@@ -78,27 +78,25 @@ module.exports = class DialogHandler {
 			modal.modal('hide');
 			this.view.updateView();
 		});
+	}
 
-		return;
+	/**
+	 * Displays a dialog to delete a budget and handles the interaction of this dialog.
+	 * 
+	 * @param {string} name The name of the budget we want to delete.
+	 */
+	deleteBudget(name) {
+		let modal = $('#divModal');
 
-			var newName = $( "#dialogInput" ).val().trim();
-			// Now we can rename all data for this budget (in the background).
-			var allFiles = getJsonFiles();
-			for ( var i = 0; i < allFiles.length; i++ ) {
-				// Filter the data. First, we get ALL data (earning OR spending will deliver everything).
-				var quest = { connector : "or", params : [["type", "earning"],["type", "spending"]] };
-				// Now, get the data.
-				var data = getData( allFiles[i] + ".json", quest );
-				// Iterate over all the data and find the data which has to be renamed.
-				for ( var j = 0; j < data.length; j++ ) {
-					// Found the correct budget? Rename it.
-					if ( data[j].budget === name ) {
-						data[j].budget = newName;
-					}
-				}
-				// Now replace the old data with the new data.
-				replaceData( allFiles[i] + ".json", data );
-			}
+		modal.find('.modal-title').html(this.view.textData['deleteBudget']);
+		modal.find('.modal-body').html(this.view.template.fromTemplate('deleteBudgetDialog.html')
+			.replace('%%BUDGET%%', name));
+		
+		modal.find('.modal-footer #modalConf').on('click', () => {
+			this.budget.deleteBudget(name);
+			modal.modal('hide');
+			this.view.updateView();
+		});
 	}
 
 	addTransaction(modal) {
