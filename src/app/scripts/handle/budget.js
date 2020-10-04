@@ -68,6 +68,10 @@ module.exports = class Budget {
 	 * @param {string} name The name of the budget to delete.
 	 */
 	deleteBudget(name) {
+		if (this.storage.readMainStorage('budgets').findIndex(b => b[0] === name) < 0) {
+			return;
+		}
+
 		// 1. Update the mainstorage
 		['budgets', 'allTimeEarnings', 'allTimeSpendings', 'allocation'].forEach(field => {
 			let storageArr = this.storage.readMainStorage(field);
@@ -92,7 +96,7 @@ module.exports = class Budget {
 		files.forEach(file => {
 			let data = this.storage.getData(file, {
 				connector: 'or', // Filter data for all budgets which are left after the delete
-				params: [...this.storage.readMainStorage('budgets').map(b => b[0])]
+				params: [...this.storage.readMainStorage('budgets').map(b => ['budget', b[0]])]
 			});
 
 			if (!(data.length > 0)) {

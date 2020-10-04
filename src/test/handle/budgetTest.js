@@ -153,23 +153,106 @@ describe('Budget', function() {
 
 	describe('#deleteBudget()', function() {
 		it('should do nothing when trying to delete a budget which does not exist', function() {
-			
+			budget.addBudget('saving account');
+			budget.deleteBudget('new account');
+
+			assert.deepStrictEqual(jsonStorage.readMainStorage('budgets'), [['checking account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeEarnings'), [['checking account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeSpendings'), [['checking account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allocation'), [['checking account', 100], ['saving account', 0]]);
 		});
 
 		it('should update the mainstorage correctly', function() {
-			
+			budget.addBudget('new account');
+			budget.addBudget('saving account');
+			budget.deleteBudget('new account');
+
+			assert.deepStrictEqual(jsonStorage.readMainStorage('budgets'), [['checking account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeEarnings'), [['checking account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeSpendings'), [['checking account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allocation'), [['checking account', 100], ['saving account', 0]]);
 		});
 
 		it('should update recurring transactions correctly', function() {
-			
+			budget.addBudget('saving account');
+			assert.deepStrictEqual(jsonStorage.readMainStorage('budgets'), [['checking account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeEarnings'), [['checking account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeSpendings'), [['checking account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allocation'), [['checking account', 100], ['saving account', 0]]);
+
+			jsonStorage.writeMainStorage('recurring', [{
+				startDate: 1599642796,
+				nextDate: 1599642796,
+				endDate: 1599642796,
+				name: 'Salary',
+				amount: 1500,
+				budget: 'saving account',
+				type: 'earning',
+				category: 'Income',
+				interval: 0, // every 7 days
+				allocationOn: true
+			}]);
+
+			budget.deleteBudget('saving account');
+			assert.deepStrictEqual(jsonStorage.readMainStorage('recurring'), []);
 		});
 
 		it('should update data entries correctly', function() {
-			
+			let testObj1 = {
+				date: 1599642796, // 09.09.2020
+				name: 'Salary',
+				amount: 500.55,
+				budget: 'checking account',
+				type: 'earning',
+				category: 'Income'
+			};
+
+			let testObj2 = {
+				date: 1599642799, // 09.09.2020
+				name: 'Salary',
+				amount: 500.55,
+				budget: 'saving account',
+				type: 'earning',
+				category: 'Income'
+			};
+
+			let transact = new Transact(jsonStorage);
+
+			budget.addBudget('saving account');
+			transact.addEarningSingle(testObj1);
+			transact.addEarningSingle(testObj2);
+
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1, testObj2]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('budgets'), [['checking account', 500.55], ['saving account', 500.55]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeEarnings'), [['checking account', 500.55], ['saving account', 500.55]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeSpendings'), [['checking account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allocation'), [['checking account', 100], ['saving account', 0]]);
+
+			budget.deleteBudget('saving account');
+
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [testObj1]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('budgets'), [['checking account', 500.55]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeEarnings'), [['checking account', 500.55]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeSpendings'), [['checking account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allocation'), [['checking account', 100]]);
 		});
 
 		it('should update allocation correctly', function() {
-			// Allocation must always sum up to 100 percent
+			budget.addBudget('saving account');
+			jsonStorage.writeMainStorage('allocation', [['checking account', 30], ['saving account', 70]]);
+
+			assert.deepStrictEqual(jsonStorage.readMainStorage('budgets'), [['checking account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeEarnings'), [['checking account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeSpendings'), [['checking account', 0], ['saving account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allocation'), [['checking account', 30], ['saving account', 70]]);
+
+			// Allocation must sum up to 100 percent, i.e., after deleting, checking account must be at 100 again
+			budget.deleteBudget('saving account');
+			
+			assert.deepStrictEqual(jsonStorage.readMainStorage('budgets'), [['checking account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeEarnings'), [['checking account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allTimeSpendings'), [['checking account', 0]]);
+			assert.deepStrictEqual(jsonStorage.readMainStorage('allocation'), [['checking account', 100]]);
 		});
 	});
 });
