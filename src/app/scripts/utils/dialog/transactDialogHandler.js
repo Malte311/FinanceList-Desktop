@@ -27,9 +27,11 @@ module.exports = class TransactDialogHandler {
 			setDate: '31.03.2020', // DateHandler.timestampToString(DateHandler.getCurrentTimestamp())
 			todayHighlight: true
 		});
+
+		let budgets = this.view.storage.readMainStorage('budgets');
+
 		
 		modal.find('.modal-footer #modalConf').on('click', () => {
-			// let budgets = this.view.storage.readMainStorage('budgets');
 			modal.modal('hide');
 			this.view.updateView();
 		});
@@ -61,7 +63,6 @@ module.exports = class TransactDialogHandler {
 		}
 		// Set the complete content for the dialog.
 		// First two lines are radio buttons to select between earning and spending.
-		let DateHandler = require('../scripts/utils/dateHandler.js');
 		var text = 
 				// Choose between manual and automated allocation. Hidden until "earning" is selected.
 				"<div id=\"dynamicDiv1\" style=\"display:none;\"><hr>" +

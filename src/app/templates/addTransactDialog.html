@@ -23,26 +23,36 @@
 </form>
 <hr>
 
-<div>
-	<b lang="de">Name</b>
-	<b lang="en">Name</b>
-	<br>
-	<input class="form-control" type="text" id="nameInput" style="width: 60%;">
+<div class="input-group">
+	<div class="input-group-prepend">
+		<label lang="de" class="input-group-text" for="nameInput">Name</label>
+		<label lang="en" class="input-group-text" for="nameInput">Name</label>
+	</div>
+	<input class="form-control" type="text" id="nameInput">
 </div>
-<div>
-	<b lang="de">Betrag</b>
-	<b lang="en">Amount</b>
-	<br>
-	<input class="form-control" type="text" id="sumInput" style="width: 30%;">
+<br>
+<div class="input-group">
+	<div class="input-group-prepend">
+		<label lang="de" class="input-group-text" for="sumInput">Betrag</label>
+		<label lang="en" class="input-group-text" for="sumInput">Amount</label>
+	</div>
+	<input class="form-control" type="text" id="sumInput">
 </div>
-<div>
-	<b lang="de">Kategorie</b> <span lang="de">(optional)</span>
-	<b lang="en">Category</b> <span lang="en">(optional)</span>
-	<br>
-	<input class="form-control" type="text" id="categoryInput" style="width: 60%;">
-	<span lang="de">Datum:</span>
-	<span lang="en">Date:</span>
-	<input type="button" id="dateInput">
+<br>
+<div class="input-group">
+	<div class="input-group-prepend">
+		<label lang="de" class="input-group-text" for="categoryInput">Kategorie (optional)</label>
+		<label lang="en" class="input-group-text" for="categoryInput">Category (optional)</label>
+	</div>
+	<input class="form-control" type="text" id="categoryInput">
+</div>
+<br>
+<div class="input-group">
+	<div class="input-group-prepend">
+		<label lang="de" class="input-group-text" for="dateInput">Datum</label>
+		<label lang="en" class="input-group-text" for="dateInput">Date</label>
+	</div>
+	<input class="form-control" type="button" id="dateInput">
 </div>
 <div id="dynamicDiv1" style="display: none;">
 	<hr>
@@ -63,13 +73,53 @@
 </div>
 <div id="dynamicDiv2">
 	<hr>
-	<div class="input-group" style="width: 60%;">
+	<div class="input-group">
 		<div class="input-group-prepend">
 			<label lang="de" class="input-group-text" for="budgetSelect">Konto</label>
 			<label lang="en" class="input-group-text" for="budgetSelect">Budget</label>
 		</div>
 		<select class="custom-select" id="budgetSelect">
-			
+			%%BUDGETS%%
 		</select>
 	</div>
+</div>
+<div>
+	<hr>
+	<span lang="de">
+		<input id="automate" type="checkbox" name="automation"
+				onclick="if (this.checked) $('#dynamicDiv3').show(); else $('#dynamicDiv3').hide();"> Automatisieren
+	</span>
+	<span lang="en">
+		<input id="automate" type="checkbox" name="automation"
+				onclick="if (this.checked) $('#dynamicDiv3').show(); else $('#dynamicDiv3').hide();"> Automate
+	</span>
+</div>
+<div id="dynamicDiv3" style="display: none;">
+	<form>
+		<div class="input-group">
+			<div class="input-group-prepend">
+				<label lang="de" class="input-group-text" for="intervalSelect">Intervall</label>
+				<label lang="en" class="input-group-text" for="intervalSelect">Interval</label>
+			</div>
+			<select class="custom-select" id="intervalSelect">
+				<option lang="de">w&ouml;chentlich</option>
+				<option lang="en"></option>
+				<option lang="de">alle vier Wochen</option>
+				<option lang="en"></option>
+				<option lang="de">monatlich</option>
+				<option lang="en"></option>
+				<option lang="de">zweimonatlich</option>
+				<option lang="en"></option>
+				<option lang="de">vierteljährlich</option>
+				<option lang="en"></option>
+				<option lang="de">halbjährlich</option>
+				<option lang="en"></option>
+				<option lang="de">jährlich</option>
+				<option lang="en"></option>
+			</select>
+		</div>
+		<span lang="de">Enddatum:</span>
+		<span lang="en">End date:</span>
+		<input type="button" id="endDateInput">
+	</form>
 </div>
