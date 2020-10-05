@@ -1,3 +1,5 @@
+const {createUniqueTimestamp} = require(__dirname + '/../utils/dateHandler.js');
+
 /**
  * Handles (non recurring) transactions.
  */
@@ -14,6 +16,8 @@ module.exports = class Transact {
 	 * should be spread across multiple budgets.
 	 */
 	addEarning(earningObj, allocationOn) {
+		earningObj.date = createUniqueTimestamp(earningObj.date, this.storage);
+
 		if (allocationOn) {
 			this.addEarningSplit(earningObj);
 		} else {
@@ -64,6 +68,8 @@ module.exports = class Transact {
 	 * @param {object} spendingObj The entry to add.
 	 */
 	addSpending(spendingObj) {
+		spendingObj.date = createUniqueTimestamp(spendingObj.date, this.storage);
+
 		this.storage.storeData(spendingObj);
 
 		this.updateMainStorageArr('budgets', spendingObj.budget, -spendingObj.amount);

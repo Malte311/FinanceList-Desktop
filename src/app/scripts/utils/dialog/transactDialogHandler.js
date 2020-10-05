@@ -1,5 +1,6 @@
 const InputHandler = require(__dirname + '/../inputHandler.js');
 const Transact = require(__dirname + '/../../handle/transact.js');
+const RecurrTrans = require(__dirname + '/../../updates/recurrTrans.js');
 const {dateToTimestamp} = require(__dirname + '/../dateHandler.js');
 
 /**
@@ -35,17 +36,19 @@ module.exports = class TransactDialogHandler {
 		['dateMonth', 'endDateMonth'].forEach(id => $(`#${id}`).val((new Date()).getMonth() + 1));
 		['dateDay', 'endDateDay'].forEach(id => $(`#${id}`).val((new Date()).getDate()));
 
-		modal.find('.modal-body #dateInput').datepicker({
-			autoclose: true,
-			format: 'dd.mm.yyyy',
-			language: 'de', // this.view.storage.readPreference('language')
-			setDate: '31.03.2020', // DateHandler.timestampToString(DateHandler.getCurrentTimestamp())
-			todayHighlight: true
-		});
+		// modal.find('.modal-body #dateInput').datepicker({
+		// 	autoclose: true,
+		// 	format: 'dd.mm.yyyy',
+		// 	language: 'de', // this.view.storage.readPreference('language')
+		// 	setDate: '31.03.2020', // DateHandler.timestampToString(DateHandler.getCurrentTimestamp())
+		// 	todayHighlight: true
+		// });
 
 		this.view.storage.readMainStorage('budgets').forEach(budget => {
 			$('#budgetSelect').append(new Option(budget[0], budget[0]));
 		});
+
+		$(`#${this.view.lang}AutoAl`).prop('checked', true); // Select auto allocation by default
 
 		// $('#nameInput').autocomplete({
 		// 	source: readMainStorage('availableNames')
@@ -62,23 +65,15 @@ module.exports = class TransactDialogHandler {
 		let modal = $('#divModal');
 
 		modal.find('.modal-footer #modalConf').on('click', () => {
-			if (!this.inputHandler.isValidAmount($('#sumInput').val().trim())) {
+			if (!this.inputHandler.isValidAmount($('#sumInput').val().trim())
+				|| !this.inputHandler.isValidDate($('#dateDay').val(), $('#dateMonth').val(), $('#dateYear').val())
+				|| !this.inputHandler.isValidEntryName($('#nameInput').val().trim())
+				|| (!this.inputHandler.isValidDate($('#endDateDay').val(), $('#endDateMonth').val(), $('#endDateYear').val())
+						&& !$(`#${this.view.lang}NoEndDate`).prop('checked'))) {
 				return;
 			}
 
-			if (!this.inputHandler.isValidDate($('#dateDay').val(), $('#dateMonth').val(), $('#dateYear').val())) {
-				return;
-			}
-
-			let obj = {
-				date: dateToTimestamp($('#dateDay').val(), $('#dateMonth').val(), $('#dateYear').val()),
-				name: $('#nameInput').val().trim(),
-				amount: $('#sumInput').val().trim(),
-				budget: $('#budgetSelect option:selected').text(),
-				type: $('input[name="type"]:checked').val(),
-				category: $('#categoryInput').val().trim()
-			};
-			//this.transact.addEarning()
+			this.createNewEntry();
 
 			this.view.addToAutocomplete('availableNames', $('#nameInput').val().trim());
 			this.view.addToAutocomplete('availableCategories', $('#categoryInput').val().trim());
@@ -86,49 +81,45 @@ module.exports = class TransactDialogHandler {
 			modal.modal('hide');
 			this.view.updateView();
 		});
+	}
 
-		return;
+	/**
+	 * Creates a new entry after the dialog has been confirmed.
+	 */
+	createNewEntry() {
+		let autoAlloc = this.view.storage.readMainStorage('allocationOn');
 
-		var selectedEndDate = $( "#datepicker2" ).datepicker( "getDate" );
-		if ( selectedEndDate !== null && selectedEndDate !== undefined ) {
-			endDate = Math.floor(
-				new Date( $( "#datepicker2" ).datepicker( "getDate" ) ).getTime() / 1000 );
-		}
-		// End date -1 means there is no end date.
-		else {
-			endDate = -1;
-		}
+		let obj = {
+			date: dateToTimestamp($('#dateDay').val(), $('#dateMonth').val(), $('#dateYear').val()),
+			name: $('#nameInput').val().trim(),
+			amount: $('#sumInput').val().trim(),
+			budget: $('#budgetSelect option:selected').text(),
+			type: $('input[name="type"]:checked').val(),
+			category: $('#categoryInput').val().trim()
+		};
 
-		// Make sure that the date as a timestamp is unique
-		date = DateHandler.createUniqueTimestamp( date );
-
-		// Find out which type (earning/spending) was selected and
-		// execute the correct function.
-		if ( $( "#earning" )[0].checked ) {
-			addEarning( name, parseFloat( sum ), budget, category, date,
-				$( "#autoAllocation" )[0].checked && readMainStorage( "allocationOn" ) );
-		}
-		else if ( $( "#spending" )[0].checked ) {
-			addSpending({"date": date, "name": name, "amount": parseFloat( sum ), "budget": budget,
-		"type": "spending", "category": category} );
+		if (obj.type === 'earning') {
+			this.transact.addEarning(obj, autoAlloc && $('input[name="allocation"]:checked').val() === 'auto');
+		} else {
+			this.transact.addSpending(obj);
 		}
 
-		// Automation activated?
-		if ( $( "#checkboxInput" )[0].checked ) {
-			// Add a new recurring transaction.
-			var type = $( "#earning" )[0].checked ? "earning" : "spending";
-			let allocationOn = $('#earning')[0].checked && $('#autoAllocation')[0].checked && this.storage.readMainStorage('allocationOn');
-			addRecurringTransaction({
-				name: name,
-				amount: parseFloat( sum ),
-				budget: budget,
-				category: category,
-				type: type,
-				interval: $("#intervalSelect")[0].selectedIndex,
-				date: date,
+		if ($(`#${this.view.lang}Automate`).prop('checked')) { // Recurring transaction
+			let endDate = -1;
+			if (!$(`#${this.view.lang}NoEndDate`).prop('checked')) {
+				endDate = dateToTimestamp($('#endDateDay').val(), $('#endDateMonth').val(), $('#endDateYear').val());
+			}
+
+			let recObj = Object.assign({
+				startDate: obj.date,
 				endDate: endDate,
-				allocationOn: allocationOn
-			});
+				interval: $('#intervalSelect').val(),
+				allocationOn: autoAlloc && obj.type === 'earning' && $('input[name="allocation"]:checked').val() === 'auto'
+			}, obj);
+
+			delete recObj.date;
+			
+			(new RecurrTrans(this.view.storage)).addRecurringTransaction(recObj);
 		}
 	}
 }

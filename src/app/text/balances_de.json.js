@@ -5,7 +5,6 @@ module.exports =
     "currentBudgetsHeadings": ["Konto", "Kontostand", "Umbenennen/L&ouml;schen", "Anteil bei Aufteilung"],
     "recurringTransactionsHeadings": ["Name", "Summe", "Art", "Konto", "Kategorie", "N&auml;chste Ausf&uuml;hrung", "Intervall", "Enddatum", "L&ouml;schen", "Bearbeiten"],
     "recurringTransactionsContent": ["Einnahme", "Ausgabe", "Tage", "Es sind keine wiederkehrenden Transaktionen vorhanden."],
-    "intervalOptionsTextElements": ["w&ouml;chentlich", "alle 4 Wochen", "monatlich", "zweimonatlich", "viertelj&auml;hrlich", "halbj&auml;hrlich", "j&auml;hrlich"],
     "reallyDelete": "Wollen Sie dieses Konto wirklich l&ouml;schen? <br> Dann gehen alle gespeicherten Daten verloren.",
     "newBudgetName": "Geben Sie einen neuen Namen f&uuml;r dieses Konto ein.",
     "autoAllocation": "Automatische Aufteilung",

@@ -8,10 +8,12 @@
 
 <form>
 	<span lang="de">
-		<input id="deEarning" type="radio" value="earning" name="type" onclick="$('#dynamicDiv1').show(); $('#dynamicDiv2').hide();"> Einnahme
+		<input id="deEarning" type="radio" value="earning" name="type" onclick="$('#dynamicDiv1').show();
+				if ($('input[name=\'allocation\']:checked').val() === 'auto') $('#dynamicDiv2').hide();"> Einnahme
 	</span>
 	<span lang="en">
-		<input id="enEarning" type="radio" value="earning" name="type" onclick="$('#dynamicDiv1').show(); $('#dynamicDiv2').hide();"> Earning
+		<input id="enEarning" type="radio" value="earning" name="type" onclick="$('#dynamicDiv1').show();
+				if ($('input[name=\'allocation\']:checked').val() === 'auto') $('#dynamicDiv2').hide();"> Earning
 	</span>
 
 	<span lang="de">
@@ -58,16 +60,16 @@
 	<hr>
 	<form>
 		<span lang="de">
-			<input type="radio" id="manual" name="allocation" onclick="$('#dynamicDiv2').show();"> Konto w&auml;hlen
+			<input type="radio" id="deManualAl" name="allocation" value="manual" onclick="$('#dynamicDiv2').show();"> Konto w&auml;hlen
 		</span>
 		<span lang="en">
-			<input type="radio" id="manual" name="allocation" onclick="$('#dynamicDiv2').show();"> Choose budget
+			<input type="radio" id="enManualAl" name="allocation" value="manual" onclick="$('#dynamicDiv2').show();"> Choose budget
 		</span>
 		<span lang="de">
-			<input type="radio" id="autoAllocation" name="allocation" checked onclick="$('#dynamicDiv2').hide();"> Automatisch verteilen
+			<input type="radio" id="deAutoAl" name="allocation" value="auto" onclick="$('#dynamicDiv2').hide();"> Automatisch verteilen
 		</span>
 		<span lang="en">
-			<input type="radio" id="autoAllocation" name="allocation" checked onclick="$('#dynamicDiv2').hide();"> Allocate automatically
+			<input type="radio" id="enAutoAl" name="allocation" value="auto" onclick="$('#dynamicDiv2').hide();"> Allocate automatically
 		</span>
 	</form>
 </div>
@@ -85,11 +87,11 @@
 <div>
 	<hr>
 	<span lang="de">
-		<input id="automate" type="checkbox" name="automation"
+		<input id="deAutomate" type="checkbox"
 				onclick="if (this.checked) $('#dynamicDiv3').show(); else $('#dynamicDiv3').hide();"> Automatisieren
 	</span>
 	<span lang="en">
-		<input id="automate" type="checkbox" name="automation"
+		<input id="enAutomate" type="checkbox"
 				onclick="if (this.checked) $('#dynamicDiv3').show(); else $('#dynamicDiv3').hide();"> Automate
 	</span>
 </div>
@@ -101,30 +103,38 @@
 				<label lang="en" class="input-group-text" for="intervalSelect">Interval</label>
 			</div>
 			<select class="custom-select" id="intervalSelect">
-				<option lang="de">w&ouml;chentlich</option>
-				<option lang="en"></option>
-				<option lang="de">alle vier Wochen</option>
-				<option lang="en"></option>
-				<option lang="de">monatlich</option>
-				<option lang="en"></option>
-				<option lang="de">zweimonatlich</option>
-				<option lang="en"></option>
-				<option lang="de">vierteljährlich</option>
-				<option lang="en"></option>
-				<option lang="de">halbjährlich</option>
-				<option lang="en"></option>
-				<option lang="de">jährlich</option>
-				<option lang="en"></option>
+				<option lang="de" value="0">w&ouml;chentlich</option>
+				<option lang="en" value="0">weekly</option>
+				<option lang="de" value="1">alle vier Wochen</option>
+				<option lang="en" value="1">every four weeks</option>
+				<option lang="de" value="2">monatlich</option>
+				<option lang="en" value="2">monthly</option>
+				<option lang="de" value="3">zweimonatlich</option>
+				<option lang="en" value="3">bimonthly</option>
+				<option lang="de" value="4">viertelj&auml;hrlich</option>
+				<option lang="en" value="4">quarterly</option>
+				<option lang="de" value="5">halbj&auml;hrlich</option>
+				<option lang="en" value="5">biannual</option>
+				<option lang="de" value="6">j&auml;hrlich</option>
+				<option lang="en" value="6">annual</option>
 			</select>
 		</div>
-		<div class="input-group">
+		<span lang="de">
+			<input id="deNoEndDate" type="checkbox" checked
+					onclick="if (this.checked) $('#dynamicDiv4').hide(); else $('#dynamicDiv4').show();"> Kein Enddatum
+		</span>
+		<span lang="en">
+			<input id="enNoEndDate" type="checkbox" checked
+					onclick="if (this.checked) $('#dynamicDiv4').hide(); else $('#dynamicDiv4').show();"> No end date
+		</span>
+		<div id="dynamicDiv4" class="input-group" style="display: none;">
 			<div class="input-group-prepend">
 				<label lang="de" class="input-group-text" for="endDateInput">Enddatum</label>
 				<label lang="en" class="input-group-text" for="endDateInput">End date</label>
 			</div>
-			<input type="number" placeholder="YYYY" name="endDateYear" size="4" min="1970" class="form-control">
-			<input type="number" placeholder="MM" name="endDateMonth" size="2" min="1" max="12" class="form-control">
-			<input type="number" placeholder="DD" name="endDateDay" size="2" min="1" max="31" class="form-control">
+			<input type="number" placeholder="YYYY" id="endDateYear" size="4" min="1970" class="form-control">
+			<input type="number" placeholder="MM" id="endDateMonth" size="2" min="1" max="12" class="form-control">
+			<input type="number" placeholder="DD" id="endDateDay" size="2" min="1" max="31" class="form-control">
 			<button type="button" class="form-control" id="endDateInput">&#x1F4C5;</button>
 		</div>
 	</form>

@@ -15,6 +15,7 @@ describe('RecurrTrans', function() {
 		path = jsonStorage.readPreference('path');
 
 		jsonStorage.storePreference('path', '/tmp/financelist');
+		jsonStorage.writeMainStorage('allocationOn', true);
 		
 		if (!existsSync('/tmp/financelist/')) {
 			mkdirSync('/tmp/financelist/');

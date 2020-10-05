@@ -19,7 +19,8 @@ module.exports = class RecurrTrans {
 			while (t.nextDate <= getCurrentTimestamp()) {
 				if (t.endDate < 0 || (t.endDate > 0 && t.nextDate <= t.endDate)) {
 					if (t.type === 'earning') {
-						(new Transact(this.storage)).addEarning(this.transToObj(t), t.allocationOn);
+						let allocOn = this.storage.readMainStorage('allocationOn') && t.allocationOn;
+						(new Transact(this.storage)).addEarning(this.transToObj(t), allocOn);
 					} else {
 						(new Transact(this.storage)).addSpending(this.transToObj(t));
 					}

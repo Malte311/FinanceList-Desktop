@@ -66,9 +66,9 @@ module.exports = class BalancesView extends View {
 	 */
 	addToAutocomplete(field, newValue) {
 		let arr = this.storage.readMainStorage(field);
-		if (!arr.includes(newValue)) {
+		if (!arr.includes(newValue) && newValue !== '') {
 			arr.push(newValue);
 		}
-		this.storage.writeMainStorage(field);
+		this.storage.writeMainStorage(field, arr);
 	}
 }

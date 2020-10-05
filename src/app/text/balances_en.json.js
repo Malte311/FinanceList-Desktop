@@ -4,7 +4,6 @@ module.exports =
     "cancel": "Cancel",
     "recurringTransactionsHeadings": ["Name", "Amount", "Type", "Budget", "Category", "Next execution", "Interval", "End date", "Delete", "Edit"],
     "recurringTransactionsContent": ["earning", "spending", "days", "No recurring transactions available."],
-    "intervalOptionsTextElements": ["weekly", "every 4 weeks", "monthly", "bimonthly", "quarterly", "biannual", "annual"],
     "reallyDelete": "Are you sure you want to delete this budget? <br> All the data will be lost.",
     "newBudgetName": "Type in a new name for this budget.",
     "autoAllocation": "Automated allocation",
