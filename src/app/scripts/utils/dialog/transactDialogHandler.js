@@ -1,105 +1,22 @@
-const InputHandler = require(__dirname + '/inputHandler.js');
-const Budget = require(__dirname + '/../handle/budget.js');
+const InputHandler = require(__dirname + '/../inputHandler.js');
+const Transact = require(__dirname + '/../../handle/transact.js');
 
 /**
- * Class for handling all kinds of dialogs.
+ * Handles all dialogs related to transactions.
  */
-module.exports = class DialogHandler {
+module.exports = class TransactDialogHandler {
 	constructor(view) {
 		this.view = view;
 		this.inputHandler = new InputHandler(this.view.storage);
-		
-		this.budget = new Budget(this.view.storage);
-
-		let dialogHandler = this; // this binding will be overridden in the upcoming block.
-		$('#divModal').on('show.bs.modal', function(event) {
-			let btnId = $(event.relatedTarget).attr('id'); // Button that triggered the modal.
-
-			let modal = $(this);
-			modal.find('.modal-footer #modalCanc').html(dialogHandler.view.textData['cancel']);
-			modal.find('.modal-footer #modalConf').html(dialogHandler.view.textData['confirm']);
-			modal.find('.modal-footer #modalConf').off(); // Remove previous listener.
-
-			switch (btnId) {
-				case 'btnAddBudget':
-					dialogHandler.addBudget(modal);
-					break;
-				case 'btnAddTransact':
-					dialogHandler.addTransaction(modal);
-					break;
-			}
-
-			$(`[lang=${dialogHandler.view.lang}]`).show();
-		});
+		this.transact = new Transact(this.view.storage);
 	}
 
 	/**
-	 * Displays a dialog to add a new budget and handles the interaction of this dialog.
-	 * 
-	 * @param {object} modal The dialog object (to access the dialog).
+	 * Displays a dialog to add a new transaction and handles the interaction of this dialog.
 	 */
-	addBudget(modal) {
-		modal.find('.modal-title').html(this.view.textData['addBudget']);
-		modal.find('.modal-body').html(this.view.template.fromTemplate('addBudgetDialog.html'));
-		
-		modal.find('.modal-footer #modalConf').on('click', () => {
-			let newBudget = $('#dialogInput').val().trim();
-			if (!this.inputHandler.isValidBudgetName(newBudget)) {
-				return;
-			}
-
-			this.budget.addBudget(newBudget);
-
-			modal.modal('hide');
-			this.view.updateView();
-		});
-	}
-
-	/**
-	 * Displays a dialog to rename a budget and handles the interaction of this dialog.
-	 * 
-	 * @param {string} name The name of the budget we want to change.
-	 */
-	renameBudget(name) {
+	addTransaction() {
 		let modal = $('#divModal');
 
-		modal.find('.modal-title').html(this.view.textData['renameBudget']);
-		modal.find('.modal-body').html(this.view.template.fromTemplate('renameBudgetDialog.html')
-			.replace('%%BUDGET%%', name));
-		
-		modal.find('.modal-footer #modalConf').on('click', () => {
-			let newName = $('#dialogInput').val().trim();
-			if (!this.inputHandler.isValidBudgetName(newName)) {
-				return;
-			}
-
-			this.budget.renameBudget(name, newName);
-
-			modal.modal('hide');
-			this.view.updateView();
-		});
-	}
-
-	/**
-	 * Displays a dialog to delete a budget and handles the interaction of this dialog.
-	 * 
-	 * @param {string} name The name of the budget we want to delete.
-	 */
-	deleteBudget(name) {
-		let modal = $('#divModal');
-
-		modal.find('.modal-title').html(this.view.textData['deleteBudget']);
-		modal.find('.modal-body').html(this.view.template.fromTemplate('deleteBudgetDialog.html')
-			.replace('%%BUDGET%%', name));
-		
-		modal.find('.modal-footer #modalConf').on('click', () => {
-			this.budget.deleteBudget(name);
-			modal.modal('hide');
-			this.view.updateView();
-		});
-	}
-
-	addTransaction(modal) {
 		modal.find('.modal-title').html(this.view.textData['addTransaction']);
 		modal.find('.modal-body').html(this.view.template.fromTemplate('addTransactDialog.html'));
 		

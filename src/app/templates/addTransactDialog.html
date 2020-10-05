@@ -8,17 +8,17 @@
 
 <form>
 	<span lang="de">
-		<input id="earning" type="radio" name="type" onclick="$('#dynamicDiv1').show()"> Einnahme
+		<input id="earning" type="radio" name="type" onclick="$('#dynamicDiv1').show(); $('#dynamicDiv2').hide();"> Einnahme
 	</span>
 	<span lang="en">
-		<input id="earning" type="radio" name="type" onclick="$('#dynamicDiv1').show()"> Earning
+		<input id="earning" type="radio" name="type" onclick="$('#dynamicDiv1').show(); $('#dynamicDiv2').hide();"> Earning
 	</span>
 
 	<span lang="de">
-		<input id="spending" type="radio" name="type" onclick="$('#dynamicDiv1').hide()" checked> Ausgabe
+		<input id="spending" type="radio" name="type" onclick="$('#dynamicDiv1').hide(); $('#dynamicDiv2').show();" checked> Ausgabe
 	</span>
 	<span lang="en">
-		<input id="spending" type="radio" name="type" onclick="$('#dynamicDiv1').hide()" checked> Spending
+		<input id="spending" type="radio" name="type" onclick="$('#dynamicDiv1').hide(); $('#dynamicDiv2').show();" checked> Spending
 	</span>
 </form>
 <hr>
@@ -27,19 +27,19 @@
 	<b lang="de">Name</b>
 	<b lang="en">Name</b>
 	<br>
-	<input type="text" id="nameInput">
+	<input class="form-control" type="text" id="nameInput" style="width: 60%;">
 </div>
 <div>
 	<b lang="de">Betrag</b>
 	<b lang="en">Amount</b>
 	<br>
-	<input type="text" id="sumInput" style="width: 50px;">
+	<input class="form-control" type="text" id="sumInput" style="width: 30%;">
 </div>
 <div>
 	<b lang="de">Kategorie</b> <span lang="de">(optional)</span>
 	<b lang="en">Category</b> <span lang="en">(optional)</span>
 	<br>
-	<input type="text" id="categoryInput">
+	<input class="form-control" type="text" id="categoryInput" style="width: 60%;">
 	<span lang="de">Datum:</span>
 	<span lang="en">Date:</span>
 	<input type="button" id="dateInput">
@@ -48,16 +48,28 @@
 	<hr>
 	<form>
 		<span lang="de">
-			<input type="radio" id="manual" name="allocation"> Konto w&auml;hlen
+			<input type="radio" id="manual" name="allocation" onclick="$('#dynamicDiv2').show();"> Konto w&auml;hlen
 		</span>
 		<span lang="en">
-			<input type="radio" id="manual" name="allocation"> Choose budget
+			<input type="radio" id="manual" name="allocation" onclick="$('#dynamicDiv2').show();"> Choose budget
 		</span>
 		<span lang="de">
-			<input type="radio" id="autoAllocation" name="allocation" checked> Automatisch verteilen
+			<input type="radio" id="autoAllocation" name="allocation" checked onclick="$('#dynamicDiv2').hide();"> Automatisch verteilen
 		</span>
 		<span lang="en">
-			<input type="radio" id="autoAllocation" name="allocation" checked> Allocate automatically
+			<input type="radio" id="autoAllocation" name="allocation" checked onclick="$('#dynamicDiv2').hide();"> Allocate automatically
 		</span>
 	</form>
+</div>
+<div id="dynamicDiv2">
+	<hr>
+	<div class="input-group" style="width: 60%;">
+		<div class="input-group-prepend">
+			<label lang="de" class="input-group-text" for="budgetSelect">Konto</label>
+			<label lang="en" class="input-group-text" for="budgetSelect">Budget</label>
+		</div>
+		<select class="custom-select" id="budgetSelect">
+			
+		</select>
+	</div>
 </div>

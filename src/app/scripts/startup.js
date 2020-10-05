@@ -1,4 +1,4 @@
-const DialogHandler = require(__dirname + '/utils/dialogHandler.js');
+const DialogHandler = require(__dirname + '/utils/dialog/dialogHandler.js');
 const JsonStorage = require(__dirname + '/storage/jsonStorage.js');
 const Updater = require(__dirname + '/updates/updater.js');
 const RecurrTrans = require(__dirname + '/updates/recurrTrans.js');
