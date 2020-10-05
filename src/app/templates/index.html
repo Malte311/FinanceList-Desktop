@@ -16,10 +16,10 @@
 				FinanceList-Desktop
 			</span>
 			<span>
-				<a onclick="s.view.updateLang('en')" href="#">
+				<a onclick="startup.view.updateLang('en')" href="#">
 					<img alt="EN" src="../img/us.ico" width="30px" height="30px">
 				</a>
-				<a onclick="s.view.updateLang('de')" href="#">
+				<a onclick="startup.view.updateLang('de')" href="#">
 					<img alt="DE" src="../img/de.ico" width="30px" height="30px">
 				</a>
 			</span>
@@ -113,9 +113,10 @@
 					<button lang="en" type="button" id="btnAddBudget" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Add budget</button>
 					<button lang="de" type="button" id="btnAddTransact" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Eintrag hinzuf&uuml;gen</button>
 					<button lang="en" type="button" id="btnAddTransact" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Add transaction</button>
-					<button lang="de" onclick="setAllocation();">Automatische Aufteilung</button>
-                    <button lang="en" onclick="setAllocation();">Automated allocation</button>
-                    <button onclick="executeTransfer();">Transfer</button>
+					<button lang="de" type="button" id="btnSetAlloc" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Automatische Aufteilung</button>
+					<button lang="en" type="button" id="btnSetAlloc" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Automated allocation</button>
+					<button onclick="executeTransfer();">Transfer</button>
+					<!-- TODO: When executing a transfer, add two entries with name "Transfer" and category "Transfer" -->
 				</div>
 				<hr style="border-color:black;">
 
@@ -143,7 +144,7 @@
 				<h3 lang="de"><i class="fas fa-folder text-warning"></i> Dateipfad</h3>
 				<h3 lang="en"><i class="fas fa-folder text-warning"></i> File path</h3>
 				<div>
-					<button onclick="s.view.updateFilepath();" id="btnCurrentPath"></button>
+					<button onclick="startup.view.updateFilepath();" id="btnCurrentPath"></button>
 				</div>
 				<hr style="border-color:black;">
 
@@ -154,13 +155,13 @@
 						<button type="button" id="btnCurrentCurrency" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						</button>
 						<div class="dropdown-menu">
-							<a class="dropdown-item" href="#" onclick="s.view.updatePreference('currency', 'euro');">
+							<a class="dropdown-item" href="#" onclick="startup.view.updatePreference('currency', 'euro');">
 								<i class="fas fa-euro-sign"></i> Euro
 							</a>
-							<a class="dropdown-item" href="#" onclick="s.view.updatePreference('currency', 'dollar');">
+							<a class="dropdown-item" href="#" onclick="startup.view.updatePreference('currency', 'dollar');">
 								<i class="fas fa-dollar-sign"></i> Dollar
 							</a>
-							<a class="dropdown-item" href="#" onclick="s.view.updatePreference('currency', 'pound');">
+							<a class="dropdown-item" href="#" onclick="startup.view.updatePreference('currency', 'pound');">
 								<i class="fas fa-pound-sign"></i> Pfund
 							</a>
 						</div>
@@ -175,28 +176,28 @@
 						<button type="button" id="btnCurrentChartType" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						</button>
 						<div class="dropdown-menu">
-							<a lang="de" class="dropdown-item" href="#" onclick="s.view.updatePreference('chartType', 'pie');">
+							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'pie');">
 								Kreisdiagramm
 							</a>
-							<a lang="en" class="dropdown-item" href="#" onclick="s.view.updatePreference('chartType', 'pie');">
+							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'pie');">
 								Pie chart
 							</a>
-							<a lang="de" class="dropdown-item" href="#" onclick="s.view.updatePreference('chartType', 'line');">
+							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'line');">
 								Liniendiagramm
 							</a>
-							<a lang="en" class="dropdown-item" href="#" onclick="s.view.updatePreference('chartType', 'line');">
+							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'line');">
 								Line chart
 							</a>
-							<a lang="de" class="dropdown-item" href="#" onclick="s.view.updatePreference('chartType', 'bar');">
+							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'bar');">
 								Balkendiagramm
 							</a>
-							<a lang="en" class="dropdown-item" href="#" onclick="s.view.updatePreference('chartType', 'bar');">
+							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'bar');">
 								Bar chart
 							</a>
-							<a lang="de" class="dropdown-item" href="#" onclick="s.view.updatePreference('chartType', 'doughnut');">
+							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'doughnut');">
 								Ringdiagramm
 							</a>
-							<a lang="en" class="dropdown-item" href="#" onclick="s.view.updatePreference('chartType', 'doughnut');">
+							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'doughnut');">
 								Doughnut chart
 							</a>
 						</div>
@@ -429,9 +430,7 @@
 		require('popper.js'); // Global Bootstrap things.
 		require('bootstrap');
 
-		$(function() {
-			let Startup = require(__dirname + '/../scripts/startup.js');
-			let s = new Startup();
-		});
+		let Startup = require(__dirname + '/../scripts/startup.js');
+		const startup = new Startup();
 	</script>
 </html>
