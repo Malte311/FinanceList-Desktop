@@ -99,6 +99,19 @@ describe('DateHandler', function() {
 		});
 	});
 
+	describe('#dateToTimestamp()', function() {
+		it('returns the correct timestamp', function() {
+			let ts1 = (new Date('2020-02-29')).getTime() / 1000;
+			assert.strictEqual(DateHandler.dateToTimestamp('29', '2', '2020'), ts1);
+
+			let ts2 = (new Date('2020-01-01')).getTime() / 1000;
+			assert.strictEqual(DateHandler.dateToTimestamp('1', '1', '2020'), ts2);
+
+			let ts3 = (new Date('2015-12-31')).getTime() / 1000;
+			assert.strictEqual(DateHandler.dateToTimestamp('31', '12', '2015'), ts3);
+		});
+	});
+
 	describe('#stepInterval()', function() {
 		let ts1 = (new Date('2020-02-29')).getTime() / 1000;
 		let ts2 = (new Date('2015-12-31')).getTime() / 1000;

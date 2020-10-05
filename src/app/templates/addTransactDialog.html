@@ -8,51 +8,51 @@
 
 <form>
 	<span lang="de">
-		<input id="earning" type="radio" name="type" onclick="$('#dynamicDiv1').show(); $('#dynamicDiv2').hide();"> Einnahme
+		<input id="deEarning" type="radio" value="earning" name="type" onclick="$('#dynamicDiv1').show(); $('#dynamicDiv2').hide();"> Einnahme
 	</span>
 	<span lang="en">
-		<input id="earning" type="radio" name="type" onclick="$('#dynamicDiv1').show(); $('#dynamicDiv2').hide();"> Earning
+		<input id="enEarning" type="radio" value="earning" name="type" onclick="$('#dynamicDiv1').show(); $('#dynamicDiv2').hide();"> Earning
 	</span>
 
 	<span lang="de">
-		<input id="spending" type="radio" name="type" onclick="$('#dynamicDiv1').hide(); $('#dynamicDiv2').show();" checked> Ausgabe
+		<input id="deSpending" type="radio" value="spending" name="type" onclick="$('#dynamicDiv1').hide(); $('#dynamicDiv2').show();"> Ausgabe
 	</span>
 	<span lang="en">
-		<input id="spending" type="radio" name="type" onclick="$('#dynamicDiv1').hide(); $('#dynamicDiv2').show();" checked> Spending
+		<input id="enSpending" type="radio" value="spending" name="type" onclick="$('#dynamicDiv1').hide(); $('#dynamicDiv2').show();"> Spending
 	</span>
 </form>
 <hr>
 
-<div class="input-group">
+<div class="input-group mb-2">
 	<div class="input-group-prepend">
 		<label lang="de" class="input-group-text" for="nameInput">Name</label>
 		<label lang="en" class="input-group-text" for="nameInput">Name</label>
 	</div>
 	<input class="form-control" type="text" id="nameInput">
 </div>
-<br>
-<div class="input-group">
+<div class="input-group mb-2">
 	<div class="input-group-prepend">
 		<label lang="de" class="input-group-text" for="sumInput">Betrag</label>
 		<label lang="en" class="input-group-text" for="sumInput">Amount</label>
 	</div>
 	<input class="form-control" type="text" id="sumInput">
 </div>
-<br>
-<div class="input-group">
+<div class="input-group mb-2">
 	<div class="input-group-prepend">
 		<label lang="de" class="input-group-text" for="categoryInput">Kategorie (optional)</label>
 		<label lang="en" class="input-group-text" for="categoryInput">Category (optional)</label>
 	</div>
 	<input class="form-control" type="text" id="categoryInput">
 </div>
-<br>
 <div class="input-group">
 	<div class="input-group-prepend">
 		<label lang="de" class="input-group-text" for="dateInput">Datum</label>
 		<label lang="en" class="input-group-text" for="dateInput">Date</label>
 	</div>
-	<input class="form-control" type="button" id="dateInput">
+	<input type="number" placeholder="YYYY" id="dateYear" size="4" min="1970" class="form-control">
+	<input type="number" placeholder="MM" id="dateMonth" size="2" min="1" max="12" class="form-control">
+	<input type="number" placeholder="DD" id="dateDay" size="2" min="1" max="31" class="form-control">
+	<input class="form-control text-center" id="dateInput" value="&#x1F4C5;">
 </div>
 <div id="dynamicDiv1" style="display: none;">
 	<hr>
@@ -71,15 +71,14 @@
 		</span>
 	</form>
 </div>
-<div id="dynamicDiv2">
-	<hr>
+<div id="dynamicDiv2" class="mt-2">
 	<div class="input-group">
 		<div class="input-group-prepend">
 			<label lang="de" class="input-group-text" for="budgetSelect">Konto</label>
 			<label lang="en" class="input-group-text" for="budgetSelect">Budget</label>
 		</div>
 		<select class="custom-select" id="budgetSelect">
-			%%BUDGETS%%
+			
 		</select>
 	</div>
 </div>
@@ -96,7 +95,7 @@
 </div>
 <div id="dynamicDiv3" style="display: none;">
 	<form>
-		<div class="input-group">
+		<div class="input-group mb-2">
 			<div class="input-group-prepend">
 				<label lang="de" class="input-group-text" for="intervalSelect">Intervall</label>
 				<label lang="en" class="input-group-text" for="intervalSelect">Interval</label>
@@ -118,8 +117,15 @@
 				<option lang="en"></option>
 			</select>
 		</div>
-		<span lang="de">Enddatum:</span>
-		<span lang="en">End date:</span>
-		<input type="button" id="endDateInput">
+		<div class="input-group">
+			<div class="input-group-prepend">
+				<label lang="de" class="input-group-text" for="endDateInput">Enddatum</label>
+				<label lang="en" class="input-group-text" for="endDateInput">End date</label>
+			</div>
+			<input type="number" placeholder="YYYY" name="endDateYear" size="4" min="1970" class="form-control">
+			<input type="number" placeholder="MM" name="endDateMonth" size="2" min="1" max="12" class="form-control">
+			<input type="number" placeholder="DD" name="endDateDay" size="2" min="1" max="31" class="form-control">
+			<button type="button" class="form-control" id="endDateInput">&#x1F4C5;</button>
+		</div>
 	</form>
 </div>

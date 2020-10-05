@@ -56,4 +56,20 @@ module.exports = class InputHandler {
 		return validChars && notEmpty && dotOk && amount.length <= this.maxStrLen
 			&& amount.split(' ').every(w => w.length <= this.maxSwLen);
 	}
+
+	/**
+	 * Validates a given date.
+	 * 
+	 * @param {string} day The day of the date.
+	 * @param {string} month The month of the date.
+	 * @param {string} year The year of the date.
+	 * @return {bool} True if the date is valid, else false.
+	 */
+	isValidDate(day, month, year) {
+		day = parseInt(day);
+		month = parseInt(month);
+		year = parseInt(year);
+
+		return day > 0 && day < 32 && month > 0 && month < 13 && year > 0;
+	}
 }

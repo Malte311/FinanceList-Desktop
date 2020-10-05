@@ -40,7 +40,7 @@ module.exports = class BalancesView extends View {
 			this.printNum(b[1]), // Index 1: balance of the budget.
 			this.elt('span', {
 				onclick: () => (new BudgetDialogHandler(this)).renameBudget(b[0])
-			}, this.template.icon('edit', 'blue'), index == 0 ? '' : this.elt('span', {
+			}, this.template.icon('edit', 'blue'), index === 0 ? '' : this.elt('span', {
 				onclick: () => (new BudgetDialogHandler(this)).deleteBudget(b[0])
 			}, this.template.icon('delete', 'red')))]);
 
@@ -56,5 +56,19 @@ module.exports = class BalancesView extends View {
 		let overallBalance = budgets.map(b => b[1]).reduce((prev, curr) => prev + curr, 0);
 		let overallLabel = `${this.textData['overallBalance']}: ${this.printNum(overallBalance)}`;
 		$(id).append(this.elt('center', {}, overallLabel));
+	}
+
+	/**
+	 * Adds a new value to the array of possible autocomplete options, if it is not included yet.
+	 * 
+	 * @param {string} field The field to which a new value should be added.
+	 * @param {string} newValue The new value to add.
+	 */
+	addToAutocomplete(field, newValue) {
+		let arr = this.storage.readMainStorage(field);
+		if (!arr.includes(newValue)) {
+			arr.push(newValue);
+		}
+		this.storage.writeMainStorage(field);
 	}
 }

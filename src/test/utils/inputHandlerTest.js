@@ -119,4 +119,23 @@ describe('InputHandler', function() {
 			});
 		});
 	});
+
+	describe('#isValidDate()', function() {
+		it('should reject invalid dates', function() {
+			assert.strictEqual(inputHandler.isValidDate('0', '1', '2000'), false, 'Test 1 failed.');
+			assert.strictEqual(inputHandler.isValidDate('32', '1', '2000'), false, 'Test 2 failed.');
+			assert.strictEqual(inputHandler.isValidDate('15', '0', '2000'), false, 'Test 3 failed.');
+			assert.strictEqual(inputHandler.isValidDate('15', '13', '2000'), false, 'Test 4 failed.');
+			assert.strictEqual(inputHandler.isValidDate('15', '-1', '2000'), false, 'Test 5 failed.');
+			assert.strictEqual(inputHandler.isValidDate('15', '13', '-2000'), false, 'Test 6 failed.');
+			assert.strictEqual(inputHandler.isValidDate('-15', '13', '2000'), false, 'Test 7 failed.');
+		});
+
+		it('should accept correct dates', function() {
+			assert.strictEqual(inputHandler.isValidDate('1', '1', '2000'), true, 'Test 1 failed.');
+			assert.strictEqual(inputHandler.isValidDate('31', '1', '2000'), true, 'Test 2 failed.');
+			assert.strictEqual(inputHandler.isValidDate('15', '02', '2000'), true, 'Test 3 failed.');
+			assert.strictEqual(inputHandler.isValidDate('01', '01', '2000'), true, 'Test 4 failed.');
+		});
+	});
 });

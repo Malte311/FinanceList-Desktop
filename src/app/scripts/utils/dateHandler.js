@@ -36,7 +36,7 @@ module.exports = class DateHandler {
 	 * @param {Storage} storage A storage object for accessing the data.
 	 * @return {number} A unique timestamp generated from the original timestamp.
 	 */
-	static createUniqueTimestamp(ts, storage) {		
+	static createUniqueTimestamp(ts, storage) {
 		let content = storage.getData(DateHandler.timestampToFilename(ts), {
 			connector: 'or',
 			params: [['type', 'earning'], ['type', 'spending']]
@@ -76,6 +76,18 @@ module.exports = class DateHandler {
 	 */
 	static timestampToFilename(ts) {
 		return DateHandler.strDateToFilename(DateHandler.timestampToString(ts));
+	}
+
+	/**
+	 * Creates a timestamp out of a given day, month and year.
+	 * 
+	 * @param {string} day The day of the date.
+	 * @param {string} month The month of the date.
+	 * @param {string} year The year of the date.
+	 * @return {number} The corresponding timestamp for the given date.
+	 */
+	static dateToTimestamp(day, month, year) {
+		return (new Date(`${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`)).getTime() / 1000;
 	}
 
 	/**
