@@ -1,4 +1,5 @@
 const ChartHandler = require(__dirname + '/../utils/chartHandler.js');
+const InputHandler = require(__dirname + '/../utils/inputHandler.js');
 const View = require(__dirname + '/view.js');
 
 /**
@@ -23,82 +24,58 @@ module.exports = class BalancesView extends View {
 	 * Displays the overview content controls (controls for filtering data).
 	 */
 	displayOverviewControls() {
+		$('#budgetSelect').html(new Option(this.textData['allBudgets'], 'all'));
 		this.storage.readMainStorage('budgets').forEach(budget => {
 			$('#budgetSelect').append(new Option(budget[0], budget[0]));
 		});
 
-		$('#typeSelect #all').text(this.textData['all']);
+		$('#typeSelect #all').text(this.textData['allTypes']);
 		$('#nameSearch').prop('placeholder', this.textData['allTransactions']);
 		$('#catSearch').prop('placeholder', this.textData['allCategories']);
-
-		// activateDateRangePicker( "#dateSelect" );
 			
-		// $( "#nameSelect" ).autocomplete({
-		// source: readMainStorage( "availableNames" )
-		// });
-
-		// $( "#categorySelect" ).autocomplete({
-		// source: readMainStorage( "availableCategories" )
-		// });
+		$('#nameSearch').autocomplete({source: this.storage.readMainStorage('availableNames')});
+		$('#catSearch').autocomplete({source: this.storage.readMainStorage('availableCategories')});
 	}
 
 	/**
 	 * Displays the overview, following the selected filters from the controls.
 	 */
 	displayOverview(id) {
-		let budget = $('#budgetSelect option:selected');
-		let type = $('#typeSelect option:selected');
+		let budget = $('#budgetSelect option:selected').val();
+		let type = $('#typeSelect option:selected').val();
 		let amountFrom = $('#amountFrom').val();
 		let amountTo = $('#amountTo').val();
 		let name = $('#nameSearch').val();
-		let cats = $('#catSearch').val();
+		let cat = $('#catSearch').val();
 
-		//if (inputHandler.isValidAmount( amountFrom, true ))
+		let input = new InputHandler(this.storage);
+		if (!input.isValidAmount(amountFrom, true) || !input.isValidAmount(amountTo, true)) {
+			return;
+		}
+
+		let paramList = [];
+		if (budget.trim().length > 0 && budget !== 'all') paramList.push(['budget', budget]);
+		if (type.trim().length > 0 && type !== 'all')     paramList.push(['type', type]);
+		if (name.trim().length > 0)                       paramList.push(['name', name]);
+		if (cat.trim().length > 0)                        paramList.push(['category', cat]);
+
+		let quest = paramList.length > 0 ? {
+			connector: 'and',
+			params: paramList
+		} : {
+			connector: 'or',
+			params: [['type', 'earning'], ['type', 'spending']]
+		};
+
+		let files = this.storage.getJsonFiles();
+		files.forEach(file => {
+
+		});
 
 		$(id).html('');
 
 		return;
-
-		/**
-		 * This function displays the details the user wishes to see.
-		 * @param {String} displayType This indicates how the data will be displayed (table/graph).
-		 * The following are filters for the data.
-		 * @param {String} budget Indicates which budget should be displayed.
-		 * @param {String} type Indictates which type of transactions should be displayed.
-		 * @param {Object} startDate Indictates the start of the date range for transactions to be displayed.
-		 * @param {Object} endDate Indictates the end of the date range for transactions to be displayed.
-		 * @param {String} amountFrom Indictates a minimum amount for transactions to be displayed.
-		 * @param {String} amountTo Indictates a maximum amount for transactions to be displayed.
-		 * @param {String} name Indictates which transactions should be displayed (by name).
-		 * @param {String} category Indictates which category should be displayed.
-		 */
-		function displayContent( displayType, budget, type, startDate, endDate, amountFrom, amountTo,
-			name, category ) {
-			// Before doing anything, we check if the input is valid.
-			// Input invalid?
-			if ( !(inputHandler.isValidAmount( amountFrom, true ) && inputHandler.isValidAmount( amountTo, true )) ) {
-
-			}
-			// Get all data before displaying anthing.
-			// Find out which data the user wants to see, then apply filter and display the chart.
-			var paramList = [];
-			if ( budget.length > 0 ) paramList.push( ["budget", budget] );
-			if ( type.length > 0 ) paramList.push( ["type", type] );
-			if ( name.length > 0 ) paramList.push( ["name", name] );
-			if ( category.length > 0 ) paramList.push( ["category", category] );
-			// Now, create a quest. If no parameter were selected, we get all data unfiltered.
-			var quest;
-			// At least one filter?
-			if ( paramList.length > 0 ) {
-			quest = { connector : "and", params : paramList };
-			}
-			// No filter?
-			else {
-			// No filters applied? Select all data.
-			quest = { connector : "or", params : [["type", "earning"], ["type", "spending"]] };
-			}
 			// Find out in which files we want to search.
-			var files = [];
 			// Date selected?
 			if ( startDate !== null && endDate !== null ) {
 			// Get start and end date as a file name (reversed file name).
@@ -189,7 +166,6 @@ module.exports = class BalancesView extends View {
 			else {
 			// Display a message that no data was found.
 			$( "#mainContent" ).html( "<center><i>" + textElements.noTransactions + "</i></center>" );
-			}
 			}
 	}
 

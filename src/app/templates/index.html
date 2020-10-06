@@ -124,7 +124,9 @@
 								<label lang="de" class="input-group-text" for="budgetSelect">Konto</label>
 								<label lang="en" class="input-group-text" for="budgetSelect">Budget</label>
 							</div>
-							<select class="form-control" id="budgetSelect"></select>
+							<select class="form-control" id="budgetSelect">
+								<option id="all" value="all"></option>
+							</select>
 						</div>
 						<div class="input-group mb-2" style="max-width: 500px;">
 							<div class="input-group-prepend">
@@ -141,12 +143,26 @@
 						</div>
 						<div class="input-group mb-2" style="max-width: 500px;">
 							<div class="input-group-prepend">
-								<label lang="de" class="input-group-text">Betrag zwischen</label>
-								<label lang="en" class="input-group-text">Amount between</label>
+								<label lang="de" class="input-group-text" for="dateFrom">Startdatum</label>
+								<label lang="en" class="input-group-text" for="dateFrom">Start Date</label>
+							</div>
+							<input class="form-control" type="text" id="dateFrom">
+						</div>
+						<div class="input-group mb-2" style="max-width: 500px;">
+							<div class="input-group-prepend">
+								<label lang="de" class="input-group-text" for="dateTo">Enddatum</label>
+								<label lang="en" class="input-group-text" for="dateTo">End Date</label>
+							</div>
+							<input class="form-control" type="text" id="dateTo">
+						</div>
+						<div class="input-group mb-2" style="max-width: 500px;">
+							<div class="input-group-prepend">
+								<label lang="de" class="input-group-text">Betrag</label>
+								<label lang="en" class="input-group-text">Amount</label>
 							</div>
 							<input class="form-control" type="number" id="amountFrom">
-							<label lang="de" class="input-group-text">und</label>
-							<label lang="en" class="input-group-text">and</label>
+							<label lang="de" class="input-group-text">bis</label>
+							<label lang="en" class="input-group-text">to</label>
 							<input class="form-control" type="number" id="amountTo">
 						</div>
 						<div class="input-group mb-2" style="max-width: 500px;">

@@ -50,12 +50,8 @@ module.exports = class TransactDialogHandler {
 
 		$(`#${this.view.lang}AutoAl`).prop('checked', true); // Select auto allocation by default
 
-		// $('#nameInput').autocomplete({
-		// 	source: readMainStorage('availableNames')
-		// });
-		// $('#categoryInput').autocomplete({
-		// 	source: readMainStorage('availableCategories')
-		// });
+		$('#nameInput').autocomplete({source: this.view.storage.readMainStorage('availableNames')});
+		$('#categoryInput').autocomplete({source: this.view.storage.readMainStorage('availableCategories')});
 	}
 
 	/**
