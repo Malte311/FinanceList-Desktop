@@ -22,6 +22,4 @@ module.exports =
     "chooseMonthTitle": "Choose a month",
     "reallyDeleteEntry": "Do you really want to delete this entry?",
 	"reallyDeleteEntryTitle": "Delete entry",
-	"chooseYearText": "For which year would you like to create an overview?",
-	"chooseYearTitle": "Choose a year"
 }

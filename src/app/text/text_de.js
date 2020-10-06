@@ -1,9 +1,12 @@
 module.exports = {
 	'addBudget': 'Konto hinzuf\u00fcgen',
 	'addTransaction': 'Eintrag hinzuf\u00fcgen',
+	'all': 'Alle',
+	'allCategories': 'Alle Kategorien',
 	'allocationRatio': 'Anteil bei Aufteilung',
 	'allTimeSpending': 'Gesamtausgaben',
 	'allTimeEarning': 'Gesamteinnahmen',
+	'allTransactions': 'Alle Transaktionen',
 	'amount': 'Betrag',
 	'autoAllocation': 'Automatische Aufteilung',
 	'automate': 'Automatisieren',
