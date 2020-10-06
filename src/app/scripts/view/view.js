@@ -94,16 +94,18 @@ module.exports = class View {
 	 * @param {string} id The id of the dom element.
 	 */
 	createDatepicker(id) {
-		$(id).datepicker({
-			dateFormat: "dd.mm.yy",
-			// Min date: tomorrow
-			minDate: (number === "2" ? new Date( (DateHandler.getCurrentTimestamp() + 86400) * 1000 ) : null),
-			monthNames : textElements.monthNames,
-			monthNamesShort : textElements.monthNamesShort,
-			dayNames: textElements.dayNames,
-			dayNamesShort : textElements.dayNamesShort,
-			dayNamesMin : textElements.dayNamesMin
-		});
-		// $( "#datepicker" + number ).datepicker("show");
+		console.log('Datepicker');
+		//$(id).datepicker({});
+		// $(id).datepicker({
+		// 	dateFormat: "dd.mm.yy",
+		// 	// Min date: tomorrow
+		// 	minDate: (number === "2" ? new Date( (DateHandler.getCurrentTimestamp() + 86400) * 1000 ) : null),
+		// 	monthNames : textElements.monthNames,
+		// 	monthNamesShort : textElements.monthNamesShort,
+		// 	dayNames: textElements.dayNames,
+		// 	dayNamesShort : textElements.dayNamesShort,
+		// 	dayNamesMin : textElements.dayNamesMin
+		// });
+		//$(id).datepicker("show");
 	}
 }

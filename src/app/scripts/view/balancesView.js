@@ -1,3 +1,5 @@
+const {timestampToFilename, dateToTimestamp} = require("../utils/dateHandler");
+
 const ChartHandler = require(__dirname + '/../utils/chartHandler.js');
 const InputHandler = require(__dirname + '/../utils/inputHandler.js');
 const View = require(__dirname + '/view.js');
@@ -67,83 +69,34 @@ module.exports = class BalancesView extends View {
 			params: [['type', 'earning'], ['type', 'spending']]
 		};
 
-		let files = this.storage.getJsonFiles();
-		files.forEach(file => {
+		// TODO: Check if dates are valid, handle empty inputs (they are valid!)
 
+		let start = timestampToFilename(dateToTimestamp(
+			$('#dateFromDay').val(),
+			$('#dateFromMonth').val(),
+			$('#dateFromYear').val())
+		);
+		let end = timestampToFilename(dateToTimestamp(
+			$('#dateToDay').val(),
+			$('#dateToMonth').val(),
+			$('#dateToYear').val())
+		);
+
+		let data = [];
+		this.storage.getJsonFiles().forEach(file => {
+			if (start.split('.').reverse() <= file.split('.').reverse()
+					&& end.split('.').reverse() >= file.split('.').reverse()) {
+				data = this.storage.getData(file, quest).filter(e => {
+					return (!amountFrom || amountFrom <= e.amount) && (!amountTo || e.amount <= amountTo);
+				}).concat(data);
+			}
 		});
 
-		$(id).html('');
+		let total = data.reduce((prev, curr) => prev + parseFloat(curr.amount), 0);
+
+		$(id).html(this.elt('center', {}, total.toString()));
 
 		return;
-			// Find out in which files we want to search.
-			// Date selected?
-			if ( startDate !== null && endDate !== null ) {
-			// Get start and end date as a file name (reversed file name).
-			var startDateFileName = startDate.getFullYear() + "." +
-							((startDate.getMonth() + 1) < 10 ?
-							"0" + (startDate.getMonth() + 1) :
-							(startDate.getMonth() + 1));
-			var endDateFileName = endDate.getFullYear() + "." +
-							((endDate.getMonth() + 1) < 10 ?
-							"0" + (endDate.getMonth() + 1) :
-							(endDate.getMonth() + 1));
-			// For comparing, we need to reverse file names.
-			var allFiles = getJsonFiles();
-			for ( var i = 0; i < allFiles.length; i++ ) {
-			// Reverse file name.
-			var tmp = allFiles[i].split( "." )[1] + "." + allFiles[i].split( "." )[0];
-			// Check if the file is in the given range
-			// (Note: This will only filter months and years).
-			if ( startDateFileName <= tmp && endDateFileName >= tmp ) {
-			files.push( allFiles[i] );
-			}
-			}
-			}
-			// No date filter? Apply the standard range (current month).
-			else {
-			// Returns the current file (without .json ending).
-			files.push( getCurrentFilename().substring( 0, getCurrentFilename().lastIndexOf( "." ) ) );
-			}
-			// Get all the matching data from every available file.
-			var data = [];
-			for ( var i = 0; i < files.length; i++ ) {
-			// Append new data to the data we already found.
-			data = getData( files[i] + ".json", quest ).concat( data );
-			}
-			// Filter the data again.
-			var newData = [];
-			var totalSum = 0;
-			for ( var i = 0; i < data.length; i++ ) {
-			// Amount not within the specified range? Continue without pushing the data.
-			// Minimum amount exists?
-			if ( amountFrom.length > 0 && parseFloat( amountFrom ) > data[i].amount ) {
-			continue;
-			}
-			// Maximum amount exists?
-			if ( amountTo.length > 0 && parseFloat( amountTo ) < data[i].amount ) {
-			continue;
-			}
-			// Date not within the specified range? Continue without pushing the data.
-			// Start date exists?
-			if ( startDate !== null && startDate.getMonth() === new Date( data[i].date * 1000 ).getMonth()
-							&& startDate.getFullYear() === new Date( data[i].date * 1000 ).getFullYear() ) {
-			if ( startDate.getDate() > new Date( data[i].date * 1000 ).getDate() ) {
-			continue;
-			}
-			}
-			// End date exists?
-			if ( endDate !== null && endDate.getMonth() === new Date( data[i].date * 1000 ).getMonth() 
-							&& endDate.getFullYear() === new Date( data[i].date * 1000 ).getFullYear()) {
-			if ( endDate.getDate() < new Date( data[i].date * 1000 ).getDate() ) {
-			continue;
-			}
-			}
-			// If we passed the filters above, we can push the data.
-			newData.push( data[i] );
-			totalSum += data[i].amount;
-			}
-			// Save the filtered data.
-			data = newData;
 			// Data exists?
 			if ( data.length > 0 ) {
 			// Display the real content. Display a graph?

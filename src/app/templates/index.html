@@ -146,14 +146,22 @@
 								<label lang="de" class="input-group-text" for="dateFrom">Startdatum</label>
 								<label lang="en" class="input-group-text" for="dateFrom">Start Date</label>
 							</div>
-							<input class="form-control" type="text" id="dateFrom">
+							<input type="number" placeholder="YYYY" id="dateFromYear" size="4" min="1970" class="form-control">
+							<input type="number" placeholder="MM" id="dateFromMonth" size="2" min="1" max="12" class="form-control">
+							<input type="number" placeholder="DD" id="dateFromDay" size="2" min="1" max="31" class="form-control">
+							<button class="form-control" onclick="startup.view.createDatepicker('dateFrom')">&#x1F4C5;</button>
+							<input type="hidden" id="dateFrom">
 						</div>
 						<div class="input-group mb-2" style="max-width: 500px;">
 							<div class="input-group-prepend">
 								<label lang="de" class="input-group-text" for="dateTo">Enddatum</label>
 								<label lang="en" class="input-group-text" for="dateTo">End Date</label>
 							</div>
-							<input class="form-control" type="text" id="dateTo">
+							<input type="number" placeholder="YYYY" id="dateToYear" size="4" min="1970" class="form-control">
+							<input type="number" placeholder="MM" id="dateToMonth" size="2" min="1" max="12" class="form-control">
+							<input type="number" placeholder="DD" id="dateToDay" size="2" min="1" max="31" class="form-control">
+							<button class="form-control" onclick="startup.view.createDatepicker('dateTo')">&#x1F4C5;</button>
+							<input type="hidden" id="dateTo">
 						</div>
 						<div class="input-group mb-2" style="max-width: 500px;">
 							<div class="input-group-prepend">
@@ -180,8 +188,8 @@
 							<input class="form-control" type="text" id="catSearch">
 						</div>
 						<div class="text-right">
-							<button lang="de" class="btn btn-outline-dark" onclick="startup.view.displayOverview()">Aktualisieren</button>
-							<button lang="en" class="btn btn-outline-dark" onclick="startup.view.displayOverview()">Update</button>
+							<button lang="de" class="btn btn-dark" onclick="startup.view.displayOverview()">Aktualisieren</button>
+							<button lang="en" class="btn btn-dark" onclick="startup.view.displayOverview()">Update</button>
 						</div>
 					</div>
 				</div>
