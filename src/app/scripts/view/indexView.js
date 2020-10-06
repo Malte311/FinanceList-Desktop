@@ -40,7 +40,7 @@ module.exports = class IndexView extends View {
 			), ` ${budgetName}`));
 
 			let balance = earnings - spendings;
-			let percentage = earnings > 0 ? ((earnings - spendings) / earnings) * 100 : 100;
+			let percentage = balance > 0 ? ((earnings - spendings) / earnings) * 100 : 100;
 			let color = balance > 0 ? 'green' : (balance < 0 ? 'red' : 'gray');
 
 			$(id).append(this.template.progress(percentage, color, this.printNum(balance)));
@@ -96,7 +96,7 @@ module.exports = class IndexView extends View {
 			let amounts = data.map(t => t[1]); // Index 0: label, index 1: amount.
 			(new ChartHandler(this)).createChart(`#${type}`, data.map(t => t[0]), amounts);
 
-			let totalSum = this.printNum(amounts.reduce((prev, curr) => prev + curr, 0));
+			let totalSum = this.printNum(amounts.reduce((prev, curr) => prev + parseFloat(curr), 0));
 			$(id).append(this.elt('center', {},
 				`${this.textData['allTime' + this.capFirstLetter(type)]}: ${totalSum}`)
 			);

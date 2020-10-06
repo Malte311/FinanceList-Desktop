@@ -94,7 +94,7 @@ function activateDateRangePicker( id ) {
             {text: textElementsLocal[8],
                 dateStart: function() {
                     var date = DateHandler.timestampToString(JSON.parse(fs.readFileSync(
-                        readPreference( "path" ) + Path.sep() + getJsonFiles()[0] + ".json")[0].date).split( "." );
+                        readPreference( "path" ) + Path.sep() + getJsonFiles()[0] + ".json")[0].date).split( "." ));
                     return moment( date[2] + "-" + date[1] + "-" + date[0] )
                 },
                 dateEnd: function() {
@@ -247,62 +247,6 @@ function compare( s1, s2, n ) {
         s2 = parseFloat( s2 );
     }
     return s1 > s2;
-}
-
-/**
- * Lets the user choose the month for which an overview should be created.
- * After the selection, the user is navigated to the PDF view.
- */
-function chooseMonth() {
-    var content = textElements.chooseMonthText;
-    content += "<br><select class=\"w3-select\" id=\"monthSelect\">";
-    var jsonFiles = getJsonFiles();
-    var currentFileName = getCurrentFilename();
-    currentFileName = currentFileName.substring( 0, currentFileName.lastIndexOf( "." ) );
-
-    for ( var i = 0; i < jsonFiles.length; i++ ) {
-        if ( currentFileName === jsonFiles[i] ) {
-            content += "<option selected=\"selected\">" + jsonFiles[i] + "</option>";
-        }
-        else {
-            content += "<option>" + jsonFiles[i] + "</option>";
-        }
-    }
-    content += "</select>";
-
-    createDialog( textElements.chooseMonthTitle, content, function() {
-        window.location.href = './pdfview.html?month=' + $( "#monthSelect option:selected" ).text();
-    });
-}
-
-/**
- * Lets the user choose the year for which an overview should be created.
- * After the selection, the user is navigated to the PDF view.
- */
-function chooseYear() {
-	var content = textElements.chooseYearText + "<br><select class=\"w3-select\" id=\"yearSelect\">";
-    var jsonFiles = getJsonFiles();
-	var currentYear = getCurrentFilename();
-	currentYear = currentYear.substring( currentYear.indexOf( "." ) + 1, currentYear.lastIndexOf( "." ) );
-	var alreadySeen = [];
-
-	for ( var i = 0; i < jsonFiles.length; i++ ) {
-		var year = jsonFiles[i].substring(jsonFiles[i].lastIndexOf(".") + 1);
-
-		if ( !alreadySeen.includes(year) && year == currentYear ) {
-			content += "<option selected=\"selected\">" + year + "</option>";
-			alreadySeen.push( year );
-		}
-		else if ( !alreadySeen.includes(year) ) {
-			content += "<option>" + year + "</option>";
-			alreadySeen.push( year );
-		}
-	}
-	content += "</select>";
-
-	createDialog(textElements.chooseYearTitle, content, function() {
-		window.location.href = './pdfview.html?year=' + $( "#yearSelect option:selected" ).text();
-	});
 }
 
 /**

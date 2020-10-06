@@ -98,12 +98,6 @@ module.exports = class TransactDialogHandler {
 			category: $('#categoryInput').val().trim()
 		};
 
-		if (obj.type === 'earning') {
-			this.transact.addEarning(obj, autoAlloc && $('input[name="allocation"]:checked').val() === 'auto');
-		} else {
-			this.transact.addSpending(obj);
-		}
-
 		if ($(`#${this.view.lang}Automate`).prop('checked')) { // Recurring transaction
 			let endDate = -1;
 			if (!$(`#${this.view.lang}NoEndDate`).prop('checked')) {
@@ -120,6 +114,14 @@ module.exports = class TransactDialogHandler {
 			delete recObj.date;
 			
 			(new RecurrTrans(this.view.storage)).addRecurringTransaction(recObj);
+
+			return; // Transaction already added, so return early and avoid adding it a second time
+		}
+
+		if (obj.type === 'earning') {
+			this.transact.addEarning(obj, autoAlloc && $('input[name="allocation"]:checked').val() === 'auto');
+		} else {
+			this.transact.addSpending(obj);
 		}
 	}
 }

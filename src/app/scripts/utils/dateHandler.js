@@ -106,6 +106,8 @@ module.exports = class DateHandler {
 	 * 6 => one year (annual)
 	 */
 	static stepInterval(startDate, oldDate, interval) {
+		interval = parseInt(interval);
+
 		if (interval === 0 || interval === 1) {
 			return DateHandler.stepIntervalDays(oldDate, interval);
 		} else if (interval >= 2 && interval <= 6) {
@@ -123,6 +125,8 @@ module.exports = class DateHandler {
 	 * @return {number} The new data as a timestamp in seconds.
 	 */
 	static stepIntervalDays(oldDate, interval) {
+		interval = parseInt(interval);
+
 		if (interval !== 0 && interval !== 1) {
 			throw new Error(`Invalid interval! Given ${interval} but expected 0 or 1.`);
 		}
@@ -144,6 +148,8 @@ module.exports = class DateHandler {
 	 * @return {number} The new data as a timestamp in seconds.
 	 */
 	static stepIntervalMonths(startDate, oldDate, interval) {
+		interval = parseInt(interval);
+		
 		if (interval < 2 || interval > 6) {
 			throw new Error(`Invalid interval! Given ${interval} but must be between 2 and 6.`);
 		}

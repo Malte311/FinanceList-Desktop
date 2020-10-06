@@ -480,7 +480,6 @@ describe('Transact', function() {
 
 			transact.addTransferEntries('saving account', 'checking account', 15.5);
 
-			console.log("====>", jsonStorage.readJsonFile(`/tmp/financelist/${currentFile}`))
 			assert.deepStrictEqual(jsonStorage.readJsonFile(`/tmp/financelist/${currentFile}`).map(e => {
 				delete e.date;
 				return e;

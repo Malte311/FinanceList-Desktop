@@ -109,7 +109,7 @@ module.exports = class Transact {
 
 		array.forEach((budget, index) => { // budget = [name, amount]
 			if (budget[0] === budgetName) {
-				array[index][1] = Math.round((array[index][1] + valueToAdd) * 100) / 100;
+				array[index][1] = Math.round((parseFloat(array[index][1]) + parseFloat(valueToAdd)) * 100) / 100;
 			}
 		});
 

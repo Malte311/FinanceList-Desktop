@@ -1,4 +1,6 @@
-const BudgetDialogHandler = require("../utils/dialog/budgetDialogHandler.js");
+const BudgetDialogHandler = require(__dirname + '/../utils/dialog/budgetDialogHandler.js');
+
+const {timestampToString} = require(__dirname + '/../utils/dateHandler.js');
 
 const View = require(__dirname + '/view.js');
 
@@ -15,6 +17,7 @@ module.exports = class BalancesView extends View {
 	 */
 	updateView() {
 		this.displayBudgets('#currentBudgets');
+		this.displayRecurrTrans('#recurrTrans');
 	}
 
 	/**
@@ -56,6 +59,40 @@ module.exports = class BalancesView extends View {
 		let overallBalance = budgets.map(b => b[1]).reduce((prev, curr) => prev + curr, 0);
 		let overallLabel = `${this.textData['overallBalance']}: ${this.printNum(overallBalance)}`;
 		$(id).append(this.elt('center', {}, overallLabel));
+	}
+
+	/**
+	 * Displays all recurring transactions in a simple overview.
+	 * 
+	 * @param {string} id The id of the dom element which contains the
+	 * recurring transactions display.
+	 */
+	displayRecurrTrans(id) {
+		let tableRows = [[
+			this.textData['name'], this.textData['amount'], this.textData['type'],
+			this.textData['budget'], this.textData['category'], this.textData['nextExecution'],
+			this.textData['interval'], this.textData['endDate'], this.textData['edit'],
+			this.textData['delete']
+		]];
+
+    	// "recurringTransactionsContent": ["earning", "spending", "days", "No recurring transactions available."],
+
+		this.storage.readMainStorage('recurring').forEach(t => {
+			let allocOn = t.allocationOn;
+			tableRows.push([
+				t.name, this.printNum(t.amount), t.type, allocOn ? '\u2013' : t.budget,
+				t.category, timestampToString(t.nextDate), this.textData['intervalNames'][t.interval],
+				t.endDate > 0 ? timestampToString(t.endDate) : '\u2013',
+				this.elt('span', {}, this.template.icon('edit', 'blue')),
+				this.elt('span', {}, this.template.icon('delete', 'red'))
+			]);
+		});
+
+		if (tableRows.length > 1) {
+			$(id).html(this.template.table(tableRows));
+		} else {
+			$(id).html(this.textData['noRecurrTrans']);
+		}
 	}
 
 	/**
