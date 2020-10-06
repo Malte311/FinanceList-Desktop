@@ -1,4 +1,4 @@
-const {createUniqueTimestamp} = require(__dirname + '/../utils/dateHandler.js');
+const {getCurrentTimestamp, createUniqueTimestamp} = require(__dirname + '/../utils/dateHandler.js');
 
 /**
  * Handles (non recurring) transactions.
@@ -74,6 +74,25 @@ module.exports = class Transact {
 
 		this.updateMainStorageArr('budgets', spendingObj.budget, -spendingObj.amount);
 		this.updateMainStorageArr('allTimeSpendings', spendingObj.budget, spendingObj.amount);
+	}
+
+	/**
+	 * Transfers money from one budget to another by adding transfer entries for them.
+	 * 
+	 * @param {string} from The budget from which money should be transferred.
+	 * @param {string} to The budget to which money should be transferred.
+	 * @param {number} amount The amount which should be transferred.
+	 */
+	addTransferEntries(from, to, amount) {
+		let obj = {
+			date: createUniqueTimestamp(getCurrentTimestamp(), this.storage),
+			name: 'Transfer',
+			amount: amount,
+			category: 'Transfer'
+		};
+
+		this.addEarningSingle(Object.assign({type: 'earning', budget: to}, obj));
+		this.addSpending(Object.assign({type: 'spending', budget: from}, obj));
 	}
 
 	/**

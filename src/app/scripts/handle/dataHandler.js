@@ -19,7 +19,7 @@ module.exports = class DataHandler {
 		return this.data.storage.getData(file, {
 			connector: 'and',
 			params: [['type', type], ['budget', budgetName]]
-		}).reduce((prev, curr) => prev + curr.amount, 0);
+		}).reduce((prev, curr) => prev + parseFloat(curr.amount), 0);
 	}
 
 	/**

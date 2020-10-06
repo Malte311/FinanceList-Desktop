@@ -48,6 +48,7 @@ module.exports = {
 	'settings': 'Settings',
 	'spending': 'Spending',
 	'totalSum': 'Total sum',
+	'transfer': 'Transfer money',
 	'updateAvailable': 'Update available',
 	'updateMessage': 'There is a new version of FinanceList-Desktop available!',
 	'undo': 'Undo',

@@ -443,6 +443,83 @@ describe('Transact', function() {
 		});
 	});
 
+	describe('#addTransferEntries()', function() {
+		it('should transfer money correctly', function() {
+			jsonStorage.writeMainStorage('budgets', [['checking account', 100], ['saving account', 100]]);
+			jsonStorage.writeMainStorage('allTimeEarnings', [['checking account', 200], ['saving account', 150]]);
+			jsonStorage.writeMainStorage('allTimeSpendings', [['checking account', 100], ['saving account', 50]]);
+			jsonStorage.writeMainStorage('allocation', [['checking account', 100], ['saving account', 0]]);
+
+			transact.addTransferEntries('checking account', 'saving account', 15.5);
+
+			let currentFile = jsonStorage.getCurrentFilename();
+			assert.deepStrictEqual(jsonStorage.readJsonFile(`/tmp/financelist/${currentFile}`).map(e => {
+				delete e.date;
+				return e;
+			}), [{
+					name: 'Transfer',
+					amount: 15.5,
+					category: 'Transfer',
+					type: 'earning',
+					budget: 'saving account'
+				}, {
+					name: 'Transfer',
+					amount: 15.5,
+					category: 'Transfer',
+					type: 'spending',
+					budget: 'checking account'
+				}
+			]);
+
+			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], Math.round((100 - 15.5) * 100) / 100);
+			assert.strictEqual(jsonStorage.readMainStorage('budgets')[1][1], Math.round((100 + 15.5) * 100) / 100);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 200);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[1][1], Math.round((150 + 15.5) * 100) / 100);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], Math.round((100 + 15.5) * 100) / 100);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[1][1], 50);
+
+			transact.addTransferEntries('saving account', 'checking account', 15.5);
+
+			console.log("====>", jsonStorage.readJsonFile(`/tmp/financelist/${currentFile}`))
+			assert.deepStrictEqual(jsonStorage.readJsonFile(`/tmp/financelist/${currentFile}`).map(e => {
+				delete e.date;
+				return e;
+			}), [{
+					name: 'Transfer',
+					amount: 15.5,
+					category: 'Transfer',
+					type: 'earning',
+					budget: 'saving account'
+				}, {
+					name: 'Transfer',
+					amount: 15.5,
+					category: 'Transfer',
+					type: 'spending',
+					budget: 'checking account'
+				}, {
+					name: 'Transfer',
+					amount: 15.5,
+					category: 'Transfer',
+					type: 'earning',
+					budget: 'checking account'
+				}, {
+					name: 'Transfer',
+					amount: 15.5,
+					category: 'Transfer',
+					type: 'spending',
+					budget: 'saving account'
+				}
+			]);
+
+			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], 100);
+			assert.strictEqual(jsonStorage.readMainStorage('budgets')[1][1], 100);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], Math.round((200 + 15.5) * 100) / 100);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[1][1], Math.round((150 + 15.5) * 100) / 100);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], Math.round((100 + 15.5) * 100) / 100);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[1][1], Math.round((50 + 15.5) * 100) / 100);
+		});
+	});
+
 	describe('#updateMainStorageArr()', function() {
 		it('should update the budgets array correctly', function() {
 			transact.updateMainStorageArr('budgets', 'checking account', 50);

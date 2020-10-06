@@ -44,7 +44,7 @@ module.exports = class Template {
 	 */
 	table(rows) {
 		return this.view.elt('table', {
-			class: 'table table-striped'
+			class: 'table table-striped table-bordered table-hover table-primary'
 		}, ...rows.map(row =>
 			this.view.elt('tr', {}, ...row.map(elem =>
 				this.view.elt('td', {}, elem)))));

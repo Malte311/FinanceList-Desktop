@@ -13,8 +13,6 @@ module.exports =
     "rangeDatePickerPreset": ["Heute", "Gestern", "Letzte 7 Tage", "Letzte Woche (Mo-So)", "Aktueller Monat", "Letzter Monat", "Aktuelles Jahr", "Letztes Jahr", "Gesamter Zeitraum"],
     "invalidInput": "Ung&uuml;ltige Eingabe!",
     "noTransactions": "Es wurden keine Transaktionen gefunden!",
-    "transferDialogTextElements": ["Hier k&ouml;nnen Sie Geld zwischen Ihren Konten &uuml;bertragen.", "Von", "Nach", "Betrag"],
-    "transfer": "Geld \u00fcbertragen",
     "totalSum": "Gesamtsumme",
     "monthNames": [ "Januar","Februar","März","April","Mai","Juni", "Juli","August","September","Oktober","November","Dezember" ],
     "monthNamesShort": [ "Jan","Feb","Mär","Apr","Mai","Jun", "Jul","Aug","Sep","Okt","Nov","Dez" ],

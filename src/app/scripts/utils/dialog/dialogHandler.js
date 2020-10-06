@@ -1,6 +1,7 @@
 const AllocationDialogHandler = require(__dirname + '/allocationDialogHandler.js');
 const BudgetDialogHandler = require(__dirname + '/budgetDialogHandler.js');
 const TransactDialogHandler = require(__dirname + '/transactDialogHandler.js');
+const TransferDialogHandler = require(__dirname + '/transferDialogHandler.js');
 
 /**
  * Class for handling all kinds of dialogs.
@@ -24,6 +25,9 @@ module.exports = class DialogHandler {
 					break;
 				case 'btnAddTransact':
 					(new TransactDialogHandler(dialogHandler.view)).addTransaction();
+					break;
+				case 'btnTransfer':
+					(new TransferDialogHandler(dialogHandler.view)).execTransfer();
 					break;
 				case 'btnSetAlloc':
 					(new AllocationDialogHandler(dialogHandler.view)).setAllocation();
