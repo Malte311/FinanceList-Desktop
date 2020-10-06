@@ -58,29 +58,39 @@
 
 		<div class="tab-content" id="myTabContent">
 			<div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
-				<h3 lang="de"><i class="fa fa-arrow-right text-success"></i> Monatlicher &Uuml;berschuss</h3>
-				<h3 lang="en"><i class="fa fa-arrow-right text-success"></i> Monthly surplus</h3>
+				<h3 lang="de"><i class="fas fa-credit-card text-primary"></i> Konten&uuml;bersicht</h3>
+				<h3 lang="en"><i class="fas fa-credit-card text-primary"></i> Budget overview</h3>
+				<div id="currentBudgets"></div>
+				<div>
+					<button lang="de" type="button" id="btnAddBudget" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Konto hinzuf&uuml;gen</button>
+					<button lang="en" type="button" id="btnAddBudget" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Add budget</button>
+					<button lang="de" type="button" id="btnAddTransact" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Eintrag hinzuf&uuml;gen</button>
+					<button lang="en" type="button" id="btnAddTransact" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Add transaction</button>
+					<button lang="de" type="button" id="btnSetAlloc" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Automatische Aufteilung</button>
+					<button lang="en" type="button" id="btnSetAlloc" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Automated allocation</button>
+					<button type="button" id="btnTransfer" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Transfer</button>
+				</div>
+				<hr style="border-color:black;">
+
+				<h3 lang="de"><i class="fas fa-redo text-warning"></i> Wiederkehrende Transaktionen</h3>
+				<h3 lang="en"><i class="fas fa-redo text-warning"></i> Recurring transactions</h3>
+				<div id="recurrTrans"></div>
+				<hr style="border-color:black;">
+
+				<h3 lang="de"><i class="fas fa-hand-holding-usd text-success"></i> Monatlicher &Uuml;berschuss</h3>
+				<h3 lang="en"><i class="fas fa-hand-holding-usd text-success"></i> Monthly surplus</h3>
 				<div id="currentBalances"></div>
 				<hr style="border-color:black;">
 				
-				<h3 lang="de"><i class="fa fa-arrow-right text-success"></i> K&uuml;rzliche Ausgaben</h3>
-				<h3 lang="en"><i class="fa fa-arrow-right text-success"></i> Recent spendings</h3>
+				<h3 lang="de"><i class="fas fa-donate text-success"></i> K&uuml;rzliche Ausgaben</h3>
+				<h3 lang="en"><i class="fas fa-donate text-success"></i> Recent spendings</h3>
 				<div id="recentSpendings"></div>
 				<hr style="border-color:black;">
-				
-				<h3 lang="de"><i class="fa fa-arrow-right text-success"></i> Gesamtausgaben</h3>
-				<h3 lang="en"><i class="fa fa-arrow-right text-success"></i> All time spendings</h3>
-				<div id="allTimeSpendings"></div>
-				<hr style="border-color:black;">
 
-				<h3 lang="de"><i class="fa fa-arrow-right text-success"></i> K&uuml;rzliche Einnahmen</h3>
-				<h3 lang="en"><i class="fa fa-arrow-right text-success"></i> Recent earnings</h3>
+				<h3 lang="de"><i class="fas fa-donate text-success"></i> K&uuml;rzliche Einnahmen</h3>
+				<h3 lang="en"><i class="fas fa-donate text-success"></i> Recent earnings</h3>
 				<div id="recentEarnings"></div>
 				<hr style="border-color:black;">
-
-				<h3 lang="de"><i class="fa fa-arrow-right text-success"></i> Gesamteinnahmen</h3>
-				<h3 lang="en"><i class="fa fa-arrow-right text-success"></i> All time earnings</h3>
-				<div id="allTimeEarnings"></div>
 			</div>
 
 			<div class="tab-pane fade" id="balances" role="tabpanel" aria-labelledby="balances-tab">
@@ -104,46 +114,35 @@
 						</div>
 					</div>
 				</div>
-
-				<h3 lang="de"><i class="fas fa-credit-card text-primary"></i> Konten&uuml;bersicht</h3>
-				<h3 lang="en"><i class="fas fa-credit-card text-primary"></i> Budget overview</h3>
-				<div id="currentBudgets"></div>
-				<div>
-					<button lang="de" type="button" id="btnAddBudget" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Konto hinzuf&uuml;gen</button>
-					<button lang="en" type="button" id="btnAddBudget" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Add budget</button>
-					<button lang="de" type="button" id="btnAddTransact" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Eintrag hinzuf&uuml;gen</button>
-					<button lang="en" type="button" id="btnAddTransact" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Add transaction</button>
-					<button lang="de" type="button" id="btnSetAlloc" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Automatische Aufteilung</button>
-					<button lang="en" type="button" id="btnSetAlloc" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Automated allocation</button>
-					<button type="button" id="btnTransfer" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">Transfer</button>
-				</div>
-				<hr style="border-color:black;">
-
 				<h3 lang="de"><i class="fas fa-search-plus text-info"></i> Detail&uuml;bersicht</h3>
 				<h3 lang="en"><i class="fas fa-search-plus text-info"></i> Detailed overview</h3>
                 <div id="mainContentControls"></div>
 				<div id="mainContent"></div>
 				<hr style="border-color:black;">
 
-				<h3 lang="de"><i class="fas fa-redo text-warning"></i> Wiederkehrende Transaktionen</h3>
-				<h3 lang="en"><i class="fas fa-redo text-warning"></i> Recurring transactions</h3>
-				<div id="recurrTrans"></div>
+				<h3 lang="de"><i class="fa fa-arrow-right text-success"></i> Gesamtausgaben</h3>
+				<h3 lang="en"><i class="fa fa-arrow-right text-success"></i> All time spendings</h3>
+				<div id="allTimeSpendings"></div>
 				<hr style="border-color:black;">
+				
+				<h3 lang="de"><i class="fa fa-arrow-right text-success"></i> Gesamteinnahmen</h3>
+				<h3 lang="en"><i class="fa fa-arrow-right text-success"></i> All time earnings</h3>
+				<div id="allTimeEarnings"></div>
 			</div>
 
 			<div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
 				<h3 lang="de"><i class="fas fa-folder text-warning"></i> Dateipfad</h3>
 				<h3 lang="en"><i class="fas fa-folder text-warning"></i> File path</h3>
 				<div>
-					<button onclick="startup.view.updateFilepath();" id="btnCurrentPath"></button>
+					<button class="btn btn-outline-primary" onclick="startup.view.updateFilepath();" id="btnCurrentPath"></button>
 				</div>
 				<hr style="border-color:black;">
 
-				<h3 lang="de"><i class="far fa-money-bill-alt text-success"></i> Währung</h3>
-				<h3 lang="en"><i class="far fa-money-bill-alt text-success"></i> Currency</h3>
+				<h3 lang="de"><i class="far fa-money-bill-alt text-primary"></i> Währung</h3>
+				<h3 lang="en"><i class="far fa-money-bill-alt text-primary"></i> Currency</h3>
 				<div>
 					<div class="btn-group">
-						<button type="button" id="btnCurrentCurrency" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<button type="button" id="btnCurrentCurrency" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						</button>
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="#" onclick="startup.view.updatePreference('currency', 'euro');">
@@ -152,8 +151,11 @@
 							<a class="dropdown-item" href="#" onclick="startup.view.updatePreference('currency', 'dollar');">
 								<i class="fas fa-dollar-sign"></i> Dollar
 							</a>
-							<a class="dropdown-item" href="#" onclick="startup.view.updatePreference('currency', 'pound');">
+							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('currency', 'pound');">
 								<i class="fas fa-pound-sign"></i> Pfund
+							</a>
+							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('currency', 'pound');">
+								<i class="fas fa-pound-sign"></i> Pound
 							</a>
 						</div>
 					</div>
@@ -164,7 +166,7 @@
 				<h3 lang="en"><i class="fas fa-chart-pie text-danger"></i> Chart type</h3>
 				<div>
 					<div class="btn-group">
-						<button type="button" id="btnCurrentChartType" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<button type="button" id="btnCurrentChartType" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						</button>
 						<div class="dropdown-menu">
 							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'pie');">
@@ -351,18 +353,6 @@
 									here if you want to.
 								</p>
 						</ul>
-					</p>
-
-					<h4 lang="de"> PDF Export </h4>
-					<h4 lang="en"> PDF Export </h4>
-					<p lang="de">
-						Unten auf der Bilanzen Seite befindet sich auch die M&ouml;glichkeit,
-						einen Monatsbericht (f&uuml;r einen beliebigen Monat) im PDF-Format
-						herunterzuladen.
-					</p>
-					<p lang="en">
-						You can download a monthly overview (for an arbitrary month)
-						at the bottom of the balances page as a PDF-file.
 					</p>
 				</div>
 				<hr style="border-color:black;">

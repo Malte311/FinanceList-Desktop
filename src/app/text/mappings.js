@@ -2,7 +2,7 @@ module.exports = {
 	'arrowright': 'fa fa-arrow-right',
 	'black': 'dark',
 	'blue': 'primary',
-	'creditcard': 'fas fa-credit-card',
+	'creditcard': 'far fa-credit-card',
 	'delete': 'fas fa-times',
 	'dollar': '\u0024',
 	'edit': 'fas fa-edit',

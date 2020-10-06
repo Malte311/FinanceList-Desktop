@@ -33,12 +33,17 @@ module.exports = class SettingsView extends View {
 		let {dialog} = require('electron').remote;
 
 		let oldPath = this.storage.readPreference('path');
-		let newPath = dialog.showOpenDialog({properties: ['openDirectory']});
-		if (newPath && newPath[0] !== oldPath) {
-			Path.moveFiles(oldPath, newPath[0]);
-
-			this.updatePreference('path', newPath[0]);
-		}
+		dialog.showOpenDialog({properties: ['openDirectory']}).then(newPath => {
+			if (newPath.filePaths && newPath.filePaths[0] !== oldPath) {
+				Path.moveJsonFiles(oldPath, newPath.filePaths[0], success => {
+					if (!success) {
+						// TODO
+					} else {
+						this.updatePreference('path', newPath.filePaths[0]);
+					}
+				});
+			}
+		});
 	}
 
 	/**
