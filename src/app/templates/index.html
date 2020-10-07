@@ -204,36 +204,24 @@
 				<div id="mainContent"></div>
 				<hr style="border-color:black;">
 				<div class="mb-2">
-					<h3 lang="de"><i class="fas fa-chart-pie text-danger"></i> Graphen</h3>
-					<h3 lang="en"><i class="fas fa-chart-pie text-danger"></i> Graphs</h3>
-					<div class="btn-group">
-						<button type="button" id="btnCurrentChartType" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						</button>
-						<div class="dropdown-menu">
-							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'pie');">
-								Kreisdiagramm
-							</a>
-							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'pie');">
-								Pie chart
-							</a>
-							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'line');">
-								Liniendiagramm
-							</a>
-							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'line');">
-								Line chart
-							</a>
-							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'bar');">
-								Balkendiagramm
-							</a>
-							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'bar');">
-								Bar chart
-							</a>
-							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'doughnut');">
-								Ringdiagramm
-							</a>
-							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'doughnut');">
-								Doughnut chart
-							</a>
+					<h3 lang="de"><i class="fas fa-chart-pie text-danger"></i> Graph</h3>
+					<h3 lang="en"><i class="fas fa-chart-pie text-danger"></i> Graph</h3>
+					<div class="alert alert-primary mb-2" role="alert" style="max-width: 550px;">
+						<div class="input-group mt-2 mb-2" style="max-width: 500px;">
+							<div class="input-group-prepend">
+								<label lang="de" class="input-group-text" for="chartTypeSelect">Diagrammart</label>
+								<label lang="en" class="input-group-text" for="chartTypeSelect">Chart Type</label>
+							</div>
+							<select class="form-control" id="chartTypeSelect">
+								<option lang="de" value="pie">Kreisdiagramm</option>
+								<option lang="en" value="pie">Pie Chart</option>
+								<option lang="de" value="line">Liniendiagramm</option>
+								<option lang="en" value="line">Line Chart</option>
+								<option lang="de" value="bar">Balkendiagramm</option>
+								<option lang="en" value="bar">Bar Chart</option>
+								<option lang="de" value="doughnut">Ringdiagramm</option>
+								<option lang="en" value="doughnut">Doughnut Chart</option>
+							</select>
 						</div>
 					</div>
 					<canvas id="graphCanvas"></canvas>

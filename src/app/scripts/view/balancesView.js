@@ -40,7 +40,11 @@ module.exports = class BalancesView extends View {
 		$('#nameSearch').autocomplete({source: this.storage.readMainStorage('availableNames')});
 		$('#catSearch').autocomplete({source: this.storage.readMainStorage('availableCategories')});
 
-		$('#btnCurrentChartType').text(this.textData[this.storage.readPreference('chartType')]);
+		//$(`#chartTypeSelect option[lang=${this.lang}][value=${this.storage.readPreference('chartType')}]`).prop('checked', true);
+		$('#chartTypeSelect').on('change', () => {
+			this.storage.storePreference('chartType', $('#chartTypeSelect option:selected').val());
+			this.displayOverview('#mainContent');
+		});
 	}
 
 	/**

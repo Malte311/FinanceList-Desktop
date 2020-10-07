@@ -6,18 +6,13 @@ const Chart = require('chart.js');
 module.exports = class ChartHandler {
 	constructor(view) {
 		this.colors = [
-			'rgba(255, 99, 132, 1)',
-			'rgba(0, 162, 235, 1)',
-			'rgba(255, 206, 86, 1)',
-			'rgba(75, 192, 192, 1)',
-			'rgba(153, 102, 255, 1)',
-			'rgba(255, 159, 64, 1)',
-			'rgba(255, 100, 170, 1)',
-			'rgba(255, 255, 102, 1)',
-			'rgba(80, 189, 255, 1)'
+			'rgba(0, 123, 255, 1)',
+			'rgba(40, 167, 69, 1)',
+			'rgba(255, 193, 7, 1)',
+			'rgba(220, 53, 69, 1)'
 		];
 		
-		this.colorSeparator = 'rgba(150, 255, 120, 1)';
+		this.colorSeparator = 'rgba(23, 162, 184, 1)';
 
 		this.view = view;
 	}
@@ -45,9 +40,9 @@ module.exports = class ChartHandler {
 				labels: labels,
 				datasets: [{
 					data: dataset,
-					backgroundColor: this.colors,
+					backgroundColor: this.colors.map(c => c.replace('1)', '0.3)')), // Opacity
 					borderColor: this.colors,
-					borderWidth: 0
+					borderWidth: 1
 				}]
 			},
 			options: {
