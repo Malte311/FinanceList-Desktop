@@ -70,37 +70,3 @@ function displayGraph( data ) {
     createChart( $( "#graphCanvas" )[0], labels, dataset, colors, colors,
                  readPreference( "chartType" ) );
 }
-
-function displayTable( data ) {
-    // Create the headings for the table.
-    var tableHeadingsText = textElements.mainContentTableHeadings;
-    var tableHeadingsHTML = "";
-    for ( var i = 0; i < tableHeadingsText.length; i++ ) {
-        tableHeadingsHTML += "<th onclick='sortTable(" + i + ")'><b>" + tableHeadingsText[i] + "</b></th>";
-	}
-	
-	let DateHandler = require('../scripts/utils/dateHandler.js');
-    // Get the content for the table.
-    var tableContentHTML = "";
-    for ( var j = 0; j < data.length; j++ ) {
-        var amount = data[j].amount.toFixed(2);
-		// Add the data to our table.
-        tableContentHTML += "<tr class=\"w3-hover-light-blue\">" +
-                            "<td>" + DateHandler.timestampToString( data[j].date ) + "</td>" +
-                            "<td>" + data[j].name + "</td>" +
-                            "<td>" + amount + getCurrencySign() + "</td>" +
-                            "<td>" + data[j].category + "</td>" +
-                            "<td>" + data[j].budget + "</td>" +
-                            "<td>" + (data[j].type == "earning" ?
-                                     textElements.earning :
-                                     textElements.spending) + "</td>" +
-                            "<td>" + "<span onclick=\"deleteEntry('" + data[j].date + "');\"" +
-                            "class=\"w3-button\">" +
-                            "<i class=\"fas fa-times w3-text-red\"></i></span></li>" +
-                            "</td></tr>";
-    }
-    // Display the table containing the data.
-    $( "#mainContent" ).html( "<br><table id='overviewTable' class=\"w3-table-all w3-round\">" +
-                              "<tr>" + tableHeadingsHTML + "</tr>" +
-                              tableContentHTML + "</table>" );
-}

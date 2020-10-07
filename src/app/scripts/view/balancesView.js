@@ -1,4 +1,4 @@
-const {timestampToFilename, dateToTimestamp} = require("../utils/dateHandler");
+const {timestampToFilename, dateToTimestamp, timestampToString} = require("../utils/dateHandler");
 
 const ChartHandler = require(__dirname + '/../utils/chartHandler.js');
 const InputHandler = require(__dirname + '/../utils/inputHandler.js');
@@ -34,6 +34,10 @@ module.exports = class BalancesView extends View {
 		$('#typeSelect #all').text(this.textData['allTypes']);
 		$('#nameSearch').prop('placeholder', this.textData['allTransactions']);
 		$('#catSearch').prop('placeholder', this.textData['allCategories']);
+
+		$('#dateToDay').val((new Date((new Date()).getFullYear(), (new Date()).getMonth() + 1, 0)).getDate());
+		['dateFromMonth', 'dateToMonth'].forEach(id => $(`#${id}`).val((new Date()).getMonth() + 1));
+		['dateFromYear', 'dateToYear'].forEach(id => $(`#${id}`).val((new Date()).getFullYear()));
 			
 		$('#nameSearch').autocomplete({source: this.storage.readMainStorage('availableNames')});
 		$('#catSearch').autocomplete({source: this.storage.readMainStorage('availableCategories')});
@@ -51,7 +55,11 @@ module.exports = class BalancesView extends View {
 		let cat = $('#catSearch').val();
 
 		let input = new InputHandler(this.storage);
-		if (!input.isValidAmount(amountFrom, true) || !input.isValidAmount(amountTo, true)) {
+		if (!input.isValidAmount(amountFrom, true) || !input.isValidAmount(amountTo, true)
+				|| (['dateFromDay', 'dateFromMonth', 'dateFromYear'].some(id => $(`#${id}`).val().trim() !== '') &&
+					!input.isValidDate($('#dateFromDay').val(), $('#dateFromMonth').val(), $('#dateFromYear').val()))
+				|| (['dateToDay', 'dateToMonth', 'dateToYear'].some(id => $(`#${id}`).val().trim() !== '') &&
+					!input.isValidDate($('#dateToDay').val(), $('#dateToMonth').val(), $('#dateToYear').val()))) {
 			return;
 		}
 
@@ -69,17 +77,21 @@ module.exports = class BalancesView extends View {
 			params: [['type', 'earning'], ['type', 'spending']]
 		};
 
-		// TODO: Check if dates are valid, handle empty inputs (they are valid!)
-
-		let start = timestampToFilename(dateToTimestamp(
-			$('#dateFromDay').val(),
-			$('#dateFromMonth').val(),
-			$('#dateFromYear').val())
+		let start = ['dateFromDay', 'dateFromMonth', 'dateFromYear'].every(id =>
+			$(`#${id}`).val().trim() === '') ? timestampToFilename((new Date('1970-01-01')).getTime() / 1000) :
+			timestampToFilename(dateToTimestamp(
+				$('#dateFromDay').val(),
+				$('#dateFromMonth').val(),
+				$('#dateFromYear').val()
+			)
 		);
-		let end = timestampToFilename(dateToTimestamp(
-			$('#dateToDay').val(),
-			$('#dateToMonth').val(),
-			$('#dateToYear').val())
+		let end = ['dateToDay', 'dateToMonth', 'dateToYear'].every(id =>
+			$(`#${id}`).val().trim() === '') ? timestampToFilename((new Date()).getTime() / 1000) :
+			timestampToFilename(dateToTimestamp(
+				$('#dateToDay').val(),
+				$('#dateToMonth').val(),
+				$('#dateToYear').val()
+			)
 		);
 
 		let data = [];
@@ -92,34 +104,25 @@ module.exports = class BalancesView extends View {
 			}
 		});
 
-		let total = data.reduce((prev, curr) => prev + parseFloat(curr.amount), 0);
+		if (data.length > 0) {
+			let total = data.reduce((prev, curr) => prev + parseFloat(curr.amount), 0);
+			let tableRows = [[
+				this.textData['date'], this.textData['name'], this.textData['amount'],
+				this.textData['category'], this.textData['budget'], this.textData['type'],
+				this.textData['delete']
+			]];
 
-		$(id).html(this.elt('center', {}, total.toString()));
+			data.forEach(d => tableRows.push([
+				timestampToString(d.date), d.name, this.printNum(d.amount), d.category,
+				d.budget, this.textData[d.type], this.template.icon('delete', 'red')
+			]));
 
-		return;
-			// Data exists?
-			if ( data.length > 0 ) {
-			// Display the real content. Display a graph?
-			if ( displayType === "graph" ) {
-			displayGraph( data );
-			}
-			// Display a table?
-			else if ( displayType === "table" ) {
-			displayTable( data );
-			}
-			totalSum = totalSum.toFixed(2);
-			$( '#mainContent' ).append(
-			"<br>" +
-			"<center>" +
-			textElements.totalSum + ": " + totalSum + getCurrencySign() +
-			"</center>"
-			);
-			}
-			// No data found?
-			else {
-			// Display a message that no data was found.
-			$( "#mainContent" ).html( "<center><i>" + textElements.noTransactions + "</i></center>" );
-			}
+			this.elt('center', {}, `${this.textData['totalSum']}: ${this.printNum(total)}`)
+			$(id).html(this.elt('div', {}, this.template.table(tableRows), this.elt('center', {},
+				`${this.textData['totalSum']}: ${this.printNum(total)}`)));
+		} else {
+			$(id).html(this.elt('center', {}, this.textData['noTransactions']));
+		}
 	}
 
 	/**
