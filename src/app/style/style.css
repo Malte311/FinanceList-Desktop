@@ -11,11 +11,11 @@
 	opacity: 0.4;
 }
 
-th {
+.tableHead {
 	cursor: pointer;
 }
 
-th:hover {
+.tableHead:hover {
 	color: #000!important;
 	background-color: #87CEEB!important;
 }

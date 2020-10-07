@@ -40,12 +40,13 @@ module.exports = class Template {
 	 * Returns a table of given rows.
 	 * 
 	 * @param {array} rows An array of strings representing the rows of the table.
+	 * @param {object} [props = {}] Object containing properties of the table.
 	 * @return {object} The table in form of a dom element.
 	 */
-	table(rows) {
-		return this.view.elt('table', {
+	table(rows, props = {}) {
+		return this.view.elt('table', Object.assign({
 			class: 'table table-striped table-bordered table-hover'
-		}, ...rows.map(row =>
+		}, props), ...rows.map(row =>
 			this.view.elt('tr', {}, ...row.map(elem =>
 				this.view.elt('td', {}, elem)))));
 	}

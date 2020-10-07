@@ -113,4 +113,51 @@ module.exports = class View {
 			monthNamesShort: this.textData['monthNamesShort'],
 		});
 	}
+
+	/**
+	 * Inspired by https://www.w3schools.com/howto/howto_js_sort_table.asp.
+	 * Sorts a table by a given column id.
+	 * 
+	 * @param {string} table The id of the table.
+	 * @param {number} n The number which specifies the column to sort by:
+	 * 0: Date
+	 * 1: Name
+	 * 2: Sum
+	 * 3: Category
+	 * 4: Budget
+	 * 5: Type
+	 */
+	sortTableByColumn(table, n) {
+		let rows = document.getElementById(table).rows, x, y,
+			shouldSwitch, dir = 'asc', switchCount = 0, switching = true;
+
+		while (switching) {
+			switching = false;
+
+			for (var i = 1; i < (rows.length - 1); i++) {
+				shouldSwitch = false;
+
+				x = rows[i].getElementsByTagName('TD')[n];
+				y = rows[i + 1].getElementsByTagName('TD')[n];
+
+				let a = n === 0 ? x.innerHTML.toLowerCase().split('.').reverse().join('.') :
+					(n === 2 ? parseFloat(x.innerHTML.toLowerCase()) : x.innerHTML.toLowerCase());
+				let b = n === 0 ? y.innerHTML.toLowerCase().split('.').reverse().join('.') :
+					(n === 2 ? parseFloat(y.innerHTML.toLowerCase()) : y.innerHTML.toLowerCase());
+				if ((dir === 'asc' && a > b) || (dir === 'desc' && b > a)) {
+					shouldSwitch = true;
+					break;
+				}
+			}
+
+			if (shouldSwitch) {
+				rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+				switching = true;
+				switchCount ++;
+			} else if (switchCount == 0 && dir === 'asc') {
+				dir = 'desc';
+				switching = true;
+			}
+		}
+	}
 }

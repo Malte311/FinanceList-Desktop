@@ -117,8 +117,16 @@ module.exports = class BalancesView extends View {
 				d.budget, this.textData[d.type], this.template.icon('delete', 'red')
 			]));
 
-			$(id).html(this.elt('div', {}, this.template.table(tableRows), this.elt('center', {},
-				`${this.textData['totalSum']}: ${this.printNum(total)}`)));
+			$(id).html(this.elt('div', {}, this.template.table(tableRows, {
+				id: 'overviewTable'
+			}), this.elt('center', {}, `${this.textData['totalSum']}: ${this.printNum(total)}`)));
+
+			$('#overviewTable').children().first().children().each((index, elem) => {
+				$(elem).addClass('tableHead');
+				if (index <= 5) {
+					$(elem).on('click', e => this.sortTableByColumn('overviewTable', index));
+				}
+			});
 
 			$(id).append(this.elt('canvas', {
 				id: 'graphCanvas'
