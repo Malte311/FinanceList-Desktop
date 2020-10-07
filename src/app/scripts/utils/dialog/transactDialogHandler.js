@@ -48,7 +48,12 @@ module.exports = class TransactDialogHandler {
 			$('#budgetSelect').append(new Option(budget[0], budget[0]));
 		});
 
-		$(`#${this.view.lang}AutoAl`).prop('checked', true); // Select auto allocation by default
+		if (this.view.storage.readMainStorage('allocationOn')) {
+			$(`#${this.view.lang}AutoAl`).prop('checked', true); // Select auto allocation by default
+		} else {
+			$(`#allocForm`).hide();
+			$(`#${this.view.lang}ManualAl`).prop('checked', true);
+		}
 
 		$('#nameInput').autocomplete({source: this.view.storage.readMainStorage('availableNames')});
 		$('#categoryInput').autocomplete({source: this.view.storage.readMainStorage('availableCategories')});

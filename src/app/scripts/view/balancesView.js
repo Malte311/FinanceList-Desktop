@@ -117,7 +117,6 @@ module.exports = class BalancesView extends View {
 				d.budget, this.textData[d.type], this.template.icon('delete', 'red')
 			]));
 
-			this.elt('center', {}, `${this.textData['totalSum']}: ${this.printNum(total)}`)
 			$(id).html(this.elt('div', {}, this.template.table(tableRows), this.elt('center', {},
 				`${this.textData['totalSum']}: ${this.printNum(total)}`)));
 		} else {
