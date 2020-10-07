@@ -203,15 +203,41 @@
 				</div>
 				<div id="mainContent"></div>
 				<hr style="border-color:black;">
-
-				<h3 lang="de"><i class="fa fa-arrow-right text-success"></i> Gesamtausgaben</h3>
-				<h3 lang="en"><i class="fa fa-arrow-right text-success"></i> All Time Spendings</h3>
-				<div id="allTimeSpendings"></div>
-				<hr style="border-color:black;">
-				
-				<h3 lang="de"><i class="fa fa-arrow-right text-success"></i> Gesamteinnahmen</h3>
-				<h3 lang="en"><i class="fa fa-arrow-right text-success"></i> All Time Earnings</h3>
-				<div id="allTimeEarnings"></div>
+				<div class="mb-2">
+					<h3 lang="de"><i class="fas fa-chart-pie text-danger"></i> Graphen</h3>
+					<h3 lang="en"><i class="fas fa-chart-pie text-danger"></i> Graphs</h3>
+					<div class="btn-group">
+						<button type="button" id="btnCurrentChartType" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						</button>
+						<div class="dropdown-menu">
+							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'pie');">
+								Kreisdiagramm
+							</a>
+							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'pie');">
+								Pie chart
+							</a>
+							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'line');">
+								Liniendiagramm
+							</a>
+							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'line');">
+								Line chart
+							</a>
+							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'bar');">
+								Balkendiagramm
+							</a>
+							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'bar');">
+								Bar chart
+							</a>
+							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'doughnut');">
+								Ringdiagramm
+							</a>
+							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'doughnut');">
+								Doughnut chart
+							</a>
+						</div>
+					</div>
+					<canvas id="graphCanvas"></canvas>
+				</div>
 			</div>
 
 			<div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
@@ -240,42 +266,6 @@
 							</a>
 							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('currency', 'pound');">
 								<i class="fas fa-pound-sign"></i> Pound
-							</a>
-						</div>
-					</div>
-				</div>
-				<hr style="border-color:black;">
-
-				<h3 lang="de"><i class="fas fa-chart-pie text-danger"></i> Diagrammart</h3>
-				<h3 lang="en"><i class="fas fa-chart-pie text-danger"></i> Chart Type</h3>
-				<div>
-					<div class="btn-group">
-						<button type="button" id="btnCurrentChartType" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						</button>
-						<div class="dropdown-menu">
-							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'pie');">
-								Kreisdiagramm
-							</a>
-							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'pie');">
-								Pie chart
-							</a>
-							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'line');">
-								Liniendiagramm
-							</a>
-							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'line');">
-								Line chart
-							</a>
-							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'bar');">
-								Balkendiagramm
-							</a>
-							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'bar');">
-								Bar chart
-							</a>
-							<a lang="de" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'doughnut');">
-								Ringdiagramm
-							</a>
-							<a lang="en" class="dropdown-item" href="#" onclick="startup.view.updatePreference('chartType', 'doughnut');">
-								Doughnut chart
 							</a>
 						</div>
 					</div>

@@ -18,8 +18,6 @@ module.exports = class BalancesView extends View {
 	updateView() {
 		this.displayOverviewControls();
 		this.displayOverview('#mainContent');
-		this.displayAllTimeChart('#allTimeSpendings', 'spending');
-		this.displayAllTimeChart('#allTimeEarnings', 'earning');
 	}
 
 	/**
@@ -41,6 +39,8 @@ module.exports = class BalancesView extends View {
 			
 		$('#nameSearch').autocomplete({source: this.storage.readMainStorage('availableNames')});
 		$('#catSearch').autocomplete({source: this.storage.readMainStorage('availableCategories')});
+
+		$('#btnCurrentChartType').text(this.textData[this.storage.readPreference('chartType')]);
 	}
 
 	/**
@@ -109,7 +109,7 @@ module.exports = class BalancesView extends View {
 			let tableRows = [[
 				this.textData['date'], this.textData['name'], this.textData['amount'],
 				this.textData['category'], this.textData['budget'], this.textData['type'],
-				this.textData['delete']
+				this.textData['edit']
 			]];
 
 			data.forEach(d => tableRows.push([
@@ -128,10 +128,6 @@ module.exports = class BalancesView extends View {
 				}
 			});
 
-			$(id).append(this.elt('canvas', {
-				id: 'graphCanvas'
-			}));
-
 			(new ChartHandler(this)).createChart(
 				'#graphCanvas',
 				data.map(d => d.name),
@@ -139,33 +135,6 @@ module.exports = class BalancesView extends View {
 			);
 		} else {
 			$(id).html(this.elt('center', {}, this.textData['noTransactions']));
-		}
-	}
-
-	/**
-	 * Displays a chart which visualizes all time transactions.
-	 * 
-	 * @param {string} id The id of the dom element in which the chart should appear.
-	 * @param {string} type The type of transactions we want to visualize (earning or spending).
-	 */
-	displayAllTimeChart(id, type) {
-		$(id).html(this.elt('canvas', {
-			id: type
-		}));
-		
-		let data = this.storage.readMainStorage(`allTime${this.capFirstLetter(type)}s`);
-		let amounts = data.map(t => t[1]); // Index 0: label, index 1: amount.
-		
-		if (amounts.some(amount => parseFloat(amount) > 0.00)) {
-			(new ChartHandler(this)).createChart(`#${type}`, data.map(t => t[0]), amounts);
-
-			let totalSum = this.printNum(amounts.reduce((prev, curr) => prev + parseFloat(curr), 0));
-			$(id).append(this.elt('center', {},
-				`${this.textData['allTime' + this.capFirstLetter(type)]}: ${totalSum}`)
-			);
-		}
-		else {
-			$(id).html(`${this.textData['no' + this.capFirstLetter(type)]}`);
 		}
 	}
 }
