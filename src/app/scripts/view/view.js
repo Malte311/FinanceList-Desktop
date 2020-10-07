@@ -92,20 +92,25 @@ module.exports = class View {
 	 * Creates a datepicker on a given dom element.
 	 * 
 	 * @param {string} id The id of the dom element.
+	 * @param {array} elems Array of three inputs (year, month, day) in which the chosen value
+	 * will be displayed.
+	 * @param {Date} [minDate = null] Minimum date which can be selected.
 	 */
-	createDatepicker(id) {
-		console.log('Datepicker');
-		//$(id).datepicker({});
-		// $(id).datepicker({
-		// 	dateFormat: "dd.mm.yy",
-		// 	// Min date: tomorrow
-		// 	minDate: (number === "2" ? new Date( (DateHandler.getCurrentTimestamp() + 86400) * 1000 ) : null),
-		// 	monthNames : textElements.monthNames,
-		// 	monthNamesShort : textElements.monthNamesShort,
-		// 	dayNames: textElements.dayNames,
-		// 	dayNamesShort : textElements.dayNamesShort,
-		// 	dayNamesMin : textElements.dayNamesMin
-		// });
-		//$(id).datepicker("show");
+	createDatepicker(id, elems, minDate = null) {
+		$(id).datepicker('dialog', `${$(elems[0]).val()}-${$(elems[1]).val()}-${$(elems[2]).val()}`,
+		function(v, o) {
+			$(elems[0]).val(o.selectedYear);
+			$(elems[1]).val(o.selectedMonth + 1);
+			$(elems[2]).val(o.selectedDay);
+		}, {
+			minDate: minDate,
+			dateFormat: "yy-mm-dd",
+			dayNames: this.textData['dayNames'],
+			dayNamesMin: this.textData['dayNamesMin'],
+			dayNamesShort: this.textData['dayNamesShort'],
+			firstDay: 1,
+			monthNames: this.textData['monthNames'],
+			monthNamesShort: this.textData['monthNamesShort'],
+		});
 	}
 }

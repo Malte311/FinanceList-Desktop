@@ -36,14 +36,6 @@ module.exports = class TransactDialogHandler {
 		['dateMonth', 'endDateMonth'].forEach(id => $(`#${id}`).val((new Date()).getMonth() + 1));
 		['dateDay', 'endDateDay'].forEach(id => $(`#${id}`).val((new Date()).getDate()));
 
-		// modal.find('.modal-body #dateInput').datepicker({
-		// 	autoclose: true,
-		// 	format: 'dd.mm.yyyy',
-		// 	language: 'de', // this.view.storage.readPreference('language')
-		// 	setDate: '31.03.2020', // DateHandler.timestampToString(DateHandler.getCurrentTimestamp())
-		// 	todayHighlight: true
-		// });
-
 		this.view.storage.readMainStorage('budgets').forEach(budget => {
 			$('#budgetSelect').append(new Option(budget[0], budget[0]));
 		});

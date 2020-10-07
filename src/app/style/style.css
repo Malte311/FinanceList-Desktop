@@ -70,10 +70,10 @@ th:hover {
 	text-align: right;
 }
 .ui-datepicker .ui-datepicker-prev:before {
-	content: "\e079";
+	content: "\2190";
 }
 .ui-datepicker .ui-datepicker-next:before {
-	content: "\e080";
+	content: "\2192";
 }
 .ui-datepicker .ui-icon {
 	display: none;
@@ -136,4 +136,8 @@ th:hover {
 }
 .ui-helper-hidden-accessible {
 	display: none;
+}
+
+.modal-open .ui-datepicker{
+	z-index: 2000!important;
 }

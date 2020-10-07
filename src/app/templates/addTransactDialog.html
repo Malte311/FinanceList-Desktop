@@ -54,7 +54,11 @@
 	<input type="number" placeholder="YYYY" id="dateYear" size="4" min="1970" class="form-control">
 	<input type="number" placeholder="MM" id="dateMonth" size="2" min="1" max="12" class="form-control">
 	<input type="number" placeholder="DD" id="dateDay" size="2" min="1" max="31" class="form-control">
-	<input class="form-control text-center" id="dateInput" value="&#x1F4C5;">
+	<button class="form-control"
+			onclick="startup.view.createDatepicker('#dateInput', ['#dateYear', '#dateMonth', '#dateDay'])">
+		&#x1F4C5;
+	</button>
+	<input type="hidden" id="dateInput">
 </div>
 <div id="dynamicDiv1" style="display: none;">
 	<hr>

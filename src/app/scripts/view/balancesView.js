@@ -119,6 +119,16 @@ module.exports = class BalancesView extends View {
 
 			$(id).html(this.elt('div', {}, this.template.table(tableRows), this.elt('center', {},
 				`${this.textData['totalSum']}: ${this.printNum(total)}`)));
+
+			$(id).append(this.elt('canvas', {
+				id: 'graphCanvas'
+			}));
+
+			(new ChartHandler(this)).createChart(
+				'#graphCanvas',
+				data.map(d => d.name),
+				data.map(d => parseFloat(d.amount).toFixed(2))
+			);
 		} else {
 			$(id).html(this.elt('center', {}, this.textData['noTransactions']));
 		}

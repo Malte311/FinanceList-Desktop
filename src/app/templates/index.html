@@ -149,7 +149,10 @@
 							<input type="number" placeholder="YYYY" id="dateFromYear" size="4" min="1970" class="form-control">
 							<input type="number" placeholder="MM" id="dateFromMonth" size="2" min="1" max="12" class="form-control">
 							<input type="number" placeholder="DD" id="dateFromDay" size="2" min="1" max="31" value="1" class="form-control">
-							<button class="form-control" onclick="startup.view.createDatepicker('dateFrom')">&#x1F4C5;</button>
+							<button class="form-control"
+									onclick="startup.view.createDatepicker('#dateFrom', ['#dateFromYear', '#dateFromMonth', '#dateFromDay'])">
+								&#x1F4C5;
+							</button>
 							<input type="hidden" id="dateFrom">
 						</div>
 						<div class="input-group mb-2" style="max-width: 500px;">
@@ -160,7 +163,12 @@
 							<input type="number" placeholder="YYYY" id="dateToYear" size="4" min="1970" class="form-control">
 							<input type="number" placeholder="MM" id="dateToMonth" size="2" min="1" max="12" class="form-control">
 							<input type="number" placeholder="DD" id="dateToDay" size="2" min="1" max="31" class="form-control">
-							<button class="form-control" onclick="startup.view.createDatepicker('dateTo')">&#x1F4C5;</button>
+							<button class="form-control"
+									onclick="startup.view.createDatepicker('#dateTo', ['#dateToYear', '#dateToMonth', '#dateToDay'],
+										['#dateFromYear', '#dateFromMonth', '#dateFromDay'].every(id => $(id).val().trim() !== '') ?
+											(new Date($('#dateFromYear').val(), $('#dateFromMonth').val() - 1, $('#dateFromDay').val())) : null)">
+								&#x1F4C5;
+							</button>
 							<input type="hidden" id="dateTo">
 						</div>
 						<div class="input-group mb-2" style="max-width: 500px;">

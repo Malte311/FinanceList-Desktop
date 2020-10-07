@@ -54,19 +54,3 @@ if ( transaction != null ) {
 	});
 }
 */
-
-function displayGraph( data ) {
-    // Create a canvas for our chart.
-    $( "#mainContent" ).html( "<br><canvas id=\"graphCanvas\"></canvas>" );
-    var dataset = [], labels = [];
-    // Get the dataset (amounts) and labels (names).
-    for ( var i = 0; i < data.length; i++ ) {
-        // Add the amount and name for our graph.
-        var amount = data[i].amount.toFixed(2);
-        dataset.push( amount );
-        labels.push( data[i].name );
-    }
-    // Now we can display the graph.
-    createChart( $( "#graphCanvas" )[0], labels, dataset, colors, colors,
-                 readPreference( "chartType" ) );
-}
