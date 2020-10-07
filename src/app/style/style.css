@@ -17,7 +17,7 @@
 
 .tableHead:hover {
 	color: #000!important;
-	background-color: #87CEEB!important;
+	background-color: rgba(0, 123, 255, 0.3)!important;
 }
 
 .ui-datepicker {

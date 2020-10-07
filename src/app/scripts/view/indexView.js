@@ -42,10 +42,12 @@ module.exports = class IndexView extends View {
 		let rows = budgets.map((b, index) => [
 			b[0], // Index 0: name of the budget.
 			this.printNum(b[1]), // Index 1: balance of the budget.
-			this.elt('span', {
-				onclick: () => (new BudgetDialogHandler(this)).renameBudget(b[0])
-			}, this.template.icon('edit', 'blue'), index === 0 ? '' : this.elt('span', {
-				onclick: () => (new BudgetDialogHandler(this)).deleteBudget(b[0])
+			this.elt('div', {}, this.elt('button', {
+				class: 'btn btn-outline-primary ml-3',
+				onclick: `(new BudgetDialogHandler(${this})).renameBudget('${b[0]}')` // TODO: Only one edit button
+			}, this.template.icon('edit', 'blue')), index === 0 ? '' : this.elt('button', {
+				class: 'btn btn-outline-primary',
+				onclick: (new BudgetDialogHandler(this)).deleteBudget(b[0])
 			}, this.template.icon('delete', 'red')))]);
 
 		if (this.storage.readMainStorage('allocationOn')) {
@@ -143,7 +145,9 @@ module.exports = class IndexView extends View {
 			let {timestampToString} = require(__dirname + '/../utils/dateHandler.js');
 			
 			$(id).append(this.template.table(data.map(d => [
-				this.template.toHtmlStr(this.template.icon('moneybill', 'green')) + d.name,
+				this.elt('div', {}, d.type === 'earning' ?
+					this.template.icon('cashregister', 'green') : this.template.icon('shoppingbag', 'red'),
+				d.name),
 				this.printNum(d.amount),
 				timestampToString(d.date)
 			]))); // Displays the table.

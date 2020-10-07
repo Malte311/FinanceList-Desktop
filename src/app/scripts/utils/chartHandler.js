@@ -53,9 +53,7 @@ module.exports = class ChartHandler {
 							return `${cD.labels[ttI.index]}: ${sum}`;
 						}
 					}
-				},
-				legend: {display: false},
-				display: false
+				}
 			}
 		});
 	}

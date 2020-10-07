@@ -40,7 +40,7 @@ module.exports = class BalancesView extends View {
 		$('#nameSearch').autocomplete({source: this.storage.readMainStorage('availableNames')});
 		$('#catSearch').autocomplete({source: this.storage.readMainStorage('availableCategories')});
 
-		//$(`#chartTypeSelect option[lang=${this.lang}][value=${this.storage.readPreference('chartType')}]`).prop('checked', true);
+		$(`#chartTypeSelect option[lang=${this.lang}][value=${this.storage.readPreference('chartType')}]`).prop('selected', true);
 		$('#chartTypeSelect').on('change', () => {
 			this.storage.storePreference('chartType', $('#chartTypeSelect option:selected').val());
 			this.displayOverview('#mainContent');
@@ -118,7 +118,10 @@ module.exports = class BalancesView extends View {
 
 			data.forEach(d => tableRows.push([
 				timestampToString(d.date), d.name, this.printNum(d.amount), d.category,
-				d.budget, this.textData[d.type], this.template.icon('delete', 'red')
+				d.budget, this.textData[d.type], this.elt('button', {
+					class: 'btn btn-outline-primary',
+					onclick: ''
+				}, this.template.icon('edit', 'black'))
 			]));
 
 			$(id).html(this.elt('div', {}, this.template.table(tableRows, {
@@ -127,9 +130,7 @@ module.exports = class BalancesView extends View {
 
 			$('#overviewTable').children().first().children().each((index, elem) => {
 				$(elem).addClass('tableHead');
-				if (index <= 5) {
-					$(elem).on('click', e => this.sortTableByColumn('overviewTable', index));
-				}
+				$(elem).on('click', () => this.sortTableByColumn('overviewTable', index));
 			});
 
 			(new ChartHandler(this)).createChart(
