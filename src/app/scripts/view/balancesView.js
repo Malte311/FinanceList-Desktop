@@ -119,8 +119,11 @@ module.exports = class BalancesView extends View {
 			data.forEach(d => tableRows.push([
 				timestampToString(d.date), d.name, this.printNum(d.amount), d.category,
 				d.budget, this.textData[d.type], this.elt('button', {
+					id: 'btnEditEntry',
 					class: 'btn btn-outline-primary',
-					onclick: ''
+					onclick: `$('#modalHidden').val('${d.date}')`,
+					['data-toggle']: 'modal',
+					['data-target']: '#divModal',
 				}, this.template.icon('edit', 'black'))
 			]));
 

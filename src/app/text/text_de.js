@@ -40,6 +40,7 @@ module.exports = {
 	'earning': 'Einnahme',	
 	'edit': 'Bearbeiten',
 	'editBudget': 'Konto bearbeiten',
+	'editEntry': 'Eintrag bearbeiten',
 	'endDate': 'Enddatum',
 	'error': 'Fehler',
 	'exit': 'Beenden',

@@ -1,5 +1,6 @@
 const AllocationDialogHandler = require(__dirname + '/allocationDialogHandler.js');
 const BudgetDialogHandler = require(__dirname + '/budgetDialogHandler.js');
+const EntryDialogHandler = require(__dirname + '/entryDialogHandler.js');
 const TransactDialogHandler = require(__dirname + '/transactDialogHandler.js');
 const TransferDialogHandler = require(__dirname + '/transferDialogHandler.js');
 
@@ -28,6 +29,9 @@ module.exports = class DialogHandler {
 					break;
 				case 'btnEditBudget':
 					(new BudgetDialogHandler(dialogHandler.view)).editBudget($('#modalHidden').val());
+					break;
+				case 'btnEditEntry':
+					(new EntryDialogHandler(dialogHandler.view)).editEntry($('#modalHidden').val());
 					break;
 				case 'btnTransfer':
 					(new TransferDialogHandler(dialogHandler.view)).execTransfer();

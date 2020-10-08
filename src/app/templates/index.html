@@ -56,30 +56,30 @@
 			</li>
 		</ul>
 
-		<div class="tab-content mt-3 ml-4 mr-4 mb-5" id="myTabContent">
-			<div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
-				<div class="modal fade" id="divModal" tabindex="-1" role="dialog" aria-labelledby="divModalLabel" aria-hidden="true">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="divModalLabel"></h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<center><div class="modal-err"></div></center>
-							<div class="modal-body">
-								
-							</div>
-							<div class="modal-footer">
-								<button type="button" id="modalCanc" class="btn btn-outline-danger" data-dismiss="modal"></button>
-								<button type="button" id="modalConf" class="btn btn-outline-success"></button>
-							</div>
-						</div>
+		<div class="modal fade" id="divModal" tabindex="-1" role="dialog" aria-labelledby="divModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="divModalLabel"></h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<center><div class="modal-err"></div></center>
+					<div class="modal-body">
+						
+					</div>
+					<div class="modal-footer">
+						<button type="button" id="modalCanc" class="btn btn-outline-danger" data-dismiss="modal"></button>
+						<button type="button" id="modalConf" class="btn btn-outline-success"></button>
 					</div>
 				</div>
-				<input type="hidden" id ="modalHidden">
+			</div>
+		</div>
+		<input type="hidden" id ="modalHidden">
 
+		<div class="tab-content mt-3 ml-4 mr-4 mb-5" id="myTabContent">
+			<div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
 				<h3 lang="de"><i class="fas fa-credit-card text-primary"></i> Konten&uuml;bersicht</h3>
 				<h3 lang="en"><i class="fas fa-credit-card text-primary"></i> Budget Overview</h3>
 				<div id="currentBudgets"></div>

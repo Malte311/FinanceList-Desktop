@@ -1,0 +1,64 @@
+<h5 lang="de"><i class="fas fa-edit text-success"></i> Eintrag bearbeiten</h5>
+<h5 lang="en"><i class="fas fa-edit text-success"></i> Edit Entry</h5>
+<span lang="de">
+	Hier k&ouml;nnen Sie den ausgew&auml;hlten Eintrag bearbeiten. Passen Sie dazu
+	einfach die untenstehenden Felder an.
+</span>
+<span lang="en">
+	Here you can edit the chosen entry by adjusting the input fields below.
+</span>
+<div class="input-group mt-2 mb-2">
+	<div class="input-group-prepend">
+		<label lang="de" class="input-group-text" for="eDateInput">Neues Datum</label>
+		<label lang="en" class="input-group-text" for="eDateInput">New Date</label>
+	</div>
+	<input type="number" id="eDateYear" size="4" min="1970" class="form-control">
+	<input type="number" id="eDateMonth" size="2" min="1" max="12" class="form-control">
+	<input type="number" id="eDateDay" size="2" min="1" max="31" class="form-control">
+	<button id="eDateBtn" class="form-control"
+			onclick="startup.view.createDatepicker('#eDateInput', ['#eDateYear', '#eDateMonth', '#eDateDay'])">
+		&#x1F4C5;
+	</button>
+	<input type="hidden" id="eDateInput">
+</div>
+<div class="input-group mb-2">
+	<div class="input-group-prepend">
+		<label lang="de" class="input-group-text" for="eNameInput">Neuer Name</label>
+		<label lang="en" class="input-group-text" for="eNameInput">New Name</label>
+	</div>
+	<input class="form-control" type="text" id="eNameInput">
+</div>
+<div class="input-group mb-2">
+	<div class="input-group-prepend">
+		<label lang="de" class="input-group-text" for="eCatInput">Neue Kategorie</label>
+		<label lang="en" class="input-group-text" for="eCatInput">New Category</label>
+	</div>
+	<input class="form-control" type="text" id="eCatInput">
+</div>
+<hr>
+<h5 lang="de"><i class="fas fa-trash-alt text-danger"></i> Eintrag l&ouml;schen</h5>
+<h5 lang="en"><i class="fas fa-trash-alt text-danger"></i> Delete Entry</h5>
+<span lang="de">
+	Soll dieser Eintrag wirklich gel&ouml;scht werden?
+	Die Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden.
+	Um diesen Eintrag zu l&ouml;schen, aktivieren Sie unten die Checkbox.
+</span>
+<span lang="en">
+	Are you sure you want to delete this entry?
+	This action cannot be undone.
+	In order to confirm, activate the checkbox below.
+</span>
+<br>
+<input class="mt-2 mb-2" type="checkbox" id="delCheck" onclick="
+		let arr = ['#eDateBtn', '#eDateYear', '#eDateMonth', '#eDateDay', '#eNameInput', '#eCatInput'];
+		if (this.checked) {
+			arr.forEach(val => $(val).prop('disabled', true));
+		} else {
+			arr.forEach(val => $(val).prop('disabled', false));
+		}">
+<span lang="de">
+	Ja, ich m&ouml;chte diesen Eintrag l&ouml;schen.
+</span>
+<span lang="en">
+	Yes, delete this entry.
+</span>

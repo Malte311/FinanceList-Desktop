@@ -44,7 +44,7 @@ module.exports = class IndexView extends View {
 			this.printNum(b[1]), // Index 1: balance of the budget.
 			this.elt('div', {}, this.elt('button', {
 				id: 'btnEditBudget',
-				class: 'btn btn-outline-primary ml-3',
+				class: 'btn btn-outline-primary',
 				onclick: `$('#modalHidden').val('${b[0]}')`,
 				['data-toggle']: 'modal',
 				['data-target']: '#divModal',

@@ -62,7 +62,5 @@ module.exports = class BudgetDialogHandler {
 		if (this.view.storage.readMainStorage('budgets').findIndex(b => b[0] === name) !== 0) {
 			$('#delDiv').show(); // Allow deleting only if the budget is not the default budget
 		}
-
-		modal.modal('show');
 	}
 }
