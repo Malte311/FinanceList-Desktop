@@ -74,8 +74,7 @@ module.exports = class IndexView extends View {
 		let tableRows = [[
 			this.textData['name'], this.textData['amount'], this.textData['type'],
 			this.textData['budget'], this.textData['category'], this.textData['nextExecution'],
-			this.textData['interval'], this.textData['endDate'], this.textData['edit'],
-			this.textData['delete']
+			this.textData['interval'], this.textData['endDate'], this.textData['edit']
 		]];
 
 		this.storage.readMainStorage('recurring').forEach(t => {
@@ -84,8 +83,13 @@ module.exports = class IndexView extends View {
 				t.name, this.printNum(t.amount), t.type, allocOn ? '\u2013' : t.budget,
 				t.category, timestampToString(t.nextDate), this.textData['intervalNames'][t.interval],
 				t.endDate > 0 ? timestampToString(t.endDate) : '\u2013',
-				this.elt('span', {}, this.template.icon('edit', 'blue')),
-				this.elt('span', {}, this.template.icon('delete', 'red'))
+				this.elt('button', {
+					id: 'btnEditRecTrans',
+					class: 'btn btn-outline-primary',
+					onclick: `$('#modalHidden').val('${t.startDate}')`,
+					['data-toggle']: 'modal',
+					['data-target']: '#divModal',
+				}, this.template.icon('edit', 'black')),
 			]);
 		});
 

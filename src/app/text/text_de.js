@@ -41,6 +41,7 @@ module.exports = {
 	'edit': 'Bearbeiten',
 	'editBudget': 'Konto bearbeiten',
 	'editEntry': 'Eintrag bearbeiten',
+	'editRecTrans': 'Wiederkehrende Transaktion bearbeiten',
 	'endDate': 'Enddatum',
 	'error': 'Fehler',
 	'exit': 'Beenden',

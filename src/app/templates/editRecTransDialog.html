@@ -1,0 +1,95 @@
+<h5 lang="de"><i class="fas fa-edit text-success"></i> Wiederkehrende Transaktion bearbeiten</h5>
+<h5 lang="en"><i class="fas fa-edit text-success"></i> Edit Recurring Transaction</h5>
+<span lang="de">
+	Hier k&ouml;nnen Sie die ausgew&auml;hlte wiederkehrende Transaktion bearbeiten.
+	Passen Sie dazu einfach die untenstehenden Felder an.
+</span>
+<span lang="en">
+	Here you can edit the chosen recurring transaction by adjusting the input fields below.
+</span>
+<div class="input-group mt-2 mb-2">
+	<div class="input-group-prepend">
+		<label lang="de" class="input-group-text" for="rtNameInput">Neuer Name</label>
+		<label lang="en" class="input-group-text" for="rtNameInput">New Name</label>
+	</div>
+	<input class="form-control" type="text" id="rtNameInput">
+</div>
+<div class="input-group mb-2">
+	<div class="input-group-prepend">
+		<label lang="de" class="input-group-text" for="rtAmountInput">Neuer Betrag</label>
+		<label lang="en" class="input-group-text" for="rtAmountInput">New Amount</label>
+	</div>
+	<input class="form-control" type="number" id="rtAmountInput">
+</div>
+<div class="input-group mb-2">
+	<div class="input-group-prepend">
+		<label lang="de" class="input-group-text" for="rtCatInput">Neue Kategorie</label>
+		<label lang="en" class="input-group-text" for="rtCatInput">New Category</label>
+	</div>
+	<input class="form-control" type="text" id="rtCatInput">
+</div>
+<div class="input-group mb-2">
+	<div class="input-group-prepend">
+		<label lang="de" class="input-group-text" for="rtIntervalSel">Neues Intervall</label>
+		<label lang="en" class="input-group-text" for="rtIntervalSel">New Interval</label>
+	</div>
+	<select class="custom-select" id="rtIntervalSel">
+		<option lang="de" value="0">w&ouml;chentlich</option>
+		<option lang="en" value="0">weekly</option>
+		<option lang="de" value="1">alle vier Wochen</option>
+		<option lang="en" value="1">every four weeks</option>
+		<option lang="de" value="2">monatlich</option>
+		<option lang="en" value="2">monthly</option>
+		<option lang="de" value="3">zweimonatlich</option>
+		<option lang="en" value="3">bimonthly</option>
+		<option lang="de" value="4">viertelj&auml;hrlich</option>
+		<option lang="en" value="4">quarterly</option>
+		<option lang="de" value="5">halbj&auml;hrlich</option>
+		<option lang="en" value="5">biannual</option>
+		<option lang="de" value="6">j&auml;hrlich</option>
+		<option lang="en" value="6">annual</option>
+	</select>
+</div>
+<div class="input-group mb-2">
+	<div class="input-group-prepend">
+		<label lang="de" class="input-group-text" for="rtDateInput">Neues Enddatum</label>
+		<label lang="en" class="input-group-text" for="rtDateInput">New End Date</label>
+	</div>
+	<input type="number" id="rtDateYear" size="4" min="1970" class="form-control">
+	<input type="number" id="rtDateMonth" size="2" min="1" max="12" class="form-control">
+	<input type="number" id="rtDateDay" size="2" min="1" max="31" class="form-control">
+	<button id="rtDateBtn" class="form-control"
+			onclick="startup.view.createDatepicker('#rtDateInput', ['#rtDateYear', '#rtDateMonth', '#rtDateDay'])">
+		&#x1F4C5;
+	</button>
+	<input type="hidden" id="rtDateInput">
+</div>
+<hr>
+<h5 lang="de"><i class="fas fa-trash-alt text-danger"></i> Wiederkehrende Transaktion l&ouml;schen</h5>
+<h5 lang="en"><i class="fas fa-trash-alt text-danger"></i> Delete Recurring Transaction</h5>
+<span lang="de">
+	Soll diese wiederkehrende Transaktion wirklich gel&ouml;scht werden?
+	Die Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden.
+	Um diese wiederkehrende Transaktion zu l&ouml;schen, aktivieren Sie unten die Checkbox.
+</span>
+<span lang="en">
+	Are you sure you want to delete this recurring transaction?
+	This action cannot be undone. In order to confirm, activate the checkbox below.
+</span>
+<br>
+<input class="mt-2 mb-2" type="checkbox" id="delCheck" onclick="
+		let arr = [
+			'#rtNameInput', '#rtAmountInput', '#rtCatInput', '#rtIntervalSel',
+			'#rtDateYear', '#rtDateMonth', '#rtDateDay', '#rtDateBtn'
+		];
+		if (this.checked) {
+			arr.forEach(val => $(val).prop('disabled', true));
+		} else {
+			arr.forEach(val => $(val).prop('disabled', false));
+		}">
+<span lang="de">
+	Ja, ich m&ouml;chte diese wiederkehrende Transaktion l&ouml;schen.
+</span>
+<span lang="en">
+	Yes, delete this recurring transaction.
+</span>

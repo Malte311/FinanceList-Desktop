@@ -1,4 +1,4 @@
-const {getCurrentTimestamp, stepInterval} = require(__dirname + '/../utils/dateHandler.js');
+const {createUniqueTimestamp, getCurrentTimestamp, stepInterval} = require(__dirname + '/../utils/dateHandler.js');
 const Transact = require(__dirname + '/../handle/transact.js');
 
 /**
@@ -46,6 +46,7 @@ module.exports = class RecurrTrans {
 	 * @param {object} transObj The transaction object to add.
 	 */
 	addRecurringTransaction(transObj) {
+		transObj.startDate = createUniqueTimestamp(transObj.startDate, this.storage);
 		transObj.nextDate = transObj.startDate;
 
 		this.storage.addToMainStorageArr('recurring', transObj);

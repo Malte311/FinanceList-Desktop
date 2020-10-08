@@ -41,6 +41,7 @@ module.exports = {
 	'edit': 'Edit',
 	'editBudget': 'Edit Budget',
 	'editEntry': 'Edit Entry',
+	'editRecTrans': 'Edit Recurring Transaction',
 	'endDate': 'End Date',
 	'error': 'Error',
 	'exit': 'Exit',
