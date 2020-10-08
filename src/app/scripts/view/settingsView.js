@@ -1,5 +1,5 @@
-const Path = require(__dirname + '/../storage/paths.js');
 const View = require(__dirname + '/view.js');
+const {moveJsonFiles} = require(__dirname + '/../storage/paths.js');
 
 /**
  * Class for controlling the settings page of the application.
@@ -34,7 +34,7 @@ module.exports = class SettingsView extends View {
 		ipcRenderer.on('showOpenDialogThen', (event, newPath) => {
 			let oldPath = this.storage.readPreference('path');
 			if (newPath.filePaths && newPath.filePaths.length > 0 && newPath.filePaths[0] !== oldPath) {
-				Path.moveJsonFiles(oldPath, newPath.filePaths[0], success => {
+				moveJsonFiles(oldPath, newPath.filePaths[0], success => {
 					if (!success) {
 						// TODO
 					} else {

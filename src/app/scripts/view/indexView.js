@@ -1,6 +1,5 @@
-const BudgetDialogHandler = require(__dirname + '/../utils/dialog/budgetDialogHandler.js');
-const {timestampToString} = require(__dirname + '/../utils/dateHandler.js');
 const View = require(__dirname + '/view.js');
+const {timestampToString} = require(__dirname + '/../utils/dateHandler.js');
 
 /**
  * Class for controlling the startpage of the application.

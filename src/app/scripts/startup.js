@@ -1,12 +1,12 @@
 const DialogHandler = require(__dirname + '/utils/dialog/dialogHandler.js');
 const JsonStorage = require(__dirname + '/storage/jsonStorage.js');
-const Updater = require(__dirname + '/updates/updater.js');
 const RecurrTrans = require(__dirname + '/updates/recurrTrans.js');
 
 const BalancesView = require(__dirname + '/view/balancesView.js');
-const HelpView = require(__dirname + '/view/helpView.js');
 const IndexView = require(__dirname + '/view/indexView.js');
 const SettingsView = require(__dirname + '/view/settingsView.js');
+
+const {checkForUpdates} = require(__dirname + '/updates/updater.js');
 
 /**
  * Class for initializing the application.
@@ -34,9 +34,6 @@ module.exports = class Startup {
 				case 'balances':
 					startUp.view = new BalancesView(startUp.storage);
 					break;
-				case 'help':
-					startUp.view = new HelpView(startUp.storage);
-					break;
 				case 'overview':
 					startUp.view = new IndexView(startUp.storage);
 					break;
@@ -48,7 +45,7 @@ module.exports = class Startup {
 			startUp.dialogHandler.view = startUp.view;
 		});
 
-		Updater.checkForUpdates();
+		checkForUpdates();
 		(new RecurrTrans(this.storage)).execRecurrTransact();
 	}
 }

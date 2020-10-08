@@ -1,8 +1,8 @@
-const {timestampToFilename, dateToTimestamp, timestampToString} = require("../utils/dateHandler");
-
 const ChartHandler = require(__dirname + '/../utils/chartHandler.js');
 const InputHandler = require(__dirname + '/../utils/inputHandler.js');
 const View = require(__dirname + '/view.js');
+
+const {timestampToFilename, dateToTimestamp, timestampToString} = require("../utils/dateHandler");
 
 /**
  * Class for controlling the balances page of the application.

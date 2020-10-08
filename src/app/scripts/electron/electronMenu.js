@@ -1,5 +1,5 @@
-const JsonStorage = require(__dirname + '/../storage/jsonStorage.js');
 const config = require(__dirname + '/config.js');
+const JsonStorage = require(__dirname + '/../storage/jsonStorage.js');
 
 // Set all labels in dependency of the currently selected language.
 let lang = (new JsonStorage()).readPreference('language');

@@ -1,6 +1,7 @@
 const InputHandler = require(__dirname + '/../inputHandler.js');
 const Transact = require(__dirname + '/../../handle/transact.js');
 const RecurrTrans = require(__dirname + '/../../updates/recurrTrans.js');
+
 const {dateToTimestamp} = require(__dirname + '/../dateHandler.js');
 
 /**

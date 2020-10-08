@@ -1,5 +1,5 @@
-const {createUniqueTimestamp, getCurrentTimestamp, stepInterval} = require(__dirname + '/../utils/dateHandler.js');
 const Transact = require(__dirname + '/../handle/transact.js');
+const {createUniqueTimestamp, getCurrentTimestamp, stepInterval} = require(__dirname + '/../utils/dateHandler.js');
 
 /**
  * Handles recurring transactions.
