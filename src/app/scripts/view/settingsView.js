@@ -29,10 +29,10 @@ module.exports = class SettingsView extends View {
 	 * it moves all files from the old directory to the new location.
 	 */
 	updateFilepath() {
-		let {dialog} = require('electron').remote;
+		let {ipcRenderer} = require('electron');
 
-		let oldPath = this.storage.readPreference('path');
-		dialog.showOpenDialog({properties: ['openDirectory']}).then(newPath => {
+		ipcRenderer.on('showOpenDialogThen', (event, newPath) => {
+			let oldPath = this.storage.readPreference('path');
 			if (newPath.filePaths && newPath.filePaths.length > 0 && newPath.filePaths[0] !== oldPath) {
 				Path.moveJsonFiles(oldPath, newPath.filePaths[0], success => {
 					if (!success) {
@@ -43,6 +43,8 @@ module.exports = class SettingsView extends View {
 				});
 			}
 		});
+
+		ipcRenderer.send('showOpenDialog', {properties: ['openDirectory']});
 	}
 
 	/**

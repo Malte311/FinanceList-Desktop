@@ -36,7 +36,6 @@ function createWindow() {
         fullscreen: typeof fullscreen === 'boolean' ? fullscreen : false,
 		show: false,
 		webPreferences: {
-			enableRemoteModule: true,
 			nodeIntegration: true
         }
     });
@@ -88,4 +87,16 @@ electron.app.on('activate', function() {
     if (mainWindow === null) {
         createWindow();
     }
+});
+
+electron.ipcMain.on('showMessageBox', (event, arg) => {
+	electron.dialog.showMessageBox(arg).then(res => event.reply('showMessageBoxThen', res));
+});
+
+electron.ipcMain.on('showOpenDialog', (event, arg) => {
+	electron.dialog.showOpenDialog(arg).then(res => event.reply('showOpenDialogThen', res));
+});
+
+electron.ipcMain.on('getVersion', (event, arg) => {
+	event.returnValue = electron.app.getVersion();
 });
