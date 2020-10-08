@@ -64,7 +64,7 @@ module.exports = class RecurrTrans {
 	editRecurringTransaction(startDate, newProps) {
 		let recurrTrans = this.storage.readMainStorage('recurring');
 
-		let trans = recurrTrans.find(trans => trans.startDate === startDate);
+		let trans = recurrTrans.find(trans => parseInt(trans.startDate) === parseInt(startDate));
 		trans = Object.assign(trans, newProps);
 
 		this.storage.writeMainStorage('recurring', recurrTrans);

@@ -1,6 +1,8 @@
 const RecTrans = require(__dirname + '/../../updates/recurrTrans.js');
 const InputHandler = require(__dirname + '/../inputHandler.js');
 
+const {dateToTimestamp} = require(__dirname + '/../dateHandler.js');
+
 /**
  * Handles all dialogs related to recurring transactions.
  */
@@ -50,10 +52,8 @@ module.exports = class RecTransDialogHandler {
 				amount: parseFloat($('#rtAmountInput').val()),
 				category: $('#rtCatInput').val(),
 				interval: $('#rtIntervalSel option:selected').val(),
-				endDate: endDate
+				endDate: endDate !== -1 ? dateToTimestamp(...endDate) : -1
 			};
-
-			console.log(newProps)
 
 			if ($('#delCheck').prop('checked')) {
 				this.recTrans.deleteRecurringTransaction(id);
@@ -61,38 +61,8 @@ module.exports = class RecTransDialogHandler {
 				this.recTrans.editRecurringTransaction(id, newProps);
 			}
 
-			return;
-
 			modal.modal('hide');
 			this.view.updateView();
 		});
 	}
-
-
-
-//"editRecurringTransaction": ["Edit", "Amount", "Interval", "Update next execution"],
-//"editRecurringTransaction": ["Bearbeiten", "Summe", "Intervall", "N\u00e4chste Ausf\u00fchrung anpassen"],
-
-	// createDialog( textElementsLocal[0], content, function() {
-	// 	var amountInput = $( "#recAmountInput" ).val().trim();
-	// 	var intervalSelect = $( "#recIntSelect" )[0].selectedIndex;
-
-	// 	if ( inputHandler.isValidAmount( amountInput, false ) ) {
-	// 		// Something changed?
-	// 		if ( amountInput != transaction.amount || intervalSelect != transaction.interval ) {
-	// 			transaction.amount = parseFloat( amountInput );
-	// 			transaction.interval = intervalSelect;
-	// 			currentRecurringTransactions[index] = transaction;
-
-	// 			// Write back to mainStorage.json.
-	// 			writeMainStorage( "recurring", currentRecurringTransactions );
-	// 			updateView();
-	// 		}
-	// 		$( this ).dialog( "close" );
-	// 	}
-	// 	else {
-	// 		dialog.showErrorBox( "Error", "Invalid input" );
-	// 	}
-	// });
-
 }
