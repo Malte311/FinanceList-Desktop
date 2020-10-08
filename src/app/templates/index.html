@@ -78,6 +78,7 @@
 						</div>
 					</div>
 				</div>
+				<input type="hidden" id ="modalHidden">
 
 				<h3 lang="de"><i class="fas fa-credit-card text-primary"></i> Konten&uuml;bersicht</h3>
 				<h3 lang="en"><i class="fas fa-credit-card text-primary"></i> Budget Overview</h3>
@@ -466,7 +467,6 @@
 		require('bootstrap');
 
 		const Startup = require(__dirname + '/../scripts/startup.js');
-		const BudgetDialog = require(__dirname + '/../scripts/utils/dialog/budgetDialogHandler.js');
 		const startup = new Startup();
 	</script>
 </html>

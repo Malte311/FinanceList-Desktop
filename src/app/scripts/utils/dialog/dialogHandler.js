@@ -26,6 +26,9 @@ module.exports = class DialogHandler {
 				case 'btnAddTransact':
 					(new TransactDialogHandler(dialogHandler.view)).addTransaction();
 					break;
+				case 'btnEditBudget':
+					(new BudgetDialogHandler(dialogHandler.view)).editBudget($('#modalHidden').val());
+					break;
 				case 'btnTransfer':
 					(new TransferDialogHandler(dialogHandler.view)).execTransfer();
 					break;

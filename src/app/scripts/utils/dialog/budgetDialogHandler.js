@@ -46,26 +46,22 @@ module.exports = class BudgetDialogHandler {
 			.replace(/%%BUDGET%%/g, name));
 		
 		modal.find('.modal-footer #modalConf').on('click', () => {
-			console.log("click")
-			if ($('#delCheck').checked && $('#delInput') === name) {
-				console.log("Delete")
+			if ($('#delCheck').prop('checked') && $('#delInput').val() === name) {
+				this.budget.deleteBudget(name);
 			} else if (this.inputHandler.isValidBudgetName($('#renInput').val().trim())) {
-				console.log("Rename")
+				this.budget.renameBudget(name, $('#renInput').val().trim());
+			} else {
+				// TODO: Display Error
+				return;
 			}
-			return;
-
-			// let newName = $('#renInput').val().trim();
-			// if (!this.inputHandler.isValidBudgetName(newName)) {
-			// 	return;
-			// }
-
-			// this.budget.renameBudget(name, newName);
-
-			// 	this.budget.deleteBudget(name);
 
 			modal.modal('hide');
 			this.view.updateView();
 		});
+
+		if (this.view.storage.readMainStorage('budgets').findIndex(b => b[0] === name) !== 0) {
+			$('#delDiv').show(); // Allow deleting only if the budget is not the default budget
+		}
 
 		modal.modal('show');
 	}

@@ -15,37 +15,39 @@
 	</div>
 	<input class="form-control" type="text" id="renInput">
 </div>
-<hr>
-<h5 lang="de"><i class="fas fa-trash-alt text-danger"></i> Konto l&ouml;schen</h5>
-<h5 lang="en"><i class="fas fa-trash-alt text-danger"></i> Delete Budget</h5>
-<span lang="de">
-	Soll das Konto &quot;%%BUDGET%%&quot; wirklich gel&ouml;scht werden?
-	Dabei gehen alle Daten verloren und die Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden.
-</span>
-<span lang="en">
-	Are you sure you want to delete the budget &quot;%%BUDGET%%&quot;?
-	All data will be lost and this action cannot be undone.
-	In order to confirm, activate the checkbox below and type in the text &quot;%%BUDGET%%&quot;.
-</span>
-<br>
-<input class="mt-2 mb-2" type="checkbox" id="delCheck" onclick="
-		if (this.checked) {
-			$('#renInput').val('').prop('disabled', true);
-			$('#delInput').prop('disabled', false);
-		} else {
-			$('#renInput').prop('disabled', false);
-			$('#delInput').val('').prop('disabled', true);
-		}">
-<span lang="de">
-	Ja, ich m&ouml;chte das Konto &quot;%%BUDGET%%&quot; l&ouml;schen.
-</span>
-<span lang="en">
-	Yes, delete the budget &quot;%%BUDGET%%&quot;.
-</span>
-<div class="input-group mt-2 mb-2">
-	<div class="input-group-prepend">
-		<label lang="de" class="input-group-text text-danger" for="delInput">Konto l&ouml;schen</label>
-		<label lang="en" class="input-group-text text-danger" for="delInput">Delete Budget</label>
+<div id="delDiv" style="display: none;">
+	<hr>
+	<h5 lang="de"><i class="fas fa-trash-alt text-danger"></i> Konto l&ouml;schen</h5>
+	<h5 lang="en"><i class="fas fa-trash-alt text-danger"></i> Delete Budget</h5>
+	<span lang="de">
+		Soll das Konto &quot;%%BUDGET%%&quot; wirklich gel&ouml;scht werden?
+		Dabei gehen alle Daten des Kontos verloren und die Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden.
+	</span>
+	<span lang="en">
+		Are you sure you want to delete the budget &quot;%%BUDGET%%&quot;?
+		All of its data will be lost and this action cannot be undone.
+		In order to confirm, activate the checkbox below and type in the text &quot;%%BUDGET%%&quot;.
+	</span>
+	<br>
+	<input class="mt-2 mb-2" type="checkbox" id="delCheck" onclick="
+			if (this.checked) {
+				$('#renInput').val('').prop('disabled', true);
+				$('#delInput').prop('disabled', false);
+			} else {
+				$('#renInput').prop('disabled', false);
+				$('#delInput').val('').prop('disabled', true);
+			}">
+	<span lang="de">
+		Ja, ich m&ouml;chte das Konto &quot;%%BUDGET%%&quot; l&ouml;schen.
+	</span>
+	<span lang="en">
+		Yes, delete the budget &quot;%%BUDGET%%&quot;.
+	</span>
+	<div class="input-group mt-2 mb-2">
+		<div class="input-group-prepend">
+			<label lang="de" class="input-group-text text-danger" for="delInput">Konto l&ouml;schen</label>
+			<label lang="en" class="input-group-text text-danger" for="delInput">Delete Budget</label>
+		</div>
+		<input class="form-control" type="text" id="delInput" disabled>
 	</div>
-	<input class="form-control" type="text" id="delInput" disabled>
 </div>
