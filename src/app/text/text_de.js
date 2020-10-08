@@ -39,6 +39,7 @@ module.exports = {
 	'download': 'Herunterladen',
 	'earning': 'Einnahme',	
 	'edit': 'Bearbeiten',
+	'editBudget': 'Konto bearbeiten',
 	'endDate': 'Enddatum',
 	'error': 'Fehler',
 	'exit': 'Beenden',

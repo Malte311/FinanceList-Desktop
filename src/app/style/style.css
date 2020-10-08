@@ -51,7 +51,7 @@
 }
 .ui-datepicker .ui-datepicker-prev,
 .ui-datepicker .ui-datepicker-next {
-	cursor: default;
+	cursor: pointer;
 	font-family: 'Glyphicons Halflings';
 	-webkit-font-smoothing: antialiased;
 	font-style: normal;

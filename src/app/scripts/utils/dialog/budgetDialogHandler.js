@@ -34,46 +34,39 @@ module.exports = class BudgetDialogHandler {
 	}
 
 	/**
-	 * Displays a dialog to rename a budget and handles the interaction of this dialog.
+	 * Displays a dialog to edit or delete a budget and handles the interaction of this dialog.
 	 * 
-	 * @param {string} name The name of the budget we want to change.
+	 * @param {string} name The name of the budget we want to edit/delete.
 	 */
-	renameBudget(name) {
+	editBudget(name) {
 		let modal = $('#divModal');
 
-		modal.find('.modal-title').html(this.view.textData['renameBudget']);
-		modal.find('.modal-body').html(this.view.template.fromTemplate('renameBudgetDialog.html')
-			.replace('%%BUDGET%%', name));
+		modal.find('.modal-title').html(this.view.textData['editBudget']);
+		modal.find('.modal-body').html(this.view.template.fromTemplate('editBudgetDialog.html')
+			.replace(/%%BUDGET%%/g, name));
 		
 		modal.find('.modal-footer #modalConf').on('click', () => {
-			let newName = $('#dialogInput').val().trim();
-			if (!this.inputHandler.isValidBudgetName(newName)) {
-				return;
+			console.log("click")
+			if ($('#delCheck').checked && $('#delInput') === name) {
+				console.log("Delete")
+			} else if (this.inputHandler.isValidBudgetName($('#renInput').val().trim())) {
+				console.log("Rename")
 			}
+			return;
 
-			this.budget.renameBudget(name, newName);
+			// let newName = $('#renInput').val().trim();
+			// if (!this.inputHandler.isValidBudgetName(newName)) {
+			// 	return;
+			// }
+
+			// this.budget.renameBudget(name, newName);
+
+			// 	this.budget.deleteBudget(name);
 
 			modal.modal('hide');
 			this.view.updateView();
 		});
-	}
 
-	/**
-	 * Displays a dialog to delete a budget and handles the interaction of this dialog.
-	 * 
-	 * @param {string} name The name of the budget we want to delete.
-	 */
-	deleteBudget(name) {
-		let modal = $('#divModal');
-
-		modal.find('.modal-title').html(this.view.textData['deleteBudget']);
-		modal.find('.modal-body').html(this.view.template.fromTemplate('deleteBudgetDialog.html')
-			.replace('%%BUDGET%%', name));
-		
-		modal.find('.modal-footer #modalConf').on('click', () => {
-			this.budget.deleteBudget(name);
-			modal.modal('hide');
-			this.view.updateView();
-		});
+		modal.modal('show');
 	}
 }

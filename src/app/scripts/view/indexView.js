@@ -30,7 +30,7 @@ module.exports = class IndexView extends View {
 		let headings = [
 			this.textData['budget'],
 			this.textData['balance'],
-			this.textData['renamedelete']
+			this.textData['edit']
 		];
 
 		if (this.storage.readMainStorage('allocationOn')) {
@@ -39,16 +39,13 @@ module.exports = class IndexView extends View {
 		
 		let budgets = this.storage.readMainStorage('budgets');
 		
-		let rows = budgets.map((b, index) => [
+		let rows = budgets.map(b => [
 			b[0], // Index 0: name of the budget.
 			this.printNum(b[1]), // Index 1: balance of the budget.
 			this.elt('div', {}, this.elt('button', {
 				class: 'btn btn-outline-primary ml-3',
-				onclick: `(new BudgetDialogHandler(${this})).renameBudget('${b[0]}')` // TODO: Only one edit button
-			}, this.template.icon('edit', 'blue')), index === 0 ? '' : this.elt('button', {
-				class: 'btn btn-outline-primary',
-				onclick: (new BudgetDialogHandler(this)).deleteBudget(b[0])
-			}, this.template.icon('delete', 'red')))]);
+				onclick: `(new BudgetDialog(startup.view)).editBudget('${b[0]}')`
+			}, this.template.icon('edit', 'black')))]);
 
 		if (this.storage.readMainStorage('allocationOn')) {
 			let allocation = this.storage.readMainStorage('allocation');
@@ -141,9 +138,7 @@ module.exports = class IndexView extends View {
 		$(id).html('');
 
 		let data = this.dataHandle.getRecentTrans(limit, type);
-		if (data.length) {
-			let {timestampToString} = require(__dirname + '/../utils/dateHandler.js');
-			
+		if (data.length) {			
 			$(id).append(this.template.table(data.map(d => [
 				this.elt('div', {}, d.type === 'earning' ?
 					this.template.icon('cashregister', 'green') : this.template.icon('shoppingbag', 'red'),

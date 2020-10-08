@@ -39,6 +39,7 @@ module.exports = {
 	'download': 'Download',
 	'earning': 'Earning',
 	'edit': 'Edit',
+	'editBudget': 'Edit Budget',
 	'endDate': 'End Date',
 	'error': 'Error',
 	'exit': 'Exit',
