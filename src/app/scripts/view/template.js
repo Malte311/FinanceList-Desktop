@@ -72,6 +72,6 @@ module.exports = class Template {
 	 */
 	fromTemplate(filename) {
 		let {readFileSync} = require('fs');
-		return readFileSync(`${__dirname}/../../../templates/${filename}`, {encoding: 'utf-8'});
+		return readFileSync(`${__dirname}/../../templates/${filename}`, {encoding: 'utf-8'});
 	}
 }

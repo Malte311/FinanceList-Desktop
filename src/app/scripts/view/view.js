@@ -1,6 +1,6 @@
 const Data = require(__dirname + '/../handle/data.js');
 const DataHandler = require(__dirname + '/../handle/dataHandler.js');
-const Template = require(__dirname + '/templates/template.js');
+const Template = require(__dirname + '/template.js');
 
 /**
  * Class for displaying html templates and content.
