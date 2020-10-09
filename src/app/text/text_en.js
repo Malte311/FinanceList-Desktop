@@ -56,6 +56,7 @@ module.exports = {
 		'Biannual',
 		'Annual'
 	],
+	'invalidBudgetName': 'Invalid budget name. The budget name must not already be used; must contain only letters, digits and spaces and has a maximum length of %%MAXLEN%% characters.',
 	'later': 'Later',
 	'line': 'Line Chart',
 	'minimize': 'Minimize',

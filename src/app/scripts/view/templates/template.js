@@ -7,6 +7,19 @@ module.exports = class Template {
 	}
 
 	/**
+	 * Returns an alert div.
+	 * 
+	 * @param {string} text The text of the alert.
+	 * @param {string} [color = 'red'] The color of the alert.
+	 */
+	alert(text, color = 'red') {
+		return this.view.elt('div', {
+			class: `alert alert-${this.view.mappings[color]}`,
+			role: 'alert'
+		}, text);
+	}
+
+	/**
 	 * Returns a fontawesome icon.
 	 * 
 	 * @param {string} icon The name of the icon.
@@ -60,17 +73,5 @@ module.exports = class Template {
 	fromTemplate(filename) {
 		let {readFileSync} = require('fs');
 		return readFileSync(`${__dirname}/../../../templates/${filename}`, {encoding: 'utf-8'});
-	}
-
-	/**
-	 * Returns the html representation of a dom element in string format.
-	 * 
-	 * @param {object} dom The dom element.
-	 * @return {string} The html representation of the dom element in string format.
-	 */
-	toHtmlStr(dom) {
-		let tmp = document.createElement('div');
-		tmp.appendChild(dom);
-		return tmp.innerHTML;
 	}
 }

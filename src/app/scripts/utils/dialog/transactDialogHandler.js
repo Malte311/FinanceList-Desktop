@@ -48,6 +48,8 @@ module.exports = class TransactDialogHandler {
 			$(`#${this.view.lang}ManualAl`).prop('checked', true);
 		}
 
+		$(`#intervalSelect option[lang=${this.view.lang}][value=0]`).prop('selected', true);
+
 		$('#nameInput').autocomplete({source: this.view.storage.readMainStorage('availableNames')});
 		$('#categoryInput').autocomplete({source: this.view.storage.readMainStorage('availableCategories')});
 	}

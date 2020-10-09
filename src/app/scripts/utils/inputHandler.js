@@ -49,9 +49,9 @@ module.exports = class InputHandler {
 
 		amount = amount.replace(',', '.');
 		
-		let validChars = !/[^0-9\.]/.test(amount);
+		let validChars = !/[^0-9.]/.test(amount);
 		let notEmpty = emptyOk || amount.trim() !== '';
-		let dotOk = /^[^\.]*$/.test(amount) || /^\d*\.\d{0,2}$/.test(amount);
+		let dotOk = /^[^.]*$/.test(amount) || /^\d*\.\d{0,2}$/.test(amount);
 
 		return validChars && notEmpty && dotOk && amount.length <= this.maxStrLen
 			&& amount.split(' ').every(w => w.length <= this.maxSwLen);
