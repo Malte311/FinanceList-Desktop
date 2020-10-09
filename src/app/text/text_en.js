@@ -57,6 +57,7 @@ module.exports = {
 		'Annual'
 	],
 	'invalidBudgetName': 'Invalid budget name. The budget name must not already be used; must contain only letters, digits and spaces and has a maximum length of %%MAXLEN%% characters.',
+	'invalidCheckInput': 'The given input does not match the expected text.',
 	'later': 'Later',
 	'line': 'Line Chart',
 	'minimize': 'Minimize',
@@ -112,6 +113,7 @@ module.exports = {
 	'selUserTitle': 'Select an Account Name',
 	'settings': 'Settings',
 	'spending': 'Spending',
+	'sumUpTo100': 'The amounts must add up to 100\u0025.',
 	'totalSum': 'Total Sum',
 	'transfer': 'Transfer Money',
 	'type': 'Type',

@@ -57,6 +57,7 @@ module.exports = {
 		'j\u00e4hrlich'
 	],
 	'invalidBudgetName': 'Der eingegebene Name ist ung\u00fcltig. Der Name darf noch nicht verwendet werden; nur aus Buchstaben, Zahlen und Leerzeichen bestehen sowie maximal %%MAXLEN%% Zeichen lang sein.',
+	'invalidCheckInput': 'Der eingegebene Name stimmt nicht mit dem Text \u00fcberein.',
 	'later': 'Sp\u00e4ter',
 	'line': 'Liniendiagramm',
 	'minimize': 'Minimieren',
@@ -112,6 +113,7 @@ module.exports = {
 	'selUserTitle': 'Kontonamen ausw\u00e4hlen',
 	'settings': 'Einstellungen',
 	'spending': 'Ausgabe',
+	'sumUpTo100': 'Die Werte m\u00fcssen sich zu 100\u0025 aufaddieren.',
 	'totalSum': 'Gesamtsumme',
 	'transfer': 'Geld \u00fcbertragen',
 	'type': 'Art',
