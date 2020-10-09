@@ -56,8 +56,10 @@ module.exports = {
 		'halbj\u00e4hrlich',
 		'j\u00e4hrlich'
 	],
-	'invalidBudgetName': 'Der eingegebene Name ist ung\u00fcltig. Der Name darf noch nicht verwendet werden; nur aus Buchstaben, Zahlen und Leerzeichen bestehen sowie maximal %%MAXLEN%% Zeichen lang sein.',
+	'invalidBudgetName': 'Der eingegebene Name ist ung\u00fcltig. Der Name darf nicht bereits verwendet werden; nur aus Buchstaben, Zahlen und Leerzeichen bestehen sowie maximal %%MAXLEN%% Zeichen lang sein.',
 	'invalidCheckInput': 'Der eingegebene Name stimmt nicht mit dem Text \u00fcberein.',
+	'invalidDateInput': 'Das eingegebene Datum ist ung\u00fcltig.',
+	'invalidEntryName': 'Der eingegebene Name ist ung\u00fcltig. Der Name darf nur aus Buchstaben, Zahlen und Leerzeichen bestehen; insgesamt maximal %%MAXLEN%% Zeichen und einzelne W\u00f6rter maximal %%MAXWLEN%% Zeichen lang sein.',
 	'later': 'Sp\u00e4ter',
 	'line': 'Liniendiagramm',
 	'minimize': 'Minimieren',

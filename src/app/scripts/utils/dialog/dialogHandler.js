@@ -1,9 +1,9 @@
-const EntryDialogHandler = require(__dirname + '/entryDialogHandler.js');
 const RecTransDialogHandler = require(__dirname + '/recTransDialogHandler.js');
 const TransactDialogHandler = require(__dirname + '/transactDialogHandler.js');
 const TransferDialogHandler = require(__dirname + '/transferDialogHandler.js');
 
 const InputHandler = require(__dirname + '/../inputHandler.js');
+const {dateToTimestamp, timestampToFilename} = require(__dirname + '/../dateHandler.js');
 
 /**
  * Class for handling all kinds of dialogs.
@@ -33,7 +33,7 @@ module.exports = class DialogHandler {
 					dialogHandler.editBudgetDialog($('#modalHidden').val());
 					break;
 				case 'btnEditEntry':
-					(new EntryDialogHandler(dialogHandler.view)).editEntry($('#modalHidden').val());
+					dialogHandler.editEntryDialog($('#modalHidden').val());
 					break;
 				case 'btnEditRecTrans':
 					(new RecTransDialogHandler(dialogHandler.view)).editRecTrans($('#modalHidden').val());
@@ -145,8 +145,58 @@ module.exports = class DialogHandler {
 	}
 
 	/**
+	 * Displays a dialog to edit or delete an entry and handles the interaction of this dialog.
+	 * 
+	 * @param {number} id The date (= id) of the entry.
+	 * @return {bool} True if the input is valid, else false.
+	 */
+	editEntryDialog(id) {
+		let title = this.view.textData['editEntry'];
+		let text = this.view.template.fromTemplate('editEntryDialog.html');
+		let entry = this.view.storage.getData(timestampToFilename(id), {
+			connector: 'or',
+			params: [['date', parseInt(id)]]
+		})[0];
+		
+		this.displayDialog(title, text, () => {
+			let d = $('#eDateDay').val(), m = $('#eDateMonth').val(), y = $('#eDateYear').val();
+			let o = {
+				date: dateToTimestamp(d, m, y),
+				name: $('#eNameInput').val().trim(),
+				category: $('#eCatInput').val().trim()
+			};
+
+			const Entry = require(__dirname + '/../../handle/entry.js');
+			if ($('#delCheck').prop('checked')) {
+				(new Entry(this.view.storage)).deleteEntry(id);
+			} else if (!this.inputHandler.isValidDate(d, m, y)) {
+				this.displayErrorMsg(this.view.textData['invalidDateInput']);
+				return false;
+			} else if (o.name !== entry.name && !this.inputHandler.isValidEntryName(o.name)) {
+				let msg = this.view.textData['invalidEntryName']
+					.replace(/%%MAXLEN%%/g, this.inputHandler.maxStrLen)
+					.replace(/%%MAXWLEN%%/g, this.inputHandler.maxSwLen);
+				this.displayErrorMsg(msg);
+				return false;
+			} else {
+				(new Entry(this.view.storage)).editEntry(id, o);
+			}
+
+			return true;
+		});
+
+		$('#eDateYear').val((new Date(entry.date * 1000)).getFullYear());
+		$('#eDateMonth').val((new Date(entry.date * 1000)).getMonth() + 1);
+		$('#eDateDay').val((new Date(entry.date * 1000)).getDate());
+		$('#eNameInput').val(entry.name);
+		$('#eCatInput').val(entry.category);
+	}
+
+	/**
 	 * Displays a dialog to maintain the auto allocation and handles
 	 * the interaction of this dialog.
+	 * 
+	 * @return {bool} True if the input is valid, else false.
 	 */
 	setAllocationDialog() {
 		let title = this.view.textData['autoAllocation'];

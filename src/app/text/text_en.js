@@ -58,6 +58,8 @@ module.exports = {
 	],
 	'invalidBudgetName': 'Invalid budget name. The budget name must not already be used; must contain only letters, digits and spaces and has a maximum length of %%MAXLEN%% characters.',
 	'invalidCheckInput': 'The given input does not match the expected text.',
+	'invalidDateInput': 'Invalid date.',
+	'invalidEntryName': 'Invalid entry name. The budget name must contain only letters, digits and spaces; has a maximum length of %%MAXLEN%% characters and each word in it has a maximum length of %%MAXWLEN%% characters.',
 	'later': 'Later',
 	'line': 'Line Chart',
 	'minimize': 'Minimize',
