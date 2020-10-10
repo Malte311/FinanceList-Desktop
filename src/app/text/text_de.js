@@ -82,7 +82,7 @@ module.exports = {
 		'November',
 		'Dezember'
 	],
-    'monthNamesShort': [
+	'monthNamesShort': [
 		'Jan',
 		'Feb',
 		'Mär',

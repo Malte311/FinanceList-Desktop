@@ -1,16 +1,16 @@
 {
-    "env": {
+	"env": {
 		"browser": true,
 		"commonjs": true,
 		"es2021": true,
 		"jquery": true,
 		"mocha": true,
-        "node": true
-    },
-    "extends": "eslint:recommended",
-    "parserOptions": {
-        "ecmaVersion": 12
-    },
-    "rules": {
-    }
+		"node": true
+	},
+	"extends": "eslint:recommended",
+	"parserOptions": {
+		"ecmaVersion": 12
+	},
+	"rules": {
+	}
 }
