@@ -3,7 +3,9 @@ language: node_js
 node_js:
 - node
 
-os: osx
+os:
+  - linux
+  - osx
 
 branches:
   only:
@@ -28,9 +30,17 @@ deploy:
   - provider: releases
     api_key: $GITHUB_TOKEN
     file:
-      - "application/FinanceList-Desktop-win32-x64.zip"
-      - "application/FinanceList-Desktop-linux-x64.zip"
       - "FinanceList-Desktop-mac-x64.dmg"
     skip_cleanup: true
     on:
       tags: true
+      condition: $TRAVIS_OS_NAME = osx
+  - provider: releases
+    api_key: $GITHUB_TOKEN
+    file:
+      - "application/FinanceList-Desktop-win32-x64.zip"
+      - "application/FinanceList-Desktop-linux-x64.zip"
+    skip_cleanup: true
+    on:
+      tags: true
+      condition: $TRAVIS_OS_NAME = linux

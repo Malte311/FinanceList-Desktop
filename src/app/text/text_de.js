@@ -1,4 +1,5 @@
 module.exports = {
+	'aboutThisApp': '\u00dcber FinanceList-Desktop',
 	'addBudget': 'Konto hinzuf\u00fcgen',
 	'addTransaction': 'Eintrag hinzuf\u00fcgen',
 	'allBudgets': 'Alle Konten',
