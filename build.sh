@@ -17,14 +17,14 @@ if [ "$TRAVIS_OS_NAME" = "linux" ]; then
 	npm run package-linux
 	zip -r -9 application/FinanceList-Desktop-linux-x64.zip application/FinanceList-Desktop-linux-x6
 
+	# Test Coverage and Documentation
+	npm test && nyc report --reporter=text-lcov | coveralls
+	jsdoc -R readme.md -r src/app
+
 fi;
 if [ "$TRAVIS_OS_NAME" = "osx" ]; then
 
 	npm run package-mac
 	npm run create-dmg
-
-	# Test Coverage and Documentation
-	npm test && nyc report --reporter=text-lcov | coveralls
-	jsdoc -R readme.md -r src/app
 
 fi;

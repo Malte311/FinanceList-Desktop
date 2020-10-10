@@ -18,14 +18,20 @@ class Startup {
 
 		this.dialogHandler = new DialogHandler(this.view);
 
-		// let txt = this.view.textData;
-		if (!this.storage.readPreference('user')) { // Set a username, if no user exists.
-			// (new Dialog(this.view)).inputDialog(txt['selUserTtitle'], txt['selUserText'], () => {
-			// 	console.log($('#dialogInput').text())
-			// });
+		// TODO: Change if to while such that an input is forced
+		if (this.storage.readPreference('user') === null) { // Set a username, if no user exists.
+			let text = this.view.template.fromTemplate('setUserProfileDialog.html');
+			this.dialogHandler.displayDialog(this.view.textData['selUserTitle'], text, () => {
+				if (!this.dialogHandler.inputHandler.isValidUserProfile($('#uPrInput').val())) {
+					this.dialogHandler.displayErrorMsg('');
+					return false;
+				}
+
+				return true;
+			});
 		}
 
-		let startUp = this; // this binding is overriden inside of the next block.
+		let startUp = this; // this binding is overridden inside of the next block.
 		$('#myTab a').on('click', function(e) { // Enable changing between tabs.
 			e.preventDefault();
 			$(this).tab('show');

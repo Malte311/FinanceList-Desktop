@@ -67,6 +67,8 @@ class DialogHandler {
 				this.view.updateView();
 			}
 		});
+
+		modal.modal('show');
 	}
 
 	/**

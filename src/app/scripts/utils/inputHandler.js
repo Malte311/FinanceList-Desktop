@@ -72,6 +72,21 @@ class InputHandler {
 
 		return day > 0 && day < 32 && month > 0 && month < 13 && year > 0;
 	}
+
+	/**
+	 * Validates a given user profile name.
+	 * 
+	 * @param {string} user The name of the user profile.
+	 */
+	isValidUserProfile(user) {
+		if (typeof user !== 'string') {
+			return false;
+		}
+
+		user = user.trim();
+
+		return !/[^a-zA-Z0-9]/.test(user) && user !== '' && user.length <= this.maxSwLen;
+	}
 }
 
 module.exports = InputHandler;

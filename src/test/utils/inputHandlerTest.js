@@ -139,4 +139,26 @@ describe('InputHandler', function() {
 			assert.strictEqual(inputHandler.isValidDate('01', '01', '2000'), true, 'Test 4 failed.');
 		});
 	});
+
+	describe('#isValidUserProfile()', function() {
+		it('should reject invalid user profile names', function() {
+			assert.strictEqual(inputHandler.isValidUserProfile(null), false, 'Test 2 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile(undefined), false, 'Test 3 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile(true), false, 'Test 4 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile(''), false, 'Test 5 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile('  '), false, 'Test 6 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile('Test$'), false, 'Test 9 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile('!?'), false, 'Test 10 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile('Test Test'), false, 'Test 10 failed.');
+		});
+
+		it('should accept valid user profile names', function() {
+			assert.strictEqual(inputHandler.isValidUserProfile('Test'), true, 'Test 1 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile('Test '), true, 'Test 2 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile(' Test'), true, 'Test 3 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile(' Test '), true, 'Test 4 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile('55'), true, 'Test 7 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile('Test1'), true, 'Test 8 failed.');
+		});
+	});
 });
