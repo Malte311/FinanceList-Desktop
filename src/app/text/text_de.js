@@ -56,6 +56,7 @@ module.exports = {
 		'halbj\u00e4hrlich',
 		'j\u00e4hrlich'
 	],
+	'invalidAmount': 'Der eingegebene Betrag ist ung\u00fcltig. Es sind nur Zahlen (Kommazahlen oder Ganzzahlen) ohne Vorzeichen erlaubt.',
 	'invalidBudgetName': 'Der eingegebene Name ist ung\u00fcltig. Der Name darf nicht bereits verwendet werden; nur aus Buchstaben, Zahlen und Leerzeichen bestehen sowie maximal %%MAXLEN%% Zeichen lang sein.',
 	'invalidCheckInput': 'Der eingegebene Name stimmt nicht mit dem Text \u00fcberein.',
 	'invalidDateInput': 'Das eingegebene Datum ist ung\u00fcltig.',

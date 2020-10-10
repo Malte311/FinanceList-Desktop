@@ -56,6 +56,7 @@ module.exports = {
 		'Biannual',
 		'Annual'
 	],
+	'invalidAmount': 'Invalid amount. Only numbers (floating point or integer) without sign are allowed.',
 	'invalidBudgetName': 'Invalid budget name. The budget name must not already be used; must contain only letters, digits and spaces and has a maximum length of %%MAXLEN%% characters.',
 	'invalidCheckInput': 'The given input does not match the expected text.',
 	'invalidDateInput': 'Invalid date.',

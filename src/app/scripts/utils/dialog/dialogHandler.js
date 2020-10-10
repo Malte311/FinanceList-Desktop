@@ -1,7 +1,3 @@
-const RecTransDialogHandler = require(__dirname + '/recTransDialogHandler.js');
-const TransactDialogHandler = require(__dirname + '/transactDialogHandler.js');
-const TransferDialogHandler = require(__dirname + '/transferDialogHandler.js');
-
 const InputHandler = require(__dirname + '/../inputHandler.js');
 const {dateToTimestamp, timestampToFilename} = require(__dirname + '/../dateHandler.js');
 
@@ -27,7 +23,7 @@ module.exports = class DialogHandler {
 					dialogHandler.addBudgetDialog();
 					break;
 				case 'btnAddTransact':
-					(new TransactDialogHandler(dialogHandler.view)).addTransaction();
+					dialogHandler.addTransactionDialog();
 					break;
 				case 'btnEditBudget':
 					dialogHandler.editBudgetDialog($('#modalHidden').val());
@@ -36,10 +32,10 @@ module.exports = class DialogHandler {
 					dialogHandler.editEntryDialog($('#modalHidden').val());
 					break;
 				case 'btnEditRecTrans':
-					(new RecTransDialogHandler(dialogHandler.view)).editRecTrans($('#modalHidden').val());
+					dialogHandler.editRecTransDialog($('#modalHidden').val());
 					break;
 				case 'btnTransfer':
-					(new TransferDialogHandler(dialogHandler.view)).execTransfer();
+					dialogHandler.execTransferDialog();
 					break;
 				case 'btnSetAlloc':
 					dialogHandler.setAllocationDialog();
@@ -109,6 +105,98 @@ module.exports = class DialogHandler {
 		});
 	}
 
+	/**
+	 * Displays a dialog to add a new transaction and handles the interaction of this dialog.
+	 * 
+	 * @return {bool} True if the input is valid, else false.
+	 */
+	addTransactionDialog() {
+		let title = this.view.textData['addTransaction'];
+		let text = this.view.template.fromTemplate('addTransactDialog.html');
+		
+		this.displayDialog(title, text, () => {
+			let d = $('#dateDay').val(), m = $('#dateMonth').val(), y = $('#dateYear').val();
+			let eD = $('#endDateDay').val(), eM = $('#endDateMonth').val(), eY = $('#endDateYear').val();
+			let noEndChecked = $(`#${this.view.lang}NoEndDate`).prop('checked');
+			let alloc = $('input[name="allocation"]:checked').val();
+
+			if (!this.inputHandler.isValidAmount($('#sumInput').val().trim())) {
+				this.displayErrorMsg(this.view.textData['invalidAmount']);
+				return false;
+			} else if (!this.inputHandler.isValidDate(d, m ,y)) {
+				this.displayErrorMsg(this.view.textData['invalidDateInput']);
+				return false;
+			} else if (!this.inputHandler.isValidEntryName($('#nameInput').val().trim())) {
+				let msg = this.view.textData['invalidEntryName']
+					.replace(/%%MAXLEN%%/g, this.inputHandler.maxStrLen)
+					.replace(/%%MAXWLEN%%/g, this.inputHandler.maxSwLen);
+				this.displayErrorMsg(msg);
+				return false;
+			} else if (!noEndChecked && !this.inputHandler.isValidDate(eD, eM, eY)) {
+				this.displayErrorMsg(this.view.textData['invalidDateInput']);
+				return false;
+			}
+
+			let autoAlloc = this.view.storage.readMainStorage('allocationOn');
+			let obj = {
+				date: dateToTimestamp(d, m ,y),
+				name: $('#nameInput').val().trim(),
+				amount: $('#sumInput').val().trim(),
+				budget: $('#budgetSelect option:selected').text(),
+				type: $('input[name="type"]:checked').val(),
+				category: $('#categoryInput').val().trim()
+			};
+
+			if ($(`#${this.view.lang}Automate`).prop('checked')) { // Recurring transaction
+				console.log("checked")
+				let endDate = noEndChecked ? -1 : dateToTimestamp(eD, eM, eY);
+				let recObj = Object.assign({
+					startDate: obj.date,
+					endDate: endDate,
+					interval: $('#intervalSelect').val(),
+					allocationOn: autoAlloc && obj.type === 'earning' && alloc === 'auto'
+				}, obj);
+				delete recObj.date;
+				
+				const RecurrTrans = require(__dirname + '/../../updates/recurrTrans.js');
+				(new RecurrTrans(this.view.storage)).addRecurringTransaction(recObj);
+			} else {
+				const Transact = require(__dirname + '/../../handle/transact.js');
+				if (obj.type === 'earning') {
+					(new Transact(this.view.storage)).addEarning(obj, autoAlloc && alloc === 'auto');
+				} else {
+					(new Transact(this.view.storage)).addSpending(obj);
+				}
+			}
+
+			this.view.addToAutocomplete('availableNames', $('#nameInput').val().trim());
+			this.view.addToAutocomplete('availableCategories', $('#categoryInput').val().trim());
+
+			return true;
+		});
+
+		$(`#${this.view.lang}Spending`).prop('checked', true); // Select spending by default
+		
+		['dateYear', 'endDateYear'].forEach(id => $(`#${id}`).val((new Date()).getFullYear()));
+		['dateMonth', 'endDateMonth'].forEach(id => $(`#${id}`).val((new Date()).getMonth() + 1));
+		['dateDay', 'endDateDay'].forEach(id => $(`#${id}`).val((new Date()).getDate()));
+
+		this.view.storage.readMainStorage('budgets').forEach(budget => {
+			$('#budgetSelect').append(new Option(budget[0], budget[0]));
+		});
+
+		if (this.view.storage.readMainStorage('allocationOn')) {
+			$(`#${this.view.lang}AutoAl`).prop('checked', true); // Select auto allocation by default
+		} else {
+			$(`#allocForm`).hide();
+			$(`#${this.view.lang}ManualAl`).prop('checked', true);
+		}
+
+		$(`#intervalSelect option[lang=${this.view.lang}][value=0]`).prop('selected', true);
+
+		$('#nameInput').autocomplete({source: this.view.storage.readMainStorage('availableNames')});
+		$('#categoryInput').autocomplete({source: this.view.storage.readMainStorage('availableCategories')});
+	}
 
 	/**
 	 * Displays a dialog to edit or delete a budget and handles the interaction of this dialog.
@@ -236,5 +324,98 @@ module.exports = class DialogHandler {
 			})]);
 		});
 		$('#allocationTable').html(this.view.template.table(tableRows));
+	}
+
+
+	/**
+	 * Edits a given recurring transaction.
+	 * 
+	 * @param {string} id The id (= start date) of the recurring transaction.
+	 * @return {bool} True if the input is valid, else false.
+	 */
+	editRecTransDialog(id) {
+		let title = this.view.textData['editRecTrans'];
+		let text = this.view.template.fromTemplate('editRecTransDialog.html');
+		let rt = this.view.storage.readMainStorage('recurring').find(r => r.startDate === parseInt(id));
+		let dArr = ['#rtDateDay', '#rtDateMonth', '#rtDateYear'];
+		
+		this.displayDialog(title, text, () => {
+			let endDate = dArr.some(id => $(id).val().trim() !== '') ? dArr.map(id => $(id).val()) : -1;
+
+			if (!this.inputHandler.isValidEntryName($('#rtNameInput').val())) {
+				let msg = this.view.textData['invalidEntryName']
+					.replace(/%%MAXLEN%%/g, this.inputHandler.maxStrLen)
+					.replace(/%%MAXWLEN%%/g, this.inputHandler.maxSwLen);
+				this.displayErrorMsg(msg);
+				return false;
+			} else if (!this.inputHandler.isValidAmount($('#rtAmountInput').val(), false)) {
+				this.displayErrorMsg(this.view.textData['invalidAmount']);
+				return false;
+			} else if (endDate !== -1 && !this.inputHandler.isValidDate(...endDate)) {
+				this.displayErrorMsg(this.view.textData['invalidDateInput']);
+				return false;
+			}
+
+			let newProps = {
+				name: $('#rtNameInput').val(),
+				amount: parseFloat($('#rtAmountInput').val()),
+				category: $('#rtCatInput').val(),
+				interval: $('#rtIntervalSel option:selected').val(),
+				endDate: endDate !== -1 ? dateToTimestamp(...endDate) : -1
+			};
+
+			const RecTrans = require(__dirname + '/../../updates/recurrTrans.js');
+			if ($('#delCheck').prop('checked')) {
+				(new RecTrans(this.view.storage)).deleteRecurringTransaction(id);
+			} else {
+				(new RecTrans(this.view.storage)).editRecurringTransaction(id, newProps);
+			}
+
+			return true;
+		});
+
+		$('#rtNameInput').val(rt.name);
+		$('#rtAmountInput').val(rt.amount);
+		$('#rtCatInput').val(rt.category);
+		$(`#rtIntervalSel option[lang=${this.view.lang}][value=${rt.interval}]`).prop('selected', true);
+
+		if (rt.endDate !== -1) {
+			$('#rtDateYear').val((new Date(rt.endDate * 1000)).getFullYear());
+			$('#rtDateMonth').val((new Date(rt.endDate * 1000)).getMonth() + 1);
+			$('#rtDateDay').val((new Date(rt.endDate * 1000)).getDate());
+		}
+	}
+
+	/**
+	 * Displays a dialog to transfer sums and handles the interaction of this dialog.
+	 * 
+	 * @return {bool} True if the input is valid, else false.
+	 */
+	execTransferDialog() {
+		let title = this.view.textData['transfer'];
+		let text = this.view.template.fromTemplate('transferDialog.html');
+		
+		this.displayDialog(title, text, () => {
+			let amount = $('#transferAmount').val();
+
+			if (!this.inputHandler.isValidAmount(amount, false)) {
+				this.displayErrorMsg(this.view.textData['invalidAmount']);
+				return false;
+			}
+
+			let from = $('#fromSelect option:selected').text();
+			let to = $('#toSelect option:selected').text();
+			if (from !== to) {
+				const Transact = require(__dirname + '/../../handle/transact.js');
+				(new Transact(this.view.storage)).addTransferEntries(from, to, parseFloat(amount));
+			}
+
+			return true;
+		});
+
+		this.view.storage.readMainStorage('budgets').forEach(budget => {
+			$('#fromSelect').append(new Option(budget[0], budget[0]));
+			$('#toSelect').append(new Option(budget[0], budget[0]));
+		});
 	}
 }
