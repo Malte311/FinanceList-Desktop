@@ -69,11 +69,11 @@ describe('Path', function() {
 
 			mkdirSync('/tmp/financelist/movetest');
 
-			Path.moveJsonFiles('/tmp/financelist', '/tmp/financelist/movetest', success => {});
+			Path.moveJsonFiles('/tmp/financelist', '/tmp/financelist/movetest', () => {});
 			assert.deepStrictEqual(Path.listJsonFiles('/tmp/financelist/movetest'), ['testA.json', 'testB.json', 'testC.json']);
 			assert.deepStrictEqual(Path.listJsonFiles('/tmp/financelist'), []);
 
-			Path.moveJsonFiles('/tmp/financelist/movetest', '/tmp/financelist', success => {}); // Move back
+			Path.moveJsonFiles('/tmp/financelist/movetest', '/tmp/financelist', () => {}); // Move back
 			assert.deepStrictEqual(Path.listJsonFiles('/tmp/financelist'), ['testA.json', 'testB.json', 'testC.json']);
 			assert.deepStrictEqual(Path.listJsonFiles('/tmp/financelist/movetest'), []);
 

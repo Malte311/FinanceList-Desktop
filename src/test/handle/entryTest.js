@@ -55,7 +55,7 @@ describe('Entry', function() {
 			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), testArr);
 
 			entry.editEntry(1598995699, {name: 'ABC'});
-			entry.editEntry(0, {name: 'ABC'});
+			entry.editEntry(0, {name: 'ABC', date: 1598995710});
 			entry.editEntry(-1, {name: 'ABC'});
 
 			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), testArr);

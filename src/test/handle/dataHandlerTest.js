@@ -3,16 +3,16 @@ const Data = require(__dirname + '/../../app/scripts/handle/data.js');
 const DataHandler = require(__dirname + '/../../app/scripts/handle/dataHandler.js');
 const JsonStorage = require(__dirname + '/../../app/scripts/storage/jsonStorage.js');
 
-const {appendFileSync, existsSync, mkdirSync, rmdirSync, unlinkSync} = require('fs');
+const {appendFileSync, existsSync, mkdirSync, rmdirSync, unlinkSync, writeFileSync} = require('fs');
 
 describe('DataHandler', function() {
 	let jsonStorage = new JsonStorage();
 	let dataHandler = new DataHandler(new Data(jsonStorage));
-
 	let path;
 
 	before(function() {
 		path = jsonStorage.readPreference('path');
+		jsonStorage.storePreference('path', '/tmp/financelist');
 
 		if (!existsSync('/tmp/financelist/')) {
 			mkdirSync('/tmp/financelist/');
@@ -39,8 +39,6 @@ describe('DataHandler', function() {
 
 	describe('#getMonthlySum()', function() {
 		it('should compute the correct sum', function() {
-			jsonStorage.storePreference('path', '/tmp/financelist');
-
 			assert.strictEqual(dataHandler.getMonthlySum('checking account', 'earning', '/test.json'), 1550.5);
 			assert.strictEqual(dataHandler.getMonthlySum('saving account', 'earning', '/test.json'), 550.6);
 			assert.strictEqual(dataHandler.getMonthlySum('checking account', 'spending', '/test.json'), 35.49);
@@ -50,8 +48,6 @@ describe('DataHandler', function() {
 
 	describe('#getRecentTrans()', function() {
 		it('should filter the most recent transactions', function() {
-			jsonStorage.storePreference('path', '/tmp/financelist');
-
 			assert.deepStrictEqual(dataHandler.getRecentTrans(3, 'earning'), [{
 				"date": 1600500309,
 				"name": "eBay Sale",
@@ -96,6 +92,58 @@ describe('DataHandler', function() {
 				"budget": "saving account",
 				"type": "spending",
 				"category": "Retirement"
+			}]);
+		});
+
+		it('should work for entries which are not sorted', function() {
+			writeFileSync(
+				'/tmp/financelist/test.json',
+				JSON.stringify([{
+					"date": 4599642796,
+					"name": "Apple Music",
+					"amount": 9.99,
+					"budget": "checking account",
+					"type": "spending",
+					"category": "Subscriptions"
+				}, {
+					"date": 3598997600,
+					"name": "Hair salon",
+					"amount": 18,
+					"budget": "checking account",
+					"type": "spending",
+					"category": "Personal care"
+				}, {
+					"date": 2599642796,
+					"name": "Apple Music",
+					"amount": 9.99,
+					"budget": "checking account",
+					"type": "spending",
+					"category": "Subscriptions"
+				}], null, 4),
+				{encoding: 'utf-8'}
+			);
+
+			assert.deepStrictEqual(dataHandler.getRecentTrans(3, 'spending'), [{
+				"date": 4599642796,
+				"name": "Apple Music",
+				"amount": 9.99,
+				"budget": "checking account",
+				"type": "spending",
+				"category": "Subscriptions"
+			}, {
+				"date": 3598997600,
+				"name": "Hair salon",
+				"amount": 18,
+				"budget": "checking account",
+				"type": "spending",
+				"category": "Personal care"
+			}, {
+				"date": 2599642796,
+				"name": "Apple Music",
+				"amount": 9.99,
+				"budget": "checking account",
+				"type": "spending",
+				"category": "Subscriptions"
 			}]);
 		});
 	});

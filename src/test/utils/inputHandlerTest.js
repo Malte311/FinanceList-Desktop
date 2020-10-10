@@ -7,6 +7,7 @@ const {unlinkSync, mkdirSync, rmdirSync, existsSync} = require('fs');
 describe('InputHandler', function() {
 	let jsonStorage = new JsonStorage();
 	let inputHandler = new InputHandler(jsonStorage);
+	let path;
 
 	before(function() {
 		path = jsonStorage.readPreference('path');

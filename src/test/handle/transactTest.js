@@ -307,6 +307,39 @@ describe('Transact', function() {
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 0);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[1][1], 0);
 		});
+
+		it('should split 100 percent to one budget correctly', function() {
+			jsonStorage.writeMainStorage('budgets', [['checking account', 0], ['saving account', 0]]);
+			jsonStorage.writeMainStorage('allTimeEarnings', [['checking account', 0], ['saving account', 0]]);
+			jsonStorage.writeMainStorage('allTimeSpendings', [['checking account', 0], ['saving account', 0]]);
+			jsonStorage.writeMainStorage('allocation', [['checking account', 0], ['saving account', 100]]);
+
+			let testObj = {
+				date: 1599642796, // 09.09.2020
+				name: 'Refund',
+				amount: 9.99,
+				budget: 'checking account',
+				type: 'earning',
+				category: 'Refunds'
+			};
+
+			transact.addEarningSplit(testObj);
+
+			assert.deepStrictEqual(jsonStorage.readJsonFile('/tmp/financelist/09.2020.json'), [{
+				date: 1599642796, // 09.09.2020
+				name: 'Refund',
+				amount: 9.99,
+				budget: 'saving account',
+				type: 'earning',
+				category: 'Refunds'
+			}]);
+			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], 0);
+			assert.strictEqual(jsonStorage.readMainStorage('budgets')[1][1], 9.99);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 0);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[1][1], 9.99);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 0);
+			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[1][1], 0);
+		});
 	});
 
 	describe('#addSpending()', function() {
