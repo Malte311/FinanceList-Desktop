@@ -58,12 +58,15 @@ module.exports = class BalancesView extends View {
 		let name = $('#nameSearch').val();
 		let cat = $('#catSearch').val();
 
+		$('#overview-err').html('');
+
 		let input = new InputHandler(this.storage);
 		if (!input.isValidAmount(amountFrom, true) || !input.isValidAmount(amountTo, true)
 				|| (['dateFromDay', 'dateFromMonth', 'dateFromYear'].some(id => $(`#${id}`).val().trim() !== '') &&
 					!input.isValidDate($('#dateFromDay').val(), $('#dateFromMonth').val(), $('#dateFromYear').val()))
 				|| (['dateToDay', 'dateToMonth', 'dateToYear'].some(id => $(`#${id}`).val().trim() !== '') &&
 					!input.isValidDate($('#dateToDay').val(), $('#dateToMonth').val(), $('#dateToYear').val()))) {
+			$('#overview-err').html(this.template.alert(this.textData['invalidSearchCriteria']));
 			return;
 		}
 

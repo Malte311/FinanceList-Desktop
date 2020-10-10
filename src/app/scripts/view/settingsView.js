@@ -36,8 +36,9 @@ module.exports = class SettingsView extends View {
 			if (newPath.filePaths && newPath.filePaths.length > 0 && newPath.filePaths[0] !== oldPath) {
 				moveJsonFiles(oldPath, newPath.filePaths[0], success => {
 					if (!success) {
-						// TODO
+						$('#set-msg').html(this.template.alert(this.textData['changePathErr']));
 					} else {
+						$('#set-msg').html(this.template.alert(this.textData['changeSuc'], 'green'));
 						this.updatePreference('path', newPath.filePaths[0]);
 					}
 				});
