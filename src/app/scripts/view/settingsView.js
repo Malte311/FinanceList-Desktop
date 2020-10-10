@@ -4,7 +4,7 @@ const {moveJsonFiles} = require(__dirname + '/../storage/paths.js');
 /**
  * Class for controlling the settings page of the application.
  */
-module.exports = class SettingsView extends View {
+class SettingsView extends View {
 	constructor(storage) {
 		super(storage);
 	}
@@ -60,3 +60,5 @@ module.exports = class SettingsView extends View {
 		this.updatePreferences();
 	}
 }
+
+module.exports = SettingsView;

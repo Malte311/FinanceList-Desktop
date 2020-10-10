@@ -7,7 +7,7 @@ const {timestampToFilename, dateToTimestamp, timestampToString} = require("../ut
 /**
  * Class for controlling the balances page of the application.
  */
-module.exports = class BalancesView extends View {
+class BalancesView extends View {
 	constructor(storage) {
 		super(storage);
 	}
@@ -152,3 +152,5 @@ module.exports = class BalancesView extends View {
 		}
 	}
 }
+
+module.exports = BalancesView;

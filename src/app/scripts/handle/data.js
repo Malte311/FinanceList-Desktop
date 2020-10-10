@@ -1,7 +1,7 @@
 /**
  * Handles all operations on the data.
  */
-module.exports = class Data {
+class Data {
 	constructor(storage) {
 		this.storage = storage;
 	}
@@ -110,3 +110,5 @@ module.exports = class Data {
 		return data.sort((a, b) => a['date'] < b['date'] ? -1 : 1);
 	}
 }
+
+module.exports = Data;

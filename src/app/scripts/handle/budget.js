@@ -1,7 +1,7 @@
 /**
  * Handles budget related things.
  */
-module.exports = class Budget {
+class Budget {
 	constructor(storage) {
 		this.storage = storage;
 	}
@@ -107,3 +107,5 @@ module.exports = class Budget {
 		});
 	}
 }
+
+module.exports = Budget;

@@ -1,7 +1,7 @@
 /**
  * Class for dealing with times and dates.
  */
-module.exports = class DateHandler {
+class DateHandler {
 	/**
 	 * Returns a timestamp for the current time.
 	 * 
@@ -191,3 +191,5 @@ module.exports = class DateHandler {
 		return Math.floor((new Date(strDateArr.reverse().join('-'))).getTime() / 1000);
 	}
 }
+
+module.exports = DateHandler;

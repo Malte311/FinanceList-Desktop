@@ -7,7 +7,7 @@ const {ipcRenderer} = require('electron');
 /**
  * Class for notifications whenever a newer version of the application is available.
  */
-module.exports = class Updater {
+class Updater {
 	/**
 	 * Searches for newer versions of the application and displays a notification if a newer
 	 * version exists.
@@ -56,3 +56,5 @@ module.exports = class Updater {
 		});
 	}
 }
+
+module.exports = Updater;

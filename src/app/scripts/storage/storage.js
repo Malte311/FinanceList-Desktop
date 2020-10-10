@@ -3,7 +3,7 @@ const {getCurrentTimestamp} = require(__dirname + '/../utils/dateHandler.js');
 /**
  * Class for loading and storing data.
  */
-module.exports = class Storage {
+class Storage {
 	constructor() {
 		// Default preferences object
 		this.defPref = {
@@ -145,3 +145,5 @@ module.exports = class Storage {
 		throw new Error('This function must be overridden!');
 	}
 }
+
+module.exports = Storage;

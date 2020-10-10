@@ -4,7 +4,7 @@ const {dateToTimestamp, timestampToFilename} = require(__dirname + '/dateHandler
 /**
  * Class for handling all kinds of dialogs.
  */
-module.exports = class DialogHandler {
+class DialogHandler {
 	constructor(view) {
 		this.view = view;
 		this.inputHandler = new InputHandler(this.view.storage);
@@ -424,3 +424,5 @@ module.exports = class DialogHandler {
 		});
 	}
 }
+
+module.exports = DialogHandler;

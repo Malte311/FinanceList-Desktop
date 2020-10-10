@@ -8,7 +8,7 @@ const {createPath, getSettingsFilePath, getStoragePath, listJsonFiles, sep} = re
 /**
  * Class for loading and storing data on the user's computer.
  */
-module.exports = class JsonStorage extends Storage {
+class JsonStorage extends Storage {
 	constructor() {
 		super();
 
@@ -288,3 +288,5 @@ module.exports = class JsonStorage extends Storage {
 		}
 	}
 }
+
+module.exports = JsonStorage;

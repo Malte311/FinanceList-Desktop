@@ -1,7 +1,7 @@
 /**
  * Class for handling data requests.
  */
-module.exports = class DataHandler {
+class DataHandler {
 	constructor(data) {
 		this.data = data;
 	}
@@ -52,3 +52,5 @@ module.exports = class DataHandler {
 		return data.length > limit ? data.slice(0, limit) : data;
 	}
 }
+
+module.exports = DataHandler;

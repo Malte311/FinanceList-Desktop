@@ -4,7 +4,7 @@ const {createUniqueTimestamp, getCurrentTimestamp, stepInterval} = require(__dir
 /**
  * Handles recurring transactions.
  */
-module.exports = class RecurrTrans {
+class RecurrTrans {
 	constructor(storage) {
 		this.storage = storage;
 	}
@@ -103,3 +103,5 @@ module.exports = class RecurrTrans {
 		};
 	}
 }
+
+module.exports = RecurrTrans;

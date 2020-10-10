@@ -3,7 +3,7 @@ const {createUniqueTimestamp, timestampToFilename} = require(__dirname + '/../ut
 /**
  * Handles entry related actions.
  */
-module.exports = class Entry {
+class Entry {
 	constructor(storage) {
 		this.storage = storage;
 	}
@@ -43,3 +43,5 @@ module.exports = class Entry {
 		this.storage.deleteData(timestampToFilename(id), id);
 	}
 }
+
+module.exports = Entry;

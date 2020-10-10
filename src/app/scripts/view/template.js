@@ -1,7 +1,7 @@
 /**
  * Class for dealing with html templates.
  */
-module.exports = class Template {
+class Template {
 	constructor(view) {
 		this.view = view;
 	}
@@ -76,3 +76,5 @@ module.exports = class Template {
 		return readFileSync(`${__dirname}/../../templates/${filename}`, {encoding: 'utf-8'});
 	}
 }
+
+module.exports = Template;

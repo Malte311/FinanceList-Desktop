@@ -11,7 +11,7 @@ const {checkForUpdates} = require(__dirname + '/updates/updater.js');
 /**
  * Class for initializing the application.
  */
-module.exports = class Startup {
+class Startup {
 	constructor() {
 		this.storage = new JsonStorage();
 		this.view = new IndexView(this.storage);
@@ -49,3 +49,5 @@ module.exports = class Startup {
 		(new RecurrTrans(this.storage)).execRecurrTransact();
 	}
 }
+
+module.exports = Startup;

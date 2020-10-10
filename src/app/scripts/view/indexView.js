@@ -4,7 +4,7 @@ const {timestampToString} = require(__dirname + '/../utils/dateHandler.js');
 /**
  * Class for controlling the startpage of the application.
  */
-module.exports = class IndexView extends View {
+class IndexView extends View {
 	constructor(storage) {
 		super(storage);
 	}
@@ -173,3 +173,5 @@ module.exports = class IndexView extends View {
 		this.storage.writeMainStorage(field, arr);
 	}
 }
+
+module.exports = IndexView;

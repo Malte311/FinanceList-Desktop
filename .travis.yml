@@ -22,14 +22,14 @@ before_deploy: bash build.sh
 
 deploy:
   - provider: pages
-    github-token: $GITHUB_TOKEN
-    local-dir: "out"
+    token: $GITHUB_TOKEN
+    local_dir: "out"
     skip_cleanup: true
     on:
       branch: master
       condition: $TRAVIS_OS_NAME = osx
   - provider: releases
-    api_key: $GITHUB_TOKEN
+    token: $GITHUB_TOKEN
     file:
       - "FinanceList-Desktop-mac-x64.dmg"
     skip_cleanup: true
@@ -37,7 +37,7 @@ deploy:
       tags: true
       condition: $TRAVIS_OS_NAME = osx
   - provider: releases
-    api_key: $GITHUB_TOKEN
+    token: $GITHUB_TOKEN
     file:
       - "application/FinanceList-Desktop-win32-x64.zip"
       - "application/FinanceList-Desktop-linux-x64.zip"

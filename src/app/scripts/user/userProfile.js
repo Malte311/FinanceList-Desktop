@@ -1,7 +1,7 @@
 /**
  * Class for handling different user profiles.
  */
-module.exports = class UserProfile {
+class UserProfile {
 	constructor(user) {
 		this.user = user;
 
@@ -29,3 +29,5 @@ module.exports = class UserProfile {
 		/* TODO */
 	}
 }
+
+module.exports = UserProfile;

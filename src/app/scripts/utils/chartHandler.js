@@ -3,7 +3,7 @@ const Chart = require('chart.js');
 /**
  * Class for creating charts.
  */
-module.exports = class ChartHandler {
+class ChartHandler {
 	constructor(view) {
 		this.colors = [
 			'rgba(0, 123, 255, 1)',
@@ -58,3 +58,5 @@ module.exports = class ChartHandler {
 		});
 	}
 }
+
+module.exports = ChartHandler;

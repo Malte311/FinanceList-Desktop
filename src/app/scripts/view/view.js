@@ -5,7 +5,7 @@ const Template = require(__dirname + '/template.js');
 /**
  * Class for displaying html templates and content.
  */
-module.exports = class View {
+class View {
 	constructor(storage) {
 		this.storage = storage;
 
@@ -161,3 +161,5 @@ module.exports = class View {
 		}
 	}
 }
+
+module.exports = View;

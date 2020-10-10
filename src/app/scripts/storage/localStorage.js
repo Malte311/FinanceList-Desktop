@@ -4,7 +4,7 @@ const Storage = require(__dirname + '/storage.js');
 /**
  * Class for loading and storing data in the local storage of a browser.
  */
-module.exports = class LocalStorage extends Storage {
+class LocalStorage extends Storage {
 	constructor() {
 		super();
 
@@ -52,3 +52,5 @@ module.exports = class LocalStorage extends Storage {
 		/* TODO */
 	}
 }
+
+module.exports = LocalStorage;

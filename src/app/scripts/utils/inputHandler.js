@@ -1,7 +1,7 @@
 /**
  * Class for dealing with user inputs.
  */
-module.exports = class InputHandler {
+class InputHandler {
 	constructor(storage) {
 		this.storage = storage;
 		this.maxStrLen = 100; // Maximum length for a whole string.
@@ -73,3 +73,5 @@ module.exports = class InputHandler {
 		return day > 0 && day < 32 && month > 0 && month < 13 && year > 0;
 	}
 }
+
+module.exports = InputHandler;

@@ -3,7 +3,7 @@ const {getCurrentTimestamp, createUniqueTimestamp} = require(__dirname + '/../ut
 /**
  * Handles (non recurring) transactions.
  */
-module.exports = class Transact {
+class Transact {
 	constructor(storage) {
 		this.storage = storage;
 	}
@@ -116,3 +116,5 @@ module.exports = class Transact {
 		this.storage.writeMainStorage(arrayKey, array);
 	}
 }
+
+module.exports = Transact;

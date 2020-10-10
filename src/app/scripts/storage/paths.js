@@ -3,7 +3,7 @@ const {join, sep} = require('path');
 /**
  * Class for handling all things related to paths.
  */
-module.exports = class Path {
+class Path {
 	/**
 	 * Returns the path to the user data directory. If the script is executed in the 'npm test'
 	 * environment (i.e., the --tmpdir argument is provided), the path to the tmp directory is
@@ -114,3 +114,5 @@ module.exports = class Path {
 		return readdirSync(dir).filter(file => file.endsWith('.json'));
 	}
 }
+
+module.exports = Path;
