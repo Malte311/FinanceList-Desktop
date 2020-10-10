@@ -134,9 +134,11 @@ module.exports = class BalancesView extends View {
 				id: 'overviewTable'
 			}), this.elt('center', {}, `${this.textData['totalSum']}: ${this.printNum(total)}`)));
 
-			$('#overviewTable').children().first().children().each((index, elem) => {
-				$(elem).addClass('tableHead');
-				$(elem).on('click', () => this.sortTableByColumn('overviewTable', index));
+			$('#overviewTable').children().first().children().first().children().each((index, elem) => {
+				if (index <= 5) {
+					$(elem).addClass('tableHead');
+					$(elem).on('click', () => this.sortTableByColumn('overviewTable', index));
+				}
 			});
 
 			$('#graphDiv').html(this.elt('canvas', {id: 'graphCanvas'}));

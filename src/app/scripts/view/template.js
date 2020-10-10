@@ -41,7 +41,8 @@ module.exports = class Template {
 	 */
 	progress(percentage, color, text = '') {
 		return this.view.elt('div', {
-			class: 'progress'
+			class: 'progress',
+			style: 'height: 22px;'
 		}, this.view.elt('div', {
 			class: `progress-bar progress-bar-striped bg-${this.view.mappings[color]}`,
 			role: 'progressbar',
@@ -59,9 +60,9 @@ module.exports = class Template {
 	table(rows, props = {}) {
 		return this.view.elt('table', Object.assign({
 			class: 'table table-striped table-bordered table-hover'
-		}, props), ...rows.map(row =>
+		}, props), this.view.elt('tbody', {}, ...rows.map(row =>
 			this.view.elt('tr', {}, ...row.map(elem =>
-				this.view.elt('td', {}, elem)))));
+				this.view.elt('td', {}, elem))))));
 	}
 
 	/**

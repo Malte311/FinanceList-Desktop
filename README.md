@@ -1,6 +1,7 @@
 # FinanceList-Desktop
 
 ![Build Status](https://travis-ci.com/Malte311/FinanceList-Desktop.svg?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Malte311/FinanceList-Desktop/badge.svg?branch=refactor)](https://coveralls.io/github/Malte311/FinanceList-Desktop?branch=refactor)
 [![GitHub license](https://img.shields.io/github/license/Malte311/FinanceList-Desktop)](https://github.com/Malte311/FinanceList-Desktop/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/v/release/Malte311/FinanceList-Desktop)](https://github.com/Malte311/FinanceList-Desktop/releases)
 

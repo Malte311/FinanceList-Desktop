@@ -27,6 +27,7 @@
 	"author": "Malte311",
 	"license": "MIT",
 	"devDependencies": {
+		"coveralls": "^3.1.0",
 		"electron": "^10.1.2",
 		"electron-installer-dmg": "^3.0.0",
 		"electron-packager": "^15.1.0",

@@ -114,7 +114,7 @@ module.exports = class IndexView extends View {
 			let earnings = this.dataHandle.getMonthlySum(budgetName, 'earning');
 			let spendings = this.dataHandle.getMonthlySum(budgetName, 'spending');
 
-			$(id).append(this.elt('h4', {}, this.template.icon(
+			$(id).append(this.elt('h4', {class: 'mt-3 mb-2'}, this.template.icon(
 				'creditcard', 'blue'
 			), ` ${budgetName}`));
 
@@ -128,7 +128,7 @@ module.exports = class IndexView extends View {
 		}
 
 		let totalSumLabel = `${this.textData['totalSum']}: ${this.printNum(totalSum)}`;
-		$(id).append(this.elt('center', {}, totalSumLabel));
+		$(id).append(this.elt('center', {class: 'mt-3 mb-2'}, totalSumLabel));
 	}
 
 	/**
@@ -148,7 +148,7 @@ module.exports = class IndexView extends View {
 			$(id).append(this.template.table(data.map(d => [
 				this.elt('div', {}, d.type === 'earning' ?
 					this.template.icon('cashregister', 'green') : this.template.icon('shoppingbag', 'red'),
-				d.name),
+				` ${d.name}`),
 				this.printNum(d.amount),
 				timestampToString(d.date)
 			]))); // Displays the table.

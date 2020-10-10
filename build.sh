@@ -14,5 +14,7 @@ zip -r -9 application/FinanceList-Desktop-linux-x64.zip application/FinanceList-
 npm run package-mac
 npm run create-dmg
 
+# Tests: npm test && nyc report --reporter=text-lcov | coveralls
+
 # Documentation, generated in directory ./out
 jsdoc -R readme.md -r scripts

@@ -59,7 +59,7 @@ module.exports = class View {
 	/**
 	 * Capitalizes the first letter of a word.
 	 * 
-	 * @param {string} str The word which should be capizalized.
+	 * @param {string} str The word which should be capitalized.
 	 */
 	capFirstLetter(str) {
 		return str.charAt(0).toUpperCase() + str.slice(1);
