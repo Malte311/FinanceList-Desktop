@@ -5,12 +5,9 @@
 [![GitHub license](https://img.shields.io/github/license/Malte311/FinanceList-Desktop)](https://github.com/Malte311/FinanceList-Desktop/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/v/release/Malte311/FinanceList-Desktop)](https://github.com/Malte311/FinanceList-Desktop/releases)
 
-> :warning: :warning: :warning: Currently, there is some refactoring going on on the [refactor branch](https://github.com/Malte311/FinanceList-Desktop/tree/refactor). :warning: :warning: :warning:
-
-FinanceList is a simple finance managing tool. For more information on how to use this tool, take a look at the [wiki](https://github.com/Malte311/FinanceList-Desktop/wiki).
+FinanceList is a simple finance managing tool. For more information on how to use this tool, take a look at the [Wiki](https://github.com/Malte311/FinanceList-Desktop/wiki).
 ***
 ## Features
-![Features](https://github.com/Malte311/FinanceList-Desktop/blob/master/screenshots/balances_page.gif)
 FinanceList allows you to keep track of your finances with ease. Some of the included features are:
 
 - Filter data by any parameter
