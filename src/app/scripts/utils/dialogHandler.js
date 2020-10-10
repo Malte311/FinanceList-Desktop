@@ -1,5 +1,5 @@
-const InputHandler = require(__dirname + '/../inputHandler.js');
-const {dateToTimestamp, timestampToFilename} = require(__dirname + '/../dateHandler.js');
+const InputHandler = require(__dirname + '/inputHandler.js');
+const {dateToTimestamp, timestampToFilename} = require(__dirname + '/dateHandler.js');
 
 /**
  * Class for handling all kinds of dialogs.
@@ -98,7 +98,7 @@ module.exports = class DialogHandler {
 				return false;
 			}
 
-			const Budget = require(__dirname + '/../../handle/budget.js');
+			const Budget = require(__dirname + '/../handle/budget.js');
 			(new Budget(this.view.storage)).addBudget(newBudget);
 
 			return true;
@@ -148,7 +148,6 @@ module.exports = class DialogHandler {
 			};
 
 			if ($(`#${this.view.lang}Automate`).prop('checked')) { // Recurring transaction
-				console.log("checked")
 				let endDate = noEndChecked ? -1 : dateToTimestamp(eD, eM, eY);
 				let recObj = Object.assign({
 					startDate: obj.date,
@@ -158,10 +157,10 @@ module.exports = class DialogHandler {
 				}, obj);
 				delete recObj.date;
 				
-				const RecurrTrans = require(__dirname + '/../../updates/recurrTrans.js');
+				const RecurrTrans = require(__dirname + '/../updates/recurrTrans.js');
 				(new RecurrTrans(this.view.storage)).addRecurringTransaction(recObj);
 			} else {
-				const Transact = require(__dirname + '/../../handle/transact.js');
+				const Transact = require(__dirname + '/../handle/transact.js');
 				if (obj.type === 'earning') {
 					(new Transact(this.view.storage)).addEarning(obj, autoAlloc && alloc === 'auto');
 				} else {
@@ -194,8 +193,14 @@ module.exports = class DialogHandler {
 
 		$(`#intervalSelect option[lang=${this.view.lang}][value=0]`).prop('selected', true);
 
-		$('#nameInput').autocomplete({source: this.view.storage.readMainStorage('availableNames')});
-		$('#categoryInput').autocomplete({source: this.view.storage.readMainStorage('availableCategories')});
+		$('#nameInput').autocomplete({
+			appendTo: '#divModal',
+			source: this.view.storage.readMainStorage('availableNames')
+		});
+		$('#categoryInput').autocomplete({
+			appendTo: '#divModal',
+			source: this.view.storage.readMainStorage('availableCategories')
+		});
 	}
 
 	/**
@@ -209,7 +214,7 @@ module.exports = class DialogHandler {
 		let text = this.view.template.fromTemplate('editBudgetDialog.html');
 
 		this.displayDialog(title, text.replace(/%%BUDGET%%/g, name), () => {
-			const Budget = require(__dirname + '/../../handle/budget.js');
+			const Budget = require(__dirname + '/../handle/budget.js');
 
 			if ($('#delCheck').prop('checked') && $('#delInput').val() === name) {
 				(new Budget(this.view.storage)).deleteBudget(name);
@@ -254,7 +259,7 @@ module.exports = class DialogHandler {
 				category: $('#eCatInput').val().trim()
 			};
 
-			const Entry = require(__dirname + '/../../handle/entry.js');
+			const Entry = require(__dirname + '/../handle/entry.js');
 			if ($('#delCheck').prop('checked')) {
 				(new Entry(this.view.storage)).deleteEntry(id);
 			} else if (!this.inputHandler.isValidDate(d, m, y)) {
@@ -364,7 +369,7 @@ module.exports = class DialogHandler {
 				endDate: endDate !== -1 ? dateToTimestamp(...endDate) : -1
 			};
 
-			const RecTrans = require(__dirname + '/../../updates/recurrTrans.js');
+			const RecTrans = require(__dirname + '/../updates/recurrTrans.js');
 			if ($('#delCheck').prop('checked')) {
 				(new RecTrans(this.view.storage)).deleteRecurringTransaction(id);
 			} else {
@@ -406,7 +411,7 @@ module.exports = class DialogHandler {
 			let from = $('#fromSelect option:selected').text();
 			let to = $('#toSelect option:selected').text();
 			if (from !== to) {
-				const Transact = require(__dirname + '/../../handle/transact.js');
+				const Transact = require(__dirname + '/../handle/transact.js');
 				(new Transact(this.view.storage)).addTransferEntries(from, to, parseFloat(amount));
 			}
 

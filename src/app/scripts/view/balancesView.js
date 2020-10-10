@@ -136,6 +136,7 @@ module.exports = class BalancesView extends View {
 				$(elem).on('click', () => this.sortTableByColumn('overviewTable', index));
 			});
 
+			$('#graphDiv').html(this.elt('canvas', {id: 'graphCanvas'}));
 			(new ChartHandler(this)).createChart(
 				'#graphCanvas',
 				data.map(d => d.name),
