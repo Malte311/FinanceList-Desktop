@@ -35,12 +35,13 @@ module.exports = class Data {
 	getDataReduce(fileContents, quest, connectFn) {
 		return fileContents.filter(dat => {
 			return quest.params.reduce((prev, curr) => {
+				let ret;
 				if (curr[0] === 'name' || curr[0] === 'category') {
-					var ret = dat[curr[0]].toLowerCase().includes(curr[1].toLowerCase());
+					ret = dat[curr[0]].toLowerCase().includes(curr[1].toLowerCase());
 				} else if (curr[0] === 'budget') {					
-					var ret = dat[curr[0]].split(',').some(budget => budget.trim() === curr[1]);
+					ret = dat[curr[0]].split(',').some(budget => budget.trim() === curr[1]);
 				} else {
-					var ret = dat[curr[0]] === curr[1];
+					ret = dat[curr[0]] === curr[1];
 				}
 
 				return connectFn(prev, ret);

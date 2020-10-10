@@ -14,18 +14,22 @@ module.exports = class LocalStorage extends Storage {
 	}
 
 	readPreference(pref) {
+		console.log(pref)
 		/* TODO */
 	}
 
 	storePreference(name, value) {
+		console.log(name, value)
 		/* TODO */
 	}
 
 	readMainStorage(field) {
+		console.log(field)
 		/* TODO */
 	}
 
 	writeMainStorage(field, value) {
+		console.log(field, value)
 		/* TODO */
 	}
 
@@ -34,14 +38,17 @@ module.exports = class LocalStorage extends Storage {
 	}
 
 	storeData(data) {
+		console.log(data)
 		/* TODO */
 	}
 
 	replaceData(file, data) {
+		console.log(file, data)
 		/* TODO */
 	}
 
 	deleteData(file, data) {
+		console.log(file, data)
 		/* TODO */
 	}
 }

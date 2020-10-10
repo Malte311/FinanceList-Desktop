@@ -15,14 +15,17 @@ module.exports = class UserProfile {
 	}
 
 	addUserProfile(user) {
+		console.log(user)
 		/* TODO */
 	}
 
 	renameUserProfile(user, newUser) {
+		console.log(user, newUser)
 		/* TODO */
 	}
 
 	deleteUserProfile(user) {
+		console.log(user)
 		/* TODO */
 	}
 }

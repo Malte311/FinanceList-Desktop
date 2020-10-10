@@ -18,7 +18,7 @@ module.exports = class Startup {
 
 		this.dialogHandler = new DialogHandler(this.view);
 
-		let txt = this.view.textData;
+		// let txt = this.view.textData;
 		if (!this.storage.readPreference('user')) { // Set a username, if no user exists.
 			// (new Dialog(this.view)).inputDialog(txt['selUserTtitle'], txt['selUserText'], () => {
 			// 	console.log($('#dialogInput').text())

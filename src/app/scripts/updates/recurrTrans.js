@@ -65,6 +65,7 @@ module.exports = class RecurrTrans {
 		let recurrTrans = this.storage.readMainStorage('recurring');
 
 		let trans = recurrTrans.find(trans => parseInt(trans.startDate) === parseInt(startDate));
+		// eslint-disable-next-line no-unused-vars
 		trans = Object.assign(trans, newProps);
 
 		this.storage.writeMainStorage('recurring', recurrTrans);

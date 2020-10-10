@@ -97,6 +97,6 @@ electron.ipcMain.on('showOpenDialog', (event, arg) => {
 	electron.dialog.showOpenDialog(arg).then(res => event.reply('showOpenDialogThen', res));
 });
 
-electron.ipcMain.on('getVersion', (event, arg) => {
+electron.ipcMain.on('getVersion', event => {
 	event.returnValue = electron.app.getVersion();
 });
