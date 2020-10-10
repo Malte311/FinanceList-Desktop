@@ -25,6 +25,6 @@ if [ "$TRAVIS_OS_NAME" = "osx" ]; then
 
 	# Test Coverage and Documentation
 	npm test && nyc report --reporter=text-lcov | coveralls
-	jsdoc -R readme.md -r scripts
+	jsdoc -R readme.md -r src/app
 
 fi;

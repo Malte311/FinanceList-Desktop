@@ -1,7 +1,7 @@
 {
 	"name": "FinanceList-Desktop",
 	"version": "1.1.2",
-	"description": "A finance managing tool",
+	"description": "A cross-platform finance manager",
 	"main": "./src/app/main.js",
 	"scripts": {
 		"start": "electron . --dev",
