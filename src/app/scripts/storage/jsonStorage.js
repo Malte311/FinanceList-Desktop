@@ -1,7 +1,7 @@
 const Data = require(__dirname + '/../handle/data.js');
 const Storage = require(__dirname + '/storage.js');
 
-const {appendFileSync, existsSync, readFileSync, writeFileSync, unlinkSync} = require('fs');
+const {appendFileSync, existsSync, readFileSync, writeFileSync, unlinkSync, rmdirSync, renameSync} = require('fs');
 const {getCurrentTimestamp, timestampToFilename} = require(__dirname + '/../utils/dateHandler.js');
 const {createPath, getSettingsFilePath, getStoragePath, listJsonFiles, sep} = require(__dirname + '/paths.js');
 
@@ -170,6 +170,29 @@ class JsonStorage extends Storage {
 	 */
 	exists(path) {
 		return existsSync(path);
+	}
+
+	/**
+	 * Renames a given directory.
+	 * 
+	 * @param {string} oldPath The name of the directory to be renamed.
+	 * @param {string} newPath The new name for the directory.
+	 */
+	renamePath(oldPath, newPath) {
+		if (existsSync(oldPath)) {
+			renameSync(oldPath, newPath);
+		}
+	}
+
+	/**
+	 * Deletes a given directory and all of its contents.
+	 * 
+	 * @param {string} path The path to the directory which should be deleted.
+	 */
+	deletePath(path) {
+		if (existsSync(path)) {
+			rmdirSync(path, {recursive: true});
+		}
 	}
 
 	/**

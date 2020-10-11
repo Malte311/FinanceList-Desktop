@@ -135,6 +135,20 @@ class Storage {
 	}
 
 	/**
+	 * Renames a given directory.
+	 */
+	renamePath() {
+		throw new Error('This function must be overridden!');
+	}
+
+	/**
+	 * Deletes a given directory and all of its contents.
+	 */
+	deletePath() {
+		throw new Error('This function must be overridden!');
+	}
+
+	/**
 	 * After deleting an object, this function removes the object's influence on the statistics.
 	 */
 	removeStats() {

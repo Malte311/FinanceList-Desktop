@@ -88,6 +88,18 @@ describe('Storage', function() {
 		});
 	});
 
+	describe('#renamePath()', function() {
+		it('should throw an error because it should be overridden', function() {
+			assert.throws(storage.renamePath, Error);
+		});
+	});
+
+	describe('#deletePath()', function() {
+		it('should throw an error because it should be overridden', function() {
+			assert.throws(storage.deletePath, Error);
+		});
+	});
+
 	describe('#removeStats()', function() {
 		it('should throw an error because it should be overridden', function() {
 			assert.throws(storage.removeStats, Error);

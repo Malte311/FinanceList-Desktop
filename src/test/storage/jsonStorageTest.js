@@ -173,6 +173,43 @@ describe('JsonStorage', function() {
 		});
 	});
 
+	describe('#renamePath()', function() {
+		it('should rename an existing path', function() {
+			mkdirSync('/tmp/financelist/renPathTest');
+			appendFileSync('/tmp/financelist/renPathTest/test.json', JSON.stringify([]), {encoding: 'utf-8'});
+
+			assert.strictEqual(existsSync('/tmp/financelist/renPathTest'), true);
+			jsonStorage.renamePath('/tmp/financelist/renPathTest', '/tmp/financelist/renPathTestNew');
+			assert.strictEqual(existsSync('/tmp/financelist/renPathTest'), false);
+			assert.strictEqual(existsSync('/tmp/financelist/renPathTestNew'), true);
+			assert.strictEqual(existsSync('/tmp/financelist/renPathTestNew/test.json'), true);
+		});
+
+		it('should do nothing on a non-existing path', function() {
+			assert.strictEqual(existsSync('/tmp/financelist/doesNotExist'), false);
+			jsonStorage.renamePath('/tmp/financelist/doesNotExist', '/tmp/financelist/doesExist');
+			assert.strictEqual(existsSync('/tmp/financelist/doesNotExist'), false);
+			assert.strictEqual(existsSync('/tmp/financelist/doesExist'), false);
+		});
+	});
+
+	describe('#deletePath()', function() {
+		it('should delete an existing path', function() {
+			mkdirSync('/tmp/financelist/delPathTest');
+			appendFileSync('/tmp/financelist/delPathTest/test.json', JSON.stringify([]), {encoding: 'utf-8'});
+
+			assert.strictEqual(existsSync('/tmp/financelist/delPathTest'), true);
+			jsonStorage.deletePath('/tmp/financelist/delPathTest');
+			assert.strictEqual(existsSync('/tmp/financelist/delPathTest'), false);
+		});
+
+		it('should do nothing on a non-existing path', function() {
+			assert.strictEqual(existsSync('/tmp/financelist/doesNotExist'), false);
+			jsonStorage.deletePath('/tmp/financelist/doesNotExist');
+			assert.strictEqual(existsSync('/tmp/financelist/doesNotExist'), false);
+		});
+	});
+
 	describe('#getData()', function() {
 		it('should return the filtered data from a file', function() {
 			let testArr = [{

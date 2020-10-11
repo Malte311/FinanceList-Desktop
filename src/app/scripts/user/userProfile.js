@@ -1,3 +1,5 @@
+const {sep} = require(__dirname + '/../storage/paths.js');
+
 /**
  * Class for handling different user profiles.
  */
@@ -23,10 +25,16 @@ class UserProfile {
 	 * @param {string} newUser The new name for the user profile.
 	 */
 	renameUserProfile(user, newUser) {
-		/* TODO: Rename the user data folder */
 		let users = this.storage.readPreference('users');
 		users[users.findIndex(u => u === user)] = newUser;
 		this.storage.storePreference('users', users);
+
+		let pathPrefix = this.storage.readPreference('path') + sep();
+		this.storage.renamePath(pathPrefix + user, pathPrefix + newUser);
+
+		if (this.storage.readPreference('activeUser') === user) {
+			this.storage.storePreference('activeUser', newUser);
+		}
 	}
 
 	/**
@@ -35,7 +43,6 @@ class UserProfile {
 	 * @param {string} user The name of the user profile to delete.
 	 */
 	deleteUserProfile(user) {
-		/* TODO: Delete the user data folder */
 		let users = this.storage.readPreference('users');
 
 		if (users.findIndex(u => u === user) < 0) {
@@ -44,6 +51,9 @@ class UserProfile {
 		
 		users.splice(users.findIndex(u => u === user), 1);
 		this.storage.storePreference('users', users);
+
+		this.storage.storePreference('activeUser', this.storage.readPreference('users')[0]);
+		this.storage.deletePath(this.storage.readPreference('path') + sep() + user);
 	}
 
 	/**
