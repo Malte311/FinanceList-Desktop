@@ -2,31 +2,46 @@
  * Class for handling different user profiles.
  */
 class UserProfile {
-	constructor(user) {
-		this.user = user;
-
-		/* TODO */
+	constructor(storage) {
+		this.storage = storage;
 	}
 
-	switchUserProfile(user) {
-		this.user = user;
-
-		/* TODO */
-	}
-
+	/**
+	 * Adds a new user profile to the storage.
+	 * 
+	 * @param {string} user The name of the new user profile.
+	 */
 	addUserProfile(user) {
-		console.log(user)
-		/* TODO */
+		let users = this.storage.readPreference('users');
+		this.storage.storePreference('users', users.concat([user]));
 	}
 
+	/**
+	 * Renames a given user profile.
+	 * 
+	 * @param {string} user The name of the user profile to rename.
+	 * @param {string} newUser The new name for the user profile.
+	 */
 	renameUserProfile(user, newUser) {
-		console.log(user, newUser)
-		/* TODO */
+		let users = this.storage.readPreference('users');
+		users[users.findIndex(u => u === user)] = newUser;
+		this.storage.storePreference('users', users);
 	}
 
+	/**
+	 * Deletes a given user profile.
+	 * 
+	 * @param {string} user The name of the user profile to delete.
+	 */
 	deleteUserProfile(user) {
-		console.log(user)
-		/* TODO */
+		let users = this.storage.readPreference('users');
+
+		if (users.findIndex(u => u === user) < 0) {
+			return;
+		}
+		
+		users.splice(users.findIndex(u => u === user), 1);
+		this.storage.storePreference('users', users);
 	}
 }
 

@@ -415,10 +415,8 @@ class DialogHandler {
 				return false;
 			}
 
-			this.view.storage.storePreference(
-				'users',
-				this.view.storage.readPreference('users').concat([$('#unameInput').val()])
-			);
+			const UserProfile = require(__dirname + '/user/userProfile.js');
+			(new UserProfile(this.view.storage)).addUserProfile($('#unameInput').val());
 
 			return true;
 		});
@@ -436,6 +434,8 @@ class DialogHandler {
 		text = text.replace(/%%MAXLEN%%/g, this.inputHandler.maxSwLen).replace(/%%USER%%/g, user);
 
 		this.displayDialog(title, text, () => {
+			// TODO
+			
 			if (!this.inputHandler.isValidUserProfile($('#uRenInput').val())) {
 				let msg = this.view.textData['invalidUserProfileName'];
 				this.displayErrorMsg(msg.replace(/%%MAXLEN%%/g, this.inputHandler.maxSwLen));
@@ -445,7 +445,7 @@ class DialogHandler {
 			return true;
 		});
 
-		$('#uRenInput').val(this.view.storage.readPreference('activeUser'));
+		$('#uRenInput').val(user);
 
 		if (this.view.storage.readPreference('users').findIndex(u => u === user) !== 0) {
 			$('#uDelDiv').show(); // Allow deleting only if the user profile is not the default one
