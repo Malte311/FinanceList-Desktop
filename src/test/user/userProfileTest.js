@@ -8,10 +8,11 @@ describe('UserProfile', function() {
 	let jsonStorage = new JsonStorage();
 	let userProfile = new UserProfile(jsonStorage);
 	let path;
-	let users;
+	let activeUser, users;
 
 	before(function() {
 		path = jsonStorage.readPreference('path');
+		activeUser = jsonStorage.readPreference('activeUser');
 		users = jsonStorage.readPreference('users');
 		jsonStorage.storePreference('path', '/tmp/financelist');
 
@@ -21,11 +22,13 @@ describe('UserProfile', function() {
 	});
 
 	beforeEach(function() {
+		jsonStorage.storePreference('activeUser', 'Alice');
 		jsonStorage.storePreference('users', ['Alice', 'Bob']);
 	});
 
 	after(function() {
 		jsonStorage.storePreference('path', path);
+		jsonStorage.storePreference('activeUser', activeUser);
 		jsonStorage.storePreference('users', users);
 
 		if (existsSync('/tmp/financelist/mainstorage.json')) {
@@ -76,6 +79,18 @@ describe('UserProfile', function() {
 		it('should do nothing when deleting a non-existing user profile', function() {
 			userProfile.deleteUserProfile('Eve');
 			assert.deepStrictEqual(jsonStorage.readPreference('users'), ['Alice', 'Bob']);
+		});
+	});
+
+	describe('#switchToUserProfile()', function() {
+		it('should switch to an existing user profile correctly', function() {
+			userProfile.switchToUserProfile('Bob');
+			assert.deepStrictEqual(jsonStorage.readPreference('activeUser'), 'Bob');
+		});
+
+		it('should do nothing when switching to a non-existing user profile', function() {
+			userProfile.switchToUserProfile('Eve');
+			assert.deepStrictEqual(jsonStorage.readPreference('activeUser'), 'Alice');
 		});
 	});
 });

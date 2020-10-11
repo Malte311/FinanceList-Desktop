@@ -44,6 +44,16 @@ class Template {
 	}
 
 	/**
+	 * Returns a link.
+	 * 
+	 * @param {string} text The text of the link.
+	 * @param {string} onclick The onclick event for the link, in string format.
+	 */
+	link(text, onclick = '') {
+		return this.view.elt('a', {href: '#', onclick: onclick}, text);
+	}
+
+	/**
 	 * Returns a progress bar.
 	 * 
 	 * @param {number} percentage Number between 0 and 100 which indicates the progress.

@@ -1,3 +1,5 @@
+const UserProfile = require("./user/userProfile");
+
 const DialogHandler = require(__dirname + '/utils/dialogHandler.js');
 const JsonStorage = require(__dirname + '/storage/jsonStorage.js');
 const RecurrTrans = require(__dirname + '/updates/recurrTrans.js');
@@ -17,6 +19,7 @@ class Startup {
 		this.view = new IndexView(this.storage);
 
 		this.dialogHandler = new DialogHandler(this.view);
+		this.userProfile = new UserProfile(this.storage);
 
 		let startUp = this; // this binding is overridden inside of the next block.
 		$('#myTab a').on('click', function(e) { // Enable changing between tabs.

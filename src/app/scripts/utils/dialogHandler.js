@@ -240,6 +240,8 @@ class DialogHandler {
 			return true;
 		});
 
+		$('#renInput').prop('placeholder', name);
+
 		if (this.view.storage.readMainStorage('budgets').findIndex(b => b[0] === name) !== 0) {
 			$('#delDiv').show(); // Allow deleting only if the budget is not the default budget
 		}
@@ -415,7 +417,7 @@ class DialogHandler {
 				return false;
 			}
 
-			const UserProfile = require(__dirname + '/user/userProfile.js');
+			const UserProfile = require(__dirname + '/../user/userProfile.js');
 			(new UserProfile(this.view.storage)).addUserProfile($('#unameInput').val());
 
 			return true;
@@ -434,18 +436,25 @@ class DialogHandler {
 		text = text.replace(/%%MAXLEN%%/g, this.inputHandler.maxSwLen).replace(/%%USER%%/g, user);
 
 		this.displayDialog(title, text, () => {
-			// TODO
-			
-			if (!this.inputHandler.isValidUserProfile($('#uRenInput').val())) {
-				let msg = this.view.textData['invalidUserProfileName'];
-				this.displayErrorMsg(msg.replace(/%%MAXLEN%%/g, this.inputHandler.maxSwLen));
+			const UserProfile = require(__dirname + '/../user/userProfile.js');
+
+			if ($('#uDelCheck').prop('checked') && $('#uDelInput').val() === user) {
+				(new UserProfile(this.view.storage)).deleteUserProfile(user);
+			} else if ($('#uDelCheck').prop('checked')) {
+				this.displayErrorMsg(this.view.textData['invalidCheckInput']);
+				return false;
+			} else if (this.inputHandler.isValidUserProfile($('#uRenInput').val().trim())) {
+				(new UserProfile(this.view.storage)).renameUserProfile(user, $('#uRenInput').val().trim());
+			} else {
+				let msgTxt = this.view.textData['invalidUserProfileName'];
+				this.displayErrorMsg(msgTxt.replace(/%%MAXLEN%%/g, this.inputHandler.maxSwLen));
 				return false;
 			}
 
 			return true;
 		});
 
-		$('#uRenInput').val(user);
+		$('#uRenInput').prop('placeholder', user);
 
 		if (this.view.storage.readPreference('users').findIndex(u => u === user) !== 0) {
 			$('#uDelDiv').show(); // Allow deleting only if the user profile is not the default one

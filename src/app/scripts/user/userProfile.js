@@ -23,6 +23,7 @@ class UserProfile {
 	 * @param {string} newUser The new name for the user profile.
 	 */
 	renameUserProfile(user, newUser) {
+		/* TODO: Rename the user data folder */
 		let users = this.storage.readPreference('users');
 		users[users.findIndex(u => u === user)] = newUser;
 		this.storage.storePreference('users', users);
@@ -34,6 +35,7 @@ class UserProfile {
 	 * @param {string} user The name of the user profile to delete.
 	 */
 	deleteUserProfile(user) {
+		/* TODO: Delete the user data folder */
 		let users = this.storage.readPreference('users');
 
 		if (users.findIndex(u => u === user) < 0) {
@@ -42,6 +44,17 @@ class UserProfile {
 		
 		users.splice(users.findIndex(u => u === user), 1);
 		this.storage.storePreference('users', users);
+	}
+
+	/**
+	 * Switches to another user profile.
+	 * 
+	 * @param {string} newUser The name of the user profile to switch to.
+	 */
+	switchToUserProfile(newUser) {
+		if (this.storage.readPreference('users').includes(newUser)) {
+			this.storage.storePreference('activeUser', newUser);
+		}
 	}
 }
 
