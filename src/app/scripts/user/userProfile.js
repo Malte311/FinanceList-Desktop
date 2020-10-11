@@ -4,6 +4,9 @@ const {sep} = require(__dirname + '/../storage/paths.js');
  * Class for handling different user profiles.
  */
 class UserProfile {
+	/**
+	 * @param {Storage} storage Storage object.
+	 */
 	constructor(storage) {
 		this.storage = storage;
 	}

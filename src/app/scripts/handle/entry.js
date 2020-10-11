@@ -4,6 +4,9 @@ const {createUniqueTimestamp, timestampToFilename} = require(__dirname + '/../ut
  * Handles entry related actions.
  */
 class Entry {
+	/**
+	 * @param {Storage} storage Storage object.
+	 */
 	constructor(storage) {
 		this.storage = storage;
 	}

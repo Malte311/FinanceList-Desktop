@@ -4,6 +4,9 @@ const {getCurrentTimestamp, createUniqueTimestamp} = require(__dirname + '/../ut
  * Handles (non recurring) transactions.
  */
 class Transact {
+	/**
+	 * @param {Storage} storage Storage object.
+	 */
 	constructor(storage) {
 		this.storage = storage;
 	}

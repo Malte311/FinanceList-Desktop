@@ -2,6 +2,9 @@
  * Handles all operations on the data.
  */
 class Data {
+	/**
+	 * @param {Storage} storage Storage object.
+	 */
 	constructor(storage) {
 		this.storage = storage;
 	}

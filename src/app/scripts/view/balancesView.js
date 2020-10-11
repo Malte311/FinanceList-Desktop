@@ -8,6 +8,9 @@ const {timestampToFilename, dateToTimestamp, timestampToString} = require("../ut
  * Class for controlling the balances page of the application.
  */
 class BalancesView extends View {
+	/**
+	 * @param {Storage} storage Storage object.
+	 */
 	constructor(storage) {
 		super(storage);
 	}

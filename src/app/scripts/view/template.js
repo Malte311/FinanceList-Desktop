@@ -2,6 +2,9 @@
  * Class for dealing with html templates.
  */
 class Template {
+	/**
+	 * @param {View} view View object.
+	 */
 	constructor(view) {
 		this.view = view;
 	}

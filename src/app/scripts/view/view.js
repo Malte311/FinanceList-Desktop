@@ -6,6 +6,9 @@ const Template = require(__dirname + '/template.js');
  * Class for displaying html templates and content.
  */
 class View {
+	/**
+	 * @param {Storage} storage Storage object.
+	 */
 	constructor(storage) {
 		this.storage = storage;
 

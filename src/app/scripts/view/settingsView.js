@@ -5,6 +5,9 @@ const {moveJsonFiles} = require(__dirname + '/../storage/paths.js');
  * Class for controlling the settings page of the application.
  */
 class SettingsView extends View {
+	/**
+	 * @param {Storage} storage Storage object.
+	 */
 	constructor(storage) {
 		super(storage);
 	}

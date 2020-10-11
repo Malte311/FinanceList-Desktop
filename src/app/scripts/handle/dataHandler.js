@@ -2,6 +2,9 @@
  * Class for handling data requests.
  */
 class DataHandler {
+	/**
+	 * @param {Data} data Data object.
+	 */
 	constructor(data) {
 		this.data = data;
 	}

@@ -47,6 +47,13 @@ describe('UserProfile', function() {
 
 			userProfile.addUserProfile('Eve2');
 			assert.deepStrictEqual(jsonStorage.readPreference('users'), ['Alice', 'Bob', 'Eve', 'Eve2']);
+
+			jsonStorage.readMainStorage('budgets'); // Creates missing directories
+			assert.strictEqual(existsSync('/tmp/financelist/Alice'), true);
+
+			jsonStorage.storePreference('activeUser', 'Eve');
+			jsonStorage.readMainStorage('budgets'); // Creates missing directories
+			assert.strictEqual(existsSync('/tmp/financelist/Eve'), true);
 		});
 	});
 
@@ -57,6 +64,11 @@ describe('UserProfile', function() {
 
 			userProfile.renameUserProfile('Alice', 'Bob');
 			assert.deepStrictEqual(jsonStorage.readPreference('users'), ['Bob', 'Eve']);
+
+			jsonStorage.readMainStorage('budgets'); // Creates missing directories
+			assert.strictEqual(existsSync('/tmp/financelist/Bob'), true);
+			assert.strictEqual(existsSync('/tmp/financelist/Alice'), false);
+			assert.strictEqual(jsonStorage.readPreference('activeUser'), 'Bob');
 		});
 
 		it('should do nothing when renaming a non-existing user profile', function() {
@@ -74,6 +86,11 @@ describe('UserProfile', function() {
 
 			userProfile.deleteUserProfile('Alice');
 			assert.deepStrictEqual(jsonStorage.readPreference('users'), ['Bob']);
+
+			jsonStorage.readMainStorage('budgets'); // Creates missing directories
+			assert.strictEqual(existsSync('/tmp/financelist/Bob'), true);
+			assert.strictEqual(existsSync('/tmp/financelist/Alice'), false);
+			assert.strictEqual(jsonStorage.readPreference('activeUser'), 'Bob');
 		});
 
 		it('should do nothing when deleting a non-existing user profile', function() {

@@ -2,6 +2,9 @@
  * Class for dealing with user inputs.
  */
 class InputHandler {
+	/**
+	 * @param {Storage} storage Storage object.
+	 */
 	constructor(storage) {
 		this.storage = storage;
 		this.maxStrLen = 100; // Maximum length for a whole string.

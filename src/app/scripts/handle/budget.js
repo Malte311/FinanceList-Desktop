@@ -2,6 +2,9 @@
  * Handles budget related things.
  */
 class Budget {
+	/**
+	 * @param {Storage} storage Storage object.
+	 */
 	constructor(storage) {
 		this.storage = storage;
 	}

@@ -4,6 +4,9 @@ const Chart = require('chart.js');
  * Class for creating charts.
  */
 class ChartHandler {
+	/**
+	 * @param {View} view View object.
+	 */
 	constructor(view) {
 		this.colors = [
 			'rgba(0, 123, 255, 1)',

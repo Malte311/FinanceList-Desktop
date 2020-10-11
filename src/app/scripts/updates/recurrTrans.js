@@ -5,6 +5,9 @@ const {createUniqueTimestamp, getCurrentTimestamp, stepInterval} = require(__dir
  * Handles recurring transactions.
  */
 class RecurrTrans {
+	/**
+	 * @param {Storage} storage Storage object.
+	 */
 	constructor(storage) {
 		this.storage = storage;
 	}

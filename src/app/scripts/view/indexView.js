@@ -5,6 +5,9 @@ const {timestampToString} = require(__dirname + '/../utils/dateHandler.js');
  * Class for controlling the startpage of the application.
  */
 class IndexView extends View {
+	/**
+	 * @param {Storage} storage Storage object.
+	 */
 	constructor(storage) {
 		super(storage);
 	}
