@@ -7,10 +7,13 @@ const {existsSync, mkdirSync, rmdirSync, unlinkSync} = require('fs');
 describe('Entry', function() {
 	let jsonStorage = new JsonStorage();
 	let entry = new Entry(jsonStorage);
-	let path;
+	let activeUser, path;
 
 	before(function() {
+		activeUser = jsonStorage.readPreference('activeUser');
 		path = jsonStorage.readPreference('path');
+
+		jsonStorage.storePreference('activeUser', undefined);
 
 		jsonStorage.storePreference('path', '/tmp/financelist');
 
@@ -20,6 +23,7 @@ describe('Entry', function() {
 	});
 
 	after(function() {
+		jsonStorage.storePreference('activeUser', activeUser);
 		jsonStorage.storePreference('path', path);
 
 		if (existsSync('/tmp/financelist/')) {

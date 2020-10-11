@@ -5,10 +5,13 @@ const {appendFileSync, existsSync, mkdirSync, rmdirSync, unlinkSync} = require('
 
 describe('JsonStorage', function() {
 	let jsonStorage = new JsonStorage();
-	let path;
+	let activeUser, path;
 
 	before(function() {
+		activeUser = jsonStorage.readPreference('activeUser');
 		path = jsonStorage.readPreference('path');
+
+		jsonStorage.storePreference('activeUser', undefined);
 
 		jsonStorage.storePreference('path', '/tmp/financelist');
 		
@@ -18,6 +21,7 @@ describe('JsonStorage', function() {
 	});
 
 	after(function() {
+		jsonStorage.storePreference('activeUser', activeUser);
 		jsonStorage.storePreference('path', path);
 
 		if (existsSync('/tmp/financelist/mainstorage.json')) {

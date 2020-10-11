@@ -8,10 +8,13 @@ describe('DateHandler', function() {
 	let jsonStorage = new JsonStorage();
 
 	let ts = 1600500309;
-	let path;
+	let activeUser, path;
 
 	before(function() {
+		activeUser = jsonStorage.readPreference('activeUser');
 		path = jsonStorage.readPreference('path');
+
+		jsonStorage.storePreference('activeUser', undefined);
 
 		if (!existsSync('/tmp/financelist/')) {
 			mkdirSync('/tmp/financelist/');
@@ -25,6 +28,7 @@ describe('DateHandler', function() {
 	});
 
 	after(function() {
+		jsonStorage.storePreference('activeUser', activeUser);
 		jsonStorage.storePreference('path', path);
 
 		if (existsSync(`/tmp/financelist/${DateHandler.timestampToFilename(ts)}`)) {

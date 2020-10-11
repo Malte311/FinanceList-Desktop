@@ -8,12 +8,13 @@ const {existsSync, unlinkSync, mkdirSync, rmdirSync} = require('fs');
 describe('RecurrTrans', function() {
 	let jsonStorage = new JsonStorage();
 	let recurrTrans = new RecurrTrans(jsonStorage);
-
-	let path;
+	let activeUser, path;
 
 	before(function() {
+		activeUser = jsonStorage.readPreference('activeUser');
 		path = jsonStorage.readPreference('path');
 
+		jsonStorage.storePreference('activeUser', undefined);
 		jsonStorage.storePreference('path', '/tmp/financelist');
 		jsonStorage.writeMainStorage('allocationOn', true);
 		
@@ -31,6 +32,7 @@ describe('RecurrTrans', function() {
 	});
 
 	after(function() {
+		jsonStorage.storePreference('activeUser', activeUser);
 		jsonStorage.storePreference('path', path);
 
 		if (existsSync('/tmp/financelist/mainstorage.json')) {

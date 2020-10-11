@@ -1,8 +1,7 @@
-const UserProfile = require("./user/userProfile");
-
 const DialogHandler = require(__dirname + '/utils/dialogHandler.js');
 const JsonStorage = require(__dirname + '/storage/jsonStorage.js');
 const RecurrTrans = require(__dirname + '/updates/recurrTrans.js');
+const UserProfile = require("./user/userProfile");
 
 const BalancesView = require(__dirname + '/view/balancesView.js');
 const IndexView = require(__dirname + '/view/indexView.js');

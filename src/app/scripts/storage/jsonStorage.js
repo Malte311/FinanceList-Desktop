@@ -20,7 +20,7 @@ class JsonStorage extends Storage {
 			'windowSize': '1920x1080'
 		});
 
-		let currFileDir = this.readPreference('path') + sep();
+		let currFileDir = this.getDataPath();
 		if (!existsSync(currFileDir)) {
 			createPath(currFileDir);
 		}
@@ -83,7 +83,7 @@ class JsonStorage extends Storage {
 	 * @return {string} The corresponding value for the field.
 	 */
 	readMainStorage(field) {
-		let storagePath = this.readPreference('path');
+		let storagePath = this.getDataPath();
 		if (!existsSync(storagePath)) { // Create storage directory if it is missing.
 			createPath(storagePath);
 		}
@@ -103,7 +103,7 @@ class JsonStorage extends Storage {
 	 * @param {any} value The new value for the specified field.
 	 */
 	writeMainStorage(field, value) {
-		let storagePath = this.readPreference('path');
+		let storagePath = this.getDataPath();
 		if (!existsSync(storagePath)) { // Create storage directory if it is missing.
 			createPath(storagePath);
 		}
@@ -135,7 +135,7 @@ class JsonStorage extends Storage {
 	 * @return {array} Array of the file names of all json files with data in it (with .json ending!).
 	 */
 	getJsonFiles() {
-		return listJsonFiles(this.readPreference('path'))
+		return listJsonFiles(this.getDataPath())
 			.filter(e => e !== 'mainstorage.json').sort((a, b) => {
 				return a.split('.').reverse().join('.') < b.split('.').reverse().join('.') ? -1 : 1;
 			});
@@ -156,7 +156,10 @@ class JsonStorage extends Storage {
 	 * @return {string} The path to the folder containing the data.
 	 */
 	getDataPath() {
-		return this.readPreference('path') + sep();
+		let activeUser = this.readPreference('activeUser');
+		let suffix = activeUser !== undefined ? (activeUser + sep()) : '';
+
+		return this.readPreference('path') + sep() + suffix;
 	}
 
 	/**

@@ -8,11 +8,14 @@ const {appendFileSync, existsSync, mkdirSync, rmdirSync, unlinkSync, writeFileSy
 describe('DataHandler', function() {
 	let jsonStorage = new JsonStorage();
 	let dataHandler = new DataHandler(new Data(jsonStorage));
-	let path;
+	let activeUser, path;
 
 	before(function() {
+		activeUser = jsonStorage.readPreference('activeUser');
 		path = jsonStorage.readPreference('path');
+		
 		jsonStorage.storePreference('path', '/tmp/financelist');
+		jsonStorage.storePreference('activeUser', undefined);
 
 		if (!existsSync('/tmp/financelist/')) {
 			mkdirSync('/tmp/financelist/');
@@ -26,6 +29,7 @@ describe('DataHandler', function() {
 	});
 
 	after(function() {
+		jsonStorage.storePreference('activeUser', activeUser);
 		jsonStorage.storePreference('path', path);
 
 		if (existsSync('/tmp/financelist/test.json')) {
