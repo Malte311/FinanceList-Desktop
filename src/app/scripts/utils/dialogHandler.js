@@ -101,7 +101,7 @@ class DialogHandler {
 		let title = this.view.textData['addBudget'];
 		let text = this.view.template.fromTemplate('addBudgetDialog.html');
 		
-		this.displayDialog(title, text, () => {
+		this.displayDialog(title, text.replace(/%%MAXLEN%%/g, this.inputHandler.maxSwLen), () => {
 			let newBudget = $('#dialogInput').val().trim();
 			if (!this.inputHandler.isValidBudgetName(newBudget)) {
 				let msgTxt = this.view.textData['invalidBudgetName'];
@@ -223,8 +223,9 @@ class DialogHandler {
 	editBudgetDialog(name) {
 		let title = this.view.textData['editBudget'];
 		let text = this.view.template.fromTemplate('editBudgetDialog.html');
+		text = text.replace(/%%BUDGET%%/g, name).replace(/%%MAXLEN%%/g, this.inputHandler.maxSwLen);
 
-		this.displayDialog(title, text.replace(/%%BUDGET%%/g, name), () => {
+		this.displayDialog(title, text, () => {
 			const Budget = require(__dirname + '/../handle/budget.js');
 
 			if ($('#delCheck').prop('checked') && $('#delInput').val() === name) {
