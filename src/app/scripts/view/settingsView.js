@@ -22,6 +22,23 @@ class SettingsView extends View {
 	updatePreferences() {
 		$('#btnCurrentPath').text(this.storage.readPreference('path'));
 		$('#btnCurrentCurrency').text(this.capFirstLetter(this.storage.readPreference('currency')));
+		
+		$('#userOverview').html(this.template.table(
+			[
+				[this.textData['userProfile'], this.textData['manage']],
+				...this.storage.readPreference('users').map(user => [
+					this.elt('div', {}, user, (this.storage.readPreference('activeUser') === user ?
+						this.template.badge(this.textData['active']) : '')),
+					this.elt('button', {
+						id: 'btnEditUserProfile',
+						class: 'btn btn-outline-primary',
+						onclick: `$('#modalHidden').val('${user}')`,
+						['data-toggle']: 'modal',
+						['data-target']: '#divModal'
+					}, this.template.icon('edit', 'black'))
+				])
+			]
+		));
 	}
 
 	/**

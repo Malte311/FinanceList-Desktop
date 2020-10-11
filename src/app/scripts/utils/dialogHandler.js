@@ -25,6 +25,9 @@ class DialogHandler {
 				case 'btnAddTransact':
 					dialogHandler.addTransactionDialog();
 					break;
+				case 'btnAddUser':
+					dialogHandler.addUserProfileDialog();
+					break;
 				case 'btnEditBudget':
 					dialogHandler.editBudgetDialog($('#modalHidden').val());
 					break;
@@ -33,6 +36,9 @@ class DialogHandler {
 					break;
 				case 'btnEditRecTrans':
 					dialogHandler.editRecTransDialog($('#modalHidden').val());
+					break;
+				case 'btnEditUserProfile':
+					dialogHandler.editUserProfileDialog($('#modalHidden').val());
 					break;
 				case 'btnTransfer':
 					dialogHandler.execTransferDialog();
@@ -390,6 +396,59 @@ class DialogHandler {
 			$('#rtDateYear').val((new Date(rt.endDate * 1000)).getFullYear());
 			$('#rtDateMonth').val((new Date(rt.endDate * 1000)).getMonth() + 1);
 			$('#rtDateDay').val((new Date(rt.endDate * 1000)).getDate());
+		}
+	}
+
+	/**
+	 * Displays a dialog to add a new user profile and handles the interaction of this dialog.
+	 * 
+	 * @return {bool} True if the input is valid, else false.
+	 */
+	addUserProfileDialog() {
+		let title = this.view.textData['addUserProfile'];
+		let text = this.view.template.fromTemplate('addUserProfileDialog.html');
+
+		this.displayDialog(title, text.replace(/%%MAXLEN%%/g, this.inputHandler.maxSwLen), () => {
+			if (!this.inputHandler.isValidUserProfile($('#unameInput').val())) {
+				let msg = this.view.textData['invalidUserProfileName'];
+				this.displayErrorMsg(msg.replace(/%%MAXLEN%%/g, this.inputHandler.maxSwLen));
+				return false;
+			}
+
+			this.view.storage.storePreference(
+				'users',
+				this.view.storage.readPreference('users').concat([$('#unameInput').val()])
+			);
+
+			return true;
+		});
+	}
+
+	/**
+	 * Displays a dialog to edit the user profiles and handles the interaction of this dialog.
+	 * 
+	 * @param {string} user The user profile to edit.
+	 * @return {bool} True if the input is valid, else false.
+	 */
+	editUserProfileDialog(user) {
+		let title = this.view.textData['editUserProfile'];
+		let text = this.view.template.fromTemplate('editUserProfileDialog.html');
+		text = text.replace(/%%MAXLEN%%/g, this.inputHandler.maxSwLen).replace(/%%USER%%/g, user);
+
+		this.displayDialog(title, text, () => {
+			if (!this.inputHandler.isValidUserProfile($('#uRenInput').val())) {
+				let msg = this.view.textData['invalidUserProfileName'];
+				this.displayErrorMsg(msg.replace(/%%MAXLEN%%/g, this.inputHandler.maxSwLen));
+				return false;
+			}
+
+			return true;
+		});
+
+		$('#uRenInput').val(this.view.storage.readPreference('activeUser'));
+
+		if (this.view.storage.readPreference('users').findIndex(u => u === user) !== 0) {
+			$('#uDelDiv').show(); // Allow deleting only if the user profile is not the default one
 		}
 	}
 

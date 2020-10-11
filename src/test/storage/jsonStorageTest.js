@@ -38,7 +38,6 @@ describe('JsonStorage', function() {
 			assert.strictEqual(jsonStorage.readPreference('chartType'), 'pie');
 			assert.strictEqual(jsonStorage.readPreference('currency'), 'euro');
 			assert.strictEqual(jsonStorage.readPreference('language'), 'en');
-			assert.strictEqual(jsonStorage.readPreference('user'), null);
 		});
 	});
 

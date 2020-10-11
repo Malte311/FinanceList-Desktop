@@ -20,6 +20,18 @@ class Template {
 	}
 
 	/**
+	 * Returns a badge.
+	 * 
+	 * @param {string} text The text of the badge.
+	 * @param {string} [color = 'green'] The color of the badge.
+	 */
+	badge(text, color = 'green') {
+		return this.view.elt('span', {
+			class: `badge badge-${this.view.mappings[color]} ml-2 mr-2`
+		}, text);
+	}
+
+	/**
 	 * Returns a fontawesome icon.
 	 * 
 	 * @param {string} icon The name of the icon.

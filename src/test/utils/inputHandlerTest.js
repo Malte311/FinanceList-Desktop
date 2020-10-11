@@ -8,10 +8,13 @@ describe('InputHandler', function() {
 	let jsonStorage = new JsonStorage();
 	let inputHandler = new InputHandler(jsonStorage);
 	let path;
+	let users;
 
 	before(function() {
 		path = jsonStorage.readPreference('path');
+		users = jsonStorage.readPreference('users');
 		jsonStorage.storePreference('path', '/tmp/financelist');
+		jsonStorage.storePreference('users', ['Alice', 'Bob']);
 
 		if (!existsSync('/tmp/financelist/')) {
 			mkdirSync('/tmp/financelist/');
@@ -20,6 +23,7 @@ describe('InputHandler', function() {
 
 	after(function() {
 		jsonStorage.storePreference('path', path);
+		jsonStorage.storePreference('users', users);
 
 		if (existsSync('/tmp/financelist/mainstorage.json')) {
 			unlinkSync('/tmp/financelist/mainstorage.json');
@@ -142,14 +146,14 @@ describe('InputHandler', function() {
 
 	describe('#isValidUserProfile()', function() {
 		it('should reject invalid user profile names', function() {
-			assert.strictEqual(inputHandler.isValidUserProfile(null), false, 'Test 2 failed.');
-			assert.strictEqual(inputHandler.isValidUserProfile(undefined), false, 'Test 3 failed.');
-			assert.strictEqual(inputHandler.isValidUserProfile(true), false, 'Test 4 failed.');
-			assert.strictEqual(inputHandler.isValidUserProfile(''), false, 'Test 5 failed.');
-			assert.strictEqual(inputHandler.isValidUserProfile('  '), false, 'Test 6 failed.');
-			assert.strictEqual(inputHandler.isValidUserProfile('Test$'), false, 'Test 9 failed.');
-			assert.strictEqual(inputHandler.isValidUserProfile('!?'), false, 'Test 10 failed.');
-			assert.strictEqual(inputHandler.isValidUserProfile('Test Test'), false, 'Test 10 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile(null), false, 'Test 1 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile(undefined), false, 'Test 2 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile(true), false, 'Test 3 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile(''), false, 'Test 4 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile('  '), false, 'Test 5 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile('Test$'), false, 'Test 6 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile('!?'), false, 'Test 7 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile('Test Test'), false, 'Test 8 failed.');
 		});
 
 		it('should accept valid user profile names', function() {
@@ -157,8 +161,16 @@ describe('InputHandler', function() {
 			assert.strictEqual(inputHandler.isValidUserProfile('Test '), true, 'Test 2 failed.');
 			assert.strictEqual(inputHandler.isValidUserProfile(' Test'), true, 'Test 3 failed.');
 			assert.strictEqual(inputHandler.isValidUserProfile(' Test '), true, 'Test 4 failed.');
-			assert.strictEqual(inputHandler.isValidUserProfile('55'), true, 'Test 7 failed.');
-			assert.strictEqual(inputHandler.isValidUserProfile('Test1'), true, 'Test 8 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile('55'), true, 'Test 5 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile('Test1'), true, 'Test 6 failed.');
+		});
+
+		it('should reject valid names which are already in use', function() {
+			assert.strictEqual(inputHandler.isValidUserProfile('Alice'), false, 'Test 1 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile('Alice '), false, 'Test 2 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile(' Alice'), false, 'Test 3 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile(' Alice '), false, 'Test 4 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile('Bob'), false, 'Test 5 failed.');
 		});
 	});
 });

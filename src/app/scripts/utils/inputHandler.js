@@ -84,8 +84,10 @@ class InputHandler {
 		}
 
 		user = user.trim();
+		let users = this.storage.readPreference('users');
 
-		return !/[^a-zA-Z0-9]/.test(user) && user !== '' && user.length <= this.maxSwLen;
+		return !/[^a-zA-Z0-9]/.test(user) && user !== '' && user.length <= this.maxSwLen
+			&& !users.includes(user);
 	}
 }
 

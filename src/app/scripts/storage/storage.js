@@ -5,12 +5,15 @@ const {getCurrentTimestamp} = require(__dirname + '/../utils/dateHandler.js');
  */
 class Storage {
 	constructor() {
+		let user = require('os').userInfo().username;
+
 		// Default preferences object
 		this.defPref = {
+			'activeUser': user,
 			'chartType': 'pie',
 			'currency': 'euro',
 			'language': 'en',
-			'user': null
+			'users': [user]
 		};
 
 		// Default storage object

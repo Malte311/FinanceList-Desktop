@@ -1,0 +1,57 @@
+<h5 lang="de"><i class="fas fa-edit text-success"></i> Benutzerprofil umbenennen</h5>
+<h5 lang="en"><i class="fas fa-edit text-success"></i> Rename User Profile</h5>
+<span lang="de">
+	Bitte geben Sie einen neuen Namen f&uuml;r das Benutzerprofil &quot;%%USER%%&quot; ein.
+	Der Name darf nicht leer sein, maximal %%MAXLEN%% Zeichen lang sein und darf
+	ausschlie&szlig;lich Buchstaben und Zahlen enthalten (Leerzeichen sind nicht erlaubt).
+</span>
+<span lang="en">
+	Please type in the new name for the user profile &quot;%%USER%%&quot;.
+	The name must not be empty, it must not be longer than %%MAXLEN%% characters
+	and it must only contain letters and digits (no spaces allowed).
+</span>
+<div class="input-group mt-2 mb-2">
+	<div class="input-group-prepend">
+		<label lang="de" class="input-group-text" for="uRenInput">Name des Benutzerprofils</label>
+		<label lang="en" class="input-group-text" for="uRenInput">Name of the User Profile</label>
+	</div>
+	<input class="form-control" type="text" id="uRenInput">
+</div>
+<div id="uDelDiv" style="display: none;">
+	<hr>
+	<h5 lang="de"><i class="fas fa-trash-alt text-danger"></i> Benutzerprofil l&ouml;schen</h5>
+	<h5 lang="en"><i class="fas fa-trash-alt text-danger"></i> Delete User Profile</h5>
+	<span lang="de">
+		Soll das Benutzerprofil &quot;%%USER%%&quot; wirklich gel&ouml;scht werden?
+		Dabei gehen alle Daten des Benutzerprofils verloren und die Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden.
+		Um das Benutzerprofil &quot;%%USER%%&quot; zu l&ouml;schen, m&uuml;ssen Sie unten die Checkbox aktivieren und
+		den Text &quot;%%USER%%&quot; eingeben.
+	</span>
+	<span lang="en">
+		Are you sure you want to delete the user profile &quot;%%USER%%&quot;?
+		All of its data will be lost and this action cannot be undone.
+		In order to confirm, activate the checkbox below and type in the text &quot;%%USER%%&quot;.
+	</span>
+	<br>
+	<input class="mt-2 mb-2" type="checkbox" id="uDelCheck" onclick="
+			if (this.checked) {
+				$('#uRenInput').prop('disabled', true);
+				$('#uDelInput').prop('disabled', false);
+			} else {
+				$('#uRenInput').prop('disabled', false);
+				$('#uDelInput').val('').prop('disabled', true);
+			}">
+	<span lang="de">
+		Ja, ich m&ouml;chte das Benutzerprofil &quot;%%USER%%&quot; l&ouml;schen.
+	</span>
+	<span lang="en">
+		Yes, delete the user profile &quot;%%USER%%&quot;.
+	</span>
+	<div class="input-group mt-2 mb-2">
+		<div class="input-group-prepend">
+			<label lang="de" class="input-group-text text-danger" for="uDelInput">Benutzerprofil l&ouml;schen</label>
+			<label lang="en" class="input-group-text text-danger" for="uDelInput">Delete User Profile</label>
+		</div>
+		<input class="form-control" type="text" id="uDelInput" disabled>
+	</div>
+</div>

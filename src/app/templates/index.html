@@ -308,11 +308,18 @@
 				<h3 lang="de"><i class="fas fa-users text-danger"></i> Benutzerprofil</h3>
 				<h3 lang="en"><i class="fas fa-users text-danger"></i> User Profile</h3>
 				<p lang="de">
-					Hier k&ouml;nnen Sie das derzeit ausgew&auml;hlte Benutzerprofil &auml;ndern.
+					Hier k&ouml;nnen Sie Ihre vorhandenen Benutzerprofile verwalten.
 				</p>
 				<p lang="en">
-					Here you can change the currently selected user profile.
+					Here you can manage your available user profiles.
 				</p>
+				<div class="mt-2 mb-2" id="userOverview"></div>
+				<button lang="de" type="button" id="btnAddUser" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">
+					Benutzerprofil hinzuf&uuml;gen
+				</button>
+				<button lang="en" type="button" id="btnAddUser" class="btn btn-outline-primary" data-toggle="modal" data-target="#divModal">
+					Add User Profile
+				</button>
 			</div>
 
 			<div class="tab-pane fade" id="help" role="tabpanel" aria-labelledby="help-tab">
@@ -351,6 +358,10 @@
 		require('bootstrap');
 
 		const Startup = require(__dirname + '/../scripts/startup.js');
-		const startup = new Startup();
+		
+		let startup; // Global namespace.
+		$(function() {
+			startup = new Startup();
+		});
 	</script>
 </html>

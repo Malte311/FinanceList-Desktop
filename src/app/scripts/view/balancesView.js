@@ -126,7 +126,7 @@ class BalancesView extends View {
 					class: 'btn btn-outline-primary',
 					onclick: `$('#modalHidden').val('${d.date}')`,
 					['data-toggle']: 'modal',
-					['data-target']: '#divModal',
+					['data-target']: '#divModal'
 				}, this.template.icon('edit', 'black'))
 			]));
 

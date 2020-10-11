@@ -46,7 +46,7 @@ class IndexView extends View {
 				class: 'btn btn-outline-primary',
 				onclick: `$('#modalHidden').val('${b[0]}')`,
 				['data-toggle']: 'modal',
-				['data-target']: '#divModal',
+				['data-target']: '#divModal'
 			}, this.template.icon('edit', 'black')))]);
 
 		if (this.storage.readMainStorage('allocationOn')) {
