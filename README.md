@@ -6,27 +6,32 @@
 [![GitHub release](https://img.shields.io/github/v/release/Malte311/FinanceList-Desktop)](https://github.com/Malte311/FinanceList-Desktop/releases)
 [![Documentation](https://img.shields.io/badge/-documentation-orange)](https://malte311.github.io/FinanceList-Desktop/)
 
-FinanceList is a simple finance managing tool. For more information on how to use this tool, take a look at the [Wiki](https://github.com/Malte311/FinanceList-Desktop/wiki).
+FinanceList-Desktop is a simple finance managing tool which works on Linux, macOS and Windows. FinanceList-Desktop helps you to keep track of your expenses and allows you to manage your finances with ease.
+
 ***
 ## Features
-FinanceList allows you to keep track of your finances with ease. Some of the included features are:
+FinanceList-Desktop offers you a variety of different features to keep your finances under control. Some of the included features are listed below.
 
-- Filter data by any parameter
-- Add recurring transactions which get executed automatically in a given time interval
-- Allocate sums automatically between different budgets
-- And many more! [Download FinanceList and try them out!](https://github.com/Malte311/FinanceList-Desktop/releases)
+- Add as many budgets as you like. You can even distribute your earnings across multiple budgets automatically by setting up a distribution policy.
+- Create recurring transactions which execute repeatedly in a given interval.
+- Filter your data by different criteria (names, categories, date, etc.) and look at a visual representation of the data in form of a chart.
 
-For more information about this application, visit the [FinanceList wiki](https://github.com/Malte311/FinanceList-Desktop/wiki).
-You can request new features at any time [here](https://github.com/Malte311/FinanceList-Desktop/issues/new/choose).
+In order to learn more about all the features provided by FinanceList-Desktop, simply try it out yourself.
 
 ***
 ## Installation
 
-You can get the latest version of FinanceList [here](https://github.com/Malte311/FinanceList-Desktop/releases). Simply download the correct `ZIP`-archive and unzip it.
+Installation is straightforward: Navigate to the [latest release](https://github.com/Malte311/FinanceList-Desktop/releases/latest) of this application and download the corresponding build for your operating system.
+
+After downloading, unpack the archive and run the executable in order to start the program.
+
+It is really that simple.
 
 ***
-## License
-FinanceList is available under the [MIT License](https://github.com/Malte311/FinanceList-Desktop/blob/master/LICENSE).
+## Usage
+
+I gave my best to make the application as self-explaining as possible, but if some things remain unclear, you can visit the [Wiki](https://github.com/Malte311/FinanceList-Desktop/wiki) page of this repository. It gives you a quick overview of the features and how to use them.
 
 ***
-*This Desktop application has been build with [electron-quick-start](https://github.com/electron/electron-quick-start).*
+## Acknowledgements
+This application has been build with [electron-quick-start](https://github.com/electron/electron-quick-start).
