@@ -149,59 +149,47 @@ class ChartHandler {
 	 * @param {array} data The input data.
 	 */
 	createMonthlySurplusChart(canvas, data) {
-		let budgets = data.map(d => d.budget).filter((val, ind, self) => self.indexOf(val) === ind);
-		let months = data.map(d => {
-			return this.view.textData['monthNames'][parseInt(timestampToString(d.date).split('.')[1]) - 1]
-		}).filter((val, ind, self) => self.indexOf(val) === ind);
-
-		let datasets = {};
-		budgets.forEach(b => {
-			datasets[b] = [];
-			months.forEach(() => datasets[b].push([0, 0]));
-		});
-
+		let months = this.view.textData['monthNames'];
+		let plotData = [];
+		
+		months.forEach((m, index) => plotData[index] = [0, 0]);
 		data.forEach(d => {
-			let m = months.indexOf(this.view.textData['monthNames'][parseInt(timestampToString(d.date).split('.')[1]) - 1]);
-			datasets[d.budget][m][d.type === 'earning' ? 0 : 1] += parseFloat(d.amount);
+			let i = d.type === 'earning' ? 0 : 1;
+			plotData[parseInt(timestampToString(d.date).split('.')[1] - 1)][i] += parseFloat(d.amount);
 		});
 
-		while (budgets.length > this.colors.length) { // Ensure that enough colors are available.
+		while (months.length > this.colors.length) { // Ensure that enough colors are available.
 			this.colors = this.colors.concat(this.colors);
 		}
 
 		// Ensure that two adjacent parts do not have the same color.
-		if (this.colors[budgets.length - 1] === this.colors[0]) {
-			this.colors[budgets.length - 1] = this.colorSeparator;
+		if (this.colors[months.length - 1] === this.colors[0]) {
+			this.colors[months.length - 1] = this.colorSeparator;
 		}
 
 		let backgroundColors = this.colors.map(c => c.replace('1)', '0.3)')); // Opacity
-
-		let dataArr = [], colIndex = 0;
-		for (const [key, val] of Object.entries(datasets)) {
-			dataArr.push({
-				backgroundColor: backgroundColors[colIndex],
-				borderColor: this.colors[colIndex++],
-				borderWidth: 1,
-				data: val.map(v => parseFloat(v[0] - v[1]).toFixed(2)),
-				label: key
-			});
-		}
 
 		new Chart($(canvas), {
 			type: 'bar',
 			data: {
 				labels: months,
-				datasets: dataArr,
+				datasets: [{
+					data: plotData.map(d => parseFloat(d[0] - d[1]).toFixed(2)),
+					backgroundColor: backgroundColors,
+					borderColor: this.colors,
+					borderWidth: 1
+				}]
 			},
 			options: {
 				tooltips: {
 					callbacks: {
 						label: (ttI, cD) => {
-							let sum = this.view.printNum(cD.datasets[ttI.datasetIndex].data[ttI.index]);
-							return `${cD.datasets[ttI.datasetIndex].label}: ${sum}`;
+							let sum = this.view.printNum(cD.datasets[0].data[ttI.index]);
+							return `${cD.labels[ttI.index]}: ${sum}`;
 						}
 					}
-				}
+				},
+				legend: false
 			}
 		});
 	}
