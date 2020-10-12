@@ -224,13 +224,15 @@ class ChartHandler {
 				labels: days,
 				datasets: [{
 					data: plotData[0].map(d => parseFloat(d).toFixed(2)),
+					backgroundColor: 'rgba(40, 167, 69, 0.3)',
 					borderColor: 'rgba(40, 167, 69, 1)',
-					fill: false,
+					borderWidth: 1,
 					label: this.view.textData['earnings']
 				}, {
 					data: plotData[1].map(d => parseFloat(d).toFixed(2)),
+					backgroundColor: 'rgba(220, 53, 69, 0.3)',
 					borderColor: 'rgba(220, 53, 69, 1)',
-					fill: false,
+					borderWidth: 1,
 					label: this.view.textData['spendings']
 				}]
 			},
