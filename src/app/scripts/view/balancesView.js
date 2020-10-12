@@ -145,11 +145,7 @@ class BalancesView extends View {
 			});
 
 			$('#graphDiv').html(this.elt('canvas', {id: 'graphCanvas'}));
-			(new ChartHandler(this)).createChart(
-				'#graphCanvas',
-				data.map(d => d.name),
-				data.map(d => parseFloat(d.amount).toFixed(2))
-			);
+			(new ChartHandler(this)).createChart('#graphCanvas', data);
 		} else {
 			$(id).html(this.elt('center', {}, this.textData['noTransactions']));
 		}
