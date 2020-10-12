@@ -15,7 +15,7 @@ if [ "$TRAVIS_OS_NAME" = "linux" ]; then
 	zip -r -9 application/FinanceList-Desktop-win32-x64.zip application/FinanceList-Desktop-win32-x64
 
 	npm run package-linux
-	zip -r -9 application/FinanceList-Desktop-linux-x64.zip application/FinanceList-Desktop-linux-x6
+	zip -r -9 application/FinanceList-Desktop-linux-x64.zip application/FinanceList-Desktop-linux-x64
 
 fi;
 if [ "$TRAVIS_OS_NAME" = "osx" ]; then
