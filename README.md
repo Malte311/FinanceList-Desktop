@@ -1,4 +1,4 @@
-# FinanceList-Desktop
+# FinanceList-Desktop <img src="src/app/img/tab.png" align="right" height="70">
 
 ![Build Status](https://travis-ci.com/Malte311/FinanceList-Desktop.svg?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/Malte311/FinanceList-Desktop/badge.svg?branch=refactor)](https://coveralls.io/github/Malte311/FinanceList-Desktop?branch=refactor)
