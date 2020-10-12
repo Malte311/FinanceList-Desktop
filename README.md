@@ -10,11 +10,16 @@ FinanceList-Desktop is a simple finance managing tool which works on Linux, macO
 
 ***
 ## Features
+
+![Overview](../media/overview-page.png?raw=true)
+
 FinanceList-Desktop offers you a variety of different features to keep your finances under control. Some of the included features are listed below.
 
 - Add as many budgets as you like. You can even distribute your earnings across multiple budgets automatically by setting up a distribution policy.
 - Create recurring transactions which execute repeatedly in a given interval.
 - Filter your data by different criteria (names, categories, date, etc.) and look at a visual representation of the data in form of a chart.
+
+![Balances](../media/balances-page-2.png?raw=true)
 
 In order to learn more about all the features provided by FinanceList-Desktop, simply try it out yourself.
 
