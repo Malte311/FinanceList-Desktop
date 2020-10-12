@@ -58,7 +58,7 @@ class SettingsView extends View {
 		ipcRenderer.on('showOpenDialogThen', (event, newPath) => {
 			let oldPath = this.storage.readPreference('path');
 			if (newPath.filePaths && newPath.filePaths.length > 0 && newPath.filePaths[0] !== oldPath) {
-				moveJsonFiles(oldPath, newPath.filePaths[0], success => {
+				moveJsonFiles(oldPath, newPath.filePaths[0], this.storage, success => {
 					if (!success) {
 						$('#set-msg').html(this.template.alert(this.textData['changePathErr']));
 					} else {

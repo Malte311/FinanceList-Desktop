@@ -81,17 +81,18 @@ class Path {
 	 * 
 	 * @param {string} from The source directory.
 	 * @param {string} to The target directory.
+	 * @param {Storage} storage Storage object to access the storage.
 	 * @param {function} callback Callback function which takes one boolean parameter
 	 * that indicates whether the operation succeeded or not (true = success).
 	 */
-	static moveJsonFiles(from, to, callback) {
+	static moveJsonFiles(from, to, storage, callback) {
 		let {readdirSync, renameSync} = require('fs');
-		let allFiles = readdirSync(from);
+		let users = storage.readPreference('users');
 
-		for (let i = 0; i < allFiles.length; i++) {
-			if (allFiles[i].endsWith('.json')) {
+		for (let file of readdirSync(from)) {
+			if (file !== 'settings.json' && (file.endsWith('.json') || users.includes(file))) {
 				try {
-					renameSync(from + Path.sep() + allFiles[i], to + Path.sep() + allFiles[i]);
+					renameSync(from + Path.sep() + file, to + Path.sep() + file);
 				} catch (err) { // Cross-device linking will cause an error.
 					callback(false);
 					break;
