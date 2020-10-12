@@ -36,6 +36,9 @@ class ChartHandler {
 			case 'doughnut':
 				this.createCategoryChart(canvas, data);
 				break;
+			case 'line':
+				this.createEarnSpendChart(canvas, data);
+				break;
 			case 'pie':
 				this.createTransactionChart(canvas, data);
 				break;
@@ -143,7 +146,7 @@ class ChartHandler {
 	}
 
 	/**
-	 * Creates a chart containing the monthly surpluses for each budget.
+	 * Creates a chart containing the monthly surpluses for all budgets combined.
 	 * 
 	 * @param {string} canvas The id of the canvas element which contains the chart.
 	 * @param {array} data The input data.
@@ -190,6 +193,56 @@ class ChartHandler {
 					}
 				},
 				legend: false
+			}
+		});
+	}
+
+	/**
+	 * Creates a chart containing the earnings and spendings per day.
+	 * 
+	 * @param {string} canvas The id of the canvas element which contains the chart.
+	 * @param {array} data The input data.
+	 */
+	createEarnSpendChart(canvas, data) {
+		let days = data.map(d => timestampToString((new Date(d.date))))
+			.filter((val, ind, self) => self.indexOf(val) === ind);
+		let dataObj = {};
+
+		days.forEach(d => dataObj[d] = [0, 0]);
+		data.forEach(d => dataObj[timestampToString(new Date(d.date))][d.type === 'earning' ? 0 : 1] += parseFloat(d.amount));
+
+		let plotData = [[], []]; // Make sure to keep labels and data in the correct order
+		for (const val of Object.values(dataObj)) {
+			plotData[0].push(val[0]);
+			plotData[1].push(val[1]);
+		}
+		plotData.map(d => d.reduce((prev, curr) => prev + parseFloat(curr), 0));
+
+		new Chart($(canvas), {
+			type: 'line',
+			data: {
+				labels: days,
+				datasets: [{
+					data: plotData[0].map(d => parseFloat(d).toFixed(2)),
+					borderColor: 'rgba(40, 167, 69, 1)',
+					fill: false,
+					label: this.view.textData['earnings']
+				}, {
+					data: plotData[1].map(d => parseFloat(d).toFixed(2)),
+					borderColor: 'rgba(220, 53, 69, 1)',
+					fill: false,
+					label: this.view.textData['spendings']
+				}]
+			},
+			options: {
+				tooltips: {
+					callbacks: {
+						label: (ttI, cD) => {
+							let sum = this.view.printNum(cD.datasets[ttI.datasetIndex].data[ttI.index]);
+							return `${cD.labels[ttI.index]}: ${sum}`;
+						}
+					}
+				}
 			}
 		});
 	}
