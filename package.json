@@ -42,8 +42,6 @@
 		"bootstrap": "^4.5.2",
 		"chart.js": "^2.9.3",
 		"compare-versions": "^3.6.0",
-		"es-abstract": "^1.17.7",
-		"is-negative-zero": "^2.0.0",
 		"jquery": "^3.5.1",
 		"jquery-ui-dist": "^1.12.1",
 		"popper.js": "^1.16.1",
