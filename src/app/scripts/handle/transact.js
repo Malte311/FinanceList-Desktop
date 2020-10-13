@@ -19,6 +19,7 @@ class Transact {
 	 * should be spread across multiple budgets.
 	 */
 	addEarning(earningObj, allocationOn) {
+		earningObj.amount = earningObj.amount.replace(',', '.');
 		earningObj.date = createUniqueTimestamp(earningObj.date, this.storage);
 
 		if (allocationOn) {
@@ -71,6 +72,7 @@ class Transact {
 	 * @param {object} spendingObj The entry to add.
 	 */
 	addSpending(spendingObj) {
+		spendingObj.amount = spendingObj.amount.replace(',', '.');
 		spendingObj.date = createUniqueTimestamp(spendingObj.date, this.storage);
 
 		this.storage.storeData(spendingObj);
@@ -90,7 +92,7 @@ class Transact {
 		let obj = {
 			date: createUniqueTimestamp(getCurrentTimestamp(), this.storage),
 			name: 'Transfer',
-			amount: amount,
+			amount: amount.replace(',', '.'),
 			category: 'Transfer'
 		};
 

@@ -115,7 +115,7 @@ class BalancesView extends View {
 				this.textData['edit']
 			]];
 
-			data.forEach(d => tableRows.push([
+			data.sort((a, b) => a.date < b.date ? 1 : -1).forEach(d => tableRows.push([
 				timestampToString(d.date), d.name, this.printNum(d.amount), d.category,
 				d.budget, this.textData[d.type], this.elt('button', {
 					id: 'btnEditEntry',

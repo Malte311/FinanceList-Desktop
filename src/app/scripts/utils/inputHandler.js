@@ -19,7 +19,7 @@ class InputHandler {
 	 */
 	isValidBudgetName(name) {
 		let budgets = this.storage.readMainStorage('budgets');
-		let validChars = !/[^a-zA-Z0-9 ]/.test(name);
+		let validChars = !/[^a-zA-ZäöüÄÖÜß0-9 ]/.test(name);
 		
 		return !!name && validChars && name.trim() !== '' && name.length <= this.maxSwLen
 			&& !budgets.map(b => b[0]).includes(name);
@@ -32,7 +32,7 @@ class InputHandler {
 	 * @return {bool} True if the name is valid, otherwise false.
 	 */
 	isValidEntryName(name) {
-		let validChars = !/[^a-zA-Z0-9 ]/.test(name);
+		let validChars = !/[^a-zA-ZäöüÄÖÜß0-9 ]/.test(name);
 
 		return !!name && validChars && name.trim() !== '' && name.length <= this.maxStrLen &&
 			name.split(' ').every(w => w.length <= this.maxSwLen);
@@ -89,7 +89,7 @@ class InputHandler {
 		user = user.trim();
 		let users = this.storage.readPreference('users');
 
-		return !/[^a-zA-Z0-9]/.test(user) && user !== '' && user.length <= this.maxSwLen
+		return !/[^a-zA-ZäöüÄÖÜß0-9]/.test(user) && user !== '' && user.length <= this.maxSwLen
 			&& !users.includes(user);
 	}
 }
