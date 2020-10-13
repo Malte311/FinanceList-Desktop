@@ -49,8 +49,6 @@ class InputHandler {
 		if (amount === null || amount === undefined) {
 			return false;
 		}
-
-		amount = amount.replace(',', '.');
 		
 		let validChars = !/[^0-9.]/.test(amount);
 		let notEmpty = emptyOk || amount.trim() !== '';

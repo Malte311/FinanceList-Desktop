@@ -56,8 +56,8 @@ class BalancesView extends View {
 	displayOverview(id) {
 		let budget = $('#budgetSelect option:selected').val();
 		let type = $('#typeSelect option:selected').val();
-		let amountFrom = $('#amountFrom').val();
-		let amountTo = $('#amountTo').val();
+		let amountFrom = $('#amountFrom').val().replace(',', '.');
+		let amountTo = $('#amountTo').val().replace(',', '.');
 		let name = $('#nameSearch').val();
 		let cat = $('#catSearch').val();
 

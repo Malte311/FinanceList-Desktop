@@ -49,7 +49,6 @@ class RecurrTrans {
 	 * @param {object} transObj The transaction object to add.
 	 */
 	addRecurringTransaction(transObj) {
-		transObj.amount = transObj.amount.replace(',', '.');
 		transObj.startDate = createUniqueTimestamp(transObj.startDate, this.storage);
 		transObj.nextDate = transObj.startDate;
 

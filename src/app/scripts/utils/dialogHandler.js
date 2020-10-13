@@ -130,8 +130,9 @@ class DialogHandler {
 			let eD = $('#endDateDay').val(), eM = $('#endDateMonth').val(), eY = $('#endDateYear').val();
 			let noEndChecked = $(`#${this.view.lang}NoEndDate`).prop('checked');
 			let alloc = $('input[name="allocation"]:checked').val();
+			let amount = $('#sumInput').val().trim().replace(',', '.');
 
-			if (!this.inputHandler.isValidAmount($('#sumInput').val().trim())) {
+			if (!this.inputHandler.isValidAmount(amount)) {
 				this.displayErrorMsg(this.view.textData['invalidAmount']);
 				return false;
 			} else if (!this.inputHandler.isValidDate(d, m ,y)) {
@@ -152,7 +153,7 @@ class DialogHandler {
 			let obj = {
 				date: dateToTimestamp(d, m ,y),
 				name: $('#nameInput').val().trim(),
-				amount: $('#sumInput').val().trim(),
+				amount: parseFloat(amount),
 				budget: $('#budgetSelect option:selected').text(),
 				type: $('input[name="type"]:checked').val(),
 				category: $('#categoryInput').val().trim()
@@ -359,6 +360,7 @@ class DialogHandler {
 		let dArr = ['#rtDateDay', '#rtDateMonth', '#rtDateYear'];
 		
 		this.displayDialog(title, text, () => {
+			let amount = $('#rtAmountInput').val();
 			let endDate = dArr.some(id => $(id).val().trim() !== '') ? dArr.map(id => $(id).val()) : -1;
 
 			if (!this.inputHandler.isValidEntryName($('#rtNameInput').val())) {
@@ -367,7 +369,7 @@ class DialogHandler {
 					.replace(/%%MAXWLEN%%/g, this.inputHandler.maxSwLen);
 				this.displayErrorMsg(msg);
 				return false;
-			} else if (!this.inputHandler.isValidAmount($('#rtAmountInput').val(), false)) {
+			} else if (!this.inputHandler.isValidAmount(amount, false)) {
 				this.displayErrorMsg(this.view.textData['invalidAmount']);
 				return false;
 			} else if (endDate !== -1 && !this.inputHandler.isValidDate(...endDate)) {
@@ -377,7 +379,7 @@ class DialogHandler {
 
 			let newProps = {
 				name: $('#rtNameInput').val(),
-				amount: parseFloat($('#rtAmountInput').val()),
+				amount: parseFloat(amount),
 				category: $('#rtCatInput').val(),
 				interval: $('#rtIntervalSel option:selected').val(),
 				endDate: endDate !== -1 ? dateToTimestamp(...endDate) : -1
@@ -475,7 +477,7 @@ class DialogHandler {
 		let text = this.view.template.fromTemplate('transferDialog.html');
 		
 		this.displayDialog(title, text, () => {
-			let amount = $('#transferAmount').val();
+			let amount = $('#transferAmount').val().trim().replace(',', '.');
 
 			if (!this.inputHandler.isValidAmount(amount, false)) {
 				this.displayErrorMsg(this.view.textData['invalidAmount']);

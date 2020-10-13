@@ -102,6 +102,11 @@ describe('InputHandler', function() {
 				assert.strictEqual(inputHandler.isValidAmount('-5', emptyOk), false, 'Test 13 failed.');
 				assert.strictEqual(inputHandler.isValidAmount('-5.5', emptyOk), false, 'Test 14 failed.');
 				assert.strictEqual(inputHandler.isValidAmount('-5,5', emptyOk), false, 'Test 15 failed.');
+				assert.strictEqual(inputHandler.isValidAmount('1,1', emptyOk), false, 'Test 16 failed.');
+				assert.strictEqual(inputHandler.isValidAmount('1,10', emptyOk), false, 'Test 17 failed.');
+				assert.strictEqual(inputHandler.isValidAmount(',1', emptyOk), false, 'Test 18 failed.');
+				assert.strictEqual(inputHandler.isValidAmount('555,', emptyOk), false, 'Test 19 failed.');
+				assert.strictEqual(inputHandler.isValidAmount('555,55', emptyOk), false, 'Test 20 failed.');
 			});
 		});
 
@@ -113,14 +118,9 @@ describe('InputHandler', function() {
 				assert.strictEqual(inputHandler.isValidAmount('1.1', emptyOk), true, 'Test 2 failed.');
 				assert.strictEqual(inputHandler.isValidAmount('1.10', emptyOk), true, 'Test 3 failed.');
 				assert.strictEqual(inputHandler.isValidAmount('.1', emptyOk), true, 'Test 4 failed.');
-				assert.strictEqual(inputHandler.isValidAmount('1,1', emptyOk), true, 'Test 5 failed.');
-				assert.strictEqual(inputHandler.isValidAmount('1,10', emptyOk), true, 'Test 6 failed.');
-				assert.strictEqual(inputHandler.isValidAmount(',1', emptyOk), true, 'Test 7 failed.');
-				assert.strictEqual(inputHandler.isValidAmount('10000000', emptyOk), true, 'Test 8 failed.');
-				assert.strictEqual(inputHandler.isValidAmount('555.55', emptyOk), true, 'Test 9 failed.');
-				assert.strictEqual(inputHandler.isValidAmount('555,55', emptyOk), true, 'Test 10 failed.');
-				assert.strictEqual(inputHandler.isValidAmount('555,', emptyOk), true, 'Test 11 failed.');
-				assert.strictEqual(inputHandler.isValidAmount('555.', emptyOk), true, 'Test 12 failed.');
+				assert.strictEqual(inputHandler.isValidAmount('10000000', emptyOk), true, 'Test 5 failed.');
+				assert.strictEqual(inputHandler.isValidAmount('555.55', emptyOk), true, 'Test 6 failed.');
+				assert.strictEqual(inputHandler.isValidAmount('555.', emptyOk), true, 'Test 7 failed.');
 			});
 		});
 	});
