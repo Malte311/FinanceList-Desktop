@@ -87,29 +87,22 @@ class BalancesView extends View {
 			params: [['type', 'earning'], ['type', 'spending']]
 		};
 
-		let start = ['dateFromDay', 'dateFromMonth', 'dateFromYear'].every(id =>
-			$(`#${id}`).val().trim() === '') ? timestampToFilename((new Date('1970-01-01')).getTime() / 1000) :
-			timestampToFilename(dateToTimestamp(
-				$('#dateFromDay').val(),
-				$('#dateFromMonth').val(),
-				$('#dateFromYear').val()
-			)
-		);
-		let end = ['dateToDay', 'dateToMonth', 'dateToYear'].every(id =>
-			$(`#${id}`).val().trim() === '') ? timestampToFilename((new Date()).getTime() / 1000) :
-			timestampToFilename(dateToTimestamp(
-				$('#dateToDay').val(),
-				$('#dateToMonth').val(),
-				$('#dateToYear').val()
-			)
-		);
+		let startTS = dateToTimestamp($('#dateFromDay').val(), $('#dateFromMonth').val(), $('#dateFromYear').val());
+		let start = ['dateFromDay', 'dateFromMonth', 'dateFromYear'].every(id => $(`#${id}`).val().trim() === '') ?
+			timestampToFilename((new Date('1970-01-01')).getTime() / 1000) : timestampToFilename(startTS);
+		
+		let endTS = dateToTimestamp($('#dateToDay').val(), $('#dateToMonth').val(), $('#dateToYear').val());
+		let end = ['dateToDay', 'dateToMonth', 'dateToYear'].every(id => $(`#${id}`).val().trim() === '') ?
+			timestampToFilename((new Date()).getTime() / 1000) : timestampToFilename(endTS);
 
 		let data = [];
 		this.storage.getJsonFiles().forEach(file => {
 			if (start.split('.').reverse() <= file.split('.').reverse()
 					&& end.split('.').reverse() >= file.split('.').reverse()) {
 				data = this.storage.getData(file, quest).filter(e => {
-					return (!amountFrom || amountFrom <= e.amount) && (!amountTo || e.amount <= amountTo);
+					return (!amountFrom || amountFrom <= e.amount) && (!amountTo || e.amount <= amountTo)
+						&& (new Date(1000 * startTS)).getDate() <= (new Date(1000 * e.date)).getDate()
+						&& (new Date(1000 * e.date)).getDate() <= (new Date(1000 * endTS)).getDate();
 				}).concat(data);
 			}
 		});
