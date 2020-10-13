@@ -60,7 +60,7 @@ describe('InputHandler', function() {
 			assert.strictEqual(inputHandler.isValidEntryName(''), false);
 			assert.strictEqual(inputHandler.isValidEntryName(null), false);
 			assert.strictEqual(inputHandler.isValidEntryName(undefined), false);
-			assert.strictEqual(inputHandler.isValidEntryName('$&§$%'), false);
+			assert.strictEqual(inputHandler.isValidEntryName('<script src="">'), false);
 			assert.strictEqual(inputHandler.isValidEntryName('   '), false);
 
 			let longWord = new Array(inputHandler.maxSwLen + 1).fill(0).join('');
@@ -75,6 +75,7 @@ describe('InputHandler', function() {
 			assert.strictEqual(inputHandler.isValidEntryName('New entry with numbers 123'), true);
 			assert.strictEqual(inputHandler.isValidEntryName('12345'), true);
 			assert.strictEqual(inputHandler.isValidEntryName('A1B2 3C'), true);
+			assert.strictEqual(inputHandler.isValidEntryName('Special Chars !"§$%&/()={}[]-#*,.;:\'`´ß'), true);
 
 			let longWord = new Array(inputHandler.maxSwLen).fill('a').join('');
 			assert.strictEqual(inputHandler.isValidEntryName(`${longWord} abc`), true);
@@ -153,7 +154,6 @@ describe('InputHandler', function() {
 			assert.strictEqual(inputHandler.isValidUserProfile('  '), false, 'Test 5 failed.');
 			assert.strictEqual(inputHandler.isValidUserProfile('Test$'), false, 'Test 6 failed.');
 			assert.strictEqual(inputHandler.isValidUserProfile('!?'), false, 'Test 7 failed.');
-			assert.strictEqual(inputHandler.isValidUserProfile('Test Test'), false, 'Test 8 failed.');
 		});
 
 		it('should accept valid user profile names', function() {
@@ -163,6 +163,8 @@ describe('InputHandler', function() {
 			assert.strictEqual(inputHandler.isValidUserProfile(' Test '), true, 'Test 4 failed.');
 			assert.strictEqual(inputHandler.isValidUserProfile('55'), true, 'Test 5 failed.');
 			assert.strictEqual(inputHandler.isValidUserProfile('Test1'), true, 'Test 6 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile('Test-Test'), true, 'Test 7 failed.');
+			assert.strictEqual(inputHandler.isValidUserProfile('Test Test'), true, 'Test 8 failed.');
 		});
 
 		it('should reject valid names which are already in use', function() {

@@ -32,7 +32,7 @@ class InputHandler {
 	 * @return {bool} True if the name is valid, otherwise false.
 	 */
 	isValidEntryName(name) {
-		let validChars = !/[^a-zA-ZäöüÄÖÜß0-9 ]/.test(name);
+		let validChars = !/[<>]/.test(name);
 
 		return !!name && validChars && name.trim() !== '' && name.length <= this.maxStrLen &&
 			name.split(' ').every(w => w.length <= this.maxSwLen);
@@ -87,7 +87,7 @@ class InputHandler {
 		user = user.trim();
 		let users = this.storage.readPreference('users');
 
-		return !/[^a-zA-ZäöüÄÖÜß0-9]/.test(user) && user !== '' && user.length <= this.maxSwLen
+		return !/[^a-zA-ZäöüÄÖÜß0-9- ]/.test(user) && user !== '' && user.length <= this.maxSwLen
 			&& !users.includes(user);
 	}
 }

@@ -79,7 +79,7 @@ class IndexView extends View {
 			this.textData['interval'], this.textData['endDate'], this.textData['edit']
 		]];
 
-		this.storage.readMainStorage('recurring').forEach(t => {
+		this.storage.readMainStorage('recurring').sort((a, b) => a.name < b.name ? -1 : 1).forEach(t => {
 			let allocOn = t.allocationOn;
 			tableRows.push([
 				t.name, this.printNum(t.amount), t.type, allocOn ? '\u2013' : t.budget,
