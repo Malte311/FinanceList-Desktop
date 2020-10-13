@@ -204,24 +204,29 @@ class ChartHandler {
 	 * @param {array} data The input data.
 	 */
 	createEarnSpendChart(canvas, data) {
-		let days = data.map(d => timestampToString((new Date(d.date))))
-			.filter((val, ind, self) => self.indexOf(val) === ind);
 		let dataObj = {};
 
-		days.forEach(d => dataObj[d] = [0, 0]);
+		data.map(d => timestampToString((new Date(d.date))))
+			.filter((val, ind, self) => self.indexOf(val) === ind)
+			.forEach(d => dataObj[d] = [0, 0]);
+		
 		data.forEach(d => dataObj[timestampToString(new Date(d.date))][d.type === 'earning' ? 0 : 1] += parseFloat(d.amount));
 
 		let plotData = [[], []]; // Make sure to keep labels and data in the correct order
-		for (const val of Object.values(dataObj)) {
-			plotData[0].push(val[0]);
-			plotData[1].push(val[1]);
-		}
-		plotData.map(d => d.reduce((prev, curr) => prev + parseFloat(curr), 0));
+		
+		let labels = Object.keys(dataObj).sort((a, b) => {
+			return a.split('.').reverse().join('.') < b.split('.').reverse().join('.') ? -1 : 1;
+		});
+		
+		labels.forEach(key => {
+			plotData[0].push(dataObj[key][0]);
+			plotData[1].push(dataObj[key][1]);
+		});
 
 		new Chart($(canvas), {
 			type: 'line',
 			data: {
-				labels: days,
+				labels: labels,
 				datasets: [{
 					data: plotData[0].map(d => parseFloat(d).toFixed(2)),
 					backgroundColor: 'rgba(40, 167, 69, 0.3)',

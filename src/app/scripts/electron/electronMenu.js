@@ -22,7 +22,7 @@ menuTemplate.push({
 				bug_report_url: 'https://github.com/Malte311/FinanceList-Desktop/issues/new?labels=bug&template=bug_report.md',
 				bug_link_text: 'Report a bug',
 				homepage: 'https://github.com/Malte311/FinanceList-Desktop',
-				description: 'A cross-platform finance manager.',
+				description: 'A Cross-Platform Finance Manager.',
 				license: 'MIT',
 				product_name: 'FinanceList-Desktop'
 			})
