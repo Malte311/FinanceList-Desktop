@@ -144,7 +144,7 @@ class BalancesView extends View {
 				}
 			});
 
-			$('#graphDiv').html(this.elt('canvas', {id: 'graphCanvas'}));
+			$('#graphDiv').html(this.elt('canvas', {id: 'graphCanvas', style: 'max-height: 40%; max-width: 75%;'}));
 			(new ChartHandler(this)).createChart('#graphCanvas', data);
 		} else {
 			$(id).html(this.elt('center', {}, this.textData['noTransactions']));
