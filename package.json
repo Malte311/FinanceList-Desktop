@@ -6,10 +6,10 @@
 	"scripts": {
 		"start": "electron . --dev",
 		"test": "nyc mocha ./src/test/ --recursive --tmpdir",
-		"package-mac": "electron-packager ./src/app --platform=darwin --arch=x64 --asar --icon=./src/app/img/tab.icns --prune=true --out=./application/ --overwrite",
+		"package-mac": "electron-packager ./ --ignore=./src/test --platform=darwin --arch=x64 --asar --icon=./src/app/img/tab.icns --prune=true --out=./application/ --overwrite",
 		"create-dmg": "electron-installer-dmg ./application/FinanceList-Desktop-darwin-x64/FinanceList-Desktop.app FinanceList-Desktop-mac-x64",
-		"package-win": "electron-packager ./src/app --platform=win32 --arch=x64 --asar --icon=./src/app/img/tab.ico --prune=true --out=./application/ --overwrite",
-		"package-linux": "electron-packager ./src/app --platform=linux --arch=x64 --asar --icon=./src/app/img/tab.png --prune=true --out=./application/ --overwrite"
+		"package-win": "electron-packager ./ --ignore=./src/test --platform=win32 --arch=x64 --asar --icon=./src/app/img/tab.ico --prune=true --out=./application/ --overwrite",
+		"package-linux": "electron-packager ./ --ignore=./src/test --platform=linux --arch=x64 --asar --icon=./src/app/img/tab.png --prune=true --out=./application/ --overwrite"
 	},
 	"nyc": {
 		"exclude": "src/test/**/*.js"
@@ -42,6 +42,8 @@
 		"bootstrap": "^4.5.2",
 		"chart.js": "^2.9.3",
 		"compare-versions": "^3.6.0",
+		"es-abstract": "^1.17.7",
+		"is-negative-zero": "^2.0.0",
 		"jquery": "^3.5.1",
 		"jquery-ui-dist": "^1.12.1",
 		"popper.js": "^1.16.1",
