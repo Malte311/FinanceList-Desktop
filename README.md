@@ -6,7 +6,7 @@
 [![GitHub release](https://img.shields.io/github/v/release/Malte311/FinanceList-Desktop)](https://github.com/Malte311/FinanceList-Desktop/releases)
 [![Documentation](https://img.shields.io/badge/-documentation-orange)](https://malte311.github.io/FinanceList-Desktop/)
 
-FinanceList-Desktop is a simple finance managing tool which works on Linux, macOS and Windows. FinanceList-Desktop helps you to keep track of your expenses and allows you to manage your finances with ease.
+FinanceList-Desktop is a simple finance managing tool which works on Linux, macOS and Windows. It helps you to keep track of your expenses and allows you to manage your finances with ease. FinanceList-Desktop runs locally on your computer, i.e., all data is only stored on your computer and nowhere else.
 
 ***
 ## Features
