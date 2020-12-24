@@ -82,7 +82,7 @@ class IndexView extends View {
 		this.storage.readMainStorage('recurring').sort((a, b) => a.name < b.name ? -1 : 1).forEach(t => {
 			let allocOn = t.allocationOn;
 			tableRows.push([
-				t.name, this.printNum(t.amount), t.type, allocOn ? '\u2013' : t.budget,
+				t.name, this.printNum(t.amount), this.textData[t.type], allocOn ? '\u2013' : t.budget,
 				t.category, timestampToString(t.nextDate), this.textData['intervalNames'][t.interval],
 				t.endDate > 0 ? timestampToString(t.endDate) : '\u2013',
 				this.elt('button', {

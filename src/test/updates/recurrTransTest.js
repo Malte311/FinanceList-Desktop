@@ -188,7 +188,7 @@ describe('RecurrTrans', function() {
 			assert.strictEqual(jsonStorage.readMainStorage('budgets')[0][1], -100);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeEarnings')[0][1], 0);
 			assert.strictEqual(jsonStorage.readMainStorage('allTimeSpendings')[0][1], 100);
-			assert.strictEqual((new Date(recurring[0].nextDate * 1000)).getMonth(), new Date(startDate * 1000).getMonth() + 1);
+			assert.strictEqual((new Date(recurring[0].nextDate * 1000)).getMonth(), (new Date(startDate * 1000).getMonth() + 1) % 12);
 		});
 	});
 
