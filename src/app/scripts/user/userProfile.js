@@ -1,3 +1,5 @@
+const RecurrTrans = require(__dirname + '/../updates/recurrTrans.js');
+
 const {sep} = require(__dirname + '/../storage/paths.js');
 
 /**
@@ -67,6 +69,7 @@ class UserProfile {
 	switchToUserProfile(newUser) {
 		if (this.storage.readPreference('users').includes(newUser)) {
 			this.storage.storePreference('activeUser', newUser);
+			(new RecurrTrans(this.storage)).execRecurrTransact();
 		}
 	}
 }
