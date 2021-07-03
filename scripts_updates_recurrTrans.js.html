@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: scripts/updates/recurrTrans.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: scripts/updates/recurrTrans.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const Transact = require(__dirname + '/../handle/transact.js');
+const {createUniqueTimestamp, getCurrentTimestamp, stepInterval} = require(__dirname + '/../utils/dateHandler.js');
+
+/**
+ * Handles recurring transactions.
+ */
+class RecurrTrans {
+	/**
+	 * @param {Storage} storage Storage object.
+	 */
+	constructor(storage) {
+		this.storage = storage;
+	}
+
+	/**
+	 * Executes all due recurring transactions.
+	 */
+	execRecurrTransact() {
+		let recurrTrans = this.storage.readMainStorage('recurring');
+
+		for (let t of recurrTrans) {
+			while (t.nextDate &lt;= getCurrentTimestamp()) {
+				if (t.endDate &lt; 0 || (t.endDate > 0 &amp;&amp; t.nextDate &lt;= t.endDate)) {
+					if (t.type === 'earning') {
+						let allocOn = this.storage.readMainStorage('allocationOn') &amp;&amp; t.allocationOn;
+						(new Transact(this.storage)).addEarning(this.transToObj(t), allocOn);
+					} else {
+						(new Transact(this.storage)).addSpending(this.transToObj(t));
+					}
+
+					t.nextDate = stepInterval(t.startDate, t.nextDate, t.interval);
+					
+					this.storage.writeMainStorage('recurring', recurrTrans);
+				} else {
+					this.deleteRecurringTransaction(t.startDate); // End date reached
+					break;
+				}
+			}
+
+			if (t.endDate > 0 &amp;&amp; t.nextDate > t.endDate) {
+				this.deleteRecurringTransaction(t.startDate);
+			}
+		}
+	}
+
+	/**
+	 * Creates a new recurring transaction.
+	 * 
+	 * @param {object} transObj The transaction object to add.
+	 */
+	addRecurringTransaction(transObj) {
+		transObj.startDate = createUniqueTimestamp(transObj.startDate, this.storage);
+		transObj.nextDate = transObj.startDate;
+
+		this.storage.addToMainStorageArr('recurring', transObj);
+		this.execRecurrTransact();
+	}
+
+	/**
+	 * Edits a recurring transaction.
+	 * 
+	 * @param {number} startDate The startDate property of the transaction which should be
+	 * edited. Since this property is unique, it acts as an identifier.
+	 * @param {object} newProps An object containing all properties which should be updated,
+	 * with the new values for each property.
+	 */
+	editRecurringTransaction(startDate, newProps) {
+		let recurrTrans = this.storage.readMainStorage('recurring');
+
+		let trans = recurrTrans.find(trans => parseInt(trans.startDate) === parseInt(startDate));
+		// eslint-disable-next-line no-unused-vars
+		trans = Object.assign(trans, newProps);
+
+		this.storage.writeMainStorage('recurring', recurrTrans);
+	}
+
+	/**
+	 * Deletes a recurring transaction.
+	 * 
+	 * @param {number} startDate The startDate property of the transaction which should be
+	 * deleted. Since this property is unique, it acts as an identifier.
+	 */
+	deleteRecurringTransaction(startDate) {
+		let recurrTrans = this.storage.readMainStorage('recurring');
+
+		let index = recurrTrans.findIndex(trans => trans.startDate === startDate);
+		recurrTrans.splice(index, 1);
+
+		this.storage.writeMainStorage('recurring', recurrTrans);
+	}
+
+	/**
+	 * Transform a transaction object into a data object.
+	 * 
+	 * @param {object} trans The transaction object.
+	 * @return {object} The data object.
+	 */
+	transToObj(trans) {
+		return {
+			date: trans.nextDate,
+			name: trans.name,
+			amount: trans.amount,
+			budget: trans.budget,
+			type: trans.type,
+			category: trans.category
+		};
+	}
+}
+
+module.exports = RecurrTrans;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BalancesView.html">BalancesView</a></li><li><a href="Budget.html">Budget</a></li><li><a href="ChartHandler.html">ChartHandler</a></li><li><a href="Data.html">Data</a></li><li><a href="DataHandler.html">DataHandler</a></li><li><a href="DateHandler.html">DateHandler</a></li><li><a href="DialogHandler.html">DialogHandler</a></li><li><a href="Entry.html">Entry</a></li><li><a href="IndexView.html">IndexView</a></li><li><a href="InputHandler.html">InputHandler</a></li><li><a href="JsonStorage.html">JsonStorage</a></li><li><a href="Path.html">Path</a></li><li><a href="RecurrTrans.html">RecurrTrans</a></li><li><a href="SettingsView.html">SettingsView</a></li><li><a href="Startup.html">Startup</a></li><li><a href="Storage.html">Storage</a></li><li><a href="Template.html">Template</a></li><li><a href="Transact.html">Transact</a></li><li><a href="Updater.html">Updater</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="View.html">View</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createWindow">createWindow</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Jul 03 2021 05:47:00 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

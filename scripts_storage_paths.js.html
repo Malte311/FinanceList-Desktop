@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: scripts/storage/paths.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: scripts/storage/paths.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const {join, sep} = require('path');
+
+/**
+ * Class for handling all things related to paths.
+ */
+class Path {
+	/**
+	 * Returns the path to the user data directory. If the script is executed in the 'npm test'
+	 * environment (i.e., the --tmpdir argument is provided), the path to the tmp directory is
+	 * being returned.
+	 * 
+	 * @return {string} The path to the user data directory.
+	 */
+	static home() {
+		// Use tmp directory for testcases
+		if (process.argv[4] === '--tmpdir') {
+			return '/tmp/financelist';
+		}
+
+		switch (process.platform) {
+			case 'darwin':
+				return join(process.env.HOME, 'Library', 'Application Support', 'FinanceList-Desktop');
+			case 'linux':
+				return join(process.env.HOME, '.local', 'share', 'FinanceList-Desktop');
+			case 'win32':
+				return join(process.env.APPDATA || require('os').homedir(), 'FinanceList-Desktop');
+			default:
+				return join(require('os').homedir(), 'FinanceList-Desktop');
+		}
+	}
+	
+	/**
+	 * Returns the path separator for the currently used operating system.
+	 * 
+	 * @return {string} The path separator for the currently used operating system.
+	 */
+	static sep() {
+		return sep;
+	}
+
+	/**
+	 * Returns the path to the storage directory.
+	 * 
+	 * @return {string} The path to the storage directory.
+	 */
+	static getStoragePath() {
+		return Path.home() + Path.sep() + 'storage';
+	}
+
+	/**
+	 * Returns the path to the settings.json file.
+	 * 
+	 * @return {string} The path to the settings.json file.
+	 */
+	static getSettingsFilePath() {
+		return Path.getStoragePath() + Path.sep() + 'settings.json';
+	}
+
+	/**
+	 * Creates the given path if it does not exist yet.
+	 * 
+	 * @param {string} newPath The path which should be created.
+	 */
+	static createPath(newPath) {
+		let {existsSync, mkdirSync} = require('fs');
+		let toBeCreated = (require('os').platform() === 'win32') ? '' : '/';
+
+		newPath.split(Path.sep()).forEach(folder => {
+			if (folder.length) {
+				toBeCreated += (folder + Path.sep());
+				
+				if (!existsSync(toBeCreated)) {
+					mkdirSync(toBeCreated);
+				}
+			}
+		});
+	}
+
+	/**
+	 * Moves all json files from a source directory to a target directory.
+	 * 
+	 * @param {string} from The source directory.
+	 * @param {string} to The target directory.
+	 * @param {Storage} storage Storage object to access the storage.
+	 * @param {function} callback Callback function which takes one boolean parameter
+	 * that indicates whether the operation succeeded or not (true = success).
+	 */
+	static moveJsonFiles(from, to, storage, callback) {
+		let {readdirSync, renameSync} = require('fs');
+		let users = storage.readPreference('users');
+
+		for (let file of readdirSync(from)) {
+			if (file !== 'settings.json' &amp;&amp; (file.endsWith('.json') || users.includes(file))) {
+				try {
+					renameSync(from + Path.sep() + file, to + Path.sep() + file);
+				} catch (err) { // Cross-device linking will cause an error.
+					callback(false);
+					break;
+				}
+			}
+		}
+
+		callback(true);
+	}
+
+	/**
+	 * Returns all json files in a given directory.
+	 * 
+	 * @param {string} dir The directory which contents we want to read.
+	 * @return {array} An array containing the names of all json files in the given directory.
+	 */
+	static listJsonFiles(dir) {
+		let {readdirSync} = require('fs');
+		
+		return readdirSync(dir).filter(file => file.endsWith('.json'));
+	}
+}
+
+module.exports = Path;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BalancesView.html">BalancesView</a></li><li><a href="Budget.html">Budget</a></li><li><a href="ChartHandler.html">ChartHandler</a></li><li><a href="Data.html">Data</a></li><li><a href="DataHandler.html">DataHandler</a></li><li><a href="DateHandler.html">DateHandler</a></li><li><a href="DialogHandler.html">DialogHandler</a></li><li><a href="Entry.html">Entry</a></li><li><a href="IndexView.html">IndexView</a></li><li><a href="InputHandler.html">InputHandler</a></li><li><a href="JsonStorage.html">JsonStorage</a></li><li><a href="Path.html">Path</a></li><li><a href="RecurrTrans.html">RecurrTrans</a></li><li><a href="SettingsView.html">SettingsView</a></li><li><a href="Startup.html">Startup</a></li><li><a href="Storage.html">Storage</a></li><li><a href="Template.html">Template</a></li><li><a href="Transact.html">Transact</a></li><li><a href="Updater.html">Updater</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="View.html">View</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createWindow">createWindow</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Jul 03 2021 05:47:00 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

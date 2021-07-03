@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: scripts/view/template.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: scripts/view/template.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Class for dealing with html templates.
+ */
+class Template {
+	/**
+	 * @param {View} view View object.
+	 */
+	constructor(view) {
+		this.view = view;
+	}
+
+	/**
+	 * Returns an alert div.
+	 * 
+	 * @param {string} text The text of the alert.
+	 * @param {string} [color = 'red'] The color of the alert.
+	 */
+	alert(text, color = 'red') {
+		return this.view.elt('div', {
+			class: `alert alert-${this.view.mappings[color]}`,
+			role: 'alert'
+		}, text);
+	}
+
+	/**
+	 * Returns a badge.
+	 * 
+	 * @param {string} text The text of the badge.
+	 * @param {string} [color = 'green'] The color of the badge.
+	 */
+	badge(text, color = 'green') {
+		return this.view.elt('span', {
+			class: `badge badge-${this.view.mappings[color]} ml-2 mr-2`
+		}, text);
+	}
+
+	/**
+	 * Returns a fontawesome icon.
+	 * 
+	 * @param {string} icon The name of the icon.
+	 * @param {string} [color = 'black'] The color of the icon.
+	 */
+	icon(icon, color = 'black') {
+		return this.view.elt('i', {
+			class: `${this.view.mappings[icon]} text-${this.view.mappings[color]}`
+		});
+	}
+
+	/**
+	 * Returns a link.
+	 * 
+	 * @param {string} text The text of the link.
+	 * @param {string} onclick The onclick event for the link, in string format.
+	 */
+	link(text, onclick = '') {
+		return this.view.elt('a', {href: '#', onclick: onclick}, text);
+	}
+
+	/**
+	 * Returns a progress bar.
+	 * 
+	 * @param {number} percentage Number between 0 and 100 which indicates the progress.
+	 * @param {string} color The color of the progress bar.
+	 * @param {string} [text = ''] Label which appears on the progress bar.
+	 * @return {object} The progress bar in form of a dom element.
+	 */
+	progress(percentage, color, text = '') {
+		return this.view.elt('div', {
+			class: 'progress',
+			style: 'height: 22px;'
+		}, this.view.elt('div', {
+			class: `progress-bar progress-bar-striped bg-${this.view.mappings[color]}`,
+			role: 'progressbar',
+			style: `width: ${Math.round(percentage)}%`
+		}, text));
+	}
+
+	/**
+	 * Returns a table of given rows.
+	 * 
+	 * @param {array} rows An array of strings representing the rows of the table.
+	 * @param {object} [props = {}] Object containing properties of the table.
+	 * @return {object} The table in form of a dom element.
+	 */
+	table(rows, props = {}) {
+		return this.view.elt('table', Object.assign({
+			class: 'table table-striped table-bordered table-hover'
+		}, props), this.view.elt('tbody', {}, ...rows.map(row =>
+			this.view.elt('tr', {}, ...row.map(elem =>
+				this.view.elt('td', {}, elem))))));
+	}
+
+	/**
+	 * Returns the content of a html template file.
+	 * 
+	 * @param {string} filename The name of the html template file.
+	 * @return {string} The contents of the html template file.
+	 */
+	fromTemplate(filename) {
+		let {readFileSync} = require('fs');
+		return readFileSync(`${__dirname}/../../templates/${filename}`, {encoding: 'utf-8'});
+	}
+}
+
+module.exports = Template;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BalancesView.html">BalancesView</a></li><li><a href="Budget.html">Budget</a></li><li><a href="ChartHandler.html">ChartHandler</a></li><li><a href="Data.html">Data</a></li><li><a href="DataHandler.html">DataHandler</a></li><li><a href="DateHandler.html">DateHandler</a></li><li><a href="DialogHandler.html">DialogHandler</a></li><li><a href="Entry.html">Entry</a></li><li><a href="IndexView.html">IndexView</a></li><li><a href="InputHandler.html">InputHandler</a></li><li><a href="JsonStorage.html">JsonStorage</a></li><li><a href="Path.html">Path</a></li><li><a href="RecurrTrans.html">RecurrTrans</a></li><li><a href="SettingsView.html">SettingsView</a></li><li><a href="Startup.html">Startup</a></li><li><a href="Storage.html">Storage</a></li><li><a href="Template.html">Template</a></li><li><a href="Transact.html">Transact</a></li><li><a href="Updater.html">Updater</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="View.html">View</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createWindow">createWindow</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Jul 03 2021 05:47:00 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

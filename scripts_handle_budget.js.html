@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: scripts/handle/budget.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: scripts/handle/budget.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Handles budget related things.
+ */
+class Budget {
+	/**
+	 * @param {Storage} storage Storage object.
+	 */
+	constructor(storage) {
+		this.storage = storage;
+	}
+
+	/**
+	 * Adds a new budget to the array of available budgets.
+	 * 
+	 * @param {string} newBudget The name of the new budget.
+	 */
+	addBudget(newBudget) {
+		['budgets', 'allTimeEarnings', 'allTimeSpendings', 'allocation'].forEach(field => {
+			this.storage.addToMainStorageArr(field, [newBudget, 0]);
+		});
+	}
+
+	/**
+	 * Renames a given budget (replaces its name with a new name).
+	 * 
+	 * @param {string} oldName The old name of the budget.
+	 * @param {string} newName The new name of the budget.
+	 */
+	renameBudget(oldName, newName) {
+		// 1. Update the mainstorage
+		['budgets', 'allTimeEarnings', 'allTimeSpendings', 'allocation'].forEach(field => {
+			let storageArr = this.storage.readMainStorage(field);
+			storageArr.forEach((entry, index) => {
+				if (entry[0] === oldName) {
+					storageArr[index][0] = newName;
+				}
+			});
+			this.storage.writeMainStorage(field, storageArr);
+		});
+
+		// 2. Update recurring entries
+		let recurring = this.storage.readMainStorage('recurring');
+		recurring.forEach((trans, index) => {
+			if (trans.budget === oldName) {
+				recurring[index].budget = newName;
+			}
+		});
+		this.storage.writeMainStorage('recurring', recurring);
+
+		// 3. Update data entries
+		let files = this.storage.getJsonFiles();
+		files.forEach(file => {
+			let data = this.storage.getData(file, {
+				connector: 'or', // earning or spending gives all data
+				params: [['type', 'earning'], ['type', 'spending']]
+			});
+
+			data.forEach((obj, index) => {
+				if (obj.budget === oldName) {
+					data[index].budget = newName;
+				}
+			});
+
+			this.storage.replaceData(file, data);
+		});
+	}
+
+	/**
+	 * Deletes a given budget (and removes all corresponding data).
+	 * 
+	 * @param {string} name The name of the budget to delete.
+	 */
+	deleteBudget(name) {
+		if (this.storage.readMainStorage('budgets').findIndex(b => b[0] === name) &lt; 0) {
+			return;
+		}
+
+		// 1. Update the mainstorage
+		['budgets', 'allTimeEarnings', 'allTimeSpendings', 'allocation'].forEach(field => {
+			let storageArr = this.storage.readMainStorage(field);
+			
+			// Make sure allocation sums up to 100 percent again (add to default budget)
+			if (field === 'allocation' &amp;&amp; storageArr.find(arr => arr[0] === name)[1] > 0) {
+				storageArr[0][1] += storageArr.find(arr => arr[0] === name)[1];
+			}
+
+			storageArr = storageArr.filter(arr => arr[0] !== name);
+
+			this.storage.writeMainStorage(field, storageArr);
+		});
+
+		// 2. Update recurring entries
+		let recurring = this.storage.readMainStorage('recurring');
+		recurring = recurring.filter(obj => obj.budget !== name);
+		this.storage.writeMainStorage('recurring', recurring);
+
+		// 3. Update data entries
+		let files = this.storage.getJsonFiles();
+		files.forEach(file => {
+			let data = this.storage.getData(file, {
+				connector: 'or', // Filter data for all budgets which are left after the delete
+				params: [...this.storage.readMainStorage('budgets').map(b => ['budget', b[0]])]
+			});
+
+			if (!(data.length > 0)) {
+				this.storage.removeFile(file);
+			} else {
+				this.storage.replaceData(file, data);
+			}
+		});
+	}
+}
+
+module.exports = Budget;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BalancesView.html">BalancesView</a></li><li><a href="Budget.html">Budget</a></li><li><a href="ChartHandler.html">ChartHandler</a></li><li><a href="Data.html">Data</a></li><li><a href="DataHandler.html">DataHandler</a></li><li><a href="DateHandler.html">DateHandler</a></li><li><a href="DialogHandler.html">DialogHandler</a></li><li><a href="Entry.html">Entry</a></li><li><a href="IndexView.html">IndexView</a></li><li><a href="InputHandler.html">InputHandler</a></li><li><a href="JsonStorage.html">JsonStorage</a></li><li><a href="Path.html">Path</a></li><li><a href="RecurrTrans.html">RecurrTrans</a></li><li><a href="SettingsView.html">SettingsView</a></li><li><a href="Startup.html">Startup</a></li><li><a href="Storage.html">Storage</a></li><li><a href="Template.html">Template</a></li><li><a href="Transact.html">Transact</a></li><li><a href="Updater.html">Updater</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="View.html">View</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createWindow">createWindow</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Jul 03 2021 05:47:00 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

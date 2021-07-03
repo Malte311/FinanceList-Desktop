@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: scripts/utils/inputHandler.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: scripts/utils/inputHandler.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Class for dealing with user inputs.
+ */
+class InputHandler {
+	/**
+	 * @param {Storage} storage Storage object.
+	 */
+	constructor(storage) {
+		this.storage = storage;
+		this.maxStrLen = 100; // Maximum length for a whole string.
+		this.maxSwLen = 30; // Maximum length for a single word.
+	}
+
+	/**
+	 * Validates user inputs for budget names.
+	 * 
+	 * @param {string} name The user input which should be validated.
+	 * @return {bool} True if the name is valid, otherwise false.
+	 */
+	isValidBudgetName(name) {
+		let budgets = this.storage.readMainStorage('budgets');
+		let validChars = !/[^a-zA-ZäöüÄÖÜß0-9 ]/.test(name);
+		
+		return !!name &amp;&amp; validChars &amp;&amp; name.trim() !== '' &amp;&amp; name.length &lt;= this.maxSwLen
+			&amp;&amp; !budgets.map(b => b[0]).includes(name);
+	}
+
+	/**
+	 * Validates user inputs for transaction names.
+	 * 
+	 * @param {string} name The user input which should be validated.
+	 * @return {bool} True if the name is valid, otherwise false.
+	 */
+	isValidEntryName(name) {
+		let validChars = !/[&lt;>]/.test(name);
+
+		return !!name &amp;&amp; validChars &amp;&amp; name.trim() !== '' &amp;&amp; name.length &lt;= this.maxStrLen &amp;&amp;
+			name.split(' ').every(w => w.length &lt;= this.maxSwLen);
+	}
+
+	/**
+	 * Validates user inputs for amounts.
+	 * 
+	 * @param {string} amount The user input which should be validated.
+	 * @param {bool} [emptyOk = false] Specifies whether an empty string is valid or not.
+	 * @return {bool} True if the amount is valid, otherwise false.
+	 */
+	isValidAmount(amount, emptyOk = false) {
+		if (amount === null || amount === undefined) {
+			return false;
+		}
+		
+		let validChars = !/[^0-9.]/.test(amount);
+		let notEmpty = emptyOk || amount.trim() !== '';
+		let dotOk = /^[^.]*$/.test(amount) || /^\d*\.\d{0,2}$/.test(amount);
+
+		return validChars &amp;&amp; notEmpty &amp;&amp; dotOk &amp;&amp; amount.length &lt;= this.maxStrLen
+			&amp;&amp; amount.split(' ').every(w => w.length &lt;= this.maxSwLen);
+	}
+
+	/**
+	 * Validates a given date.
+	 * 
+	 * @param {string} day The day of the date.
+	 * @param {string} month The month of the date.
+	 * @param {string} year The year of the date.
+	 * @return {bool} True if the date is valid, else false.
+	 */
+	isValidDate(day, month, year) {
+		day = parseInt(day);
+		month = parseInt(month);
+		year = parseInt(year);
+
+		return day > 0 &amp;&amp; day &lt; 32 &amp;&amp; month > 0 &amp;&amp; month &lt; 13 &amp;&amp; year > 0;
+	}
+
+	/**
+	 * Validates a given user profile name.
+	 * 
+	 * @param {string} user The name of the user profile.
+	 */
+	isValidUserProfile(user) {
+		if (typeof user !== 'string') {
+			return false;
+		}
+
+		user = user.trim();
+		let users = this.storage.readPreference('users');
+
+		return !/[^a-zA-ZäöüÄÖÜß0-9- ]/.test(user) &amp;&amp; user !== '' &amp;&amp; user.length &lt;= this.maxSwLen
+			&amp;&amp; !users.includes(user);
+	}
+}
+
+module.exports = InputHandler;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BalancesView.html">BalancesView</a></li><li><a href="Budget.html">Budget</a></li><li><a href="ChartHandler.html">ChartHandler</a></li><li><a href="Data.html">Data</a></li><li><a href="DataHandler.html">DataHandler</a></li><li><a href="DateHandler.html">DateHandler</a></li><li><a href="DialogHandler.html">DialogHandler</a></li><li><a href="Entry.html">Entry</a></li><li><a href="IndexView.html">IndexView</a></li><li><a href="InputHandler.html">InputHandler</a></li><li><a href="JsonStorage.html">JsonStorage</a></li><li><a href="Path.html">Path</a></li><li><a href="RecurrTrans.html">RecurrTrans</a></li><li><a href="SettingsView.html">SettingsView</a></li><li><a href="Startup.html">Startup</a></li><li><a href="Storage.html">Storage</a></li><li><a href="Template.html">Template</a></li><li><a href="Transact.html">Transact</a></li><li><a href="Updater.html">Updater</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="View.html">View</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createWindow">createWindow</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Jul 03 2021 05:47:00 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

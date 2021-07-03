@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: scripts/handle/transact.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: scripts/handle/transact.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const {getCurrentTimestamp, createUniqueTimestamp} = require(__dirname + '/../utils/dateHandler.js');
+
+/**
+ * Handles (non recurring) transactions.
+ */
+class Transact {
+	/**
+	 * @param {Storage} storage Storage object.
+	 */
+	constructor(storage) {
+		this.storage = storage;
+	}
+
+	/**
+	 * Stores a new earning entry in the corresponding data file.
+	 * 
+	 * @param {object} earningObj The entry to add.
+	 * @param {bool} allocationOn Specifies whether the entry
+	 * should be spread across multiple budgets.
+	 */
+	addEarning(earningObj, allocationOn) {
+		earningObj.date = createUniqueTimestamp(earningObj.date, this.storage);
+
+		if (allocationOn) {
+			this.addEarningSplit(earningObj);
+		} else {
+			this.addEarningSingle(earningObj);
+		}
+	}
+
+	/**
+	 * Stores a new earning entry for a single budget.
+	 * 
+	 * @param {object} earningObj The entry to add.
+	 */
+	addEarningSingle(earningObj) {
+		this.storage.storeData(earningObj);
+
+		this.updateMainStorageArr('budgets', earningObj.budget, earningObj.amount);
+		this.updateMainStorageArr('allTimeEarnings', earningObj.budget, earningObj.amount);	
+	}
+
+	/**
+	 * Stores a new earning entry which is spread across multiple budgets.
+	 * 
+	 * @param {object} earningObj The entry to add.
+	 */
+	addEarningSplit(earningObj) {
+		let allocation = this.storage.readMainStorage('allocation');
+
+		let totalAmount = 0; // To avoid rounding deviations.
+		allocation.forEach((budget, index) => { // budget = [name, percentage]
+			if (budget[1] > 0) { // Only handle entries with percentage > 0.
+				let objCopy = Object.assign({}, earningObj);
+				objCopy.amount = Math.round((objCopy.amount * budget[1] / 100) * 100) / 100;
+				objCopy.budget = budget[0];
+				totalAmount += objCopy.amount;
+
+				if (index === allocation.length - 1) { // Correct deviations in the last iteration.
+					objCopy.amount += (earningObj.amount - totalAmount);
+				}
+
+				this.addEarningSingle(objCopy);
+			}
+		});
+	}
+
+	/**
+	 * Stores a new spending entry in the corresponding data file.
+	 * 
+	 * @param {object} spendingObj The entry to add.
+	 */
+	addSpending(spendingObj) {
+		spendingObj.date = createUniqueTimestamp(spendingObj.date, this.storage);
+
+		this.storage.storeData(spendingObj);
+
+		this.updateMainStorageArr('budgets', spendingObj.budget, -spendingObj.amount);
+		this.updateMainStorageArr('allTimeSpendings', spendingObj.budget, spendingObj.amount);
+	}
+
+	/**
+	 * Transfers money from one budget to another by adding transfer entries for them.
+	 * 
+	 * @param {string} from The budget from which money should be transferred.
+	 * @param {string} to The budget to which money should be transferred.
+	 * @param {number} amount The amount which should be transferred.
+	 */
+	addTransferEntries(from, to, amount) {
+		let obj = {
+			date: createUniqueTimestamp(getCurrentTimestamp(), this.storage),
+			name: 'Transfer',
+			amount: amount,
+			category: 'Transfer'
+		};
+
+		this.addEarningSingle(Object.assign({type: 'earning', budget: to}, obj));
+		this.addSpending(Object.assign({type: 'spending', budget: from}, obj));
+	}
+
+	/**
+	 * Updates an array in the mainstorage, i.e., reads the value for a given budget and adds a
+	 * given number to it.
+	 * 
+	 * @param {string} arrayKey The field of the mainstorage to update
+	 * (e.g. budgets, allTimeEarnings, allTimeSpendings).
+	 * @param {string} budgetName The name of the budget which should be updated.
+	 * @param {number} valueToAdd The number to add.
+	 */
+	updateMainStorageArr(arrayKey, budgetName, valueToAdd) {
+		let array = this.storage.readMainStorage(arrayKey);
+
+		array.forEach((budget, index) => { // budget = [name, amount]
+			if (budget[0] === budgetName) {
+				array[index][1] = Math.round((parseFloat(array[index][1]) + parseFloat(valueToAdd)) * 100) / 100;
+			}
+		});
+
+		this.storage.writeMainStorage(arrayKey, array);
+	}
+}
+
+module.exports = Transact;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BalancesView.html">BalancesView</a></li><li><a href="Budget.html">Budget</a></li><li><a href="ChartHandler.html">ChartHandler</a></li><li><a href="Data.html">Data</a></li><li><a href="DataHandler.html">DataHandler</a></li><li><a href="DateHandler.html">DateHandler</a></li><li><a href="DialogHandler.html">DialogHandler</a></li><li><a href="Entry.html">Entry</a></li><li><a href="IndexView.html">IndexView</a></li><li><a href="InputHandler.html">InputHandler</a></li><li><a href="JsonStorage.html">JsonStorage</a></li><li><a href="Path.html">Path</a></li><li><a href="RecurrTrans.html">RecurrTrans</a></li><li><a href="SettingsView.html">SettingsView</a></li><li><a href="Startup.html">Startup</a></li><li><a href="Storage.html">Storage</a></li><li><a href="Template.html">Template</a></li><li><a href="Transact.html">Transact</a></li><li><a href="Updater.html">Updater</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="View.html">View</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createWindow">createWindow</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Jul 03 2021 05:47:00 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

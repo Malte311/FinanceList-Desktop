@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: main.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: main.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const electron = require('electron');
+const config = require(__dirname + '/scripts/electron/config.js');
+const JsonStorage = require(__dirname + '/scripts/storage/jsonStorage.js');
+
+let jsStorage = new JsonStorage();
+
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+let mainWindow;
+
+/**
+ * Creates the application window.
+ */
+function createWindow() {
+	// Read the stored data to select the window size and window mode.
+	let screenWidth, screenHeight, fullscreen;
+	let mainScreenWidth = electron.screen.getPrimaryDisplay().size.width;
+	let mainScreenHeight = electron.screen.getPrimaryDisplay().size.height;
+	
+	try {
+		screenWidth = parseInt(jsStorage.readPreference('windowSize').split('x')[0]);
+		screenHeight = parseInt(jsStorage.readPreference('windowSize').split('x')[1]);
+		fullscreen = JSON.parse(jsStorage.readPreference('fullscreen'));
+	}
+	catch (err) { // If the file is corrupted, we set default values (size of the main screen).
+		screenWidth = mainScreenWidth;
+		screenHeight = mainScreenHeight;
+	}
+
+	mainWindow = new electron.BrowserWindow({
+		width: screenWidth,
+		height: screenHeight,
+		icon: electron.nativeImage.createFromPath(__dirname + '/img/tab.ico'),
+		movable: true,
+		center: true,
+		fullscreen: typeof fullscreen === 'boolean' ? fullscreen : false,
+		show: false,
+		webPreferences: {
+			nodeIntegration: true
+		}
+	});
+
+	if (screenWidth >= mainScreenWidth &amp;&amp; screenHeight >= mainScreenHeight) {
+		mainWindow.maximize(); // Maximize window if it is at least as big as the screen size.
+	}
+
+	mainWindow.loadURL('file://' + __dirname + '/templates/index.html');
+
+	mainWindow.once('page-title-updated', function() {
+		mainWindow.show();
+	});
+
+	mainWindow.on('closed', function() {
+		mainWindow = null;
+	});
+
+	mainWindow.on('close', function() {
+		if (!mainWindow.isMaximized()) {
+			let size = mainWindow.getSize();
+			jsStorage.storePreference('windowSize', `${size[0]}x${size[1]}`);
+		}
+	});
+
+	mainWindow.on('maximize', function() {
+		jsStorage.storePreference('windowSize', `${mainScreenWidth}x${mainScreenHeight}`);
+	});
+
+	let electronMenu = require(__dirname + '/scripts/electron/electronMenu.js');
+	electron.Menu.setApplicationMenu(electron.Menu.buildFromTemplate(electronMenu));
+
+	if (config.devMode) mainWindow.webContents.openDevTools();
+}
+
+electron.app.on('ready', createWindow);
+
+electron.app.on('window-all-closed', function() {
+	// On OS X it is common for applications and their menu bar
+	// to stay active until the user quits explicitly with Cmd + Q.
+	if (process.platform !== 'darwin') {
+		electron.app.quit();
+	}
+});
+
+electron.app.on('activate', function() {
+	// On OS X it's common to re-create a window in the app when the
+	// dock icon is clicked and there are no other windows open.
+	if (mainWindow === null) {
+		createWindow();
+	}
+});
+
+electron.ipcMain.on('showMessageBox', (event, arg) => {
+	electron.dialog.showMessageBox(arg).then(res => event.reply('showMessageBoxThen', res));
+});
+
+electron.ipcMain.on('showOpenDialog', (event, arg) => {
+	electron.dialog.showOpenDialog(arg).then(res => event.reply('showOpenDialogThen', res));
+});
+
+electron.ipcMain.on('getVersion', event => {
+	event.returnValue = electron.app.getVersion();
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BalancesView.html">BalancesView</a></li><li><a href="Budget.html">Budget</a></li><li><a href="ChartHandler.html">ChartHandler</a></li><li><a href="Data.html">Data</a></li><li><a href="DataHandler.html">DataHandler</a></li><li><a href="DateHandler.html">DateHandler</a></li><li><a href="DialogHandler.html">DialogHandler</a></li><li><a href="Entry.html">Entry</a></li><li><a href="IndexView.html">IndexView</a></li><li><a href="InputHandler.html">InputHandler</a></li><li><a href="JsonStorage.html">JsonStorage</a></li><li><a href="Path.html">Path</a></li><li><a href="RecurrTrans.html">RecurrTrans</a></li><li><a href="SettingsView.html">SettingsView</a></li><li><a href="Startup.html">Startup</a></li><li><a href="Storage.html">Storage</a></li><li><a href="Template.html">Template</a></li><li><a href="Transact.html">Transact</a></li><li><a href="Updater.html">Updater</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="View.html">View</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createWindow">createWindow</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Jul 03 2021 05:47:00 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
