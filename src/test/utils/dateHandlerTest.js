@@ -194,4 +194,83 @@ describe('DateHandler', function() {
 			), '31.03.2022');
 		});
 	});
+
+	describe('#lessEqualDate()', function() {
+		it('handles same dates correctly', function() {
+			let d1 = new Date('2020-02-29');
+			let d2 = new Date('2020-02-29');
+			assert.strictEqual(DateHandler.lessEqualDate(d1, d2), true, 'Test 1 failed.');
+			assert.strictEqual(DateHandler.lessEqualDate(d2, d1), true, 'Test 2 failed.');
+
+			let d3 = new Date('2021-12-31');
+			let d4 = new Date('2021-12-31');
+			assert.strictEqual(DateHandler.lessEqualDate(d3, d4), true, 'Test 3 failed.');
+			assert.strictEqual(DateHandler.lessEqualDate(d4, d3), true, 'Test 4 failed.');
+		});
+
+		it('handles different days correctly for same month and same year', function() {
+			let d1 = new Date('2020-02-28');
+			let d2 = new Date('2020-02-29');
+			assert.strictEqual(DateHandler.lessEqualDate(d1, d2), true, 'Test 1 failed.');
+			assert.strictEqual(DateHandler.lessEqualDate(d2, d1), false, 'Test 2 failed.');
+
+			let d3 = new Date('2021-12-01');
+			let d4 = new Date('2021-12-31');
+			assert.strictEqual(DateHandler.lessEqualDate(d3, d4), true, 'Test 3 failed.');
+			assert.strictEqual(DateHandler.lessEqualDate(d4, d3), false, 'Test 4 failed.');
+		});
+
+		it('handles different days correctly for different month and different year', function() {
+			let d1 = new Date('2019-12-31');
+			let d2 = new Date('2020-01-01');
+			assert.strictEqual(DateHandler.lessEqualDate(d1, d2), true, 'Test 1 failed.');
+			assert.strictEqual(DateHandler.lessEqualDate(d2, d1), false, 'Test 2 failed.');
+
+			let d3 = new Date('2020-12-01');
+			let d4 = new Date('2021-12-31');
+			assert.strictEqual(DateHandler.lessEqualDate(d3, d4), true, 'Test 3 failed.');
+			assert.strictEqual(DateHandler.lessEqualDate(d4, d3), false, 'Test 4 failed.');
+		});
+
+		it('handles different days correctly for same month and different year', function() {
+			let d1 = new Date('2019-02-28');
+			let d2 = new Date('2020-02-27');
+			assert.strictEqual(DateHandler.lessEqualDate(d1, d2), true, 'Test 1 failed.');
+			assert.strictEqual(DateHandler.lessEqualDate(d2, d1), false, 'Test 2 failed.');
+
+			let d3 = new Date('2020-12-01');
+			let d4 = new Date('2021-12-31');
+			assert.strictEqual(DateHandler.lessEqualDate(d3, d4), true, 'Test 3 failed.');
+			assert.strictEqual(DateHandler.lessEqualDate(d4, d3), false, 'Test 4 failed.');
+		});
+
+		it('handles different days correctly for different month and same year', function() {
+			let d1 = new Date('2020-01-28');
+			let d2 = new Date('2020-02-27');
+			assert.strictEqual(DateHandler.lessEqualDate(d1, d2), true, 'Test 1 failed.');
+			assert.strictEqual(DateHandler.lessEqualDate(d2, d1), false, 'Test 2 failed.');
+
+			let d3 = new Date('2021-11-30');
+			let d4 = new Date('2021-12-31');
+			assert.strictEqual(DateHandler.lessEqualDate(d3, d4), true, 'Test 3 failed.');
+			assert.strictEqual(DateHandler.lessEqualDate(d4, d3), false, 'Test 4 failed.');
+		});
+
+		it('handles same days correctly', function() {
+			let d1 = new Date('2020-01-28');
+			let d2 = new Date('2020-02-28');
+			assert.strictEqual(DateHandler.lessEqualDate(d1, d2), true, 'Test 1 failed.');
+			assert.strictEqual(DateHandler.lessEqualDate(d2, d1), false, 'Test 2 failed.');
+
+			let d3 = new Date('2020-11-30');
+			let d4 = new Date('2021-11-30');
+			assert.strictEqual(DateHandler.lessEqualDate(d3, d4), true, 'Test 3 failed.');
+			assert.strictEqual(DateHandler.lessEqualDate(d4, d3), false, 'Test 4 failed.');
+
+			let d5 = new Date('2020-11-30');
+			let d6 = new Date('2021-10-30');
+			assert.strictEqual(DateHandler.lessEqualDate(d5, d6), true, 'Test 5 failed.');
+			assert.strictEqual(DateHandler.lessEqualDate(d6, d5), false, 'Test 6 failed.');
+		});
+	});
 });

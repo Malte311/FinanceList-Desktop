@@ -1,4 +1,5 @@
 const ChartHandler = require(__dirname + '/../utils/chartHandler.js');
+const DateHandler = require(__dirname + '/../utils/dateHandler.js');
 const InputHandler = require(__dirname + '/../utils/inputHandler.js');
 const View = require(__dirname + '/view.js');
 
@@ -101,8 +102,8 @@ class BalancesView extends View {
 					&& end.split('.').reverse() >= file.split('.').reverse()) {
 				data = this.storage.getData(file, quest).filter(e => {
 					return (!amountFrom || amountFrom <= e.amount) && (!amountTo || e.amount <= amountTo)
-						&& (new Date(1000 * startTS)).getDate() <= (new Date(1000 * e.date)).getDate()
-						&& (new Date(1000 * e.date)).getDate() <= (new Date(1000 * endTS)).getDate();
+						&& DateHandler.lessEqualDate(new Date(1000 * startTS), new Date(1000 * e.date))
+						&& DateHandler.lessEqualDate(new Date(1000 * e.date), new Date(1000 * endTS));
 				}).concat(data);
 			}
 		});

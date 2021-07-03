@@ -190,6 +190,32 @@ class DateHandler {
 
 		return Math.floor((new Date(strDateArr.reverse().join('-'))).getTime() / 1000);
 	}
+
+	/**
+	 * Checks whether d1 <= d2, i.e., whether d2 is the same day as d1 or d2
+	 * comes after d1 (only day, month, year are relevant, the actual time of
+	 * the day is neglected).
+	 * 
+	 * @param {Date} d1 The first date.
+	 * @param {Date} d2 The second date.
+	 * 
+	 * @return {bool} True if d1 <= d2 (in terms of day, month, year), else false.
+	 */
+	static lessEqualDate(d1, d2) {
+		if (d1.getFullYear() < d2.getFullYear()) {
+			return true;
+		} else if (d1.getFullYear() > d2.getFullYear()) {
+			return false;
+		}
+
+		if (d1.getMonth() < d2.getMonth()) {
+			return true;
+		} else if (d1.getMonth() > d2.getMonth()) {
+			return false;
+		}
+
+		return d1.getDate() <= d2.getDate();
+	}
 }
 
 module.exports = DateHandler;
