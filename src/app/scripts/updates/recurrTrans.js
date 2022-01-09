@@ -83,7 +83,7 @@ class RecurrTrans {
 	deleteRecurringTransaction(startDate) {
 		let recurrTrans = this.storage.readMainStorage('recurring');
 
-		let index = recurrTrans.findIndex(trans => trans.startDate === startDate);
+		let index = recurrTrans.findIndex(trans => parseInt(trans.startDate) === parseInt(startDate));
 		recurrTrans.splice(index, 1);
 
 		this.storage.writeMainStorage('recurring', recurrTrans);
