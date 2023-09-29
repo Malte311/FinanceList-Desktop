@@ -8,6 +8,8 @@
 
 FinanceList-Desktop is a simple finance managing tool which works on Linux, macOS and Windows. It helps you to keep track of your expenses and allows you to manage your finances with ease. FinanceList-Desktop runs locally on your computer, i.e., all data is only stored on your computer and nowhere else.
 
+> :warning: This software is not actively maintained anymore for Windows and Linux.
+
 ***
 ## Features
 
