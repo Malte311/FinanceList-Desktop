@@ -130,6 +130,8 @@ module.exports = {
 	'sumUpTo100': 'The amounts must add up to 100\u0025.',
 	'switch': 'Switch',
 	'totalSum': 'Total Sum',
+	'transaction': 'Transaction',
+	'transactions': 'Transactions',
 	'transfer': 'Transfer Money',
 	'type': 'Type',
 	'updateAvailable': 'Update Available',

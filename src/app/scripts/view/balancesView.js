@@ -127,9 +127,11 @@ class BalancesView extends View {
 				}, this.template.icon('edit', 'black'))
 			]));
 
+			let transactionKey = data.length > 1 ? 'transactions' : 'transaction';
 			$(id).html(this.elt('div', {}, this.template.table(tableRows, {
 				id: 'overviewTable'
-			}), this.elt('center', {}, `${this.textData['totalSum']}: ${this.printNum(total)}`)));
+			}), this.elt('center', {}, `${this.textData['totalSum']}: ${this.printNum(total)}` +
+				` (${data.length} ${this.textData[transactionKey]})`)));
 
 			$('#overviewTable').children().first().children().first().children().each((index, elem) => {
 				if (index <= 5) {

@@ -129,6 +129,8 @@ module.exports = {
 	'sumUpTo100': 'Die Werte m\u00fcssen sich zu 100\u0025 aufaddieren.',
 	'switch': 'Wechseln',
 	'totalSum': 'Gesamtsumme',
+	'transaction': 'Transaktion',
+	'transactions': 'Transaktionen',
 	'transfer': 'Geld \u00fcbertragen',
 	'type': 'Art',
 	'updateAvailable': 'Update verf\u00fcgbar',
