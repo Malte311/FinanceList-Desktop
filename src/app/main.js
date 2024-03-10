@@ -36,6 +36,7 @@ function createWindow() {
 		fullscreen: typeof fullscreen === 'boolean' ? fullscreen : false,
 		show: false,
 		webPreferences: {
+			contextIsolation: false,
 			nodeIntegration: true
 		}
 	});

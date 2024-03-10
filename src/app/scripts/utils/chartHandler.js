@@ -1,4 +1,5 @@
-const Chart = require('chart.js');
+require('chart.js/auto');
+const {Chart} = require('chart.js');
 
 const {timestampToString} = require(__dirname + '/dateHandler.js');
 
@@ -85,7 +86,8 @@ class ChartHandler {
 							return `${cD.labels[ttI.index]}: ${sum}`;
 						}
 					}
-				}
+				},
+				responsive: false,
 			}
 		});
 	}
@@ -140,7 +142,8 @@ class ChartHandler {
 							return `${cD.labels[ttI.index]}: ${sum}`;
 						}
 					}
-				}
+				},
+				responsive: false,
 			}
 		});
 	}
@@ -192,7 +195,12 @@ class ChartHandler {
 						}
 					}
 				},
-				legend: false
+				plugins: {
+					legend: {
+						display: false,
+					},
+				},
+				responsive: false,
 			}
 		});
 	}
@@ -249,7 +257,8 @@ class ChartHandler {
 							return `${cD.labels[ttI.index]}: ${sum}`;
 						}
 					}
-				}
+				},
+				responsive: false,
 			}
 		});
 	}

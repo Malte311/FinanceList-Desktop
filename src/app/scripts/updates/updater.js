@@ -22,7 +22,7 @@ class Updater {
 		request(options, (err, resp, body) => {
 			if (!err && resp.statusCode == 200) {	
 				let pckgJson = Buffer.from(JSON.parse(body).content, 'base64').toString('ascii');
-				let compareVersions = require('compare-versions');
+				let {compareVersions} = require('compare-versions');
 
 				if (compareVersions(ipcRenderer.sendSync('getVersion', {}), JSON.parse(pckgJson).version) < 0) {
 					Updater.showUpdateNotification();
